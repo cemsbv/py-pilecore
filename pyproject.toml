@@ -7,10 +7,7 @@ name = "py-pilecore"
 version = "0.0.1"
 description = "Public python SDK for the CEMS PileCore web-API."
 requires-python = ">=3.9"
-dependencies = [
-    "requests",
-    'importlib-metadata; python_version<"3.9"',
-]
+dependencies = ["requests", 'importlib-metadata; python_version<"3.9"']
 license = { file = "LICENSE" }
 readme = "README.md"
 keywords = ["API", "PileCore", "CEMS", "CRUX"]
@@ -28,7 +25,7 @@ ensure_newline_before_comments = true
 line_length = 88
 
 [tool.mypy]
-files = ["py-pilecore"]
+files = ["py_pilecore"]
 mypy_path = 'src'
 namespace_packages = true
 show_error_codes = true
