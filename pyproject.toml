@@ -7,13 +7,31 @@ name = "py-pilecore"
 version = "0.0.1"
 description = "Public python SDK for the CEMS PileCore web-API."
 requires-python = ">=3.9"
-dependencies = ["requests", 'importlib-metadata; python_version<"3.9"']
+dependencies = [
+    'pygef>0.8,<1',
+    'numpy>1,<2',
+    'pandas>2,<3',
+    'cems-nuclei[client]>0.3,<1',
+    'matplotlib>3,<4',
+]
 license = { file = "LICENSE" }
 readme = "README.md"
 keywords = ["API", "PileCore", "CEMS", "CRUX"]
 
 [project.urls]
 repository = "https://github.com/cemsbv/py-pilecore"
+
+[project.optional-dependencies]
+test = [
+    "coveralls",
+    "pytest"
+]
+lint = [
+    "black",
+    "isort",
+    "mypy",
+    "flake8"
+]
 
 [tool.isort]
 profile = "black"
