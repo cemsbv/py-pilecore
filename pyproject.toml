@@ -22,16 +22,8 @@ keywords = ["API", "PileCore", "CEMS", "CRUX"]
 repository = "https://github.com/cemsbv/py-pilecore"
 
 [project.optional-dependencies]
-test = [
-    "coveralls",
-    "pytest"
-]
-lint = [
-    "black",
-    "isort",
-    "mypy",
-    "flake8"
-]
+test = ["coveralls", "pytest"]
+lint = ["black", "isort", "mypy", "flake8"]
 
 [tool.isort]
 profile = "black"
@@ -43,7 +35,7 @@ ensure_newline_before_comments = true
 line_length = 88
 
 [tool.mypy]
-files = ["py_pilecore"]
+files = ["pypilecore"]
 mypy_path = 'src'
 namespace_packages = true
 show_error_codes = true
