@@ -61,6 +61,191 @@ def create_multi_cpt_payload(
     is_low_vibrating: float | None = None,
     negative_fr_delta_factor: float | None = None,
 ) -> Tuple[dict, Dict[str, dict]]:
+    """soil_properties_list, results_passover = create_soil_properties_payload(
+    Creates a dictionary with the payload content for the PileCore endpoint
+    "/compression/multi-cpt/results"
+
+    This dictionary can be passed directly to `nuclei.client.call_endpoint()`. Note that
+    it should be converted to a jsonifyable message before it can be passed to a
+    `requests` call directly, for instance with
+    `nuclei.client.utils.python_types_to_message()`.
+
+    Parameters
+    ----------
+    pile_tip_levels_nap:
+        Range of values for which the pile resistance is calculated.
+    cptdata_objects:
+        A list of pygef.CPTData objects
+    layer_tables:
+        A dictionary, mapping `CPTData.alias` values to pandas Dataframes with soil-layer
+        information, containing the following columns:
+            (index):
+                Unique integer for soil-layer, starting at 0 for the top layer.
+            depth_top (float):
+                Depth w.r.t. surface level [m];
+            thickness (float):
+                Thickness of the layer [m];
+            gamma (float):
+                Dry volumetric weight [kN/m^3];
+            gamma_sat (float):
+                Saturated volumetric weight [kN/m^3];
+            phi (float):
+                Internal friction angle [rad];
+            soil_code (str):
+                Main components are specified with capital letters and are the following:
+                    - G: gravel (Grind)
+                    - Z: sand (Zand)
+                    - L: loam (Leem)
+                    - K: clay (Klei)
+                    - V: peat (Veen)
+            thickness (float):
+                The layer thickness [m]
+    groundwater_level_nap:
+        The ground water level. Unit: [m] w.r.t. NAP.
+    friction_range_strategy:
+        Sets the method to determine the sleeve friction zones on the pile. The soil
+        friction in the positive zone contributes to the bearing capacity, while the
+        negative zone adds an extra load on the pile. Accepted values: "manual",
+        "lower_bound" or "settlement_driven".
+    pile_type:
+        The equaly named entry in the "pile_type_specification" settings.
+        Accepted values are: ["A","B","C""D","E","F","G"]
+    specification:
+        The equaly named entry in the "pile_type_specification" settings.
+        Accepted values are: ["concrete","steel","micro","wood"]
+    installation:
+        The equaly named entry in the "pile_type_specification" settings.
+        Accepted values are: ["1","2","3","4","5","6","7"]
+    pile_shape:
+        The shape of the pile.
+        Accepted values are: ["round", "rect"]
+    fixed_negative_friction_range_nap:
+        Optionally sets the fixed depth range between which the negative sleeve friction
+        is calculated. If an array of format [top, bottom], the range is set between top
+        and bottom where top and bottom are floating values.
+        Unit: [m] w.r.t. NAP
+    fixed_positive_friction_range_nap:
+        Optionally sets the fixed depth range between which the positive sleeve friction
+        is calculated. If an array of format (top, bottom), the range is set between top
+        and bottom where top and bottom are floating point values. If bottom == "ptl",
+        the pile tip level of the calculation is used as value for bottom.
+        Unit: [m] w.r.t. NAP
+    negative_shaft_friction:
+        Sets a fixed value for the negative friction force. If provided, the
+        fixed_negative_friction_range_nap parameter will be ignored.
+        Unit: [kN]
+    apply_qc3_reduction:
+        Determines if the reduction on the qc;III trajectory for auger piles should be
+        applied conform 7.6.2.3(e) of NEN 9997-1. If omitted (or null: default), the
+        value is inferred from the pile type: only True for auger piles (when
+        pile_properties.is_auger == True). If a boolean is provided, the qc3 reduction
+        is/isn't applied, regardless of the pile type.
+    relative_pile_load:
+        The fraction of the maximum bearing capacity that is used as pilehead force in
+        the settlement calculations. The input value can range between 0.0 and 1.0,
+        where 1.0 translates to a pile load of 100% of the maximum bearing capacity.
+        When the pile_load parameter is provided, rel_pile_load will be ignored.
+
+        When multiple pile-tip levels are considered, the applied pile load will vary
+        with each pile-tip level, depending on the bearing capacity.
+    pile_load_sls:
+        Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.
+    pile_head_level_nap:
+        The level of the pile head. Can be:
+            - float. This is interpreted as an absolute level in [m w.r.t. NAP].
+            - the string "surface". In this case, the soil_properties.service_level
+              property is used.
+    excavation_depth_nap:
+        Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
+    excavation_param_t:
+        Excavation parameter depending on pile installation method and/or phasing.
+            - Use 1.0 for post-excavation installation with vibration (i.e. hammering).
+            - Use 0.5 for reduced-vibration installation, or pile installation prior to
+              excavation method.
+        See for more info NEN 9997-1+C2:2017 7.6.2.3.(10)(k)
+    individual_negative_friction_range_nap:
+        A dictionary, mapping `CPTData.alias` values to fixed negative-friction ranges.
+        For a specification of the values, see `fixed_negative_friction_range_nap`
+    individual_positive_friction_range_nap:
+        A dictionary, mapping `CPTData.alias` values to fixed positive-friction ranges.
+        For a specification of the values, see `fixed_positive_friction_range_nap`
+    diameter_base:
+        Pile base diameter [m].
+        Only relevant if `shape`="round".
+    diameter_shaft:
+        Pile shaft diameter [m].
+        Only relevant if `shape`="round".
+    width_base_large:
+        Largest dimension of the pile base [m].
+        Only relevant if `shape`="rect".
+    width_base_small:
+        Smallest dimension of the pile base [m].
+        Only relevant if `shape`="rect".
+    width_shaft_large:
+        Largest dimension of the pile shaft [m].
+        Only relevant if `shape`="rect".
+    width_shaft_small:
+        Smallest dimension of the pile shaft [m].
+        Only relevant if `shape`="rect".
+    height_base:
+        Height of pile base [m]. If None, a pile with constant dimension is inferred.
+        Cannot be None if diameter_base and diameter_shaft are unequal.
+    settlement_curve:
+        Settlement lines for figures 7.n and 7.o of NEN-9997-1 As defined in table 7.c
+        of NEN-9997-1. The value is inferred from the pile_type_specifications, but can
+        be overwritten.
+    adhesion:
+        Optional adhesion value [kPa], use it if the pile shaft has undergone a special
+        treatment. Examples: - adhesion = 50 kN/m2 for synthetic coating - adhesion = 20
+        kN/m2 for bentonite - adhesion = 10 kN/m2 for bitumen coating See 7.3.2.2(d) of
+        NEN 9997-1 for examples.
+    alpha_p:
+        Alpha p factor used in pile tip resistance calculation. The value is inferred
+        from the pile_type_specifications, but can be overwritten.
+    alpha_s_clay:
+        Alpha s factor for soft layers used in the positive friction calculation. If
+        None the factor is determined as specified in table 7.d of NEN 9997-1.
+    alpha_s_sand:
+        Alpha s factor for coarse layers used in the positive friction calculation. The
+        value is inferred from the pile_type_specifications, but can be overwritten.
+    beta_p:
+        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).
+        The value is inferred from the pile dimension properties, but can be overwritten.
+    pile_tip_factor_s:
+        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).
+        The value is inferred from the pile dimension properties, but can be overwritten.
+    elastic_modulus:
+        Modulus of elasticity of the pile [Mpa]. The value is inferred from the
+        pile_type_specifications, but can be overwritten.
+    is_auger:
+        Determines weather the pile the pile is an auger pile or not. The value is
+        inferred from the pile_type_specifications, but can be overwritten.
+    is_low_vibrating:
+        Determines weather the pile has an installation type with low vibration. The
+        value is inferred from the pile_type_specifications, but can be overwritten.
+    negative_fr_delta_factor:
+        factor * φ = δ. This parameter will be multiplied with phi to get the delta
+        parameter used in negative friction calculation according to NEN-9997-1 7.3.2.2
+        (e). Typically values are 1.0 for piles cast in place, and 0.75 for other pile
+        types. The value is inferred from the pile_type_specifications, but can be
+        overwritten.
+
+    Returns
+    -------
+    multi_cpt_payload:
+        Dictionary with the payload content for the PileCore endpoint
+        "/compression/multi-cpt/results"
+    results_kwargs:
+        Dictionary with keyword arguments for the `pilecore.MultiCPTBearingResults`
+        object.
+
+    Raises
+    ------
+    ValueError:
+        - if `pile_shape`=="round" & `diameter_base` is None
+        - if `pile_shape`=="rect" & `width_base_large` is None
+        - if `pile_shape` not in ["rect", "round"]
+    """
     soil_properties_list, results_kwargs = create_soil_properties_payload(
         cptdata_objects=cptdata_objects,
         layer_tables=layer_tables,
@@ -155,6 +340,41 @@ def create_multi_cpt_report_payload(
     individual_cpt_results_content: bool = True,
     result_summary_content: bool = True,
 ) -> dict:
+    """
+    Creates a dictionary with the payload content for the PileCore endpoint
+    "/compression/multi-cpt/report"
+
+    This dictionary can be passed directly to `nuclei.client.call_endpoint()`. Note that
+    it should be converted to a jsonifyable message before it can be passed to a
+    `requests` call directly, for instance with
+    `nuclei.client.utils.python_types_to_message()`.
+
+    Parameters
+    ----------
+    multi_cpt_payload:
+        Index 0 of the resulting tuple of a call to `create_multi_cpt_payload()`
+    project_name:
+        The name of the project.
+    project_id:
+        The identifier (code) of the project.
+    author:
+        The author of the report.
+    date:
+        The date of the report. If None, the current date will be used.
+    group_results_content:
+        Whether or not to add the group-results section to the report. Default = True
+    individual_cpt_results_content:
+        Whether or not to add the individual-cpt-results section to the report.
+        Default = True
+    result_summary_content:
+        Whether or not to add the result-summary section to the report. Default = True
+
+    Returns
+    -------
+    report_payload:
+        Dictionary with the payload content for the PileCore endpoint
+        "/compression/multi-cpt/report"
+    """
     report_payload = deepcopy(multi_cpt_payload)
     report_payload.update(
         dict(

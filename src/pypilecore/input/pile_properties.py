@@ -25,6 +25,102 @@ def create_pile_properties_payload(
     is_low_vibrating: float | None = None,
     negative_fr_delta_factor: float | None = None,
 ) -> dict:
+    """
+    Creates a dictionary with the `pile_properties` payload content for the PileCore
+    endpoints.
+
+    Note that
+    the dictionary should be converted to a jsonifyable message before it can be passed
+    to a `requests` call directly, for instance with
+    `nuclei.client.utils.python_types_to_message()`.
+
+    Parameters
+    ----------
+    pile_type:
+        The equaly named entry in the "pile_type_specification" settings.
+        Accepted values are: ["A","B","C""D","E","F","G"]
+    specification:
+        The equaly named entry in the "pile_type_specification" settings.
+        Accepted values are: ["concrete","steel","micro","wood"]
+    installation:
+        The equaly named entry in the "pile_type_specification" settings.
+        Accepted values are: ["1","2","3","4","5","6","7"]
+    pile_shape:
+        The shape of the pile.
+        Accepted values are: ["round", "rect"]
+    diameter_base:
+        Pile base diameter [m].
+        Only relevant if `shape`="round".
+    diameter_shaft:
+        Pile shaft diameter [m].
+        Only relevant if `shape`="round".
+    width_base_large:
+        Largest dimension of the pile base [m].
+        Only relevant if `shape`="rect".
+    width_base_small:
+        Smallest dimension of the pile base [m].
+        Only relevant if `shape`="rect".
+    width_shaft_large:
+        Largest dimension of the pile shaft [m].
+        Only relevant if `shape`="rect".
+    width_shaft_small:
+        Smallest dimension of the pile shaft [m].
+        Only relevant if `shape`="rect".
+    height_base:
+        Height of pile base [m]. If None, a pile with constant dimension is inferred.
+        Cannot be None if diameter_base and diameter_shaft are unequal.
+    settlement_curve:
+        Settlement lines for figures 7.n and 7.o of NEN-9997-1 As defined in table 7.c
+        of NEN-9997-1. The value is inferred from the pile_type_specifications, but can
+        be overwritten.
+    adhesion:
+        Optional adhesion value [kPa], use it if the pile shaft has undergone a special
+        treatment. Examples: - adhesion = 50 kN/m2 for synthetic coating - adhesion = 20
+        kN/m2 for bentonite - adhesion = 10 kN/m2 for bitumen coating See 7.3.2.2(d) of
+        NEN 9997-1 for examples.
+    alpha_p:
+        Alpha p factor used in pile tip resistance calculation. The value is inferred
+        from the pile_type_specifications, but can be overwritten.
+    alpha_s_clay:
+        Alpha s factor for soft layers used in the positive friction calculation. If
+        None the factor is determined as specified in table 7.d of NEN 9997-1.
+    alpha_s_sand:
+        Alpha s factor for coarse layers used in the positive friction calculation. The
+        value is inferred from the pile_type_specifications, but can be overwritten.
+    beta_p:
+        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).
+        The value is inferred from the pile dimension properties, but can be overwritten.
+    pile_tip_factor_s:
+        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).
+        The value is inferred from the pile dimension properties, but can be overwritten.
+    elastic_modulus:
+        Modulus of elasticity of the pile [Mpa]. The value is inferred from the
+        pile_type_specifications, but can be overwritten.
+    is_auger:
+        Determines weather the pile the pile is an auger pile or not. The value is
+        inferred from the pile_type_specifications, but can be overwritten.
+    is_low_vibrating:
+        Determines weather the pile has an installation type with low vibration. The
+        value is inferred from the pile_type_specifications, but can be overwritten.
+    negative_fr_delta_factor:
+        factor * φ = δ. This parameter will be multiplied with phi to get the delta
+        parameter used in negative friction calculation according to NEN-9997-1 7.3.2.2
+        (e). Typically values are 1.0 for piles cast in place, and 0.75 for other pile
+        types. The value is inferred from the pile_type_specifications, but can be
+        overwritten.
+
+    Returns
+    -------
+    pile_properties:
+        The `pile_properties` payload content of the PileCore-API endpoints.
+
+    Raises
+    ------
+    ValueError:
+        - if `pile_shape`=="round" & `diameter_base` is None
+        - if `pile_shape`=="rect" & `width_base_large` is None
+        - if `pile_shape` not in ["rect", "round"]
+    """
     pile_properties: dict = dict(
         props=dict(
             pile_type_specification=dict(
