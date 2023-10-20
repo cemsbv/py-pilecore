@@ -15,11 +15,13 @@ soil_properties_list = []
 def create_soil_properties_payload(
     cptdata_objects: List[CPTData],
     layer_tables: Dict[str, pd.DataFrame],
-    groundwater_level: float,
+    groundwater_level_nap: float,
     friction_range_strategy: str,
     excavation_depth_nap: float | None = None,
-    set_negative_friction_range_nap: Mapping[Any, Tuple[float, str]] | None = None,
-    set_positive_friction_range_nap: Mapping[Any, Tuple[float, str]] | None = None,
+    individual_negative_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    | None = None,
+    individual_positive_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    | None = None,
 ) -> Tuple[List[dict], Dict[str, dict]]:
     for cpt in tqdm(cptdata_objects):
         # Construct the cpt_data payload
@@ -57,27 +59,27 @@ def create_soil_properties_payload(
             layer_table_data=layer_table_data,
             ref_height=cpt.delivered_vertical_position_offset,
             test_id=cpt.alias,
-            groundwater_level_nap=groundwater_level
-            if groundwater_level is not None
+            groundwater_level_nap=groundwater_level_nap
+            if groundwater_level_nap is not None
             else cpt.delivered_vertical_position_offset - 1,
             coordinates=dict(x=cpt.delivered_location.x, y=cpt.delivered_location.y),
         )
         # Optionally add cpt-specific friction-range parameters
         if friction_range_strategy == "manual":
             if (
-                set_negative_friction_range_nap is not None
-                and cpt.alias in set_negative_friction_range_nap.keys()
+                individual_negative_friction_range_nap is not None
+                and cpt.alias in individual_negative_friction_range_nap.keys()
             ):
                 soil_properties[
                     "fixed_negative_friction_range_nap"
-                ] = set_negative_friction_range_nap[cpt.alias]
+                ] = individual_negative_friction_range_nap[cpt.alias]
             if (
-                set_positive_friction_range_nap is not None
-                and cpt.alias in set_positive_friction_range_nap.keys()
+                individual_positive_friction_range_nap is not None
+                and cpt.alias in individual_positive_friction_range_nap.keys()
             ):
                 soil_properties[
                     "fixed_positive_friction_range_nap"
-                ] = set_positive_friction_range_nap[cpt.alias]
+                ] = individual_positive_friction_range_nap[cpt.alias]
 
         soil_properties_list.append(soil_properties)
         results_passover[cpt.alias] = {

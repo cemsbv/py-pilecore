@@ -15,7 +15,7 @@ def create_multi_cpt_payload(
     pile_tip_levels_nap: Sequence[float],
     cptdata_objects: List[CPTData],
     layer_tables: Dict[str, pd.DataFrame],
-    groundwater_level: float,
+    groundwater_level_nap: float,
     friction_range_strategy: str,
     pile_type: str,
     specification: str,
@@ -38,8 +38,10 @@ def create_multi_cpt_payload(
     pile_head_level_nap: float | str | None = None,
     excavation_depth_nap: float | None = None,
     excavation_param_t: float | None = None,
-    set_negative_friction_range_nap: Mapping[Any, Tuple[float, str]] | None = None,
-    set_positive_friction_range_nap: Mapping[Any, Tuple[float, str]] | None = None,
+    individual_negative_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    | None = None,
+    individual_positive_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    | None = None,
     diameter_base: float | None = None,
     diameter_shaft: float | None = None,
     width_base_large: float | None = None,
@@ -59,14 +61,14 @@ def create_multi_cpt_payload(
     is_low_vibrating: float | None = None,
     negative_fr_delta_factor: float | None = None,
 ) -> Tuple[dict, Dict[str, dict]]:
-    soil_properties_list, results_passover = create_soil_properties_payload(
+    soil_properties_list, results_kwargs = create_soil_properties_payload(
         cptdata_objects=cptdata_objects,
         layer_tables=layer_tables,
-        groundwater_level=groundwater_level,
+        groundwater_level_nap=groundwater_level_nap,
         friction_range_strategy=friction_range_strategy,
         excavation_depth_nap=excavation_depth_nap,
-        set_negative_friction_range_nap=set_negative_friction_range_nap,
-        set_positive_friction_range_nap=set_positive_friction_range_nap,
+        individual_negative_friction_range_nap=individual_negative_friction_range_nap,
+        individual_positive_friction_range_nap=individual_positive_friction_range_nap,
     )
     pile_properties = create_pile_properties_payload(
         pile_type=pile_type,
@@ -140,7 +142,7 @@ def create_multi_cpt_payload(
     if stiff_construction is not None:
         multi_cpt_payload["stiff_construction"] = stiff_construction
 
-    return multi_cpt_payload, results_passover
+    return multi_cpt_payload, results_kwargs
 
 
 def create_multi_cpt_report_payload(
@@ -149,9 +151,9 @@ def create_multi_cpt_report_payload(
     project_id: str,
     author: str,
     date: str | None = None,
-    group_results_content: bool | None = None,
-    individual_cpt_results_content: bool | None = None,
-    result_summary_content: bool | None = None,
+    group_results_content: bool = True,
+    individual_cpt_results_content: bool = True,
+    result_summary_content: bool = True,
 ) -> dict:
     report_payload = deepcopy(multi_cpt_payload)
     report_payload.update(
