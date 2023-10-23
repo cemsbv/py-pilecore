@@ -97,6 +97,8 @@ mypy-extensions==1.0.0
     #   black
     #   mypy
     #   py-pilecore (pyproject.toml)
+natsort==8.4.0
+    # via py-pilecore (pyproject.toml)
 numpy==1.26.1
     # via
     #   cems-nuclei
