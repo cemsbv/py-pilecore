@@ -45,11 +45,12 @@ def create_grouper_payload(
     form  subgroups of the total group of CPT’s belonging to this project.
     Valid subgroups have three characteristics:
         - a maximum variation coefficient of 12% at one or more pile-tip levels. (Variation check
-        NEN9997-1 A.3.3.3)
+          NEN9997-1 A.3.3.3)
         - a minimum design pile bearing capacity based on the given pile load ULS at one or more
-        pile-tip levels. (Bearing check)
+          pile-tip levels. (Bearing check)
         - is spatially coherent, which means there are no other CPTs in between the members
-        of the subgroup. (Spatial check)
+          of the subgroup. (Spatial check)
+
 
     Additionally, centre to centre validation (include_centre_to_centre_check; NEN9997-1 3.2.3) can be
     added to the cluster method. This check adds restrictions to the maximum allowable R;c;cal outliers
@@ -80,13 +81,14 @@ def create_grouper_payload(
         Based on the filter method, a selection of valid subgroups are included in the report. The following
         filters are available:
             - Number_of_cpts: the grouper adds filters to make the group as big as possible to try and get a
-            uniform pile tip level for most CPT’s.
+              uniform pile tip level for most CPT’s.
             - Number_of_consecutive_pile_levels; the grouper adds filters to get groups that contain consecutive
-            pile tip levels to ensure a consistent soil layer is used.
+              pile tip levels to ensure a consistent soil layer is used.
             - Minimum_pile_level; the grouper adds filters to return groups that optimize pile length to try and
-            optimize or reduce material use.
+              optimize or reduce material use.
             - Centre_to_centre_check; the grouper adds filters to favour groups that are valid according to the
-            centre to centre rules of the NEN9997-1 3.2.3.
+              centre to centre rules of the NEN9997-1 3.2.3.
+
     gamma_shaft
         Default is 1.2
         Safety factor shaft design bearing capacity
@@ -114,8 +116,13 @@ def create_grouper_payload(
     ------
     ValueError:
         - if NaN values are present in negative friction, bottom or shaft bearing_capacity
+
+
         - if x or y coordinate is None
+
+
         - if pile tip levels don't macht for all SingleCPTBearingResults
+
 
     Returns
     -------
