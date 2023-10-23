@@ -42,8 +42,7 @@ class SingleClusterData:
         return pd.DataFrame(self.__dict__)
 
     def plot_variation_coefficient(
-        self,
-        axes: plt.Axes,
+        self, axes: plt.Axes | None = None, **kwargs: Any
     ) -> None:
         """
         Plot the bearing capacity and variation coefficient in a subplot
@@ -52,7 +51,12 @@ class SingleClusterData:
         ----------
         axes:
             `plt.Axes` object where the data can be plotted on.
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
         """
+        if axes is None:
+            _, axes = plt.subplots(**kwargs)
+
         # create variation coefficient plot
         axes.plot(self.variation_coefficient, self.pile_tip_level, "o-")
         axes.axvline(x=0.12, color="black", linestyle="--")
@@ -60,9 +64,7 @@ class SingleClusterData:
         axes.set_xlabel("Variation coefficient [-]")
 
     def plot_bearing_capacity(
-        self,
-        axes: plt.Axes,
-        pile_load_uls: float,
+        self, axes: plt.Axes | None = None, pile_load_uls: float = 0.0, **kwargs: Any
     ) -> None:
         """
         Plot the bearing capacity and variation coefficient in a subplot
@@ -78,8 +80,14 @@ class SingleClusterData:
         axes:
             `plt.Axes` object where the data can be plotted on.
         pile_load_uls:
+            Default is 0.0
             ULS load in kN.
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
         """
+        if axes is None:
+            _, axes = plt.subplots(**kwargs)
+
         # add net bearing capacity to plot
         axes.scatter(
             self.net_design_bearing_capacity,
@@ -96,8 +104,7 @@ class SingleClusterData:
         axes.set_xlabel("Net bearing capacity [kN]")
 
     def plot_group_centre_to_centre_validation(
-        self,
-        axes: plt.Axes,
+        self, axes: plt.Axes | None = None, **kwargs: Any
     ) -> None:
         """
         Plot the spacing checks in a subplot
@@ -112,7 +119,12 @@ class SingleClusterData:
         ----------
         axes:
             `plt.Axes` object where the data can be plotted on.
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
         """
+        if axes is None:
+            _, axes = plt.subplots(**kwargs)
+
         axes.scatter(
             [0] * len(self.pile_tip_level),
             self.pile_tip_level,
@@ -150,10 +162,7 @@ class SingleClusterData:
         axes.set_xticks([0, 1, 2], ["25", "20", "15"])
         axes.set_xlabel("CPT ctc [m]")
 
-    def plot_xi(
-        self,
-        axes: plt.Axes,
-    ) -> None:
+    def plot_xi(self, axes: plt.Axes | None = None, **kwargs: Any) -> None:
         """
         Plot the xi factor in a subplot
 
@@ -167,7 +176,11 @@ class SingleClusterData:
         ----------
         axes:
             `plt.Axes` object where the data can be plotted on.
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
         """
+        if axes is None:
+            _, axes = plt.subplots(**kwargs)
 
         axes.scatter(
             self.xi_values,
@@ -190,7 +203,7 @@ class SingleClusterResult:
     """
 
     cpt_names: List[str]
-    coordinates: List[float]
+    coordinates: List[Tuple[float, float]]
     pile_load_uls: float
     maximum_pile_level: float
     minimum_pile_level: float
@@ -265,7 +278,7 @@ class SingleClusterResult:
         )
 
         # plot cpt
-        xy: List[List[List[float]]] = list(*zip(*self.coordinates))
+        xy = list(zip(*self.coordinates))
         axes = axes.scatter(x=xy[0], y=xy[1], color="grey")
 
         # add labels (cpt names) to map
