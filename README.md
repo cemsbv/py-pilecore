@@ -43,6 +43,18 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+## Documentation
+
+Build the docs:
+
+```bash
+python -m pip install --upgrade pip setuptools
+pip install -r requirements.txt
+pip install .
+
+sphinx-build -b html docs public
+```
+
 ## Format
 
 We format our code with black and isort.
@@ -82,11 +94,11 @@ pip install pip-tools
 Generate requirements.txt file with:
 
 ```bash
-pip-compile --extra=test --extra=lint --output-file=requirements.txt pyproject.toml
+pip-compile --extra=test --extra=lint --extra=docs --output-file=requirements.txt pyproject.toml
 ```
 
 Update the requirements within the defined ranges with:
 
 ```bash
-pip-compile --upgrade --extra=test --extra=lint --output-file=requirements.txt pyproject.toml
+pip-compile --upgrade --extra=test --extra=lint --extra=docs --output-file=requirements.txt pyproject.toml
 ```
