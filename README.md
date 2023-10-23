@@ -6,7 +6,7 @@ Public python SDK for the CEMS PileCore web-API
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 
-This repository is created by [CEMS BV](https://cemsbv.nl/) and is a public python wrapper around the the CEMS [PileCore web-API](https://nuclei.cemsbv.io/#/pilecore/api).
+This repository is created by [CEMS BV](https://cemsbv.nl/) and is a public python wrapper around the CEMS [PileCore web-API](https://nuclei.cemsbv.io/#/pilecore/api).
 
 # Installation
 
@@ -48,8 +48,8 @@ pip install -e .
 We format our code with black and isort.
 
 ```bash
-black --config "pyproject.toml" src/nuclei tests
-isort --settings-path "pyproject.toml" src/nuclei tests
+black --config "pyproject.toml" src/pypilecore
+isort --settings-path "pyproject.toml" src/pypilecore
 ```
 
 ## Lint
@@ -88,5 +88,5 @@ pip-compile --extra=test --extra=lint --output-file=requirements.txt pyproject.t
 Update the requirements within the defined ranges with:
 
 ```bash
-pip-compile --upgrade --extra=test ---extra=lint --output-file=requirements.txt pyproject.toml
+pip-compile --upgrade --extra=test --extra=lint --output-file=requirements.txt pyproject.toml
 ```
