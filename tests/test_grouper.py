@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+
 from pypilecore.results.grouper_result import GrouperResults
 
 
@@ -8,7 +9,9 @@ def test_grouper_results(mock_group_cpts_response):
     """
 
     # test parsing of response to dataclass
-    result = GrouperResults.from_api_response(mock_group_cpts_response, pile_load_uls=1500)
+    result = GrouperResults.from_api_response(
+        mock_group_cpts_response, pile_load_uls=1500
+    )
 
     # test plotting
     plot = result.plot()
