@@ -48,8 +48,8 @@ pip install -e .
 We format our code with black and isort.
 
 ```bash
-black --config "pyproject.toml" src/pypilecore
-isort --settings-path "pyproject.toml" src/pypilecore
+black --config "pyproject.toml" src/pypilecore tests 
+isort --settings-path "pyproject.toml" src/pypilecore tests
 ```
 
 ## Lint
