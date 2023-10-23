@@ -14,6 +14,39 @@ from shapely import MultiPoint
 class SingleClusterData:
     """
     *Not meant to be instantiated by the user.*
+
+    Attributes:
+    ------------
+    characteristic_bearing_capacity: List[float]
+        characteristic bearing capacity [kN]
+    design_bearing_capacity: List[float]
+        design bearing capacity [kN]
+    design_negative_friction: List[float]
+        design negative friction [kN]
+    group_centre_to_centre_validation: List[bool]
+        group centre to centre validation
+    group_centre_to_centre_validation_15: List[bool]
+        group centre to centre validation 15 meter
+    group_centre_to_centre_validation_20: List[bool]
+        group centre to centre validation 20 meter
+    group_centre_to_centre_validation_25: List[bool]
+        group centre to centre validation 25 meter
+    mean_calculated_bearing_capacity: List[float]
+        mean calculated bearing capacity [kN]
+    min_calculated_bearing_capacity: List[float]
+        min calculated bearing capacity [kN]
+    net_design_bearing_capacity: List[float]
+        net design bearing capacity [kN]
+    nominal_cpt: List[str]
+        nominal cpt
+    pile_tip_level: List[float]
+        pile tip level [m w.r.t NAP]
+    variation_coefficient: List[float]
+        variation coefficient [-]
+    xi_factor: List[str]
+        xi factor
+    xi_values: List[float]
+        xi values [-]
     """
 
     characteristic_bearing_capacity: List[float]
@@ -200,6 +233,33 @@ class SingleClusterData:
 class SingleClusterResult:
     """
     *Not meant to be instantiated by the user.*
+
+    Attributes:
+    ------------
+    cpt_names: List[str]
+        List of cpt names present in this cluster
+    coordinates: List[Tuple[float, float]]
+        List of coordinates present in this cluster
+    pile_load_uls
+        ULS load in kN. Used to determine if a grouping configuration is valid.
+    maximum_pile_level: float
+        maximum pile level [m w.r.t NAP]
+    minimum_pile_level: float
+        minimum pile level [m w.r.t NAP]
+    number_of_consecutive_pile_levels: int
+        number of consecutive pile levels
+    pile_load_check: bool
+        True if a minimum design pile bearing capacity based on the given pile load ULS at one or more
+        pile-tip levels.
+    spatial_check: bool
+        True if cluster is spatially coherent, which means there are no other CPTs in between the members
+        of the subgroup.
+    variation_check: bool
+        True if a maximum variation coefficient of 12% at one or more pile-tip levels.
+    centre_to_centre_check: bool
+        True if one of the conditions stated in NEN9997-1 3.2.3 is met at one or more pile-tip levels.
+    data: SingleClusterData
+        single cluster dataclass
     """
 
     cpt_names: List[str]
@@ -356,6 +416,16 @@ class SingleClusterResult:
 
 @dataclass(frozen=True)
 class GrouperResults:
+    """
+    *Not meant to be instantiated by the user.*
+
+    Use the `from_api_response` method to instantiate the class.
+
+    Attributes:
+    ------------
+    clusters: List[SingleClusterResult]
+    """
+
     clusters: List[SingleClusterResult]
 
     @classmethod
