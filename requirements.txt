@@ -10,7 +10,7 @@ attrs==23.1.0
     # via fiona
 backcall==0.2.0
     # via ipython
-black==23.9.1
+black==23.10.0
     # via py-pilecore (pyproject.toml)
 cems-nuclei[client]==0.3.2
     # via
@@ -21,7 +21,7 @@ certifi==2023.7.22
     #   fiona
     #   pyproj
     #   requests
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via requests
 click==8.1.7
     # via
@@ -87,12 +87,14 @@ matplotlib-inline==0.1.6
     # via ipython
 mccabe==0.7.0
     # via flake8
-mypy==1.6.0
+mypy==1.6.1
     # via py-pilecore (pyproject.toml)
 mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
+natsort==8.4.0
+    # via py-pilecore (pyproject.toml)
 numpy==1.26.1
     # via
     #   cems-nuclei
@@ -127,7 +129,7 @@ platformdirs==3.11.0
     # via black
 pluggy==1.3.0
     # via pytest
-polars[pyarrow]==0.19.8
+polars[pyarrow]==0.19.11
     # via
     #   cems-nuclei
     #   polars
@@ -144,7 +146,7 @@ pycodestyle==2.11.1
     # via flake8
 pyflakes==3.1.0
     # via flake8
-pygef==0.9.0
+pygef==0.10.0
     # via py-pilecore (pyproject.toml)
 pygments==2.16.1
     # via ipython
@@ -191,7 +193,7 @@ typing-extensions==4.8.0
     #   mypy
 tzdata==2023.3
     # via pandas
-urllib3==2.0.6
+urllib3==2.0.7
     # via requests
 wcwidth==0.2.8
     # via prompt-toolkit
