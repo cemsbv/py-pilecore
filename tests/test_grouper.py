@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from pypilecore.results.grouper_result import GrouperResults
 
 
-def test_grouper_results(mock_group_cpts_response):
+def test_grouper_results(mock_group_cpts_response) -> None:
     """
     Test parsing and plotting in GrouperResults object
     """
