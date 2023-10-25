@@ -162,7 +162,7 @@ pyflakes==3.0.1
     # via
     #   flake8
     #   py-pilecore (pyproject.toml)
-pygef==0.9.0
+pygef==0.10.0
     # via py-pilecore (pyproject.toml)
 pygments==2.16.1
     # via ipython
