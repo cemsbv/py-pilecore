@@ -215,7 +215,7 @@ typing-extensions==4.7.1
     #   py-pilecore (pyproject.toml)
 tzdata==2023.3
     # via pandas
-urllib3==2.0.6
+urllib3==2.0.7
     # via requests
 wcwidth==0.2.8
     # via prompt-toolkit
