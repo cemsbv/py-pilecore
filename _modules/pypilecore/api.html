@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypilecore.api &mdash; py-pilecore 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/getting_started.html">Installing py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/getting_started.html#how-to-import-py-pilecore">How to import py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tree/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pypilecore.api</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pypilecore.api</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="kn">from</span> <span class="nn">nuclei.client</span> <span class="kn">import</span> <span class="n">NucleiClient</span>
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">Response</span>
+
+
+<span class="k">def</span> <span class="nf">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">ticket</span><span class="p">:</span> <span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ticket</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ticket</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;STARTED&quot;</span>
+    <span class="n">sleep_time</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="k">while</span> <span class="n">status</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;PENDING&quot;</span><span class="p">,</span> <span class="s2">&quot;STARTED&quot;</span><span class="p">,</span> <span class="s2">&quot;RETRY&quot;</span><span class="p">]:</span>
+        <span class="n">sleep_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sleep_time</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="n">sleep_time</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-status&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;FAILURE&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;msg&quot;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;traceback&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_multi_cpt_api_result"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_multi_cpt_api_result">[docs]</a><span class="k">def</span> <span class="nf">get_multi_cpt_api_result</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;/compression/multiple-cpts/results&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="get_multi_cpt_api_report"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_multi_cpt_api_report">[docs]</a><span class="k">def</span> <span class="nf">get_multi_cpt_api_report</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;/compression/multiple-cpts/report&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="get_groups_api_result"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_groups_api_result">[docs]</a><span class="k">def</span> <span class="nf">get_groups_api_result</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/group_cpts&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Finding groups... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;/grouper/group_cpts&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="get_optimize_groups_api_result"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_optimize_groups_api_result">[docs]</a><span class="k">def</span> <span class="nf">get_optimize_groups_api_result</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/optimize_groups&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Optimize groups... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;/grouper/optimize_groups&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="get_groups_api_report"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_groups_api_report">[docs]</a><span class="k">def</span> <span class="nf">get_groups_api_report</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/generate_grouper_report&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request, can be created by calling `create_grouper_report_payload()`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;/grouper/generate_grouper_report&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

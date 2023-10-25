@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypilecore.results.grouper_result &mdash; py-pilecore 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/getting_started.html">Installing py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/getting_started.html#how-to-import-py-pilecore">How to import py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pypilecore.results.grouper_result</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pypilecore.results.grouper_result</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">natsort</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">MultiPoint</span>
+
+
+<div class="viewcode-block" id="SingleClusterData"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterData">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SingleClusterData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Not meant to be instantiated by the user.*</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    ------------</span>
+<span class="sd">    characteristic_bearing_capacity: List[float]</span>
+<span class="sd">        characteristic bearing capacity [kN]</span>
+<span class="sd">    design_bearing_capacity: List[float]</span>
+<span class="sd">        design bearing capacity [kN]</span>
+<span class="sd">    design_negative_friction: List[float]</span>
+<span class="sd">        design negative friction [kN]</span>
+<span class="sd">    group_centre_to_centre_validation: List[bool]</span>
+<span class="sd">        group centre to centre validation</span>
+<span class="sd">    group_centre_to_centre_validation_15: List[bool]</span>
+<span class="sd">        group centre to centre validation 15 meter</span>
+<span class="sd">    group_centre_to_centre_validation_20: List[bool]</span>
+<span class="sd">        group centre to centre validation 20 meter</span>
+<span class="sd">    group_centre_to_centre_validation_25: List[bool]</span>
+<span class="sd">        group centre to centre validation 25 meter</span>
+<span class="sd">    mean_calculated_bearing_capacity: List[float]</span>
+<span class="sd">        mean calculated bearing capacity [kN]</span>
+<span class="sd">    min_calculated_bearing_capacity: List[float]</span>
+<span class="sd">        min calculated bearing capacity [kN]</span>
+<span class="sd">    net_design_bearing_capacity: List[float]</span>
+<span class="sd">        net design bearing capacity [kN]</span>
+<span class="sd">    nominal_cpt: List[str]</span>
+<span class="sd">        nominal cpt</span>
+<span class="sd">    pile_tip_level: List[float]</span>
+<span class="sd">        pile tip level [m w.r.t NAP]</span>
+<span class="sd">    variation_coefficient: List[float]</span>
+<span class="sd">        variation coefficient [-]</span>
+<span class="sd">    xi_factor: List[str]</span>
+<span class="sd">        xi factor</span>
+<span class="sd">    xi_values: List[float]</span>
+<span class="sd">        xi values [-]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">characteristic_bearing_capacity</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">design_bearing_capacity</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">design_negative_friction</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">group_centre_to_centre_validation</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+    <span class="n">group_centre_to_centre_validation_15</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+    <span class="n">group_centre_to_centre_validation_20</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+    <span class="n">group_centre_to_centre_validation_25</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+    <span class="n">mean_calculated_bearing_capacity</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">min_calculated_bearing_capacity</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">net_design_bearing_capacity</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">nominal_cpt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">pile_tip_level</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">variation_coefficient</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">xi_factor</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">xi_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">raw_lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;All values in this dataclass must have the same length.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SingleClusterData.plot_variation_coefficient"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterData.plot_variation_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">plot_variation_coefficient</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the bearing capacity and variation coefficient in a subplot</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            `plt.Axes` object where the data can be plotted on.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># create variation coefficient plot</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variation_coefficient</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Variation coefficient [-]&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SingleClusterData.plot_bearing_capacity"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterData.plot_bearing_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">plot_bearing_capacity</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the bearing capacity and variation coefficient in a subplot</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        For the `Net bearing capacity` subplot there are two colors plotted:</span>
+<span class="sd">         - orange:  conservative bearing capacity</span>
+<span class="sd">         - blue:    net bearing capacity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            `plt.Axes` object where the data can be plotted on.</span>
+<span class="sd">        pile_load_uls:</span>
+<span class="sd">            Default is 0.0</span>
+<span class="sd">            ULS load in kN.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add net bearing capacity to plot</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_design_bearing_capacity</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                <span class="nb">map</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:blue&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.12</span> <span class="k">else</span> <span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">variation_coefficient</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pile_load_uls</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Net bearing capacity [kN]&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SingleClusterData.plot_group_centre_to_centre_validation"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterData.plot_group_centre_to_centre_validation">[docs]</a>    <span class="k">def</span> <span class="nf">plot_group_centre_to_centre_validation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the spacing checks in a subplot</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        For the `spacing` subplot there are two colors plotted:</span>
+<span class="sd">         - red:     invalid spacing</span>
+<span class="sd">         - green:   valid spacing</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            `plt.Axes` object where the data can be plotted on.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                <span class="nb">map</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:green&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">group_centre_to_centre_validation_25</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                <span class="nb">map</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:green&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">group_centre_to_centre_validation_20</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;D&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                <span class="nb">map</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:green&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">group_centre_to_centre_validation_15</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;25&quot;</span><span class="p">,</span> <span class="s2">&quot;20&quot;</span><span class="p">,</span> <span class="s2">&quot;15&quot;</span><span class="p">])</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;CPT ctc [m]&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SingleClusterData.plot_xi"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterData.plot_xi">[docs]</a>    <span class="k">def</span> <span class="nf">plot_xi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the xi factor in a subplot</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        For the `xi factor` subplot there are two colors plotted:</span>
+<span class="sd">         - olive:   xi3</span>
+<span class="sd">         - cyan:    xi4</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            `plt.Axes` object where the data can be plotted on.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xi_values</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                <span class="nb">map</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="s2">&quot;tab:cyan&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\u03BE</span><span class="s2">4&quot;</span> <span class="k">else</span> <span class="s2">&quot;tab:olive&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xi_factor</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;xi value [-]&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SingleClusterResult"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterResult">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SingleClusterResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Not meant to be instantiated by the user.*</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    ------------</span>
+<span class="sd">    cpt_names: List[str]</span>
+<span class="sd">        List of cpt names present in this cluster</span>
+<span class="sd">    coordinates: List[Tuple[float, float]]</span>
+<span class="sd">        List of coordinates present in this cluster</span>
+<span class="sd">    pile_load_uls</span>
+<span class="sd">        ULS load in kN. Used to determine if a grouping configuration is valid.</span>
+<span class="sd">    maximum_pile_level: float</span>
+<span class="sd">        maximum pile level [m w.r.t NAP]</span>
+<span class="sd">    minimum_pile_level: float</span>
+<span class="sd">        minimum pile level [m w.r.t NAP]</span>
+<span class="sd">    number_of_consecutive_pile_levels: int</span>
+<span class="sd">        number of consecutive pile levels</span>
+<span class="sd">    pile_load_check: bool</span>
+<span class="sd">        True if a minimum design pile bearing capacity based on the given pile load ULS at one or more</span>
+<span class="sd">        pile-tip levels.</span>
+<span class="sd">    spatial_check: bool</span>
+<span class="sd">        True if cluster is spatially coherent, which means there are no other CPTs in between the members</span>
+<span class="sd">        of the subgroup.</span>
+<span class="sd">    variation_check: bool</span>
+<span class="sd">        True if a maximum variation coefficient of 12% at one or more pile-tip levels.</span>
+<span class="sd">    centre_to_centre_check: bool</span>
+<span class="sd">        True if one of the conditions stated in NEN9997-1 3.2.3 is met at one or more pile-tip levels.</span>
+<span class="sd">    data: SingleClusterData</span>
+<span class="sd">        single cluster dataclass</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cpt_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">coordinates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+    <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">maximum_pile_level</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">minimum_pile_level</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">number_of_consecutive_pile_levels</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pile_load_check</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">spatial_check</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">variation_check</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">centre_to_centre_check</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">SingleClusterData</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">response_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SingleClusterResult&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+                <span class="n">cpt_names</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">],</span>
+                <span class="n">coordinates</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">],</span>
+                <span class="n">pile_load_uls</span><span class="o">=</span><span class="n">pile_load_uls</span><span class="p">,</span>
+                <span class="n">maximum_pile_level</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;maximum_pile_level&quot;</span><span class="p">],</span>
+                <span class="n">minimum_pile_level</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;minimum_pile_level&quot;</span><span class="p">],</span>
+                <span class="n">number_of_consecutive_pile_levels</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span>
+                    <span class="s2">&quot;number_of_consecutive_pile_levels&quot;</span>
+                <span class="p">],</span>
+                <span class="n">pile_load_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;pile_load_check&quot;</span><span class="p">],</span>
+                <span class="n">spatial_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;spatial_check&quot;</span><span class="p">],</span>
+                <span class="n">variation_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;variation_check&quot;</span><span class="p">],</span>
+                <span class="n">centre_to_centre_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;centre_to_centre_check&quot;</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">SingleClusterData</span><span class="p">(</span><span class="o">**</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;table&quot;</span><span class="p">]),</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="s2">&quot;Response dictionary is missing an expected key.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="sa">rf</span><span class="s2">&quot;Traceback: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Could not create `SingleClusterResult` class with the following cpts: </span><span class="si">{</span><span class="n">response_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;names&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">rf</span><span class="s2">&quot;Traceback: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="SingleClusterResult.map"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterResult.map">[docs]</a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot a map of the cpt locations</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        figsize:</span>
+<span class="sd">            Size of the activate figure, as the `plt.figure()` argument.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            The `Axes` object where the data was plotted on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create axes objects if not provided</span>
+        <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+            <span class="o">**</span><span class="n">kwargs_subplot</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># plot cpt</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">))</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
+
+        <span class="c1"># add labels (cpt names) to map</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">):</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="SingleClusterResult.plot"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterResult.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot contains the:</span>
+<span class="sd">            - bearing capacity</span>
+<span class="sd">            - variation coefficient</span>
+<span class="sd">            - xi factor</span>
+<span class="sd">            - centre to centre validation</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        For the `Net bearing capacity` subplot there are two colors plotted:</span>
+<span class="sd">         - orange:  conservative bearing capacity</span>
+<span class="sd">         - blue:    net bearing capacity</span>
+
+<span class="sd">        For the `xi factor` subplot there are two colors plotted:</span>
+<span class="sd">         - olive:   xi3</span>
+<span class="sd">         - cyan:    xi4</span>
+
+<span class="sd">        For the `spacing` subplot there are two colors plotted:</span>
+<span class="sd">         - red:     invalid spacing</span>
+<span class="sd">         - green:   valid spacing</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        figsize:</span>
+<span class="sd">            Size of the activate figure, as the `plt.figure()` argument.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        figure:</span>
+<span class="sd">            `plt.Figure` object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;sharey&quot;</span><span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sharex&quot;</span><span class="p">:</span> <span class="s2">&quot;col&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="mi">4</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs_subplot</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># add plot variation coefficient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot_variation_coefficient</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># add plot bearing capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot_bearing_capacity</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_load_uls</span><span class="p">)</span>
+
+        <span class="c1"># add xi table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot_xi</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="c1"># add centre to centre</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot_group_centre_to_centre_validation</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div></div>
+
+
+<div class="viewcode-block" id="GrouperResults"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.GrouperResults">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">GrouperResults</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Not meant to be instantiated by the user.*</span>
+
+<span class="sd">    Use the `from_api_response` method to instantiate the class.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    ------------</span>
+<span class="sd">    clusters: List[SingleClusterResult]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">clusters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SingleClusterResult</span><span class="p">]</span>
+
+<div class="viewcode-block" id="GrouperResults.from_api_response"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.GrouperResults.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">response_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GrouperResults&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores the response of the PileCore endpoint</span>
+<span class="sd">        &quot;/grouper/group_cpts&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        response_dict:</span>
+<span class="sd">           The resulting response of a call to `get_groups_api_result()`</span>
+<span class="sd">        pile_load_uls:</span>
+<span class="sd">            ULS load in kN. Used to determine if a grouping configuration is valid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SingleClusterResult</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;sub_groups&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">clusters</span><span class="o">=</span><span class="n">results</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GrouperResults.map"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.GrouperResults.map">[docs]</a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">25.0</span><span class="p">,</span>
+        <span class="n">add_tags</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot a map of the valid subgroups.</span>
+<span class="sd">        Plot contains the:</span>
+<span class="sd">            - convex_hull of the subgroup with buffer distance</span>
+<span class="sd">            - All CPT&#39;s with tag</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        distance : float, optional</span>
+<span class="sd">            Default is 25.</span>
+<span class="sd">            The buffer around the convex_hull of the subgroup</span>
+<span class="sd">        add_tags : bool, optional</span>
+<span class="sd">            default is True</span>
+<span class="sd">            Show the CTP names as tags on the map</span>
+<span class="sd">        figsize:</span>
+<span class="sd">            Size of the activate figure, as the `plt.figure()` argument.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        figure:</span>
+<span class="sd">            The `Figure` object where the data was plotted on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">figure</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+            <span class="o">**</span><span class="n">kwargs_subplot</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">):</span>
+            <span class="c1"># add cpts to plot</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">cluster</span><span class="o">.</span><span class="n">coordinates</span><span class="p">))</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">add_tags</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">):</span>
+                    <span class="n">axes</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                        <span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="c1"># add group convex hull</span>
+            <span class="n">polygon</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">MultiPoint</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">coordinates</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">convex_hull</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">exterior</span>
+            <span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polygon</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">group_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">figure</span></div>
+
+<div class="viewcode-block" id="GrouperResults.plot"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.GrouperResults.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot a summary of the valid subgroups.</span>
+<span class="sd">        Plot contains the:</span>
+<span class="sd">            - cpts within a subgroup</span>
+<span class="sd">            - valid depth of the subgroup</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        figsize:</span>
+<span class="sd">            Size of the activate figure, as the `plt.figure()` argument.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        figure:</span>
+<span class="sd">            the `plt.Figure` object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;sharex&quot;</span><span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">figure</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="mi">2</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs_subplot</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># place holds needed to sort for plot</span>
+        <span class="n">group_id_list_sort</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cpt_names_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">color_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">group_id_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">):</span>
+            <span class="n">group_id_list_sort</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">group_id</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">))</span>
+            <span class="n">cpt_names_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">)</span>
+            <span class="n">color_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;tab:green&quot;</span>
+                    <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
+                    <span class="k">else</span> <span class="s2">&quot;tab:orange&quot;</span>
+                    <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="o">~</span><span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
+                    <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span>
+                <span class="p">]</span>
+                <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">valid_pile_level</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">)[</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">net_design_bearing_capacity</span><span class="p">)</span>
+                <span class="o">&lt;=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">pile_load_uls</span>
+            <span class="p">]</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="n">group_id</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_pile_level</span><span class="p">),</span> <span class="n">valid_pile_level</span><span class="p">)</span>
+            <span class="n">group_id_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;group_id&quot;</span><span class="p">:</span> <span class="n">group_id_list_sort</span><span class="p">,</span>
+                    <span class="s2">&quot;cpt_names&quot;</span><span class="p">:</span> <span class="n">cpt_names_list</span><span class="p">,</span>
+                    <span class="s2">&quot;colors&quot;</span><span class="p">:</span> <span class="n">color_list</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;cpt_names&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">natsort</span><span class="o">.</span><span class="n">natsort_keygen</span><span class="p">())</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;group_id&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;cpt_names&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;colors&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Group ID&quot;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">group_id_list</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;CPT name&quot;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Group ID&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Depth [m NAP]&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">figure</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

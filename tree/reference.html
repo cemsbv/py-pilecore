@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reference &mdash; py-pilecore 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Installing py-pilecore" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Installing py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#how-to-import-py-pilecore">How to import py-pilecore</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#application-programming-interface">Application programming interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.api.get_multi_cpt_api_result"><code class="docutils literal notranslate"><span class="pre">get_multi_cpt_api_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.api.get_multi_cpt_api_report"><code class="docutils literal notranslate"><span class="pre">get_multi_cpt_api_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.api.get_groups_api_result"><code class="docutils literal notranslate"><span class="pre">get_groups_api_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.api.get_optimize_groups_api_result"><code class="docutils literal notranslate"><span class="pre">get_optimize_groups_api_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.api.get_groups_api_report"><code class="docutils literal notranslate"><span class="pre">get_groups_api_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pilecore-grouper">PileCore grouper</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.input.grouper_properties.create_grouper_payload"><code class="docutils literal notranslate"><span class="pre">create_grouper_payload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.input.grouper_properties.create_grouper_report_payload"><code class="docutils literal notranslate"><span class="pre">create_grouper_report_payload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults"><code class="docutils literal notranslate"><span class="pre">GrouperResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.from_api_response"><code class="docutils literal notranslate"><span class="pre">GrouperResults.from_api_response()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.map"><code class="docutils literal notranslate"><span class="pre">GrouperResults.map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.plot"><code class="docutils literal notranslate"><span class="pre">GrouperResults.plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterResult"><code class="docutils literal notranslate"><span class="pre">SingleClusterResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterResult.map"><code class="docutils literal notranslate"><span class="pre">SingleClusterResult.map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterResult.plot"><code class="docutils literal notranslate"><span class="pre">SingleClusterResult.plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterData"><code class="docutils literal notranslate"><span class="pre">SingleClusterData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterData.plot_variation_coefficient"><code class="docutils literal notranslate"><span class="pre">SingleClusterData.plot_variation_coefficient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterData.plot_bearing_capacity"><code class="docutils literal notranslate"><span class="pre">SingleClusterData.plot_bearing_capacity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterData.plot_group_centre_to_centre_validation"><code class="docutils literal notranslate"><span class="pre">SingleClusterData.plot_group_centre_to_centre_validation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.SingleClusterData.plot_xi"><code class="docutils literal notranslate"><span class="pre">SingleClusterData.plot_xi()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tree/reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reference">
+<h1>Reference<a class="headerlink" href="#reference" title="Permalink to this heading"></a></h1>
+<section id="application-programming-interface">
+<h2>Application programming interface<a class="headerlink" href="#application-programming-interface" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pypilecore.api.get_multi_cpt_api_result">
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_result" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypilecore.api.get_multi_cpt_api_report">
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_report" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypilecore.api.get_groups_api_result">
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_groups_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_groups_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_groups_api_result" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper around the PileCore endpoint “/grouper/group_cpts”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
+<li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypilecore.api.get_optimize_groups_api_result">
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_optimize_groups_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_optimize_groups_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_optimize_groups_api_result" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper around the PileCore endpoint “/grouper/optimize_groups”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
+<li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypilecore.api.get_groups_api_report">
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_groups_api_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_groups_api_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_groups_api_report" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper around the PileCore endpoint “/grouper/generate_grouper_report”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
+<li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_report_payload()</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="pilecore-grouper">
+<h2>PileCore grouper<a class="headerlink" href="#pilecore-grouper" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pypilecore.input.grouper_properties.create_grouper_payload">
+<span class="sig-prename descclassname"><span class="pre">pypilecore.input.grouper_properties.</span></span><span class="sig-name descname"><span class="pre">create_grouper_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_results_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">building_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_grid_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_shaft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centre_to_centre_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stiff_construction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_result_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['minimum_pile_level',</span> <span class="pre">'number_of_cpts',</span> <span class="pre">'number_of_consecutive_pile_levels']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/input/grouper_properties.html#create_grouper_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.input.grouper_properties.create_grouper_payload" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a dictionary with the payload content for the PileCore endpoint
+“/grouper/group_cpts”</p>
+<p class="rubric">Notes</p>
+<p>The grouper uses pile bearing capacity results calculated by PileCore or other software to
+form  subgroups of the total group of CPT’s belonging to this project.
+Valid subgroups have three characteristics:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a maximum variation coefficient of 12% at one or more pile-tip levels. (Variation check
+NEN9997-1 A.3.3.3)</p></li>
+<li><p>a minimum design pile bearing capacity based on the given pile load ULS at one or more
+pile-tip levels. (Bearing check)</p></li>
+<li><p>is spatially coherent, which means there are no other CPTs in between the members
+of the subgroup. (Spatial check)</p></li>
+</ul>
+</div></blockquote>
+<p>Additionally, centre to centre validation (include_centre_to_centre_check; NEN9997-1 3.2.3) can be
+added to the cluster method. This check adds restrictions to the maximum allowable R;c;cal outliers
+and makes sure that the suitable data density requirements for the subgroup are met, by checking the
+centre-to-centre (CTC) distance of the cpts in a regular square grid:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A maximum CTC distance of 25 m, if no R;c;cal outliers greater than 30% off the average;</p></li>
+<li><p>A maximum CTC distance of 20 m, if no R;c;cal outliers greater than 40% off the average;</p></li>
+<li><p>A maximum CTC distance of 15 m, if no R;c;cal outliers greater than 50% off the average;</p></li>
+<li><p>All subgroups with R;c;cal outliers greater than 50% of the average are considered invalid.</p></li>
+</ul>
+</div></blockquote>
+<p>The CTC check is performed by drawing a square around each CPT with the CTC dimensions according to the
+outlier criterion and verifying that there is no empty space between squares. The rotation of the squares
+can be provided with the <cite>cpt_grid_rotation</cite> argument. Note that this rotation is assigned to all CPT’s and
+therefore should represent the main orientation of the building.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpt_results_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>SingleCPTBearingResults</em><em>]</em>) – Dictionary with key as CPT name and value a SingleCPTBearingResults class</p></li>
+<li><p><strong>pile_load_uls</strong> (<em>float</em>) – ULS load in kN. Used to determine if a grouping configuration is valid.</p></li>
+<li><p><strong>stiff_construction</strong> (<em>bool</em>) – Default is False
+Attribute use to get the xi3 and xi4 value. True if it is a stiff construction</p></li>
+<li><p><strong>optimize_result_by</strong> (<em>List</em><em>[</em><em>Literal</em><em>[</em><em>'minimum_pile_level'</em><em>, </em><em>'number_of_cpts'</em><em>, </em><em>'number_of_consecutive_pile_levels'</em><em>, </em><em>'centre_to_centre_check'</em><em>]</em><em>] </em><em>| </em><em>None</em>) – <p>Default is “minimum_pile_level”, “number_of_cpts”, “number_of_consecutive_pile_levels”
+Attribute that states how to sort the result and find groups.
+Based on the filter method, a selection of valid subgroups are included in the report. The following
+filters are available:</p>
+<blockquote>
+<div><ul>
+<li><p>Number_of_cpts: the grouper adds filters to make the group as big as possible to try and get a
+uniform pile tip level for most CPT’s.</p></li>
+<li><p>Number_of_consecutive_pile_levels; the grouper adds filters to get groups that contain consecutive
+pile tip levels to ensure a consistent soil layer is used.</p></li>
+<li><p>Minimum_pile_level; the grouper adds filters to return groups that optimize pile length to try and
+optimize or reduce material use.</p></li>
+<li><p>Centre_to_centre_check; the grouper adds filters to favour groups that are valid according to the
+centre to centre rules of the NEN9997-1 3.2.3.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>gamma_shaft</strong> (<em>float</em>) – Default is 1.2
+Safety factor shaft design bearing capacity</p></li>
+<li><p><strong>gamma_bottom</strong> (<em>float</em>) – Default is 1.2
+Safety factor bottom design bearing capacity</p></li>
+<li><p><strong>include_centre_to_centre_check</strong> (<em>bool</em>) – Default is False
+Flag that indicates if the cluster algorithm performs a centre to centre validation of the CPT’s of the
+generated subgroups or not according to NEN9997-1 3.2.3. If the group doesn’t comply to the check, the
+result of the group is deleted from the result.</p></li>
+<li><p><strong>building_polygon</strong> (<em>Polygon</em><em> | </em><em>None</em>) – Default is None
+Polygon of the contour of the building. If None the building Polygon in generated based on the
+convex_hull of the CPT points.</p></li>
+<li><p><strong>cpt_grid_rotation</strong> (<em>float</em>) – Default is 0.0.
+Rotation of the squares used in the centre to centre validation [degrees]</p></li>
+<li><p><strong>resolution</strong> (<em>float</em>) – Default is 0.5
+The resolution of clusters algorithm. If resolution is 1 the cluster boundary conditions can be met
+(number clusters is number CPTs). Depending on the number of CPTs this can take some time.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError:</strong> – <ul class="simple">
+<li><p>if NaN values are present in negative friction, bottom or shaft bearing_capacity</p></li>
+<li><p>if x or y coordinate is None</p></li>
+<li><p>if pile tip levels don’t macht for all SingleCPTBearingResults</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary with the payload content for the PileCore endpoint
+“/grouper/group_cpts”</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>payload</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypilecore.input.grouper_properties.create_grouper_report_payload">
+<span class="sig-prename descclassname"><span class="pre">pypilecore.input.grouper_properties.</span></span><span class="sig-name descname"><span class="pre">create_grouper_report_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grouper_payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grouper_response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/input/grouper_properties.html#create_grouper_report_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.input.grouper_properties.create_grouper_report_payload" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a dictionary with the payload content for the PileCore endpoint
+“grouper/generate_grouper_report”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grouper_payload</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The resulting payload of a call to <cite>create_grouper_payload()</cite></p></li>
+<li><p><strong>grouper_response</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The resulting response of a call to <cite>get_groups_api_result()</cite></p></li>
+<li><p><strong>project_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the project.</p></li>
+<li><p><strong>project_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The identifier (code) of the project.</p></li>
+<li><p><strong>author</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The author of the report.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with the payload content for the PileCore endpoint
+“grouper/generate_grouper_report”</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>report_payload</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.grouper_result.</span></span><span class="sig-name descname"><span class="pre">GrouperResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults" title="Permalink to this definition"></a></dt>
+<dd><p><em>Not meant to be instantiated by the user.</em></p>
+<p>Use the <cite>from_api_response</cite> method to instantiate the class.</p>
+<section id="attributes">
+<h3>Attributes:<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
+<p>clusters: List[SingleClusterResult]</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults.from_api_response">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults.from_api_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults.from_api_response" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the response of the PileCore endpoint
+“/grouper/group_cpts”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>response_dict</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The resulting response of a call to <cite>get_groups_api_result()</cite></p></li>
+<li><p><strong>pile_load_uls</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – ULS load in kN. Used to determine if a grouping configuration is valid.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults" title="pypilecore.results.grouper_result.GrouperResults"><code class="xref py py-class docutils literal notranslate"><span class="pre">GrouperResults</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults.map">
+<span class="sig-name descname"><span class="pre">map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults.map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults.map" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a map of the valid subgroups.
+Plot contains the:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>convex_hull of the subgroup with buffer distance</p></li>
+<li><p>All CPT’s with tag</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>float</em><em>, </em><em>optional</em>) – Default is 25.
+The buffer around the convex_hull of the subgroup</p></li>
+<li><p><strong>add_tags</strong> (<em>bool</em><em>, </em><em>optional</em>) – default is True
+Show the CTP names as tags on the map</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>] </em><em>| </em><em>None</em>) – Size of the activate figure, as the <cite>plt.figure()</cite> argument.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <cite>Figure</cite> object where the data was plotted on.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults.plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a summary of the valid subgroups.
+Plot contains the:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>cpts within a subgroup</p></li>
+<li><p>valid depth of the subgroup</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>] </em><em>| </em><em>None</em>) – Size of the activate figure, as the <cite>plt.figure()</cite> argument.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the <cite>plt.Figure</cite> object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.grouper_result.</span></span><span class="sig-name descname"><span class="pre">SingleClusterResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_pile_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_pile_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_consecutive_pile_levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre_to_centre_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterResult" title="Permalink to this definition"></a></dt>
+<dd><p><em>Not meant to be instantiated by the user.</em></p>
+<section id="id1">
+<h3>Attributes:<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<dl class="simple">
+<dt>cpt_names: List[str]</dt><dd><p>List of cpt names present in this cluster</p>
+</dd>
+<dt>coordinates: List[Tuple[float, float]]</dt><dd><p>List of coordinates present in this cluster</p>
+</dd>
+<dt>pile_load_uls</dt><dd><p>ULS load in kN. Used to determine if a grouping configuration is valid.</p>
+</dd>
+<dt>maximum_pile_level: float</dt><dd><p>maximum pile level [m w.r.t NAP]</p>
+</dd>
+<dt>minimum_pile_level: float</dt><dd><p>minimum pile level [m w.r.t NAP]</p>
+</dd>
+<dt>number_of_consecutive_pile_levels: int</dt><dd><p>number of consecutive pile levels</p>
+</dd>
+<dt>pile_load_check: bool</dt><dd><p>True if a minimum design pile bearing capacity based on the given pile load ULS at one or more
+pile-tip levels.</p>
+</dd>
+<dt>spatial_check: bool</dt><dd><p>True if cluster is spatially coherent, which means there are no other CPTs in between the members
+of the subgroup.</p>
+</dd>
+<dt>variation_check: bool</dt><dd><p>True if a maximum variation coefficient of 12% at one or more pile-tip levels.</p>
+</dd>
+<dt>centre_to_centre_check: bool</dt><dd><p>True if one of the conditions stated in NEN9997-1 3.2.3 is met at one or more pile-tip levels.</p>
+</dd>
+<dt>data: SingleClusterData</dt><dd><p>single cluster dataclass</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterResult.map">
+<span class="sig-name descname"><span class="pre">map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterResult.map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterResult.map" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a map of the cpt locations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>] </em><em>| </em><em>None</em>) – Size of the activate figure, as the <cite>plt.figure()</cite> argument.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <cite>Axes</cite> object where the data was plotted on.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterResult.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterResult.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterResult.plot" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Plot contains the:</dt><dd><ul class="simple">
+<li><p>bearing capacity</p></li>
+<li><p>variation coefficient</p></li>
+<li><p>xi factor</p></li>
+<li><p>centre to centre validation</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>For the <cite>Net bearing capacity</cite> subplot there are two colors plotted:</dt><dd><ul class="simple">
+<li><p>orange:  conservative bearing capacity</p></li>
+<li><p>blue:    net bearing capacity</p></li>
+</ul>
+</dd>
+<dt>For the <cite>xi factor</cite> subplot there are two colors plotted:</dt><dd><ul class="simple">
+<li><p>olive:   xi3</p></li>
+<li><p>cyan:    xi4</p></li>
+</ul>
+</dd>
+<dt>For the <cite>spacing</cite> subplot there are two colors plotted:</dt><dd><ul class="simple">
+<li><p>red:     invalid spacing</p></li>
+<li><p>green:   valid spacing</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>] </em><em>| </em><em>None</em>) – Size of the activate figure, as the <cite>plt.figure()</cite> argument.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>plt.Figure</cite> object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.grouper_result.</span></span><span class="sig-name descname"><span class="pre">SingleClusterData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">characteristic_bearing_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_bearing_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_negative_friction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_centre_to_centre_validation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_centre_to_centre_validation_15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_centre_to_centre_validation_20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_centre_to_centre_validation_25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_calculated_bearing_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_calculated_bearing_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_design_bearing_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nominal_cpt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_tip_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation_coefficient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterData" title="Permalink to this definition"></a></dt>
+<dd><p><em>Not meant to be instantiated by the user.</em></p>
+<section id="id2">
+<h3>Attributes:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<dl class="simple">
+<dt>characteristic_bearing_capacity: List[float]</dt><dd><p>characteristic bearing capacity [kN]</p>
+</dd>
+<dt>design_bearing_capacity: List[float]</dt><dd><p>design bearing capacity [kN]</p>
+</dd>
+<dt>design_negative_friction: List[float]</dt><dd><p>design negative friction [kN]</p>
+</dd>
+<dt>group_centre_to_centre_validation: List[bool]</dt><dd><p>group centre to centre validation</p>
+</dd>
+<dt>group_centre_to_centre_validation_15: List[bool]</dt><dd><p>group centre to centre validation 15 meter</p>
+</dd>
+<dt>group_centre_to_centre_validation_20: List[bool]</dt><dd><p>group centre to centre validation 20 meter</p>
+</dd>
+<dt>group_centre_to_centre_validation_25: List[bool]</dt><dd><p>group centre to centre validation 25 meter</p>
+</dd>
+<dt>mean_calculated_bearing_capacity: List[float]</dt><dd><p>mean calculated bearing capacity [kN]</p>
+</dd>
+<dt>min_calculated_bearing_capacity: List[float]</dt><dd><p>min calculated bearing capacity [kN]</p>
+</dd>
+<dt>net_design_bearing_capacity: List[float]</dt><dd><p>net design bearing capacity [kN]</p>
+</dd>
+<dt>nominal_cpt: List[str]</dt><dd><p>nominal cpt</p>
+</dd>
+<dt>pile_tip_level: List[float]</dt><dd><p>pile tip level [m w.r.t NAP]</p>
+</dd>
+<dt>variation_coefficient: List[float]</dt><dd><p>variation coefficient [-]</p>
+</dd>
+<dt>xi_factor: List[str]</dt><dd><p>xi factor</p>
+</dd>
+<dt>xi_values: List[float]</dt><dd><p>xi values [-]</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterData.plot_variation_coefficient">
+<span class="sig-name descname"><span class="pre">plot_variation_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterData.plot_variation_coefficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterData.plot_variation_coefficient" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the bearing capacity and variation coefficient in a subplot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<em>plt.Axes</em><em> | </em><em>None</em>) – <cite>plt.Axes</cite> object where the data can be plotted on.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterData.plot_bearing_capacity">
+<span class="sig-name descname"><span class="pre">plot_bearing_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterData.plot_bearing_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterData.plot_bearing_capacity" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the bearing capacity and variation coefficient in a subplot</p>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>For the <cite>Net bearing capacity</cite> subplot there are two colors plotted:</dt><dd><ul class="simple">
+<li><p>orange:  conservative bearing capacity</p></li>
+<li><p>blue:    net bearing capacity</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<em>plt.Axes</em><em> | </em><em>None</em>) – <cite>plt.Axes</cite> object where the data can be plotted on.</p></li>
+<li><p><strong>pile_load_uls</strong> (<em>float</em>) – Default is 0.0
+ULS load in kN.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterData.plot_group_centre_to_centre_validation">
+<span class="sig-name descname"><span class="pre">plot_group_centre_to_centre_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterData.plot_group_centre_to_centre_validation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterData.plot_group_centre_to_centre_validation" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the spacing checks in a subplot</p>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>For the <cite>spacing</cite> subplot there are two colors plotted:</dt><dd><ul class="simple">
+<li><p>red:     invalid spacing</p></li>
+<li><p>green:   valid spacing</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<em>plt.Axes</em><em> | </em><em>None</em>) – <cite>plt.Axes</cite> object where the data can be plotted on.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterData.plot_xi">
+<span class="sig-name descname"><span class="pre">plot_xi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterData.plot_xi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterData.plot_xi" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the xi factor in a subplot</p>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>For the <cite>xi factor</cite> subplot there are two colors plotted:</dt><dd><ul class="simple">
+<li><p>olive:   xi3</p></li>
+<li><p>cyan:    xi4</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<em>plt.Axes</em><em> | </em><em>None</em>) – <cite>plt.Axes</cite> object where the data can be plotted on.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Installing py-pilecore" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
