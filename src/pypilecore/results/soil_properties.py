@@ -386,6 +386,14 @@ class SoilProperties:
         return self._layer_table
 
     @property
+    def x(self) -> float | None:
+        return None
+
+    @property
+    def y(self) -> float | None:
+        return None
+
+    @property
     def test_id(self) -> str | None:
         """Identifier of the CPT"""
         return self._test_id

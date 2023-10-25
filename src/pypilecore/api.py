@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 
 from nuclei.client import NucleiClient
@@ -44,6 +45,87 @@ def get_multi_cpt_api_report(client: NucleiClient, payload: dict) -> dict:
         schema=payload,
         return_response=True,
     )
+    wait_until_ticket_is_ready(client=client, ticket=ticket)
+
+    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+
+
+def get_groups_api_result(client: NucleiClient, payload: dict) -> dict:
+    """
+    Wrapper around the PileCore endpoint "/grouper/group_cpts".
+
+    Parameters
+    ----------
+    client: NucleiClient
+        client object created by [nuclei](https://github.com/cemsbv/nuclei)
+    payload: dict
+        the payload of the request, can be created by calling `create_grouper_payload()`
+    """
+    logging.info(
+        "Finding groups... \n"
+        "Depending on the amount of pile tip levels and CPT's this can take a while."
+    )
+    ticket = client.call_endpoint(
+        "PileCore",
+        "/grouper/group_cpts",
+        schema=payload,
+        return_response=True,
+    )
+
+    wait_until_ticket_is_ready(client=client, ticket=ticket)
+
+    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+
+
+def get_optimize_groups_api_result(client: NucleiClient, payload: dict) -> dict:
+    """
+    Wrapper around the PileCore endpoint "/grouper/optimize_groups".
+
+    Parameters
+    ----------
+    client: NucleiClient
+        client object created by [nuclei](https://github.com/cemsbv/nuclei)
+    payload: dict
+        the payload of the request, can be created by calling `create_grouper_payload()`
+    """
+    logging.info(
+        "Optimize groups... \n"
+        "Depending on the amount of pile tip levels and CPT's this can take a while."
+    )
+    ticket = client.call_endpoint(
+        "PileCore",
+        "/grouper/optimize_groups",
+        schema=payload,
+        return_response=True,
+    )
+
+    wait_until_ticket_is_ready(client=client, ticket=ticket)
+
+    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+
+
+def get_groups_api_report(client: NucleiClient, payload: dict) -> bytes:
+    """
+    Wrapper around the PileCore endpoint "/grouper/generate_grouper_report".
+
+    Parameters
+    ----------
+    client: NucleiClient
+        client object created by [nuclei](https://github.com/cemsbv/nuclei)
+    payload: dict
+        the payload of the request, can be created by calling `create_grouper_report_payload()`
+    """
+    logging.info(
+        "Generate report... \n"
+        "Depending on the amount of pile tip levels and CPT's this can take a while."
+    )
+    ticket = client.call_endpoint(
+        "PileCore",
+        "/grouper/generate_grouper_report",
+        schema=payload,
+        return_response=True,
+    )
+
     wait_until_ticket_is_ready(client=client, ticket=ticket)
 
     return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
