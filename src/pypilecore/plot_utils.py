@@ -1,17 +1,17 @@
 from typing import Any, List, Union
 
-from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 
 
 def validate_axes_array(axes: Any, shape: Union[int, List[int]]) -> None:
     """
     Validates if the axes argument is an iterable object of a certain shape, filled with
-    plt.Axes objects.
+    Axes objects.
 
     Parameters
     ----------
     axes:
-        The presumed array of `plt.Axes` objects
+        The presumed array of `Axes` objects
     shape:
         The shape of the `axes` array.
     """
@@ -26,10 +26,10 @@ def validate_axes_array(axes: Any, shape: Union[int, List[int]]) -> None:
                 validate_axes_array(axes[idx], shape[1:])
 
             else:
-                assert axes[idx] is None or isinstance(axes[idx], plt.Axes)
+                assert axes[idx] is None or isinstance(axes[idx], Axes)
 
     except (IndexError, AssertionError, ValueError, TypeError):
         raise ValueError(
             f"""Invalid value for axes argument.
-        Provide an array-like with Optional[plt.Axes] objects and shape {shape}."""
+        Provide an array-like with Optional[Axes] objects and shape {shape}."""
         )

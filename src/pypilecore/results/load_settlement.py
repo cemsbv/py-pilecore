@@ -5,6 +5,7 @@ from typing import Any, Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 from numpy.typing import NDArray
 
 # Axis with mobilized capacity as a fracion of maximum.
@@ -389,12 +390,12 @@ def get_load_settlement_plot(
     rs_mob_ratio: float,
     rb_mob_ratio: float,
     sb_max: float = 25,
-    axes: plt.Axes | None = None,
+    axes: Axes | None = None,
     figsize: Tuple[float, float] = (6.0, 6.0),
     **kwargs: Any,
-) -> plt.Axes:
+) -> Axes:
     """
-    Returns a `plt.Axes` object with a load-settlement diagram. Based on NEN 9997-1+C2
+    Returns a `Axes` object with a load-settlement diagram. Based on NEN 9997-1+C2
     section 7.6.4.2(i).
 
     Parameters
@@ -420,17 +421,21 @@ def get_load_settlement_plot(
     sb_max: float
         Maximum pile-tip settlement [mm].
     axes:
-        Optional `plt.Axes` object. If not provided, a `plt.Figure`
-        and `plt.Axes` objects will be created.
+        Optional `Axes` object. If not provided, a `plt.Figure`
+        and `Axes` objects will be created.
     figsize: Tuple[float, float]
         The figure dimensions. Default = (6.0, 6.0)
     **kwargs:
         All additional keyword arguments are passed to the `pyplot.figure` call.
 
     """
-
     # Create axes objects if not provided
-    if axes is None:
+    if axes is not None:
+        if not isinstance(axes, Axes):
+            raise ValueError(
+                "'axes' argument to get_load_settlement_plot() must be a `pyplot.axes.Axes` object or None."
+            )
+    else:
         kwargs_subplot = {
             "figsize": figsize,
             "tight_layout": True,
@@ -439,13 +444,15 @@ def get_load_settlement_plot(
         kwargs_subplot.update(kwargs)
 
         _, axes = plt.subplots(
+            1,
+            1,
             **kwargs_subplot,
         )
 
-    elif not isinstance(axes, plt.Axes):
-        raise ValueError(
-            "'axes' argument to get_load_settlement_plot() must be a `pyplot.Axes` object or None."
-        )
+        if not isinstance(axes, Axes):
+            raise ValueError(
+                "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
+            )
 
     mob_ratio, sb_rb_deq, sb_rs = get_load_settlement_axes_data(settlement_curve)
 
@@ -467,7 +474,7 @@ def get_load_settlement_plot(
     axes.grid()
     if s_b <= sb_max:
         axes.annotate(
-            None,
+            "",
             xy=(max(-1 * rs_mob_ratio * r_s_k, -r_s_k), s_b),
             xytext=(min(rb_mob_ratio * r_b_k, r_b_k), s_b),
             arrowprops={"arrowstyle": "<|-|>"},
@@ -487,7 +494,7 @@ def get_load_settlement_plot(
             f"$s_b$ = {s_b:3.2f} mm",
             xy=(-25, 0.9 * sb_max),
         )
-    axes.axis([-r_s_k, r_b_k, sb_max, 0])
+    axes.axis((-r_s_k, r_b_k, sb_max, 0))
 
     axes.set_xticks(axes.get_xticks().tolist())  # to avoid FixedLocator warning
     axes.set_xticklabels([str(abs(x)) for x in axes.get_xticks()])

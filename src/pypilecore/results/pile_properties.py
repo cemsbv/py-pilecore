@@ -241,7 +241,7 @@ class PileProperties(ABC):
         """
         return self._pile_type_specification
 
-    @property  # type: ignore
+    @property
     @abstractmethod
     def circumference_pile_shaft(self) -> float:
         """
@@ -249,7 +249,7 @@ class PileProperties(ABC):
         """
         raise NotImplementedError
 
-    @property  # type: ignore
+    @property
     @abstractmethod
     def circumference_pile_base(self) -> float:
         """
@@ -257,7 +257,7 @@ class PileProperties(ABC):
         """
         raise NotImplementedError
 
-    @property  # type: ignore
+    @property
     @abstractmethod
     def area_pile_tip(self) -> float:
         """
@@ -265,7 +265,7 @@ class PileProperties(ABC):
         """
         raise NotImplementedError
 
-    @property  # type: ignore
+    @property
     @abstractmethod
     def equiv_base_diameter(self) -> float:
         """
@@ -273,7 +273,7 @@ class PileProperties(ABC):
         """
         raise NotImplementedError
 
-    @property  # type: ignore
+    @property
     @abstractmethod
     def equiv_shaft_diameter(self) -> float:
         """
@@ -833,9 +833,7 @@ class RectPileProperties(PileProperties):
         return area_vs_depth
 
 
-def create_pile_properties_from_api_response(
-    response_dict: Dict[str, dict]
-) -> PileProperties:
+def create_pile_properties_from_api_response(response_dict: dict) -> PileProperties:
     shape = response_dict["type"]
     props = response_dict["props"]
 
