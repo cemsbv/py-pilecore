@@ -75,5 +75,10 @@ strict_equality = true
 install_types = true
 
 [[tool.mypy.overrides]]
-module = ["matplotlib.*", "requests.*", "nuclei.*", "pygef.*"]
+module = ["matplotlib.*", "requests.*", "nuclei.*", "pygef.*", "natsort.*", "shapely.*", "pytest.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tests/*"]
+disallow_untyped_defs = false
+disallow_untyped_calls = false

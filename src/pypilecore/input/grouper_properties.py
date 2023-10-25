@@ -1,11 +1,17 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Dict, List, Literal
+from typing import Any, Dict, List, Literal
 
 from shapely.geometry import Polygon, mapping
 
 from ..results import SingleCPTBearingResults
+
+_dft_optimize_result_by = [
+    "minimum_pile_level",
+    "number_of_cpts",
+    "number_of_consecutive_pile_levels",
+]
 
 
 def create_grouper_payload(
@@ -25,11 +31,7 @@ def create_grouper_payload(
             "centre_to_centre_check",
         ]
     ]
-    | None = [
-        "minimum_pile_level",
-        "number_of_cpts",
-        "number_of_consecutive_pile_levels",
-    ],
+    | None = _dft_optimize_result_by,  # type: ignore
     resolution: float = 0.5,
 ) -> dict:
     """
@@ -122,7 +124,7 @@ def create_grouper_payload(
         "/grouper/group_cpts"
     """
     # create default payload object
-    payload = {
+    payload: Dict[str, Any] = {
         "cpt_grid_rotation": cpt_grid_rotation,
         "gamma_bottom": gamma_bottom,
         "gamma_shaft": gamma_shaft,
@@ -148,22 +150,20 @@ def create_grouper_payload(
             raise ValueError(f"CPT {name} does not have a y-coordinate")
 
         for item in ["R_b_cal", "F_nk_cal", "R_s_cal"]:
-            if cpt_result.results_df[item].isnull().values.any():
+            if cpt_result.table.__getattribute__(item).isnull().values.any():
                 raise ValueError(
                     f"CPT {name} has NaN values are present in column {item}."
                 )
 
         # map pile tip levels to object
-        pile_tip_level_object[name] = cpt_result.results_df[
-            "pile_tip_level_nap"
-        ].tolist()
+        pile_tip_level_object[name] = cpt_result.table.pile_tip_level_nap.tolist()
 
         # add bearing capacity result to object
         cpt_objects.append(
             {
-                "bottom_bearing_capacity": cpt_result.results_df["R_b_cal"].tolist(),
-                "negative_friction": cpt_result.results_df["F_nk_cal"].tolist(),
-                "shaft_bearing_capacity": cpt_result.results_df["R_s_cal"].tolist(),
+                "bottom_bearing_capacity": cpt_result.table.R_b_cal.tolist(),
+                "negative_friction": cpt_result.table.F_nk_cal.tolist(),
+                "shaft_bearing_capacity": cpt_result.table.R_s_cal.tolist(),
                 "name": name,
                 "coordinates": {
                     "x": cpt_result.soil_properties.x,
