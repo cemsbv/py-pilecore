@@ -15,6 +15,8 @@ Number = Union[float, int]
 
 
 class CPTResultsTable:
+    """Object containing the results of a single CPT."""
+
     def __init__(
         self,
         pile_tip_level_nap: Sequence[float],
@@ -48,8 +50,8 @@ class CPTResultsTable:
         k_v_1: Sequence[float],
     ):
         """
-        Arguments
-        ---------
+        Parameters
+        ----------
         pile_tip_level_nap:
             The pile-tip level in [m] w.r.t. the reference.
         F_nk_cal:
@@ -200,9 +202,7 @@ class CPTResultsTable:
 
 class SingleCPTBearingResults:
     """
-    Object that is returned by calling get_results() on a SingleCPTBearingCalculation
-    object. Carries all result values from the calculation and can generate plots and
-    dataframes.
+    Object that contains the results of a PileCore single-cpt calculation.
 
     *Not meant to be instantiated by the user.*
     """
@@ -243,6 +243,7 @@ class SingleCPTBearingResults:
 
     @property
     def table(self) -> CPTResultsTable:
+        """The object with single-CPT results table traces."""
         return self._results_table
 
     def plot_bearing_capacities(
