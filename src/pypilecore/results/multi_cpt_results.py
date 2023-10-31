@@ -57,71 +57,141 @@ class CPTGroupResultsTable:
         cpt_Rc_max: Sequence[str],
         cpt_normative: Sequence[str],
     ):
-        self.pile_tip_level_nap = pile_tip_level_nap
+        """
+        Arguments
+        ---------
+        pile_tip_level_nap:
+            The pile-tip level [m] w.r.t. NAP.
+        R_s_k:
+            The characteristic value of the shaft bearingcapacity  [kN].
+        R_b_k:
+            The characteristic value of the bottom bearingcapacity [kN].
+        R_c_k:
+            The characteristic value of the total compressive bearingcapacity [kN].
+        R_c_d:
+            The design value of the total bearingcapacity [kN].
+        F_nk_cal_mean:
+            The mean value of the calculated single-CPT negative friction forces [kN].
+        F_nk_k:
+            The charactertistic value of the negative friction force [kN].
+        F_nk_d:
+            The design value of the negative friction force [kN].
+        R_c_d_net:
+            The net design value of the total bearingcapacity [kN] (netto = excluding design negative friction force.).
+        F_c_k:
+            The characteristic value of the load on the pile head (e.g. building load) [kN]
+        F_c_k_tot:
+            The characteristic value of the total compressive pile load [kN] (building-load + neg. friction force).
+        s_b:
+            The settlement of the pile bottom [mm].
+        s_e:
+            The elastic shortening of the pile [mm].
+        s_e_mean:
+            The mean of single-CPT results for elastic shortening of the pile [mm].
+        R_b_mob_ratio:
+            The mobilisation ratio of the bottom bearing capacity [-].
+        R_s_mob_ratio:
+            The mobilisation ratio of the shaft bearing capacity [-].
+        k_v_b:
+            The 1-dimensional stiffness modulus at pile bottom [kN/m].
+        k_v_1:
+            The 1-dimensional stiffness modulus at pile head [kN/m].
+        R_c_min:
+            The minimum of the single-CPT values for the calculated bearingcapacity [kN].
+        R_c_max:
+            The maximum of the single-CPT values for the calculated bearingcapacity [kN].
+        R_c_mean:
+            The mean of the single-CPT values for the calculated bearingcapacity [kN].
+        R_c_std:
+            The standard-deviation of the single-CPT values for the calculated bearingcapacity [kN].
+        R_s_mean:
+            The mean of the single-CPT values for the calculated shaft bearingcapacity [kN].
+        R_b_mean:
+            The mean of the single-CPT values for the calculated bottom bearingcapacity [kN].
+        var_coef:
+            The variation coefficient [%] of the calculated bearing capacities in the group.
+        n_cpts:
+            The number of CPTs [-] that have been taken into account to establish the Xi value.
+        use_group_average:
+            If true, the group average is used for the calculation of characteristic group
+            results. If false, the values of the normative CPT are used.
+        xi_normative:
+            The normative Xi (either Xi_3 or Xi_4)
+        xi_value:
+            The Xi value [-] that was applied to calculate the characteristic value of the
+            total bearing capacity.
+        cpt_Rc_min:
+            The CPT with the lowest value for R_c_cal.
+        cpt_Rc_max:
+            The CPT with the highest value for R_c_cal.
+        cpt_normative:
+            The normative CPT. Can be "group average" if that was found to be the normative scenario.
+        """
+        self.pile_tip_level_nap = np.array(pile_tip_level_nap).astype(np.float64)
         """The pile-tip level [m] w.r.t. NAP."""
-        self.R_s_k = R_s_k
+        self.R_s_k = np.array(R_s_k).astype(np.float64)
         """The characteristic value of the shaft bearingcapacity  [kN]."""
-        self.R_b_k = R_b_k
+        self.R_b_k = np.array(R_b_k).astype(np.float64)
         """The characteristic value of the bottom bearingcapacity [kN]."""
-        self.R_c_k = R_c_k
+        self.R_c_k = np.array(R_c_k).astype(np.float64)
         """The characteristic value of the total compressive bearingcapacity [kN]."""
-        self.R_c_d = R_c_d
+        self.R_c_d = np.array(R_c_d).astype(np.float64)
         """The design value of the total bearingcapacity [kN]."""
-        self.F_nk_cal_mean = F_nk_cal_mean
+        self.F_nk_cal_mean = np.array(F_nk_cal_mean).astype(np.float64)
         """The mean value of the calculated single-CPT negative friction forces [kN]."""
-        self.F_nk_k = F_nk_k
+        self.F_nk_k = np.array(F_nk_k).astype(np.float64)
         """The charactertistic value of the negative friction force [kN]."""
-        self.F_nk_d = F_nk_d
+        self.F_nk_d = np.array(F_nk_d).astype(np.float64)
         """The design value of the negative friction force [kN]."""
-        self.R_c_d_net = R_c_d_net
+        self.R_c_d_net = np.array(R_c_d_net).astype(np.float64)
         """The net design value of the total bearingcapacity [kN] (netto = excluding design negative friction force.)."""
-        self.F_c_k = F_c_k
+        self.F_c_k = np.array(F_c_k).astype(np.float64)
         """The characteristic value of the load on the pile head (e.g. building load) [kN]"""
-        self.F_c_k_tot = F_c_k_tot
+        self.F_c_k_tot = np.array(F_c_k_tot).astype(np.float64)
         """The characteristic value of the total compressive pile load [kN] (building-load + neg. friction force)."""
-        self.s_b = s_b
+        self.s_b = np.array(s_b).astype(np.float64)
         """The settlement of the pile bottom [mm]."""
-        self.s_e = s_e
+        self.s_e = np.array(s_e).astype(np.float64)
         """The elastic shortening of the pile [mm]."""
-        self.s_e_mean = s_e_mean
+        self.s_e_mean = np.array(s_e_mean).astype(np.float64)
         """The mean of single-CPT results for elastic shortening of the pile [mm]."""
-        self.R_b_mob_ratio = R_b_mob_ratio
+        self.R_b_mob_ratio = np.array(R_b_mob_ratio).astype(np.float64)
         """The mobilisation ratio of the bottom bearing capacity [-]."""
-        self.R_s_mob_ratio = R_s_mob_ratio
+        self.R_s_mob_ratio = np.array(R_s_mob_ratio).astype(np.float64)
         """The mobilisation ratio of the shaft bearing capacity [-]."""
-        self.k_v_b = k_v_b
+        self.k_v_b = np.array(k_v_b).astype(np.float64)
         """The 1-dimensional stiffness modulus at pile bottom [kN/m]."""
-        self.k_v_1 = k_v_1
+        self.k_v_1 = np.array(k_v_1).astype(np.float64)
         """The 1-dimensional stiffness modulus at pile head [kN/m]."""
-        self.R_c_min = R_c_min
+        self.R_c_min = np.array(R_c_min).astype(np.float64)
         """The minimum of the single-CPT values for the calculated bearingcapacity [kN]."""
-        self.R_c_max = R_c_max
+        self.R_c_max = np.array(R_c_max).astype(np.float64)
         """The maximum of the single-CPT values for the calculated bearingcapacity [kN]."""
-        self.R_c_mean = R_c_mean
+        self.R_c_mean = np.array(R_c_mean).astype(np.float64)
         """The mean of the single-CPT values for the calculated bearingcapacity [kN]."""
-        self.R_c_std = R_c_std
+        self.R_c_std = np.array(R_c_std).astype(np.float64)
         """The standard-deviation of the single-CPT values for the calculated bearingcapacity [kN]."""
-        self.R_s_mean = R_s_mean
+        self.R_s_mean = np.array(R_s_mean).astype(np.float64)
         """The mean of the single-CPT values for the calculated shaft bearingcapacity [kN]."""
-        self.R_b_mean = R_b_mean
+        self.R_b_mean = np.array(R_b_mean).astype(np.float64)
         """The mean of the single-CPT values for the calculated bottom bearingcapacity [kN]."""
-        self.var_coef = var_coef
+        self.var_coef = np.array(var_coef).astype(np.float64)
         """The variation coefficient [%] of the calculated bearing capacities in the group."""
-        self.n_cpts = n_cpts
+        self.n_cpts = np.array(n_cpts).astype(np.int32)
         """The number of CPTs [-] that have been taken into account to establish the Xi value."""
-        self.use_group_average = use_group_average
+        self.use_group_average = np.array(use_group_average).astype(np.bool_)
         """If true, the group average is used for the calculation of characteristic group
         results. If false, the values of the normative CPT are used."""
-        self.xi_normative = xi_normative
+        self.xi_normative = np.array(xi_normative).astype(np.str_)
         """The normative Xi (either Xi_3 or Xi_4)"""
-        self.xi_value = xi_value
+        self.xi_value = np.array(xi_value).astype(np.float64)
         """The Xi value [-] that was applied to calculate the characteristic value of the
         total bearing capacity."""
-        self.cpt_Rc_min = cpt_Rc_min
+        self.cpt_Rc_min = np.array(cpt_Rc_min).astype(np.str_)
         """The CPT with the lowest value for R_c_cal."""
-        self.cpt_Rc_max = cpt_Rc_max
+        self.cpt_Rc_max = np.array(cpt_Rc_max).astype(np.str_)
         """The CPT with the highest value for R_c_cal."""
-        self.cpt_normative = cpt_normative
+        self.cpt_normative = np.array(cpt_normative).astype(np.str_)
         """The normative CPT. Can be "group average" if that was found to be the normative scenario."""
 
         for value in self.__dict__.values():
