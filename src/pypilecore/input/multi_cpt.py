@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import datetime
 from copy import deepcopy
-from typing import Any, Dict, List, Mapping, Sequence, Tuple
+from typing import Any, Dict, List, Literal, Mapping, Sequence, Tuple
 
-import pandas as pd
 from pygef.cpt import CPTData
 
 from .pile_properties import create_pile_properties_payload
@@ -14,9 +13,9 @@ from .soil_properties import create_soil_properties_payload
 def create_multi_cpt_payload(
     pile_tip_levels_nap: Sequence[float],
     cptdata_objects: List[CPTData],
-    layer_tables: Dict[str, pd.DataFrame],
+    classify_tables: Dict[str, dict],
     groundwater_level_nap: float,
-    friction_range_strategy: str,
+    friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     pile_type: str,
     specification: str,
     installation: str,
@@ -76,32 +75,31 @@ def create_multi_cpt_payload(
         Range of values for which the pile resistance is calculated.
     cptdata_objects:
         A list of pygef.CPTData objects
-    layer_tables:
-        A dictionary, mapping `CPTData.alias` values to pandas Dataframes with soil-layer
-        information, containing the following columns:
-            (index):
-                Unique integer for soil-layer, starting at 0 for the top layer.
-            depth_top (float):
-                Depth w.r.t. surface level [m];
-            thickness (float):
-                Thickness of the layer [m];
-            gamma (float):
-                Dry volumetric weight [kN/m^3];
-            gamma_sat (float):
-                Saturated volumetric weight [kN/m^3];
-            phi (float):
-                Internal friction angle [rad];
-            soil_code (str):
-                Main components are specified with capital letters and are the following:
-                    - G: gravel (Grind)
-                    - Z: sand (Zand)
-                    - L: loam (Leem)
-                    - K: clay (Klei)
-                    - V: peat (Veen)
-            thickness (float):
-                The layer thickness [m]
+    classify_tables:
+        A dictionary, mapping `CPTData.alias` values to dictionary with the resulting response
+        of a call to CPTCore `classify/*` information, containing the following keys:
+            geotechnicalSoilName: Sequence[str]
+                geotechnical Soil Name related to the ISO
+            lowerBoundary: Sequence[float]
+                lower boundary of the layer [m]
+            upperBoundary: Sequence[float]
+                upper boundary of the layer [m]
+            color: Sequence[str]
+                hex color code
+            mainComponent: Sequence[Literal["rocks", "gravel", "sand", "silt", "clay", "peat"]]
+                main soil component
+            cohesion: Sequence[float]
+                cohesion of the layer [kPa]
+            gamma_sat: Sequence[float]
+                Saturated unit weight [kN/m^3]
+            gamma_unsat: Sequence[float]
+                unsaturated unit weight [kN/m^3]
+            phi: Sequence[float]
+                phi [degrees]
+            undrainedShearStrength: Sequence[float]
+                undrained shear strength [kPa]
     groundwater_level_nap:
-        The ground water level. Unit: [m] w.r.t. NAP.
+        The groundwater level. Unit: [m] w.r.t. NAP.
     friction_range_strategy:
         Sets the method to determine the sleeve friction zones on the pile. The soil
         friction in the positive zone contributes to the bearing capacity, while the
@@ -248,7 +246,7 @@ def create_multi_cpt_payload(
     """
     soil_properties_list, results_kwargs = create_soil_properties_payload(
         cptdata_objects=cptdata_objects,
-        layer_tables=layer_tables,
+        classify_tables=classify_tables,
         groundwater_level_nap=groundwater_level_nap,
         friction_range_strategy=friction_range_strategy,
         excavation_depth_nap=excavation_depth_nap,

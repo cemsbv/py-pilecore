@@ -1,11 +1,19 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping, Tuple
+from typing import Any, Dict, List, Literal, Mapping, Tuple
 
 import numpy as np
-import pandas as pd
 from pygef.cpt import CPTData
 from tqdm import tqdm
+
+transform = {
+    "rocks": "G",
+    "gravel": "G",
+    "sand": "Z",
+    "silt": "L",
+    "clay": "K",
+    "peat": "V",
+}
 
 # Create input_table
 results_passover = {}
@@ -14,9 +22,9 @@ soil_properties_list = []
 
 def create_soil_properties_payload(
     cptdata_objects: List[CPTData],
-    layer_tables: Dict[str, pd.DataFrame],
+    classify_tables: Dict[str, dict],
     groundwater_level_nap: float,
-    friction_range_strategy: str,
+    friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     excavation_depth_nap: float | None = None,
     individual_negative_friction_range_nap: Mapping[Any, Tuple[float, str]]
     | None = None,
@@ -27,7 +35,8 @@ def create_soil_properties_payload(
     Creates a dictionary with the `soil_properties` payload content for the PileCore
     endpoints.
 
-    Note that
+    Notes
+    ------
     the dictionary should be converted to a jsonifyable message before it can be passed
     to a `requests` call directly, for instance with
     `nuclei.client.utils.python_types_to_message()`.
@@ -36,32 +45,31 @@ def create_soil_properties_payload(
     ----------
     cptdata_objects:
         A list of pygef.CPTData objects
-    layer_tables:
-        A dictionary, mapping `CPTData.alias` values to pandas Dataframes with soil-layer
-        information, containing the following columns:
-            (index):
-                Unique integer for soil-layer, starting at 0 for the top layer.
-            depth_top (float):
-                Depth w.r.t. surface level [m];
-            thickness (float):
-                Thickness of the layer [m];
-            gamma (float):
-                Dry volumetric weight [kN/m^3];
-            gamma_sat (float):
-                Saturated volumetric weight [kN/m^3];
-            phi (float):
-                Internal friction angle [rad];
-            soil_code (str):
-                Main components are specified with capital letters and are the following:
-                    - G: gravel (Grind)
-                    - Z: sand (Zand)
-                    - L: loam (Leem)
-                    - K: clay (Klei)
-                    - V: peat (Veen)
-            thickness (float):
-                The layer thickness [m]
+    classify_tables:
+        A dictionary, mapping `CPTData.alias` values to dictionary with the resulting response
+        of a call to CPTCore `classify/*` information, containing the following keys:
+            geotechnicalSoilName: Sequence[str]
+                geotechnical Soil Name related to the ISO
+            lowerBoundary: Sequence[float]
+                lower boundary of the layer [m]
+            upperBoundary: Sequence[float]
+                upper boundary of the layer [m]
+            color: Sequence[str]
+                hex color code
+            mainComponent: Sequence[Literal["rocks", "gravel", "sand", "silt", "clay", "peat"]]
+                main soil component
+            cohesion: Sequence[float]
+                cohesion of the layer [kPa]
+            gamma_sat: Sequence[float]
+                Saturated unit weight [kN/m^3]
+            gamma_unsat: Sequence[float]
+                unsaturated unit weight [kN/m^3]
+            phi: Sequence[float]
+                phi [degrees]
+            undrainedShearStrength: Sequence[float]
+                undrained shear strength [kPa]
     groundwater_level_nap:
-        The ground water level. Unit: [m] w.r.t. NAP.
+        The groundwater level. Unit: [m] w.r.t. NAP.
     friction_range_strategy:
         Sets the method to determine the sleeve friction zones on the pile. The soil
         friction in the positive zone contributes to the bearing capacity, while the
@@ -85,7 +93,7 @@ def create_soil_properties_payload(
         Dictionary with keyword arguments for the `pilecore.MultiCPTBearingResults`
         object.
     """
-    for cpt in tqdm(cptdata_objects):
+    for cpt in tqdm(cptdata_objects, desc="Create soil properties payload"):
         # Construct the cpt_data payload
         cpt_data = dict(
             depth=np.array(cpt.data["depth"], dtype=float),
@@ -97,23 +105,28 @@ def create_soil_properties_payload(
             cpt_data["u"] = np.array(cpt.data["porePressure"])
 
         # Get the layer_table for this cpt from the layer-table dictionary
-        layer_table = layer_tables[cpt.alias]
+        if cpt.alias not in classify_tables.keys():
+            raise ValueError(f"{cpt.alias} not in `classify_tables`")
+        layer_table = classify_tables[cpt.alias]
 
         # Construct the layer_table_data payload
         layer_table_data = dict(
-            depth_btm=np.array(layer_table["depth_top"] + layer_table["thickness"]),
-            gamma=np.array(layer_table["gamma"]),
-            gamma_sat=np.array(layer_table["gamma_sat"]),
-            index=np.array(layer_table.index),
-            phi=np.array(layer_table["phi"]),
-            soil_code=np.array(layer_table["soil_code"]),
-            thickness=np.array(layer_table["thickness"]),
+            depth_btm=layer_table["lowerBoundary"],
+            gamma=layer_table["gamma_unsat"],
+            gamma_sat=layer_table["gamma_sat"],
+            index=list(range(0, len(layer_table["gamma_sat"]))),
+            phi=layer_table["phi"],
+            soil_code=[transform[soil] for soil in layer_table["mainComponent"]],
+            thickness=(
+                np.array(layer_table["lowerBoundary"])
+                - np.array(layer_table["upperBoundary"])
+            ).tolist(),
         )
         # Optionally add consolidation parameters to 'layer_table_data'.
-        if "C_p" in layer_table.columns:
-            layer_table_data["C_p"] = np.array(layer_table["C_p"])
-        if "C_s" in layer_table.columns:
-            layer_table_data["C_s"] = np.array(layer_table["C_s"])
+        if "C_p" in layer_table.keys():
+            layer_table_data["C_p"] = layer_table["C_p"]
+        if "C_s" in layer_table.keys():
+            layer_table_data["C_s"] = layer_table["C_s"]
 
         # Create the Soil-Properties payload
         soil_properties = dict(
@@ -149,6 +162,7 @@ def create_soil_properties_payload(
             "surface_level_nap": excavation_depth_nap
             if excavation_depth_nap is not None
             else cpt.delivered_vertical_position_offset,
+            "location": {"x": cpt.delivered_location.x, "y": cpt.delivered_location.y},
         }
 
     return soil_properties_list, results_passover
