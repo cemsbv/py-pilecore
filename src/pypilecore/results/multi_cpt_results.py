@@ -58,8 +58,8 @@ class CPTGroupResultsTable:
         cpt_normative: Sequence[str],
     ):
         """
-        Arguments
-        ---------
+        Parameters
+        ----------
         pile_tip_level_nap:
             The pile-tip level [m] w.r.t. NAP.
         R_s_k:
@@ -291,7 +291,14 @@ class SingleCPTBearingResultsContainer:
     """A container that holds multiple SingleCPTBearingResults objects"""
 
     def __init__(self, cpt_results_dict: Dict[str, SingleCPTBearingResults]):
+        """
+        Parameters
+        ----------
+        cpt_results_dict:
+            A dictionary that maps the cpt-names to SingleCPTBearingResults objects.
+        """
         self.cpt_results_dict = cpt_results_dict
+        """A dictionary that maps the cpt-names to SingleCPTBearingResults objects."""
 
     def __getitem__(self, test_id: str) -> SingleCPTBearingResults:
         if not isinstance(test_id, str):
@@ -301,10 +308,12 @@ class SingleCPTBearingResultsContainer:
 
     @property
     def test_ids(self) -> List[str]:
+        """The test-ids of the CPTs."""
         return list(self.cpt_results_dict.keys())
 
     @property
     def results(self) -> List[SingleCPTBearingResults]:
+        """The computed results, as a list of SingleCPTBearingResults objects."""
         return list(self.cpt_results_dict.values())
 
     def get_cpt_results(self, test_id: str) -> SingleCPTBearingResults:
@@ -321,6 +330,15 @@ class SingleCPTBearingResultsContainer:
         return self.cpt_results_dict[test_id]
 
     def get_results_per_cpt(self, column_name: str) -> pd.DataFrame:
+        """
+        Returns a pandas dataframe with a single result-item, organized per CPT
+        (test-id) and pile-tip-level-nap.
+
+        Parameters
+        ----------
+        column_name:
+            The name of the result-item / column name of the single-cpt-results table.
+        """
         if column_name not in self.to_pandas().columns or column_name in [
             "pile_tip_level_nap",
             "test_id",
@@ -337,6 +355,7 @@ class SingleCPTBearingResultsContainer:
 
     @lru_cache
     def to_pandas(self) -> pd.DataFrame:
+        """Returns a total overview of all single-cpt results in a pandas.DataFrame representation."""
         df_list: List[pd.DataFrame] = []
 
         for test_id in self.cpt_results_dict:
@@ -353,6 +372,12 @@ class SingleCPTBearingResultsContainer:
 
 
 class MultiCPTBearingResults:
+    """
+    Object that contains the results of a PileCore multi-cpt calculation.
+
+    *Not meant to be instantiated by the user.*
+    """
+
     def __init__(
         self,
         cpt_results: SingleCPTBearingResultsContainer,
@@ -363,6 +388,25 @@ class MultiCPTBearingResults:
         gamma_r_s: float,
         soil_load: float,
     ) -> None:
+        """
+        Parameters
+        ----------
+        cpt_results:
+            The container object with single-CPT results
+        group_results_table:
+            The table object with CPT-group-results
+        pile_properties:
+            The PileProperties object
+        gamma_f_nk:
+            Safety factor for design-values of the negative sleeve friction force. [-]
+        gamma_r_b:
+            Safety factor, used to obtain design-values of the pile-tip bearingcapacity. [-]
+        gamma_r_s:
+            Safety factor, used to obtain design-values of the sleeve bearingcapacity. [-]
+        soil_load:
+            (Fictive) load on soil used to calculate soil settlement [kPa]. This is
+            required and used to determine settlement of pile w.r.t. soil.
+        """
         self._pp = pile_properties
         self._gamma_f_nk = gamma_f_nk
         self._gamma_r_b = gamma_r_b
@@ -377,6 +421,10 @@ class MultiCPTBearingResults:
     def from_api_response(
         cls, response_dict: dict, cpt_input: dict
     ) -> "MultiCPTBearingResults":
+        """
+        Build the object from the response payload of the PileCore endpoint
+        "/compression/multi-cpt/results".
+        """
         cpt_results_dict = SingleCPTBearingResultsContainer(
             cpt_results_dict={
                 cpt_results["test_id"]: SingleCPTBearingResults(
@@ -419,10 +467,12 @@ class MultiCPTBearingResults:
 
     @property
     def cpt_results(self) -> SingleCPTBearingResultsContainer:
+        """The SingleCPTBearingResultsContainer object."""
         return self._cpt_results
 
     @property
     def cpt_names(self) -> List[str]:
+        """The test-ids of the CPTs."""
         return self.cpt_results.test_ids
 
     @property
