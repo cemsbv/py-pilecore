@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypilecore.input.multi_cpt &mdash; py-pilecore 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/getting_started.html">Installing py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/getting_started.html#how-to-import-py-pilecore">How to import py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pypilecore.input.multi_cpt</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pypilecore.input.multi_cpt</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">pygef.cpt</span> <span class="kn">import</span> <span class="n">CPTData</span>
+
+<span class="kn">from</span> <span class="nn">.pile_properties</span> <span class="kn">import</span> <span class="n">create_pile_properties_payload</span>
+<span class="kn">from</span> <span class="nn">.soil_properties</span> <span class="kn">import</span> <span class="n">create_soil_properties_payload</span>
+
+
+<div class="viewcode-block" id="create_multi_cpt_payload"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.input.multi_cpt.create_multi_cpt_payload">[docs]</a><span class="k">def</span> <span class="nf">create_multi_cpt_payload</span><span class="p">(</span>
+    <span class="n">pile_tip_levels_nap</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">cptdata_objects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CPTData</span><span class="p">],</span>
+    <span class="n">classify_tables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+    <span class="n">groundwater_level_nap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">friction_range_strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;manual&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span> <span class="s2">&quot;settlement_driven&quot;</span><span class="p">],</span>
+    <span class="n">pile_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">],</span>
+    <span class="n">specification</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;concrete&quot;</span><span class="p">,</span> <span class="s2">&quot;steel&quot;</span><span class="p">,</span> <span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="s2">&quot;wood&quot;</span><span class="p">],</span>
+    <span class="n">installation</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">],</span>
+    <span class="n">pile_shape</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="s2">&quot;rect&quot;</span><span class="p">],</span>
+    <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">cpts_group</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_almere_rules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">soil_load_sls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">overrule_xi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gamma_f_nk</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gamma_r_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gamma_r_b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fixed_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fixed_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">negative_shaft_friction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">apply_qc3_reduction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_pile_load</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pile_load_sls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">excavation_depth_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">excavation_param_t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">individual_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">individual_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">diameter_base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">diameter_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">width_base_large</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">width_base_small</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">width_shaft_large</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">width_shaft_small</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">height_base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">settlement_curve</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">adhesion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_s_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_s_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">beta_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pile_tip_factor_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">elastic_modulus</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_auger</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
+<span class="sd">    &quot;/compression/multi-cpt/results&quot;</span>
+
+<span class="sd">    This dictionary can be passed directly to `nuclei.client.call_endpoint()`.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    The result should be converted to a jsonifyable message before it can be passed to a</span>
+<span class="sd">    `requests` call directly, for instance with</span>
+<span class="sd">    `nuclei.client.utils.python_types_to_message()`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pile_tip_levels_nap:</span>
+<span class="sd">        Range of values for which the pile resistance is calculated.</span>
+<span class="sd">    cptdata_objects:</span>
+<span class="sd">        A list of pygef.CPTData objects</span>
+<span class="sd">    classify_tables:</span>
+<span class="sd">        A dictionary, mapping `CPTData.alias` values to dictionary with the resulting response</span>
+<span class="sd">        of a call to CPTCore `classify/*` information, containing the following keys:</span>
+
+<span class="sd">            - geotechnicalSoilName: Sequence[str]</span>
+<span class="sd">                Geotechnical Soil Name related to the ISO</span>
+<span class="sd">            - lowerBoundary: Sequence[float]</span>
+<span class="sd">                Lower boundary of the layer [m]</span>
+<span class="sd">            - upperBoundary: Sequence[float]</span>
+<span class="sd">                Upper boundary of the layer [m]</span>
+<span class="sd">            - color: Sequence[str]</span>
+<span class="sd">                Hex color code</span>
+<span class="sd">            - mainComponent: Sequence[Literal[&quot;rocks&quot;, &quot;gravel&quot;, &quot;sand&quot;, &quot;silt&quot;, &quot;clay&quot;, &quot;peat&quot;]]</span>
+<span class="sd">                Main soil component</span>
+<span class="sd">            - cohesion: Sequence[float]</span>
+<span class="sd">                Cohesion of the layer [kPa]</span>
+<span class="sd">            - gamma_sat: Sequence[float]</span>
+<span class="sd">                Saturated unit weight [kN/m^3]</span>
+<span class="sd">            - gamma_unsat: Sequence[float]</span>
+<span class="sd">                Unsaturated unit weight [kN/m^3]</span>
+<span class="sd">            - phi: Sequence[float]</span>
+<span class="sd">                Phi [degrees]</span>
+<span class="sd">            - undrainedShearStrength: Sequence[float]</span>
+<span class="sd">                Undrained shear strength [kPa]</span>
+
+<span class="sd">    groundwater_level_nap:</span>
+<span class="sd">        The groundwater level. Unit: [m] w.r.t. NAP.</span>
+<span class="sd">    friction_range_strategy:</span>
+<span class="sd">        Sets the method to determine the sleeve friction zones on the pile. The soil</span>
+<span class="sd">        friction in the positive zone contributes to the bearing capacity, while the</span>
+<span class="sd">        negative zone adds an extra load on the pile. Accepted values: &quot;manual&quot;,</span>
+<span class="sd">        &quot;lower_bound&quot; or &quot;settlement_driven&quot;.</span>
+<span class="sd">    pile_type:</span>
+<span class="sd">        The equaly named entry in the &quot;pile_type_specification&quot; settings.</span>
+<span class="sd">    specification:</span>
+<span class="sd">        The equaly named entry in the &quot;pile_type_specification&quot; settings.</span>
+<span class="sd">    installation:</span>
+<span class="sd">        The equaly named entry in the &quot;pile_type_specification&quot; settings.</span>
+<span class="sd">    pile_shape:</span>
+<span class="sd">        The shape of the pile.</span>
+<span class="sd">    fixed_negative_friction_range_nap:</span>
+<span class="sd">        Optionally sets the fixed depth range between which the negative sleeve friction</span>
+<span class="sd">        is calculated. If an array of format [top, bottom], the range is set between top</span>
+<span class="sd">        and bottom where top and bottom are floating values.</span>
+<span class="sd">        Unit: [m] w.r.t. NAP</span>
+<span class="sd">    fixed_positive_friction_range_nap:</span>
+<span class="sd">        Optionally sets the fixed depth range between which the positive sleeve friction</span>
+<span class="sd">        is calculated. If an array of format (top, bottom), the range is set between top</span>
+<span class="sd">        and bottom where top and bottom are floating point values. If bottom == &quot;ptl&quot;,</span>
+<span class="sd">        the pile tip level of the calculation is used as value for bottom.</span>
+<span class="sd">        Unit: [m] w.r.t. NAP</span>
+<span class="sd">    negative_shaft_friction:</span>
+<span class="sd">        Sets a fixed value for the negative friction force. If provided, the</span>
+<span class="sd">        fixed_negative_friction_range_nap parameter will be ignored.</span>
+<span class="sd">        Unit: [kN]</span>
+<span class="sd">    apply_qc3_reduction:</span>
+<span class="sd">        Determines if the reduction on the qc;III trajectory for auger piles should be</span>
+<span class="sd">        applied conform 7.6.2.3(e) of NEN 9997-1. If omitted (or null: default), the</span>
+<span class="sd">        value is inferred from the pile type: only True for auger piles (when</span>
+<span class="sd">        pile_properties.is_auger == True). If a boolean is provided, the qc3 reduction</span>
+<span class="sd">        is/isn&#39;t applied, regardless of the pile type.</span>
+<span class="sd">    relative_pile_load:</span>
+<span class="sd">        The fraction of the maximum bearing capacity that is used as pilehead force in</span>
+<span class="sd">        the settlement calculations. The input value can range between 0.0 and 1.0,</span>
+<span class="sd">        where 1.0 translates to a pile load of 100% of the maximum bearing capacity.</span>
+<span class="sd">        When the pile_load parameter is provided, rel_pile_load will be ignored.</span>
+
+<span class="sd">        When multiple pile-tip levels are considered, the applied pile load will vary</span>
+<span class="sd">        with each pile-tip level, depending on the bearing capacity.</span>
+<span class="sd">    pile_load_sls:</span>
+<span class="sd">        Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.</span>
+<span class="sd">    pile_head_level_nap:</span>
+<span class="sd">        The level of the pile head. Can be:</span>
+
+<span class="sd">            - float;</span>
+<span class="sd">                This is interpreted as an absolute level in [m w.r.t. NAP];</span>
+<span class="sd">            - Literal[&quot;surface&quot;].</span>
+<span class="sd">                In this case, the soil_properties.service_level</span>
+<span class="sd">                property is used.</span>
+
+<span class="sd">    excavation_depth_nap:</span>
+<span class="sd">        Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.</span>
+<span class="sd">    excavation_param_t:</span>
+<span class="sd">        Excavation parameter depending on pile installation method and/or phasing.</span>
+<span class="sd">            - Use 1.0 for post-excavation installation with vibration (i.e. hammering).</span>
+<span class="sd">            - Use 0.5 for reduced-vibration installation, or pile installation prior to</span>
+<span class="sd">              excavation method.</span>
+
+<span class="sd">        See for more info NEN 9997-1+C2:2017 7.6.2.3.(10)(k)</span>
+<span class="sd">    individual_negative_friction_range_nap:</span>
+<span class="sd">        A dictionary, mapping ``CPTData.alias`` values to fixed negative-friction ranges.</span>
+<span class="sd">        For a specification of the values, see ``fixed_negative_friction_range_nap``</span>
+<span class="sd">    individual_positive_friction_range_nap:</span>
+<span class="sd">        A dictionary, mapping ``CPTData.alias`` values to fixed positive-friction ranges.</span>
+<span class="sd">        For a specification of the values, see ``fixed_positive_friction_range_nap``</span>
+<span class="sd">    diameter_base:</span>
+<span class="sd">        Pile base diameter [m].</span>
+<span class="sd">        Only relevant if ``pile_shape`` = &quot;round&quot;.</span>
+<span class="sd">    diameter_shaft:</span>
+<span class="sd">        Pile shaft diameter [m].</span>
+<span class="sd">        Only relevant if ``pile_shape`` = &quot;round&quot;.</span>
+<span class="sd">    width_base_large:</span>
+<span class="sd">        Largest dimension of the pile base [m].</span>
+<span class="sd">        Only relevant if ``pile_shape`` = &quot;rect&quot;.</span>
+<span class="sd">    width_base_small:</span>
+<span class="sd">        Smallest dimension of the pile base [m].</span>
+<span class="sd">        Only relevant if ``pile_shape`` = &quot;rect&quot;.</span>
+<span class="sd">    width_shaft_large:</span>
+<span class="sd">        Largest dimension of the pile shaft [m].</span>
+<span class="sd">        Only relevant if ``pile_shape`` = &quot;rect&quot;.</span>
+<span class="sd">    width_shaft_small:</span>
+<span class="sd">        Smallest dimension of the pile shaft [m].</span>
+<span class="sd">        Only relevant if ``pile_shape`` = &quot;rect&quot;.</span>
+<span class="sd">    height_base:</span>
+<span class="sd">        Height of pile base [m]. If None, a pile with constant dimension is inferred.</span>
+<span class="sd">        Cannot be None if diameter_base and diameter_shaft are unequal.</span>
+<span class="sd">    settlement_curve:</span>
+<span class="sd">        Settlement lines for figures 7.n and 7.o of NEN-9997-1 As defined in table 7.c</span>
+<span class="sd">        of NEN-9997-1. The value is inferred from the pile_type_specifications, but can</span>
+<span class="sd">        be overwritten.</span>
+<span class="sd">    adhesion:</span>
+<span class="sd">        Optional adhesion value [kPa], use it if the pile shaft has undergone a special</span>
+<span class="sd">        treatment. Examples: - adhesion = 50 kN/m2 for synthetic coating - adhesion = 20</span>
+<span class="sd">        kN/m2 for bentonite - adhesion = 10 kN/m2 for bitumen coating See 7.3.2.2(d) of</span>
+<span class="sd">        NEN 9997-1 for examples.</span>
+<span class="sd">    alpha_p:</span>
+<span class="sd">        Alpha p factor used in pile tip resistance calculation. The value is inferred</span>
+<span class="sd">        from the pile_type_specifications, but can be overwritten.</span>
+<span class="sd">    alpha_s_clay:</span>
+<span class="sd">        Alpha s factor for soft layers used in the positive friction calculation. If</span>
+<span class="sd">        None the factor is determined as specified in table 7.d of NEN 9997-1.</span>
+<span class="sd">    alpha_s_sand:</span>
+<span class="sd">        Alpha s factor for coarse layers used in the positive friction calculation. The</span>
+<span class="sd">        value is inferred from the pile_type_specifications, but can be overwritten.</span>
+<span class="sd">    beta_p:</span>
+<span class="sd">        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).</span>
+<span class="sd">        The value is inferred from the pile dimension properties, but can be overwritten.</span>
+<span class="sd">    pile_tip_factor_s:</span>
+<span class="sd">        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).</span>
+<span class="sd">        The value is inferred from the pile dimension properties, but can be overwritten.</span>
+<span class="sd">    elastic_modulus:</span>
+<span class="sd">        Modulus of elasticity of the pile [Mpa]. The value is inferred from the</span>
+<span class="sd">        pile_type_specifications, but can be overwritten.</span>
+<span class="sd">    is_auger:</span>
+<span class="sd">        Determines weather the pile the pile is an auger pile or not. The value is</span>
+<span class="sd">        inferred from the pile_type_specifications, but can be overwritten.</span>
+<span class="sd">    is_low_vibrating:</span>
+<span class="sd">        Determines weather the pile has an installation type with low vibration. The</span>
+<span class="sd">        value is inferred from the pile_type_specifications, but can be overwritten.</span>
+<span class="sd">    negative_fr_delta_factor:</span>
+<span class="sd">        factor * φ = δ. This parameter will be multiplied with phi to get the delta</span>
+<span class="sd">        parameter used in negative friction calculation according to NEN-9997-1 7.3.2.2</span>
+<span class="sd">        (e). Typically values are 1.0 for piles cast in place, and 0.75 for other pile</span>
+<span class="sd">        types. The value is inferred from the pile_type_specifications, but can be</span>
+<span class="sd">        overwritten.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    multi_cpt_payload:</span>
+<span class="sd">        Dictionary with the payload content for the PileCore endpoint</span>
+<span class="sd">        &quot;/compression/multi-cpt/results&quot;</span>
+<span class="sd">    results_kwargs:</span>
+<span class="sd">        Dictionary with keyword arguments for the `pilecore.MultiCPTBearingResults`</span>
+<span class="sd">        object.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError:</span>
+<span class="sd">        - if `pile_shape`==&quot;round&quot; &amp; `diameter_base` is None</span>
+<span class="sd">        - if `pile_shape`==&quot;rect&quot; &amp; `width_base_large` is None</span>
+<span class="sd">        - if `pile_shape` not in [&quot;rect&quot;, &quot;round&quot;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">soil_properties_list</span><span class="p">,</span> <span class="n">results_kwargs</span> <span class="o">=</span> <span class="n">create_soil_properties_payload</span><span class="p">(</span>
+        <span class="n">cptdata_objects</span><span class="o">=</span><span class="n">cptdata_objects</span><span class="p">,</span>
+        <span class="n">classify_tables</span><span class="o">=</span><span class="n">classify_tables</span><span class="p">,</span>
+        <span class="n">groundwater_level_nap</span><span class="o">=</span><span class="n">groundwater_level_nap</span><span class="p">,</span>
+        <span class="n">friction_range_strategy</span><span class="o">=</span><span class="n">friction_range_strategy</span><span class="p">,</span>
+        <span class="n">excavation_depth_nap</span><span class="o">=</span><span class="n">excavation_depth_nap</span><span class="p">,</span>
+        <span class="n">individual_negative_friction_range_nap</span><span class="o">=</span><span class="n">individual_negative_friction_range_nap</span><span class="p">,</span>
+        <span class="n">individual_positive_friction_range_nap</span><span class="o">=</span><span class="n">individual_positive_friction_range_nap</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">pile_properties</span> <span class="o">=</span> <span class="n">create_pile_properties_payload</span><span class="p">(</span>
+        <span class="n">pile_type</span><span class="o">=</span><span class="n">pile_type</span><span class="p">,</span>
+        <span class="n">specification</span><span class="o">=</span><span class="n">specification</span><span class="p">,</span>
+        <span class="n">installation</span><span class="o">=</span><span class="n">installation</span><span class="p">,</span>
+        <span class="n">pile_shape</span><span class="o">=</span><span class="n">pile_shape</span><span class="p">,</span>
+        <span class="n">diameter_base</span><span class="o">=</span><span class="n">diameter_base</span><span class="p">,</span>
+        <span class="n">diameter_shaft</span><span class="o">=</span><span class="n">diameter_shaft</span><span class="p">,</span>
+        <span class="n">width_base_large</span><span class="o">=</span><span class="n">width_base_large</span><span class="p">,</span>
+        <span class="n">width_base_small</span><span class="o">=</span><span class="n">width_base_small</span><span class="p">,</span>
+        <span class="n">width_shaft_large</span><span class="o">=</span><span class="n">width_shaft_large</span><span class="p">,</span>
+        <span class="n">width_shaft_small</span><span class="o">=</span><span class="n">width_shaft_small</span><span class="p">,</span>
+        <span class="n">height_base</span><span class="o">=</span><span class="n">height_base</span><span class="p">,</span>
+        <span class="n">settlement_curve</span><span class="o">=</span><span class="n">settlement_curve</span><span class="p">,</span>
+        <span class="n">adhesion</span><span class="o">=</span><span class="n">adhesion</span><span class="p">,</span>
+        <span class="n">alpha_p</span><span class="o">=</span><span class="n">alpha_p</span><span class="p">,</span>
+        <span class="n">alpha_s_clay</span><span class="o">=</span><span class="n">alpha_s_clay</span><span class="p">,</span>
+        <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">alpha_s_sand</span><span class="p">,</span>
+        <span class="n">beta_p</span><span class="o">=</span><span class="n">beta_p</span><span class="p">,</span>
+        <span class="n">pile_tip_factor_s</span><span class="o">=</span><span class="n">pile_tip_factor_s</span><span class="p">,</span>
+        <span class="n">elastic_modulus</span><span class="o">=</span><span class="n">elastic_modulus</span><span class="p">,</span>
+        <span class="n">is_auger</span><span class="o">=</span><span class="n">is_auger</span><span class="p">,</span>
+        <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">is_low_vibrating</span><span class="p">,</span>
+        <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">negative_fr_delta_factor</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">multi_cpt_payload</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">pile_tip_levels_nap</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pile_tip_levels_nap</span><span class="p">),</span>
+        <span class="n">list_soil_properties</span><span class="o">=</span><span class="n">soil_properties_list</span><span class="p">,</span>
+        <span class="n">pile_properties</span><span class="o">=</span><span class="n">pile_properties</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add optional properties</span>
+    <span class="k">if</span> <span class="n">excavation_depth_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_depth_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_depth_nap</span>
+    <span class="k">if</span> <span class="n">excavation_param_t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_param_t&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_param_t</span>
+    <span class="k">if</span> <span class="n">pile_head_level_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;pile_head_level_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_head_level_nap</span>
+    <span class="k">if</span> <span class="n">pile_load_sls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;pile_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_load_sls</span>
+    <span class="k">if</span> <span class="n">relative_pile_load</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;rel_pile_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relative_pile_load</span>
+    <span class="k">if</span> <span class="n">apply_qc3_reduction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;apply_qc3_reduction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_qc3_reduction</span>
+    <span class="k">if</span> <span class="n">negative_shaft_friction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;f_nk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">negative_shaft_friction</span>
+    <span class="k">if</span> <span class="n">fixed_negative_friction_range_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span>
+            <span class="s2">&quot;fixed_negative_friction_range_nap&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">fixed_negative_friction_range_nap</span>
+    <span class="k">if</span> <span class="n">fixed_positive_friction_range_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span>
+            <span class="s2">&quot;fixed_positive_friction_range_nap&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">fixed_positive_friction_range_nap</span>
+    <span class="k">if</span> <span class="n">gamma_f_nk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_f_nk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_f_nk</span>
+    <span class="k">if</span> <span class="n">gamma_r_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_s&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_s</span>
+    <span class="k">if</span> <span class="n">gamma_r_b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_b</span>
+    <span class="k">if</span> <span class="n">overrule_xi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;overrule_xi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overrule_xi</span>
+    <span class="k">if</span> <span class="n">soil_load_sls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;soil_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">soil_load_sls</span>
+    <span class="k">if</span> <span class="n">use_almere_rules</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;use_almere_rules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_almere_rules</span>
+    <span class="k">if</span> <span class="n">cpts_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;cpts_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpts_group</span>
+    <span class="k">if</span> <span class="n">friction_range_strategy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;friction_range_strategy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">friction_range_strategy</span>
+    <span class="k">if</span> <span class="n">stiff_construction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;stiff_construction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stiff_construction</span>
+
+    <span class="k">return</span> <span class="n">multi_cpt_payload</span><span class="p">,</span> <span class="n">results_kwargs</span></div>
+
+
+<div class="viewcode-block" id="create_multi_cpt_report_payload"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.input.multi_cpt.create_multi_cpt_report_payload">[docs]</a><span class="k">def</span> <span class="nf">create_multi_cpt_report_payload</span><span class="p">(</span>
+    <span class="n">multi_cpt_payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">project_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">group_results_content</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">individual_cpt_results_content</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">result_summary_content</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
+<span class="sd">    &quot;/compression/multi-cpt/report&quot;</span>
+
+<span class="sd">    This dictionary can be passed directly to `nuclei.client.call_endpoint()`. Note that</span>
+<span class="sd">    it should be converted to a jsonifyable message before it can be passed to a</span>
+<span class="sd">    `requests` call directly, for instance with</span>
+<span class="sd">    `nuclei.client.utils.python_types_to_message()`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    multi_cpt_payload:</span>
+<span class="sd">        Index 0 of the resulting tuple of a call to `create_multi_cpt_payload()`</span>
+<span class="sd">    project_name:</span>
+<span class="sd">        The name of the project.</span>
+<span class="sd">    project_id:</span>
+<span class="sd">        The identifier (code) of the project.</span>
+<span class="sd">    author:</span>
+<span class="sd">        The author of the report.</span>
+<span class="sd">    date:</span>
+<span class="sd">        The date of the report. If None, the current date will be used.</span>
+<span class="sd">    group_results_content:</span>
+<span class="sd">        Whether or not to add the group-results section to the report. Default = True</span>
+<span class="sd">    individual_cpt_results_content:</span>
+<span class="sd">        Whether or not to add the individual-cpt-results section to the report.</span>
+<span class="sd">        Default = True</span>
+<span class="sd">    result_summary_content:</span>
+<span class="sd">        Whether or not to add the result-summary section to the report. Default = True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    report_payload:</span>
+<span class="sd">        Dictionary with the payload content for the PileCore endpoint</span>
+<span class="sd">        &quot;/compression/multi-cpt/report&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">report_payload</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">multi_cpt_payload</span><span class="p">)</span>
+    <span class="n">report_payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">content</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">group_results</span><span class="o">=</span><span class="n">group_results_content</span><span class="p">,</span>
+                <span class="n">individual_cpt_results</span><span class="o">=</span><span class="n">individual_cpt_results_content</span><span class="p">,</span>
+                <span class="n">result_summary</span><span class="o">=</span><span class="n">result_summary_content</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">general</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
+                <span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span>
+                <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
+                <span class="n">date</span><span class="o">=</span><span class="n">date</span>
+                <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%y&quot;</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">report_payload</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

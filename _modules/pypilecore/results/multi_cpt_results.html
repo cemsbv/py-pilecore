@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypilecore.results.multi_cpt_results &mdash; py-pilecore 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/getting_started.html">Installing py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/getting_started.html#how-to-import-py-pilecore">How to import py-pilecore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pypilecore.results.multi_cpt_results</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pypilecore.results.multi_cpt_results</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+
+<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">UserError</span>
+<span class="kn">from</span> <span class="nn">.load_settlement</span> <span class="kn">import</span> <span class="n">get_load_settlement_plot</span>
+<span class="kn">from</span> <span class="nn">.pile_properties</span> <span class="kn">import</span> <span class="n">PileProperties</span><span class="p">,</span> <span class="n">create_pile_properties_from_api_response</span>
+<span class="kn">from</span> <span class="nn">.single_cpt_results</span> <span class="kn">import</span> <span class="n">CPTResultsTable</span><span class="p">,</span> <span class="n">SingleCPTBearingResults</span>
+<span class="kn">from</span> <span class="nn">.soil_properties</span> <span class="kn">import</span> <span class="n">SoilProperties</span>
+
+<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="CPTGroupResultsTable"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.CPTGroupResultsTable">[docs]</a><span class="k">class</span> <span class="nc">CPTGroupResultsTable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dataclass that contains the bearing results of a group of CPTs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_s_k</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_b_k</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_c_k</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_c_d</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">F_nk_cal_mean</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">F_nk_k</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">F_nk_d</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_c_d_net</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">F_c_k</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">F_c_k_tot</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">s_b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">s_e</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">s_e_mean</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_b_mob_ratio</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_s_mob_ratio</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">k_v_b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">k_v_1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_c_min</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_c_max</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_c_mean</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_c_std</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_s_mean</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">R_b_mean</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">var_coef</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">n_cpts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">use_group_average</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+        <span class="n">xi_normative</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">xi_value</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">cpt_Rc_min</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">cpt_Rc_max</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">cpt_normative</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pile_tip_level_nap:</span>
+<span class="sd">            The pile-tip level [m] w.r.t. NAP.</span>
+<span class="sd">        R_s_k:</span>
+<span class="sd">            The characteristic value of the shaft bearingcapacity  [kN].</span>
+<span class="sd">        R_b_k:</span>
+<span class="sd">            The characteristic value of the bottom bearingcapacity [kN].</span>
+<span class="sd">        R_c_k:</span>
+<span class="sd">            The characteristic value of the total compressive bearingcapacity [kN].</span>
+<span class="sd">        R_c_d:</span>
+<span class="sd">            The design value of the total bearingcapacity [kN].</span>
+<span class="sd">        F_nk_cal_mean:</span>
+<span class="sd">            The mean value of the calculated single-CPT negative friction forces [kN].</span>
+<span class="sd">        F_nk_k:</span>
+<span class="sd">            The charactertistic value of the negative friction force [kN].</span>
+<span class="sd">        F_nk_d:</span>
+<span class="sd">            The design value of the negative friction force [kN].</span>
+<span class="sd">        R_c_d_net:</span>
+<span class="sd">            The net design value of the total bearingcapacity [kN] (netto = excluding design negative friction force.).</span>
+<span class="sd">        F_c_k:</span>
+<span class="sd">            The characteristic value of the load on the pile head (e.g. building load) [kN]</span>
+<span class="sd">        F_c_k_tot:</span>
+<span class="sd">            The characteristic value of the total compressive pile load [kN] (building-load + neg. friction force).</span>
+<span class="sd">        s_b:</span>
+<span class="sd">            The settlement of the pile bottom [mm].</span>
+<span class="sd">        s_e:</span>
+<span class="sd">            The elastic shortening of the pile [mm].</span>
+<span class="sd">        s_e_mean:</span>
+<span class="sd">            The mean of single-CPT results for elastic shortening of the pile [mm].</span>
+<span class="sd">        R_b_mob_ratio:</span>
+<span class="sd">            The mobilisation ratio of the bottom bearing capacity [-].</span>
+<span class="sd">        R_s_mob_ratio:</span>
+<span class="sd">            The mobilisation ratio of the shaft bearing capacity [-].</span>
+<span class="sd">        k_v_b:</span>
+<span class="sd">            The 1-dimensional stiffness modulus at pile bottom [kN/m].</span>
+<span class="sd">        k_v_1:</span>
+<span class="sd">            The 1-dimensional stiffness modulus at pile head [kN/m].</span>
+<span class="sd">        R_c_min:</span>
+<span class="sd">            The minimum of the single-CPT values for the calculated bearingcapacity [kN].</span>
+<span class="sd">        R_c_max:</span>
+<span class="sd">            The maximum of the single-CPT values for the calculated bearingcapacity [kN].</span>
+<span class="sd">        R_c_mean:</span>
+<span class="sd">            The mean of the single-CPT values for the calculated bearingcapacity [kN].</span>
+<span class="sd">        R_c_std:</span>
+<span class="sd">            The standard-deviation of the single-CPT values for the calculated bearingcapacity [kN].</span>
+<span class="sd">        R_s_mean:</span>
+<span class="sd">            The mean of the single-CPT values for the calculated shaft bearingcapacity [kN].</span>
+<span class="sd">        R_b_mean:</span>
+<span class="sd">            The mean of the single-CPT values for the calculated bottom bearingcapacity [kN].</span>
+<span class="sd">        var_coef:</span>
+<span class="sd">            The variation coefficient [%] of the calculated bearing capacities in the group.</span>
+<span class="sd">        n_cpts:</span>
+<span class="sd">            The number of CPTs [-] that have been taken into account to establish the Xi value.</span>
+<span class="sd">        use_group_average:</span>
+<span class="sd">            If true, the group average is used for the calculation of characteristic group</span>
+<span class="sd">            results. If false, the values of the normative CPT are used.</span>
+<span class="sd">        xi_normative:</span>
+<span class="sd">            The normative Xi (either Xi_3 or Xi_4)</span>
+<span class="sd">        xi_value:</span>
+<span class="sd">            The Xi value [-] that was applied to calculate the characteristic value of the</span>
+<span class="sd">            total bearing capacity.</span>
+<span class="sd">        cpt_Rc_min:</span>
+<span class="sd">            The CPT with the lowest value for R_c_cal.</span>
+<span class="sd">        cpt_Rc_max:</span>
+<span class="sd">            The CPT with the highest value for R_c_cal.</span>
+<span class="sd">        cpt_normative:</span>
+<span class="sd">            The normative CPT. Can be &quot;group average&quot; if that was found to be the normative scenario.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level_nap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pile_tip_level_nap</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The pile-tip level [m] w.r.t. NAP.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_s_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_s_k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The characteristic value of the shaft bearingcapacity  [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_b_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_b_k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The characteristic value of the bottom bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_c_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_c_k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The characteristic value of the total compressive bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_c_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_c_d</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The design value of the total bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F_nk_cal_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_nk_cal_mean</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mean value of the calculated single-CPT negative friction forces [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F_nk_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_nk_k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The charactertistic value of the negative friction force [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F_nk_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_nk_d</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The design value of the negative friction force [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_c_d_net</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_c_d_net</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The net design value of the total bearingcapacity [kN] (netto = excluding design negative friction force.).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F_c_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_c_k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The characteristic value of the load on the pile head (e.g. building load) [kN]&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F_c_k_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_c_k_tot</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The characteristic value of the total compressive pile load [kN] (building-load + neg. friction force).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">s_b</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The settlement of the pile bottom [mm].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">s_e</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The elastic shortening of the pile [mm].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s_e_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">s_e_mean</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mean of single-CPT results for elastic shortening of the pile [mm].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_b_mob_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_b_mob_ratio</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mobilisation ratio of the bottom bearing capacity [-].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_s_mob_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_s_mob_ratio</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mobilisation ratio of the shaft bearing capacity [-].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_v_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">k_v_b</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The 1-dimensional stiffness modulus at pile bottom [kN/m].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_v_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">k_v_1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The 1-dimensional stiffness modulus at pile head [kN/m].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_c_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_c_min</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The minimum of the single-CPT values for the calculated bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_c_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_c_max</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The maximum of the single-CPT values for the calculated bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_c_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_c_mean</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mean of the single-CPT values for the calculated bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_c_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_c_std</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The standard-deviation of the single-CPT values for the calculated bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_s_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_s_mean</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mean of the single-CPT values for the calculated shaft bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_b_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_b_mean</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mean of the single-CPT values for the calculated bottom bearingcapacity [kN].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_coef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">var_coef</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The variation coefficient [%] of the calculated bearing capacities in the group.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cpts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_cpts</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The number of CPTs [-] that have been taken into account to establish the Xi value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_group_average</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">use_group_average</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;If true, the group average is used for the calculation of characteristic group</span>
+<span class="sd">        results. If false, the values of the normative CPT are used.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xi_normative</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi_normative</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The normative Xi (either Xi_3 or Xi_4)&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xi_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi_value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The Xi value [-] that was applied to calculate the characteristic value of the</span>
+<span class="sd">        total bearing capacity.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_Rc_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cpt_Rc_min</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The CPT with the lowest value for R_c_cal.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_Rc_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cpt_Rc_max</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The CPT with the highest value for R_c_cal.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_normative</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cpt_normative</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The normative CPT. Can be &quot;group average&quot; if that was found to be the normative scenario.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Inputs for CPTGroupResults dataclass must have same length.&quot;</span>
+                <span class="p">)</span>
+
+<div class="viewcode-block" id="CPTGroupResultsTable.to_pandas"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.CPTGroupResultsTable.to_pandas">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The pandas.DataFrame representation&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CPTGroupResultsTable.plot_bearing_capacities"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.CPTGroupResultsTable.plot_bearing_capacities">[docs]</a>    <span class="k">def</span> <span class="nf">plot_bearing_capacities</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axes</span><span class="p">:</span> <span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="n">add_legend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots the design value of the bearing capacity Rcd, based on a group of CPTs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            Optional `Axes` object where the bearing capacity data can be plotted on.</span>
+<span class="sd">            If not provided, a new `plt.Figure` will be activated and the `Axes`</span>
+<span class="sd">            object will be created and returned.</span>
+<span class="sd">        figsize:</span>
+<span class="sd">            Size of the activate figure, as the `plt.figure()` argument.</span>
+<span class="sd">        add_legend:</span>
+<span class="sd">            Add a legend to the `Axes` object</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            The `Axes` object where the bearing capacities were plotted on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create axes objects if not provided</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">Axes</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;&#39;axes&#39; argument to plot_bearing_capacities() must be a `pyplot.axes.Axes` object or None.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+                <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs_subplot</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">Axes</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. &quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">R_c_d</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">,</span>
+            <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$R_{c;d}$&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">,</span>
+            <span class="s2">&quot;:&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$F_{s;d}$ &quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;[kN]&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;[m] w.r.t. NAP&quot;</span><span class="p">)</span>
+
+        <span class="c1"># set grid</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="c1"># Add legend</span>
+        <span class="k">if</span> <span class="n">add_legend</span><span class="p">:</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+                <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span>
+                <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">axes</span></div></div>
+
+
+<div class="viewcode-block" id="SingleCPTBearingResultsContainer"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer">[docs]</a><span class="k">class</span> <span class="nc">SingleCPTBearingResultsContainer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A container that holds multiple SingleCPTBearingResults objects&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpt_results_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SingleCPTBearingResults</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cpt_results_dict:</span>
+<span class="sd">            A dictionary that maps the cpt-names to SingleCPTBearingResults objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span> <span class="o">=</span> <span class="n">cpt_results_dict</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A dictionary that maps the cpt-names to SingleCPTBearingResults objects.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SingleCPTBearingResults</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">test_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a test-id as a string, but got: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">test_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpt_results</span><span class="p">(</span><span class="n">test_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The test-ids of the CPTs.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SingleCPTBearingResults</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The computed results, as a list of SingleCPTBearingResults objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<div class="viewcode-block" id="SingleCPTBearingResultsContainer.get_cpt_results"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.get_cpt_results">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpt_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SingleCPTBearingResults</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the `SingleCPTBearingResults` object for the provided test_id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">test_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No Cpt-results were calculated for this test-id: </span><span class="si">{</span><span class="n">test_id</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;Please check the spelling or run a new calculation for this CPT.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SingleCPTBearingResultsContainer.get_results_per_cpt"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.get_results_per_cpt">[docs]</a>    <span class="k">def</span> <span class="nf">get_results_per_cpt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a pandas dataframe with a single result-item, organized per CPT</span>
+<span class="sd">        (test-id) and pile-tip-level-nap.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        column_name:</span>
+<span class="sd">            The name of the result-item / column name of the single-cpt-results table.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">column_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;test_id&quot;</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid column_name provided.&quot;</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;test_id&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SingleCPTBearingResultsContainer.to_pandas"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.to_pandas">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a total overview of all single-cpt results in a pandas.DataFrame representation.&quot;&quot;&quot;</span>
+        <span class="n">df_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">test_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">test_id</span><span class="o">=</span><span class="n">test_id</span><span class="p">)</span>
+            <span class="n">df_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="n">cpt_results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">df_list</span><span class="p">)</span>
+        <span class="n">cpt_results_df</span> <span class="o">=</span> <span class="n">cpt_results_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+            <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">cpt_results_df</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cpt_results_df</span></div></div>
+
+
+<div class="viewcode-block" id="MultiCPTBearingResults"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.MultiCPTBearingResults">[docs]</a><span class="k">class</span> <span class="nc">MultiCPTBearingResults</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Object that contains the results of a PileCore multi-cpt calculation.</span>
+
+<span class="sd">    *Not meant to be instantiated by the user.*</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cpt_results</span><span class="p">:</span> <span class="n">SingleCPTBearingResultsContainer</span><span class="p">,</span>
+        <span class="n">group_results_table</span><span class="p">:</span> <span class="n">CPTGroupResultsTable</span><span class="p">,</span>
+        <span class="n">pile_properties</span><span class="p">:</span> <span class="n">PileProperties</span><span class="p">,</span>
+        <span class="n">gamma_f_nk</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">gamma_r_b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">gamma_r_s</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">soil_load</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cpt_results:</span>
+<span class="sd">            The container object with single-CPT results</span>
+<span class="sd">        group_results_table:</span>
+<span class="sd">            The table object with CPT-group-results</span>
+<span class="sd">        pile_properties:</span>
+<span class="sd">            The PileProperties object</span>
+<span class="sd">        gamma_f_nk:</span>
+<span class="sd">            Safety factor for design-values of the negative sleeve friction force. [-]</span>
+<span class="sd">        gamma_r_b:</span>
+<span class="sd">            Safety factor, used to obtain design-values of the pile-tip bearingcapacity. [-]</span>
+<span class="sd">        gamma_r_s:</span>
+<span class="sd">            Safety factor, used to obtain design-values of the sleeve bearingcapacity. [-]</span>
+<span class="sd">        soil_load:</span>
+<span class="sd">            (Fictive) load on soil used to calculate soil settlement [kPa]. This is</span>
+<span class="sd">            required and used to determine settlement of pile w.r.t. soil.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pp</span> <span class="o">=</span> <span class="n">pile_properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gamma_f_nk</span> <span class="o">=</span> <span class="n">gamma_f_nk</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gamma_r_b</span> <span class="o">=</span> <span class="n">gamma_r_b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gamma_r_s</span> <span class="o">=</span> <span class="n">gamma_r_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_soil_load</span> <span class="o">=</span> <span class="n">soil_load</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results</span> <span class="o">=</span> <span class="n">cpt_results</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_results_table</span> <span class="o">=</span> <span class="n">group_results_table</span>
+
+<div class="viewcode-block" id="MultiCPTBearingResults.from_api_response"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">response_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">cpt_input</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MultiCPTBearingResults&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the object from the response payload of the PileCore endpoint</span>
+<span class="sd">        &quot;/compression/multi-cpt/results&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cpt_results_dict</span> <span class="o">=</span> <span class="n">SingleCPTBearingResultsContainer</span><span class="p">(</span>
+            <span class="n">cpt_results_dict</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]:</span> <span class="n">SingleCPTBearingResults</span><span class="p">(</span>
+                    <span class="n">soil_properties</span><span class="o">=</span><span class="n">SoilProperties</span><span class="p">(</span>
+                        <span class="n">cpt_table</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;cpt_chart&quot;</span><span class="p">],</span>
+                        <span class="n">layer_table</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;layer_table&quot;</span><span class="p">],</span>
+                        <span class="n">ref_height</span><span class="o">=</span><span class="n">cpt_input</span><span class="p">[</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]][</span><span class="s2">&quot;ref_height&quot;</span><span class="p">],</span>
+                        <span class="n">surface_level_ref</span><span class="o">=</span><span class="n">cpt_input</span><span class="p">[</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]][</span>
+                            <span class="s2">&quot;surface_level_nap&quot;</span>
+                        <span class="p">],</span>
+                        <span class="n">groundwater_level_ref</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;groundwater_level_nap&quot;</span><span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">][</span>
+                        <span class="s2">&quot;pile_head_level_nap&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">results_table</span><span class="o">=</span><span class="n">CPTResultsTable</span><span class="p">(</span><span class="o">**</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;results_table&quot;</span><span class="p">]),</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">cpt_results</span> <span class="ow">in</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;cpts&quot;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">cpt_results</span><span class="o">=</span><span class="n">cpt_results_dict</span><span class="p">,</span>
+            <span class="n">pile_properties</span><span class="o">=</span><span class="n">create_pile_properties_from_api_response</span><span class="p">(</span>
+                <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;pile_properties&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">group_results_table</span><span class="o">=</span><span class="n">CPTGroupResultsTable</span><span class="p">(</span><span class="o">**</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;group_results&quot;</span><span class="p">]),</span>
+            <span class="n">gamma_f_nk</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;calculation_params&quot;</span><span class="p">][</span><span class="s2">&quot;gamma_f_nk&quot;</span><span class="p">],</span>
+            <span class="n">gamma_r_b</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;calculation_params&quot;</span><span class="p">][</span><span class="s2">&quot;gamma_r_b&quot;</span><span class="p">],</span>
+            <span class="n">gamma_r_s</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;calculation_params&quot;</span><span class="p">][</span><span class="s2">&quot;gamma_r_s&quot;</span><span class="p">],</span>
+            <span class="n">soil_load</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;calculation_params&quot;</span><span class="p">][</span><span class="s2">&quot;soil_load&quot;</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pile_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileProperties</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The PileProperties object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pp</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cpt_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SingleCPTBearingResultsContainer</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The SingleCPTBearingResultsContainer object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cpt_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The test-ids of the CPTs.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">test_ids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">group_results_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CPTGroupResultsTable</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The CPTGroupResultsTable dataclass, containing the group results.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_results_table</span>
+
+<div class="viewcode-block" id="MultiCPTBearingResults.plot_load_settlement"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.plot_load_settlement">[docs]</a>    <span class="k">def</span> <span class="nf">plot_load_settlement</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">axes</span><span class="p">:</span> <span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">),</span>
+        <span class="n">sb_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot load settlement curve.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pile_tip_level_nap:</span>
+<span class="sd">            Pile tip level  in [m NAP] for which to calculate and plot the</span>
+<span class="sd">            load-settlement behavior.</span>
+<span class="sd">        axes:</span>
+<span class="sd">            Optional `Axes` object where the load-settlement data can be plotted on.</span>
+<span class="sd">            If not provided, a new `plt.Figure` will be activated and the `Axes`</span>
+<span class="sd">            object will be created and returned.</span>
+<span class="sd">        figsize:</span>
+<span class="sd">            Size of the activate figure, as the `plt.figure()` argument.</span>
+<span class="sd">        sb_max:</span>
+<span class="sd">            Default: 25</span>
+<span class="sd">            Maximum value for settlement at pile-tip level.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        axes:</span>
+<span class="sd">            The `Axes` object where the settlement curves were plotted on</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Validate axes</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">Axes</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;axes&#39; argument to plot_load_settlement() must be a `pyplot.axes.Axes` object or None.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Get ptl index</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
+                <span class="nb">abs</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">)</span>
+                    <span class="o">-</span> <span class="n">pile_tip_level_nap</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">pile_tip_level_nap</span><span class="p">)</span>
+            <span class="o">&gt;</span> <span class="mf">0.01</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;No results have been calculated for the requested pile-tip-level.</span>
+<span class="sd">                Please include this level in the pile-tip range parameter of the</span>
+<span class="sd">                calculation.&quot;&quot;&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">get_load_settlement_plot</span><span class="p">(</span>
+            <span class="n">settlement_curve</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pp</span><span class="o">.</span><span class="n">settlement_curve</span><span class="p">,</span>
+            <span class="n">d_eq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pp</span><span class="o">.</span><span class="n">equiv_base_diameter</span><span class="p">,</span>
+            <span class="n">s_b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">s_b</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="n">f_c_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">F_c_k</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="n">f_nk_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">F_nk_k</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="n">r_b_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">R_b_k</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="n">r_s_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">R_s_k</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="n">rs_mob_ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">R_s_mob_ratio</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="n">rb_mob_ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">R_b_mob_ratio</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="n">sb_max</span><span class="o">=</span><span class="n">sb_max</span><span class="p">,</span>
+            <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
