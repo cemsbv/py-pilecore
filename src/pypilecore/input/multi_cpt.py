@@ -16,10 +16,10 @@ def create_multi_cpt_payload(
     classify_tables: Dict[str, dict],
     groundwater_level_nap: float,
     friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
-    pile_type: str,
-    specification: str,
-    installation: str,
-    pile_shape: str,
+    pile_type: Literal["A", "B", "C", "D", "E", "F", "G"],
+    specification: Literal["concrete", "steel", "micro", "wood"],
+    installation: Literal["1", "2", "3", "4", "5", "6", "7"],
+    pile_shape: Literal["round", "rect"],
     stiff_construction: bool | None = None,
     cpts_group: bool | None = None,
     use_almere_rules: bool | None = None,
@@ -60,12 +60,15 @@ def create_multi_cpt_payload(
     is_low_vibrating: float | None = None,
     negative_fr_delta_factor: float | None = None,
 ) -> Tuple[dict, Dict[str, dict]]:
-    """soil_properties_list, results_passover = create_soil_properties_payload(
+    """
     Creates a dictionary with the payload content for the PileCore endpoint
     "/compression/multi-cpt/results"
 
-    This dictionary can be passed directly to `nuclei.client.call_endpoint()`. Note that
-    it should be converted to a jsonifyable message before it can be passed to a
+    This dictionary can be passed directly to `nuclei.client.call_endpoint()`.
+
+    Note
+    ----
+    The result should be converted to a jsonifyable message before it can be passed to a
     `requests` call directly, for instance with
     `nuclei.client.utils.python_types_to_message()`.
 
@@ -78,26 +81,28 @@ def create_multi_cpt_payload(
     classify_tables:
         A dictionary, mapping `CPTData.alias` values to dictionary with the resulting response
         of a call to CPTCore `classify/*` information, containing the following keys:
-            geotechnicalSoilName: Sequence[str]
-                geotechnical Soil Name related to the ISO
-            lowerBoundary: Sequence[float]
-                lower boundary of the layer [m]
-            upperBoundary: Sequence[float]
-                upper boundary of the layer [m]
-            color: Sequence[str]
-                hex color code
-            mainComponent: Sequence[Literal["rocks", "gravel", "sand", "silt", "clay", "peat"]]
-                main soil component
-            cohesion: Sequence[float]
-                cohesion of the layer [kPa]
-            gamma_sat: Sequence[float]
+
+            - geotechnicalSoilName: Sequence[str]
+                Geotechnical Soil Name related to the ISO
+            - lowerBoundary: Sequence[float]
+                Lower boundary of the layer [m]
+            - upperBoundary: Sequence[float]
+                Upper boundary of the layer [m]
+            - color: Sequence[str]
+                Hex color code
+            - mainComponent: Sequence[Literal["rocks", "gravel", "sand", "silt", "clay", "peat"]]
+                Main soil component
+            - cohesion: Sequence[float]
+                Cohesion of the layer [kPa]
+            - gamma_sat: Sequence[float]
                 Saturated unit weight [kN/m^3]
-            gamma_unsat: Sequence[float]
-                unsaturated unit weight [kN/m^3]
-            phi: Sequence[float]
-                phi [degrees]
-            undrainedShearStrength: Sequence[float]
-                undrained shear strength [kPa]
+            - gamma_unsat: Sequence[float]
+                Unsaturated unit weight [kN/m^3]
+            - phi: Sequence[float]
+                Phi [degrees]
+            - undrainedShearStrength: Sequence[float]
+                Undrained shear strength [kPa]
+
     groundwater_level_nap:
         The groundwater level. Unit: [m] w.r.t. NAP.
     friction_range_strategy:
@@ -107,16 +112,12 @@ def create_multi_cpt_payload(
         "lower_bound" or "settlement_driven".
     pile_type:
         The equaly named entry in the "pile_type_specification" settings.
-        Accepted values are: ["A","B","C""D","E","F","G"]
     specification:
         The equaly named entry in the "pile_type_specification" settings.
-        Accepted values are: ["concrete","steel","micro","wood"]
     installation:
         The equaly named entry in the "pile_type_specification" settings.
-        Accepted values are: ["1","2","3","4","5","6","7"]
     pile_shape:
         The shape of the pile.
-        Accepted values are: ["round", "rect"]
     fixed_negative_friction_range_nap:
         Optionally sets the fixed depth range between which the negative sleeve friction
         is calculated. If an array of format [top, bottom], the range is set between top
@@ -150,9 +151,13 @@ def create_multi_cpt_payload(
         Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.
     pile_head_level_nap:
         The level of the pile head. Can be:
-            - float. This is interpreted as an absolute level in [m w.r.t. NAP].
-            - the string "surface". In this case, the soil_properties.service_level
-              property is used.
+
+            - float;
+                This is interpreted as an absolute level in [m w.r.t. NAP];
+            - Literal["surface"].
+                In this case, the soil_properties.service_level
+                property is used.
+
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
     excavation_param_t:
@@ -160,31 +165,32 @@ def create_multi_cpt_payload(
             - Use 1.0 for post-excavation installation with vibration (i.e. hammering).
             - Use 0.5 for reduced-vibration installation, or pile installation prior to
               excavation method.
+
         See for more info NEN 9997-1+C2:2017 7.6.2.3.(10)(k)
     individual_negative_friction_range_nap:
-        A dictionary, mapping `CPTData.alias` values to fixed negative-friction ranges.
-        For a specification of the values, see `fixed_negative_friction_range_nap`
+        A dictionary, mapping ``CPTData.alias`` values to fixed negative-friction ranges.
+        For a specification of the values, see ``fixed_negative_friction_range_nap``
     individual_positive_friction_range_nap:
-        A dictionary, mapping `CPTData.alias` values to fixed positive-friction ranges.
-        For a specification of the values, see `fixed_positive_friction_range_nap`
+        A dictionary, mapping ``CPTData.alias`` values to fixed positive-friction ranges.
+        For a specification of the values, see ``fixed_positive_friction_range_nap``
     diameter_base:
         Pile base diameter [m].
-        Only relevant if `shape`="round".
+        Only relevant if ``pile_shape`` = "round".
     diameter_shaft:
         Pile shaft diameter [m].
-        Only relevant if `shape`="round".
+        Only relevant if ``pile_shape`` = "round".
     width_base_large:
         Largest dimension of the pile base [m].
-        Only relevant if `shape`="rect".
+        Only relevant if ``pile_shape`` = "rect".
     width_base_small:
         Smallest dimension of the pile base [m].
-        Only relevant if `shape`="rect".
+        Only relevant if ``pile_shape`` = "rect".
     width_shaft_large:
         Largest dimension of the pile shaft [m].
-        Only relevant if `shape`="rect".
+        Only relevant if ``pile_shape`` = "rect".
     width_shaft_small:
         Smallest dimension of the pile shaft [m].
-        Only relevant if `shape`="rect".
+        Only relevant if ``pile_shape`` = "rect".
     height_base:
         Height of pile base [m]. If None, a pile with constant dimension is inferred.
         Cannot be None if diameter_base and diameter_shaft are unequal.

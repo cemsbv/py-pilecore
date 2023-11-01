@@ -44,6 +44,7 @@ def create_grouper_payload(
     The grouper uses pile bearing capacity results calculated by PileCore or other software to
     form  subgroups of the total group of CPT’s belonging to this project.
     Valid subgroups have three characteristics:
+
         - a maximum variation coefficient of 12% at one or more pile-tip levels. (Variation check
           NEN9997-1 A.3.3.3)
         - a minimum design pile bearing capacity based on the given pile load ULS at one or more
@@ -56,6 +57,7 @@ def create_grouper_payload(
     added to the cluster method. This check adds restrictions to the maximum allowable R;c;cal outliers
     and makes sure that the suitable data density requirements for the subgroup are met, by checking the
     centre-to-centre (CTC) distance of the cpts in a regular square grid:
+
         - A maximum CTC distance of 25 m, if no R;c;cal outliers greater than 30% off the average;
         - A maximum CTC distance of 20 m, if no R;c;cal outliers greater than 40% off the average;
         - A maximum CTC distance of 15 m, if no R;c;cal outliers greater than 50% off the average;
@@ -80,6 +82,7 @@ def create_grouper_payload(
         Attribute that states how to sort the result and find groups.
         Based on the filter method, a selection of valid subgroups are included in the report. The following
         filters are available:
+
             - Number_of_cpts: the grouper adds filters to make the group as big as possible to try and get a
               uniform pile tip level for most CPT’s.
             - Number_of_consecutive_pile_levels; the grouper adds filters to get groups that contain consecutive

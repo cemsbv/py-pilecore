@@ -80,6 +80,7 @@ class LayerTable:
         """
         The code used to describe the soil layers of the boreholes. Main components are
         specified with capital letters and are the following:
+
             - G: gravel (Grind)
             - Z: sand (Zand)
             - L: loam (Leem)
