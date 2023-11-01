@@ -35,7 +35,7 @@ docs = [
 # lint dependencies from github super-linter v5
 # See https://github.com/super-linter/super-linter/tree/main/dependencies/python
 lint = [
-    "mypy==1.5.1",
+    "mypy==1.6.1",
     "mypy-extensions==1.0.0",
     "tomli==2.0.1",
     "typing_extensions==4.7.1",

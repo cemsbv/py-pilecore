@@ -118,7 +118,7 @@ mccabe==0.7.0
     # via
     #   flake8
     #   py-pilecore (pyproject.toml)
-mypy==1.5.1
+mypy==1.6.1
     # via py-pilecore (pyproject.toml)
 mypy-extensions==1.0.0
     # via
