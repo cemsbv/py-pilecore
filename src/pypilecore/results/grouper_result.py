@@ -459,6 +459,7 @@ class GrouperResults:
         """
         Plot a map of the valid subgroups.
         Plot contains the:
+
             - convex_hull of the subgroup with buffer distance
             - All CPT's with tag
 
@@ -524,6 +525,7 @@ class GrouperResults:
         """
         Plot a summary of the valid subgroups.
         Plot contains the:
+
             - cpts within a subgroup
             - valid depth of the subgroup
 
