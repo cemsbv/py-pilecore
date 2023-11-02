@@ -129,6 +129,13 @@ class PileProperties(ABC):
         self._height_base = height_base
 
     @property
+    def name(self) -> str | None:
+        """
+        Pile name (optional)
+        """
+        return self._name
+
+    @property
     def alpha_s_clay(self) -> str | float:
         """
         Alpha s factor for soft layers used in the positive friction calculation [-].
