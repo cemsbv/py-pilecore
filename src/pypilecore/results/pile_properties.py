@@ -133,35 +133,41 @@ class PileProperties(ABC):
         """
         Pile name (optional)
         """
-        return self._name
+        if self._name is not None:
+            return str(self._name)
+        else:
+            return None
 
     @property
     def alpha_s_clay(self) -> str | float:
         """
         Alpha s factor for soft layers used in the positive friction calculation [-].
         """
-        return self._alpha_s_clay
+        if isinstance(self._alpha_s_clay, str):
+            return self._alpha_s_clay
+        else:
+            return float(self._alpha_s_clay)
 
     @property
     def alpha_s_sand(self) -> float:
         """
         Alpha s factor for coarse layers used in the positive friction calculation [-].
         """
-        return self._alpha_s_sand
+        return float(self._alpha_s_sand)
 
     @property
     def alpha_p(self) -> float:
         """
         Alpha p factor used in pile tip resistance calculation [-].
         """
-        return self._alpha_p
+        return float(self._alpha_p)
 
     @property
     def elastic_modulus(self) -> float:
         """
         Modulus of elasticity of the pile [MPa].
         """
-        return self._elastic_modulus
+        return float(self._elastic_modulus)
 
     @property
     def negative_fr_delta_factor(self) -> float:
@@ -176,14 +182,14 @@ class PileProperties(ABC):
         """
         Determines wether the pile has an installation type with low vibration.
         """
-        return self._is_low_vibrating
+        return bool(self._is_low_vibrating)
 
     @property
     def is_auger(self) -> bool:
         """
         Determines wether the pile the pile is an auger pile or not.
         """
-        return self._is_auger
+        return bool(self._is_auger)
 
     @property
     def adhesion(self) -> float:
@@ -197,49 +203,49 @@ class PileProperties(ABC):
         """
         The shape of the pile (round or rect).
         """
-        return self._shape
+        return str(self._shape)
 
     @property
     def pile_type(self) -> str:
         """
         The pile type of the pile in the configured locale setting.
         """
-        return self._pile_type
+        return str(self._pile_type)
 
     @property
     def installation(self) -> str:
         """
         The installation of the pile.
         """
-        return self._installation
+        return str(self._installation)
 
     @property
     def specification(self) -> str:
         """
         The specification of the pile.
         """
-        return self._specification
+        return str(self._specification)
 
     @property
     def height_base(self) -> float:
         """
         Height of the pile base [m].
         """
-        return self._height_base
+        return float(self._height_base)
 
     @property
     def settlement_curve(self) -> int:
         """
         The settlement curve number.
         """
-        return self._settlement_curve
+        return int(self._settlement_curve)
 
     @property
     def pile_tip_factor_s(self) -> float:
         """
         Factor s [-], used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).
         """
-        return self._pile_tip_factor_s
+        return float(self._pile_tip_factor_s)
 
     @property
     def pile_type_specification(self) -> Dict[str, str]:
@@ -293,7 +299,7 @@ class PileProperties(ABC):
         """
         The beta-p factor 𝛽_𝑝 to account for the shape of the pile tip according to NEN9997-1 Fig 7.i.
         """
-        return self._beta_p
+        return float(self._beta_p)
 
     @abstractmethod
     def get_circum_vs_depth(
