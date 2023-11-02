@@ -135,24 +135,35 @@ def create_pile_properties_payload(
     if pile_shape == "round":
         if diameter_base is None:
             raise ValueError(
-                'A value for `diameter_base` is required for pile_shape=="round"'
+                'A value for `diameter_base` is required for `pile_shape`=="round"'
             )
 
         pile_properties["props"]["diameter_base"] = diameter_base
 
         if diameter_shaft is not None:
+            if height_base is None:
+                raise ValueError(
+                    "A value for `height_base` is required when the base and shaft dimensions are unequal"
+                )
+
             pile_properties["props"]["diameter_shaft"] = diameter_shaft
 
     elif pile_shape == "rect":
         if width_base_large is None:
             raise ValueError(
-                'A value for `width_base_large` is required for pile_shape=="rect"'
+                'A value for `width_base_large` is required for `pile_shape`=="rect"'
             )
         pile_properties["props"]["width_base_large"] = width_base_large
 
         if width_base_small is not None:
             pile_properties["props"]["width_base_small"] = width_base_small
 
+        if (
+            width_shaft_large is not None or width_shaft_small is not None
+        ) and height_base is None:
+            raise ValueError(
+                "A value for `height_base` is required when the base and shaft dimensions are unequal"
+            )
         if width_shaft_large is not None:
             pile_properties["props"]["width_shaft_large"] = width_shaft_large
 
