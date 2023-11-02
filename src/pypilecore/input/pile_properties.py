@@ -140,7 +140,7 @@ def create_pile_properties_payload(
 
         pile_properties["props"]["diameter_base"] = diameter_base
 
-        if diameter_shaft is None:
+        if diameter_shaft is not None:
             pile_properties["props"]["diameter_shaft"] = diameter_shaft
 
     elif pile_shape == "rect":
