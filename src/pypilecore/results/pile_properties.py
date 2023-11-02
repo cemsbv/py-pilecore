@@ -336,6 +336,8 @@ class RoundPileProperties(PileProperties):
     A class with round pile properties
     """
 
+    _shape = "round"
+
     def __init__(
         self,
         pile_type_specification: Dict[str, str],
@@ -583,6 +585,8 @@ class RectPileProperties(PileProperties):
     """
     A class with rectangular pile properties
     """
+
+    _shape = "rect"
 
     def __init__(
         self,
