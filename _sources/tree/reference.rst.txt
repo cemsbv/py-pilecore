@@ -1,7 +1,9 @@
+.. _reference:
 
 Reference
 =========
 
+.. _API:
 Application programming interface (API)
 ---------------------------------------
 
@@ -16,6 +18,7 @@ Application programming interface (API)
 .. autofunction:: pypilecore.api.get_groups_api_report
 
 
+.. _bearingCalculationInput:
 Bearing calculation: Input
 --------------------------
 
@@ -23,6 +26,8 @@ Bearing calculation: Input
 
 .. autofunction:: pypilecore.input.multi_cpt.create_multi_cpt_report_payload
 
+
+.. _bearingCalculationResults:
 Bearing calculation: Results
 ----------------------------
 
@@ -73,6 +78,7 @@ Soil properties: Results
     :member-order: bysource
 
 
+.. _cptGrouperInput:
 CPT grouper: Input
 ------------------
 
@@ -81,6 +87,7 @@ CPT grouper: Input
 .. autofunction:: pypilecore.input.grouper_properties.create_grouper_report_payload
 
 
+.. _cptGrouperResults:
 CPT grouper: Results
 --------------------
 
