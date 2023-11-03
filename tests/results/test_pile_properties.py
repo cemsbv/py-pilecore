@@ -1,13 +1,14 @@
-from typing import Sequence
-
 import numpy as np
 import pytest
-from numpy.typing import NDArray
 
-from pypilecore.results.pile_properties import RectPileProperties, RoundPileProperties, create_pile_properties_from_api_response
+from pypilecore.results.pile_properties import (
+    RectPileProperties,
+    RoundPileProperties,
+    create_pile_properties_from_api_response,
+)
 
 
-def test_round_pile_properties():
+def test_round_pile_properties() -> None:
     pile = RoundPileProperties(
         pile_type_specification=dict(
             pile_type="concrete", specification="1", installation="A"
@@ -74,7 +75,7 @@ def test_round_pile_properties():
     assert isinstance(areas, np.ndarray)
 
 
-def test_rect_pile_properties():
+def test_rect_pile_properties() -> None:
     pile = RectPileProperties(
         pile_type_specification=dict(
             pile_type="concrete", specification="1", installation="A"
@@ -144,7 +145,7 @@ def test_rect_pile_properties():
     assert isinstance(areas, np.ndarray)
 
 
-def test_create_round_pile_properties_from_api_response():
+def test_create_round_pile_properties_from_api_response() -> None:
     response = dict(
         type="round",
         props=dict(
@@ -172,7 +173,8 @@ def test_create_round_pile_properties_from_api_response():
     pile = create_pile_properties_from_api_response(response)
     assert isinstance(pile, RoundPileProperties)
 
-def test_create_rect_pile_properties_from_api_response():
+
+def test_create_rect_pile_properties_from_api_response() -> None:
     response = dict(
         type="rect",
         props=dict(
