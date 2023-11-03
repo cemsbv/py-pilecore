@@ -576,7 +576,7 @@ class GrouperResults:
             )
             valid_pile_level = np.array(cluster.data.pile_tip_level)[
                 np.array(cluster.data.net_design_bearing_capacity)
-                <= cluster.pile_load_uls
+                >= cluster.pile_load_uls
             ]
             axes[1].scatter([group_id] * len(valid_pile_level), valid_pile_level)
             group_id_list.append(group_id)
