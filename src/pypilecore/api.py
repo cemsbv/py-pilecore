@@ -26,6 +26,20 @@ def wait_until_ticket_is_ready(client: NucleiClient, ticket: Response) -> None:
 
 
 def get_multi_cpt_api_result(client: NucleiClient, payload: dict) -> dict:
+    """
+    Wrapper around the PileCore endpoint "/compression/multiple-cpts/results".
+
+    Parameters
+    ----------
+    client: NucleiClient
+        client object created by [nuclei](https://github.com/cemsbv/nuclei)
+    payload: dict
+        the payload of the request, can be created by calling `create_grouper_payload()`
+    """
+    logging.info(
+        "Calculating bearing capacities... \n"
+        "Depending on the amount of pile tip levels and CPT's this can take a while."
+    )
     ticket = client.call_endpoint(
         "PileCore",
         "/compression/multiple-cpts/results",
@@ -39,6 +53,20 @@ def get_multi_cpt_api_result(client: NucleiClient, payload: dict) -> dict:
 
 
 def get_multi_cpt_api_report(client: NucleiClient, payload: dict) -> dict:
+    """
+    Wrapper around the PileCore endpoint "/compression/multiple-cpts/report".
+
+    Parameters
+    ----------
+    client: NucleiClient
+        client object created by [nuclei](https://github.com/cemsbv/nuclei)
+    payload: dict
+        the payload of the request, can be created by calling `create_grouper_payload()`
+    """
+    logging.info(
+        "Generate report... \n"
+        "Depending on the amount of pile tip levels and CPT's this can take a while."
+    )
     ticket = client.call_endpoint(
         "PileCore",
         "/compression/multiple-cpts/report",
