@@ -10,7 +10,7 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 from numpy.typing import NDArray
 
-from ..utils import depth_to_nap, nap_to_depth
+from pypilecore.utils import depth_to_nap, nap_to_depth
 
 Number = Union[float, int]
 
