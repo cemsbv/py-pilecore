@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from copy import deepcopy
 from typing import Any, Dict, List, Literal
 
@@ -154,6 +155,7 @@ def create_grouper_payload(
     cpt_objects = []
     pile_tip_level_object = {}
     for name, cpt_result in cpt_results_dict.items():
+        isnan = False
         # check if coordinate are set
         if cpt_result.soil_properties.x is None:
             raise ValueError(f" CPT {name} does not have a x-coordinate")
@@ -161,10 +163,16 @@ def create_grouper_payload(
             raise ValueError(f"CPT {name} does not have a y-coordinate")
 
         for item in ["R_b_cal", "F_nk_cal", "R_s_cal"]:
-            if np.isnan(cpt_result.table.__getattribute__(item).any()):
-                raise ValueError(
-                    f"CPT {name} has NaN values are present in column {item}."
+            if np.isnan(cpt_result.table.__getattribute__(item)).any():
+                isnan = True
+                logging.error(
+                    f"CPT {name} has NaN values are present in column {item}. "
+                    f"Not included in grouper payload."
                 )
+                break
+        # skip CPT that are not valid.
+        if isnan:
+            continue
 
         # map pile tip levels to object
         pile_tip_level_object[name] = cpt_result.table.pile_tip_level_nap.tolist()
