@@ -227,6 +227,29 @@ class SingleCPTBearingResults:
         self._pile_head_level_nap = pile_head_level_nap
         self._results_table = results_table
 
+    @classmethod
+    def from_api_response(
+        cls,
+        cpt_results_dict: dict,
+        ref_height: float,
+        surface_level_ref: float,
+    ) -> "SingleCPTBearingResults":
+        return cls(
+            soil_properties=SoilProperties(
+                cpt_table=CPTTable.from_api_response(
+                    cpt_results_dict.get("cpt_chart", {})
+                ),
+                layer_table=LayerTable.from_api_response(
+                    cpt_results_dict["layer_table"]
+                ),
+                ref_height=ref_height,
+                surface_level_ref=surface_level_ref,
+                groundwater_level_ref=cpt_results_dict["groundwater_level_nap"],
+            ),
+            pile_head_level_nap=cpt_results_dict["annotations"]["pile_head_level_nap"],
+            results_table=CPTResultsTable(**cpt_results_dict["results_table"]),
+        )
+
     @property
     def soil_properties(self) -> SoilProperties:
         """

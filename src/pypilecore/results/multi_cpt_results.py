@@ -300,6 +300,27 @@ class SingleCPTBearingResultsContainer:
         self.cpt_results_dict = cpt_results_dict
         """A dictionary that maps the cpt-names to SingleCPTBearingResults objects."""
 
+    @classmethod
+    def from_api_response(
+        cls, cpt_results_list: list, cpt_input: dict
+    ) -> "SingleCPTBearingResultsContainer":
+        """
+        Instantiates the SingleCPTBearingResultsContainer object from the "cpts" array,
+        which is returned in the response of a "compression/multiple-cpts/results" endpoint call.
+        """
+        return cls(
+            cpt_results_dict={
+                cpt_results["test_id"]: SingleCPTBearingResults.from_api_response(
+                    cpt_results_dict=cpt_results,
+                    ref_height=cpt_input[cpt_results["test_id"]]["ref_height"],
+                    surface_level_ref=cpt_input[cpt_results["test_id"]][
+                        "surface_level_nap"
+                    ],
+                )
+                for cpt_results in cpt_results_list
+            }
+        )
+
     def __getitem__(self, test_id: str) -> SingleCPTBearingResults:
         if not isinstance(test_id, str):
             raise TypeError(f"Expected a test-id as a string, but got: {type(test_id)}")
@@ -425,25 +446,8 @@ class MultiCPTBearingResults:
         Build the object from the response payload of the PileCore endpoint
         "/compression/multi-cpt/results".
         """
-        cpt_results_dict = SingleCPTBearingResultsContainer(
-            cpt_results_dict={
-                cpt_results["test_id"]: SingleCPTBearingResults(
-                    soil_properties=SoilProperties(
-                        cpt_table=cpt_results["cpt_chart"],
-                        layer_table=cpt_results["layer_table"],
-                        ref_height=cpt_input[cpt_results["test_id"]]["ref_height"],
-                        surface_level_ref=cpt_input[cpt_results["test_id"]][
-                            "surface_level_nap"
-                        ],
-                        groundwater_level_ref=cpt_results["groundwater_level_nap"],
-                    ),
-                    pile_head_level_nap=cpt_results["annotations"][
-                        "pile_head_level_nap"
-                    ],
-                    results_table=CPTResultsTable(**cpt_results["results_table"]),
-                )
-                for cpt_results in response_dict["cpts"]
-            }
+        cpt_results_dict = SingleCPTBearingResultsContainer.from_api_response(
+            cpt_results_list=response_dict["cpts"], cpt_input=cpt_input
         )
 
         return cls(
