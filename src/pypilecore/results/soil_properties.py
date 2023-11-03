@@ -50,9 +50,8 @@ class LayerTable:
         index: Sequence[int],
         thickness: Sequence[float],
         depth_btm: Sequence[float],
-        qc_chamfered: Sequence[float],
-        C_s: Sequence[float],
-        C_p: Sequence[float],
+        C_s: Sequence[float] | None,
+        C_p: Sequence[float] | None,
         gamma: Sequence[float],
         gamma_sat: Sequence[float],
         phi: Sequence[float],
@@ -64,8 +63,6 @@ class LayerTable:
         """The layer thickness [m]"""
         self.depth_btm = np.array(depth_btm).astype(np.float64)
         """The depth of the layer bottom (below service level) [m]."""
-        self.qc_chamfered = np.array(qc_chamfered).astype(np.float64)
-        """The chamfered-qc signal, used for the positive friction range [MPa]."""
         self.C_s = np.array(C_s).astype(np.float64)
         """Koppejan parameters for secondary compression."""
         self.C_p = np.array(C_p).astype(np.float64)
@@ -76,7 +73,7 @@ class LayerTable:
         """The saturated unit weights [MPa]."""
         self.phi = np.array(phi).astype(np.float64)
         """Internal friction angle. [rad]"""
-        self.soil_code = np.array(soil_code).astype(str)
+        self.soil_code = np.array(soil_code).astype(np.str_)
         """
         The code used to describe the soil layers of the boreholes. Main components are
         specified with capital letters and are the following:
@@ -99,6 +96,24 @@ class LayerTable:
 
         self.__dict__.update({"depth_top": self.depth_top})
 
+    @classmethod
+    def from_api_response(cls, layer_table_dict: dict) -> "LayerTable":
+        """
+        Instantiates the LayerTable object from the "layer_table" object, which is returned in
+        the response of a "compression/multiple-cpts/results" endpoint call.
+        """
+        return cls(
+            index=layer_table_dict["index"],
+            thickness=layer_table_dict["thickness"],
+            depth_btm=layer_table_dict["depth_btm"],
+            C_s=layer_table_dict.get("C_s"),
+            C_p=layer_table_dict.get("C_p"),
+            gamma=layer_table_dict["gamma"],
+            gamma_sat=layer_table_dict["gamma_sat"],
+            phi=layer_table_dict["phi"],
+            soil_code=layer_table_dict["soil_code"],
+        )
+
     @property
     def depth_top(self) -> NDArray[np.float64]:
         return self.depth_btm - self.thickness
@@ -117,12 +132,12 @@ class CPTTable:
 
     def __init__(
         self,
-        depth_nap: Sequence[float],
-        qc: Sequence[float],
-        qc_original: Sequence[float],
-        qc_chamfered: Sequence[float],
-        qc1: Sequence[float],
-        qc2: Sequence[float],
+        depth_nap: Sequence[float] | None,
+        qc: Sequence[float] | None,
+        qc_original: Sequence[float] | None,
+        qc_chamfered: Sequence[float] | None,
+        qc1: Sequence[float] | None,
+        qc2: Sequence[float] | None,
         fs: Sequence[float] | None,
     ):
         self.depth_nap = np.array(depth_nap).astype(np.float64)
@@ -151,6 +166,22 @@ class CPTTable:
             )
 
         self.__dict__.update({"friction_ratio": self.friction_ratio})
+
+    @classmethod
+    def from_api_response(cls, cpt_chart_dict: dict) -> "CPTTable":
+        """
+        Instantiates the CPTTable object from the "cpt_chart" object, which is returned in
+        the response of a "compression/multiple-cpts/results" endpoint call.
+        """
+        return cls(
+            depth_nap=cpt_chart_dict.get("depth_nap"),
+            qc=cpt_chart_dict.get("qc"),
+            qc_original=cpt_chart_dict.get("qc_original"),
+            qc_chamfered=cpt_chart_dict.get("qc_chamfered"),
+            qc1=cpt_chart_dict.get("qc1"),
+            qc2=cpt_chart_dict.get("qc2"),
+            fs=cpt_chart_dict.get("fs"),
+        )
 
     @property
     def friction_ratio(self) -> NDArray[np.float64]:
