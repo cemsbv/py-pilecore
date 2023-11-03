@@ -9,7 +9,12 @@ from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from .soil_properties import SoilProperties, get_soil_layer_handles
+from pypilecore.results.soil_properties import (
+    CPTTable,
+    LayerTable,
+    SoilProperties,
+    get_soil_layer_handles,
+)
 
 Number = Union[float, int]
 
