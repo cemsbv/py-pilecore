@@ -90,7 +90,7 @@ class LayerTable:
 
         dict_lengths = {}
         for key, value in self.__dict__.items():
-            if not np.all(np.isnan(value)):
+            if not np.all(pd.isnull(value)):
                 dict_lengths[key] = len(value)
         if len(set(dict_lengths.values())) > 1:
             raise ValueError(
