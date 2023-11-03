@@ -11,8 +11,7 @@ from matplotlib.axes import Axes
 from ..exceptions import UserError
 from .load_settlement import get_load_settlement_plot
 from .pile_properties import PileProperties, create_pile_properties_from_api_response
-from .single_cpt_results import CPTResultsTable, SingleCPTBearingResults
-from .soil_properties import SoilProperties
+from .single_cpt_results import SingleCPTBearingResults
 
 Number = Union[float, int]
 
