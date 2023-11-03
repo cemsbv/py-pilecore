@@ -238,6 +238,8 @@ class SingleCPTBearingResults:
         cpt_results_dict: dict,
         ref_height: float,
         surface_level_ref: float,
+        x: float | None = None,
+        y: float | None = None,
     ) -> "SingleCPTBearingResults":
         return cls(
             soil_properties=SoilProperties(
@@ -250,6 +252,8 @@ class SingleCPTBearingResults:
                 ref_height=ref_height,
                 surface_level_ref=surface_level_ref,
                 groundwater_level_ref=cpt_results_dict["groundwater_level_nap"],
+                x=x,
+                y=y,
             ),
             pile_head_level_nap=cpt_results_dict["annotations"]["pile_head_level_nap"],
             results_table=CPTResultsTable(**cpt_results_dict["results_table"]),
