@@ -3,6 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, List, Literal
 
+import numpy as np
 from shapely.geometry import Polygon, mapping
 
 from ..results import SingleCPTBearingResults
@@ -160,7 +161,7 @@ def create_grouper_payload(
             raise ValueError(f"CPT {name} does not have a y-coordinate")
 
         for item in ["R_b_cal", "F_nk_cal", "R_s_cal"]:
-            if cpt_result.table.__getattribute__(item).isnull().values.any():
+            if np.isnan(cpt_result.table.__getattribute__(item).any()):
                 raise ValueError(
                     f"CPT {name} has NaN values are present in column {item}."
                 )
@@ -184,11 +185,16 @@ def create_grouper_payload(
     payload["cpt_objects"] = cpt_objects
 
     # validate pile tip levels
-    raw_lengths = [frozenset(values) for values in pile_tip_level_object.values()]
+    raw_lengths = [
+        frozenset(np.round(values, 1)) for values in pile_tip_level_object.values()
+    ]
     if len(list(set(raw_lengths))) > 1:
         msg = "For the grouper payload must all CPT's have a valid bearing capacity for all pile tip levels. \n"
         for name, pile_tip_level in pile_tip_level_object.items():
-            msg += f"Pile tip levels are not similar for CPT {name} with length {len(pile_tip_level)}. \n"
+            msg += (
+                f"Pile tip levels are not similar for CPT {name} with length {len(pile_tip_level)}, "
+                f"upper boundary: {max(pile_tip_level)}, lower boundary: {min(pile_tip_level)}. \n"
+            )
         raise ValueError(msg)
     payload["pile_tip_level"] = list(raw_lengths[0])
 
@@ -228,11 +234,13 @@ def create_grouper_report_payload(
     report_payload = deepcopy(grouper_payload)
     report_payload.update(
         dict(
-            sub_groups=grouper_response,
+            sub_groups=grouper_response["sub_groups"],
             author=author,
-            project_id=project_id,
+            project_number=project_id,
             project_name=project_name,
         ),
     )
+    # remove not used attributes
     _ = report_payload.pop("pile_tip_level")
+    _ = report_payload.pop("cpt_objects")
     return report_payload
