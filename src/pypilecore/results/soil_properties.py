@@ -249,6 +249,11 @@ class CPTTable:
                     "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
                 )
 
+        if np.all(np.isnan(self.qc)):
+            qc = np.ones_like(self.depth_nap) * np.nan
+        else:
+            qc = self.qc
+
         # Plot Base qc subplot
         if self.qc_has_been_chamfered is True:
             axes.plot(
@@ -268,7 +273,7 @@ class CPTTable:
                 color="darkblue",
             )
             axes.plot(
-                self.qc,
+                qc,
                 self.depth_nap,
                 label="$q_{c;reduced}$",
                 linestyle="-",
@@ -277,7 +282,7 @@ class CPTTable:
 
         else:
             axes.plot(
-                self.qc,
+                qc,
                 self.depth_nap,
                 label="$q_c$",
                 linestyle="-",
