@@ -18,9 +18,9 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.9'
-          - '3.10'
-          - '3.11'
+          - "3.9"
+          - "3.10"
+          - "3.11"
     steps:
       - uses: actions/checkout@v3
 
@@ -68,6 +68,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
+          FILTER_REGEX_EXCLUDE: .*tests/.*
 
           VALIDATE_JSCPD: false
           VALIDATE_CSS: false

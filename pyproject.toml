@@ -64,7 +64,7 @@ ensure_newline_before_comments = true
 line_length = 88
 
 [tool.mypy]
-files = ["src/hoedelalalala"]
+files = ["src/pypilecore"]
 mypy_path = 'src'
 namespace_packages = true
 show_error_codes = true
@@ -92,8 +92,3 @@ module = [
     "pytest.*",
 ]
 ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["tests/*"]
-disallow_untyped_defs = false
-disallow_untyped_calls = false
