@@ -185,7 +185,7 @@ class CPTTable:
 
     @property
     def friction_ratio(self) -> NDArray[np.float64]:
-        return self.fs / self.qc * 100
+        return np.array(self.fs / self.qc * 100)
 
     @property
     def qc_has_been_chamfered(self) -> bool:
@@ -347,9 +347,14 @@ class CPTTable:
                     "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
                 )
 
+        if np.all(np.isnan(self.friction_ratio)):
+            friction_ratio = np.ones_like(self.depth_nap) * np.nan
+        else:
+            friction_ratio = self.friction_ratio
+
         # add friction number subplot
         axes.plot(
-            self.friction_ratio,
+            friction_ratio,
             self.depth_nap,
             label="Rf",
             color="darkgray",
