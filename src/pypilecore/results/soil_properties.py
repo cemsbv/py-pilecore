@@ -140,7 +140,11 @@ class CPTTable:
         qc2: Sequence[float] | None,
         fs: Sequence[float] | None,
     ):
-        self.depth_nap = np.array(depth_nap).astype(np.float64)
+        if depth_nap is None:
+            self.depth_nap = np.array([depth_nap]).astype(np.float64)
+        else:
+            self.depth_nap = np.array(depth_nap).astype(np.float64)
+
         """The depth [m] w.r.t. NAP"""
         self.qc = np.array(qc).astype(np.float64)
         """The cone resistance signal from the CPT [MPa], possibly corrected for excavation
