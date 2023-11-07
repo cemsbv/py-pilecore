@@ -83,8 +83,7 @@
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">UserError</span>
 <span class="kn">from</span> <span class="nn">.load_settlement</span> <span class="kn">import</span> <span class="n">get_load_settlement_plot</span>
 <span class="kn">from</span> <span class="nn">.pile_properties</span> <span class="kn">import</span> <span class="n">PileProperties</span><span class="p">,</span> <span class="n">create_pile_properties_from_api_response</span>
-<span class="kn">from</span> <span class="nn">.single_cpt_results</span> <span class="kn">import</span> <span class="n">CPTResultsTable</span><span class="p">,</span> <span class="n">SingleCPTBearingResults</span>
-<span class="kn">from</span> <span class="nn">.soil_properties</span> <span class="kn">import</span> <span class="n">SoilProperties</span>
+<span class="kn">from</span> <span class="nn">.single_cpt_results</span> <span class="kn">import</span> <span class="n">SingleCPTBearingResults</span>
 
 <span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 
@@ -372,6 +371,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span> <span class="o">=</span> <span class="n">cpt_results_dict</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A dictionary that maps the cpt-names to SingleCPTBearingResults objects.&quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="SingleCPTBearingResultsContainer.from_api_response"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">cpt_results_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">cpt_input</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SingleCPTBearingResultsContainer&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiates the SingleCPTBearingResultsContainer object from the &quot;cpts&quot; array,</span>
+<span class="sd">        which is returned in the response of a &quot;compression/multiple-cpts/results&quot; endpoint call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">cpt_results_dict</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]:</span> <span class="n">SingleCPTBearingResults</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span>
+                    <span class="n">cpt_results_dict</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">,</span>
+                    <span class="n">ref_height</span><span class="o">=</span><span class="n">cpt_input</span><span class="p">[</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]][</span><span class="s2">&quot;ref_height&quot;</span><span class="p">],</span>
+                    <span class="n">surface_level_ref</span><span class="o">=</span><span class="n">cpt_input</span><span class="p">[</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]][</span>
+                        <span class="s2">&quot;surface_level_nap&quot;</span>
+                    <span class="p">],</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">cpt_results</span> <span class="ow">in</span> <span class="n">cpt_results_list</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SingleCPTBearingResults</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">test_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a test-id as a string, but got: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">test_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -497,25 +517,8 @@
 <span class="sd">        Build the object from the response payload of the PileCore endpoint</span>
 <span class="sd">        &quot;/compression/multi-cpt/results&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">cpt_results_dict</span> <span class="o">=</span> <span class="n">SingleCPTBearingResultsContainer</span><span class="p">(</span>
-            <span class="n">cpt_results_dict</span><span class="o">=</span><span class="p">{</span>
-                <span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]:</span> <span class="n">SingleCPTBearingResults</span><span class="p">(</span>
-                    <span class="n">soil_properties</span><span class="o">=</span><span class="n">SoilProperties</span><span class="p">(</span>
-                        <span class="n">cpt_table</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;cpt_chart&quot;</span><span class="p">],</span>
-                        <span class="n">layer_table</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;layer_table&quot;</span><span class="p">],</span>
-                        <span class="n">ref_height</span><span class="o">=</span><span class="n">cpt_input</span><span class="p">[</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]][</span><span class="s2">&quot;ref_height&quot;</span><span class="p">],</span>
-                        <span class="n">surface_level_ref</span><span class="o">=</span><span class="n">cpt_input</span><span class="p">[</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;test_id&quot;</span><span class="p">]][</span>
-                            <span class="s2">&quot;surface_level_nap&quot;</span>
-                        <span class="p">],</span>
-                        <span class="n">groundwater_level_ref</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;groundwater_level_nap&quot;</span><span class="p">],</span>
-                    <span class="p">),</span>
-                    <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;pile_head_level_nap&quot;</span>
-                    <span class="p">],</span>
-                    <span class="n">results_table</span><span class="o">=</span><span class="n">CPTResultsTable</span><span class="p">(</span><span class="o">**</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;results_table&quot;</span><span class="p">]),</span>
-                <span class="p">)</span>
-                <span class="k">for</span> <span class="n">cpt_results</span> <span class="ow">in</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;cpts&quot;</span><span class="p">]</span>
-            <span class="p">}</span>
+        <span class="n">cpt_results_dict</span> <span class="o">=</span> <span class="n">SingleCPTBearingResultsContainer</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span>
+            <span class="n">cpt_results_list</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;cpts&quot;</span><span class="p">],</span> <span class="n">cpt_input</span><span class="o">=</span><span class="n">cpt_input</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
