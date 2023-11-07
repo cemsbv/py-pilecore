@@ -207,7 +207,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable.from_api_response"><code class="docutils literal notranslate"><span class="pre">CPTTable.from_api_response()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable.qc_has_been_chamfered"><code class="docutils literal notranslate"><span class="pre">CPTTable.qc_has_been_chamfered</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable.qc_has_been_reduced"><code class="docutils literal notranslate"><span class="pre">CPTTable.qc_has_been_reduced</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable.df"><code class="docutils literal notranslate"><span class="pre">CPTTable.df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable.to_pandas"><code class="docutils literal notranslate"><span class="pre">CPTTable.to_pandas()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable.plot_qc"><code class="docutils literal notranslate"><span class="pre">CPTTable.plot_qc()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable.plot_friction_ratio"><code class="docutils literal notranslate"><span class="pre">CPTTable.plot_friction_ratio()</span></code></a></li>
 </ul>
@@ -223,7 +223,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable.phi"><code class="docutils literal notranslate"><span class="pre">LayerTable.phi</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable.soil_code"><code class="docutils literal notranslate"><span class="pre">LayerTable.soil_code</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable.from_api_response"><code class="docutils literal notranslate"><span class="pre">LayerTable.from_api_response()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable.df"><code class="docutils literal notranslate"><span class="pre">LayerTable.df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable.to_pandas"><code class="docutils literal notranslate"><span class="pre">LayerTable.to_pandas()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1591,10 +1591,15 @@ the response of a “compression/multiple-cpts/results” endpoint call.</p>
 <dd><p>Returns False if <cite>qc</cite> contains the same data as <cite>qc_original</cite>.</p>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pypilecore.results.soil_properties.CPTTable.df">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.CPTTable.df" title="Permalink to this definition"></a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.soil_properties.CPTTable.to_pandas">
+<span class="sig-name descname"><span class="pre">to_pandas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/soil_properties.html#CPTTable.to_pandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.soil_properties.CPTTable.to_pandas" title="Permalink to this definition"></a></dt>
 <dd><p>The pandas.DataFrame representation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1721,10 +1726,15 @@ the response of a “compression/multiple-cpts/results” endpoint call.</p>
 </dl>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pypilecore.results.soil_properties.LayerTable.df">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.LayerTable.df" title="Permalink to this definition"></a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.soil_properties.LayerTable.to_pandas">
+<span class="sig-name descname"><span class="pre">to_pandas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/soil_properties.html#LayerTable.to_pandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.soil_properties.LayerTable.to_pandas" title="Permalink to this definition"></a></dt>
 <dd><p>The pandas.DataFrame representation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
