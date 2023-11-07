@@ -197,7 +197,7 @@ def create_grouper_payload(
         frozenset(np.round(values, 1)) for values in pile_tip_level_object.values()
     ]
     if len(list(set(raw_lengths))) > 1:
-        msg = "For the grouper payload must all CPT's have a valid bearing capacity for all pile tip levels. \n"
+        msg = "The PileCore grouper requires all CPTs to have a valid bearing capacity for all pile tip levels. \n"
         for name, pile_tip_level in pile_tip_level_object.items():
             msg += (
                 f"Pile tip levels are not similar for CPT {name} with length {len(pile_tip_level)}, "
