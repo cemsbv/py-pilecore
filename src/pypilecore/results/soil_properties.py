@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import Any, List, Sequence, Tuple, Union
 
 import numpy as np
@@ -118,8 +119,8 @@ class LayerTable:
     def depth_top(self) -> NDArray[np.float64]:
         return self.depth_btm - self.thickness
 
-    @property
-    def df(self) -> pd.DataFrame:
+    @lru_cache
+    def to_pandas(self) -> pd.DataFrame:
         """The pandas.DataFrame representation"""
         return pd.DataFrame(self.__dict__).dropna(axis=1)
 
@@ -201,8 +202,8 @@ class CPTTable:
         """Returns False if `qc` contains the same data as `qc_original`."""
         return not np.allclose(self.qc_original, self.qc)
 
-    @property
-    def df(self) -> pd.DataFrame:
+    @lru_cache
+    def to_pandas(self) -> pd.DataFrame:
         """The pandas.DataFrame representation"""
         return pd.DataFrame(self.__dict__).dropna(axis=1)
 

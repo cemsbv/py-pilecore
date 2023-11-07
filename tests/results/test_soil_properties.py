@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
+from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from pandas import DataFrame
-from matplotlib import pyplot as plt
 
 from pypilecore.results.soil_properties import CPTTable, LayerTable, SoilProperties
 
@@ -34,7 +34,7 @@ def test_layer_table():
         soil_code=["Z", "Z"],
     )
 
-    assert isinstance(layer_table.df, DataFrame)
+    assert isinstance(layer_table.to_pandas(), DataFrame)
 
 
 def test_cpt_table():
@@ -70,7 +70,7 @@ def test_cpt_table():
     assert isinstance(cpt_table.qc_has_been_chamfered, bool)
     assert isinstance(cpt_table.qc_has_been_reduced, bool)
 
-    assert isinstance(cpt_table.df, DataFrame)
+    assert isinstance(cpt_table.to_pandas(), DataFrame)
 
     assert isinstance(cpt_table.plot_qc(), Axes)
     plt.close("all")
@@ -96,7 +96,7 @@ def test_cpt_table():
     assert isinstance(cpt_table.qc_has_been_chamfered, bool)
     assert isinstance(cpt_table.qc_has_been_reduced, bool)
 
-    assert isinstance(cpt_table.df, DataFrame)
+    assert isinstance(cpt_table.to_pandas(), DataFrame)
 
     assert isinstance(cpt_table.plot_qc(), Axes)
     plt.close("all")
