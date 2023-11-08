@@ -442,10 +442,12 @@ class SoilProperties:
 
     @property
     def x(self) -> float | None:
+        """x-coordinate of the CPT"""
         return self._x
 
     @property
     def y(self) -> float | None:
+        """y-coordinate of the CPT"""
         return self._y
 
     @property
