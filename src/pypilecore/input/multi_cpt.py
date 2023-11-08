@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from copy import deepcopy
-from typing import Any, Dict, List, Literal, Mapping, Sequence, Tuple
+from typing import Dict, List, Literal, Mapping, Sequence, Tuple
 
 from pygef.cpt import CPTData
 
@@ -15,26 +15,28 @@ def create_multi_cpt_payload(
     cptdata_objects: List[CPTData],
     classify_tables: Dict[str, dict],
     groundwater_level_nap: float,
-    friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     pile_type: Literal["A", "B", "C", "D", "E", "F", "G"],
     specification: Literal["concrete", "steel", "micro", "wood"],
     installation: Literal["1", "2", "3", "4", "5", "6", "7"],
     pile_shape: Literal["round", "rect"],
-    stiff_construction: bool | None = None,
+    friction_range_strategy: Literal[
+        "manual", "lower_bound", "settlement_driven"
+    ] = "lower_bound",
+    stiff_construction: bool = False,
     cpts_group: List[str] | None = None,
     fixed_negative_friction_range_nap: Tuple[float, float] | None = None,
     fixed_positive_friction_range_nap: Tuple[float, str | float] | None = None,
     negative_shaft_friction: float | None = None,
     apply_qc3_reduction: bool | None = None,
-    relative_pile_load: float | None = None,
+    relative_pile_load: float = 0.7,
     pile_load_sls: float | None = None,
-    soil_load_sls: float | None = None,
-    pile_head_level_nap: float | str | None = None,
+    soil_load_sls: float = 0.0,
+    pile_head_level_nap: float | Literal["surface"] = "surface",
     excavation_depth_nap: float | None = None,
-    excavation_param_t: float | None = None,
-    individual_negative_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    excavation_param_t: float = 1.0,
+    individual_negative_friction_range_nap: Mapping[str, Tuple[float, str]]
     | None = None,
-    individual_positive_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    individual_positive_friction_range_nap: Mapping[str, Tuple[float, str]]
     | None = None,
     diameter_base: float | None = None,
     diameter_shaft: float | None = None,
@@ -54,11 +56,11 @@ def create_multi_cpt_payload(
     is_auger: float | None = None,
     is_low_vibrating: float | None = None,
     negative_fr_delta_factor: float | None = None,
-    use_almere_rules: bool | None = None,
+    use_almere_rules: bool = False,
     overrule_xi: float | None = None,
-    gamma_f_nk: float | None = None,
-    gamma_r_s: float | None = None,
-    gamma_r_b: float | None = None,
+    gamma_f_nk: float = 1.0,
+    gamma_r_s: float = 1.2,
+    gamma_r_b: float = 1.2,
 ) -> Tuple[dict, Dict[str, dict]]:
     """
     Creates a dictionary with the payload content for the PileCore endpoint
@@ -105,13 +107,13 @@ def create_multi_cpt_payload(
 
     groundwater_level_nap:
         The groundwater level. Unit: [m] w.r.t. NAP.
+    pile_type:
+        The equaly named entry in the "pile_type_specification" settings.
     friction_range_strategy:
         Sets the method to determine the sleeve friction zones on the pile. The soil
         friction in the positive zone contributes to the bearing capacity, while the
         negative zone adds an extra load on the pile. Accepted values: "manual",
-        "lower_bound" or "settlement_driven".
-    pile_type:
-        The equaly named entry in the "pile_type_specification" settings.
+        "lower_bound" (default) or "settlement_driven".
     specification:
         The equaly named entry in the "pile_type_specification" settings.
     installation:
@@ -120,7 +122,7 @@ def create_multi_cpt_payload(
         The shape of the pile.
     stiff_construction:
         Set to True if it's a stiff costruction. This will have influence on the xi factor
-        if you don't overrule it.
+        if you don't overrule it. Default = False.
     cpts_group:
         CPTs that are considered one group. Items must relate to the alias of the CPTData
         objects in `cptdata_objects`.
@@ -149,28 +151,31 @@ def create_multi_cpt_payload(
         The fraction of the maximum bearing capacity that is used as pilehead force in
         the settlement calculations. The input value can range between 0.0 and 1.0,
         where 1.0 translates to a pile load of 100% of the maximum bearing capacity.
-        When the pile_load parameter is provided, rel_pile_load will be ignored.
+        When the pile_load_sls parameter is provided, rel_pile_load will be ignored.
 
         When multiple pile-tip levels are considered, the applied pile load will vary
         with each pile-tip level, depending on the bearing capacity.
+
+        Default = 0.7
     pile_load_sls:
         Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.
     soil_load_sls:
-        Load on soil surface, used to calculate soil settlement. This is only required
+        Load on soil surface [kPa], used to calculate soil settlement. This is only required
         with the settlement-driven friction-range strategy.
+        Default = 0.0
     pile_head_level_nap:
         The level of the pile head. Can be:
 
             - float;
                 This is interpreted as an absolute level in [m w.r.t. NAP];
-            - Literal["surface"].
+            - Literal["surface"] (default).
                 In this case, the soil_properties.service_level
                 property is used.
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
     excavation_param_t:
         Excavation parameter depending on pile installation method and/or phasing.
-            - Use 1.0 for post-excavation installation with vibration (i.e. hammering).
+            - Use 1.0 (default) for post-excavation installation with vibration (i.e. hammering).
             - Use 0.5 for reduced-vibration installation, or pile installation prior to
               excavation method.
 
@@ -251,10 +256,13 @@ def create_multi_cpt_payload(
         coefficient and construction stiffness.
     gamma_f_nk:
         Safety factor for design-values of the negative sleeve friction force.
+        Default = 1.0
     gamma_r_s:
         Safety factor, used to obtain design-values of the pile-tip bearingcapacity.
+        Default = 1.2
     gamma_r_b:
         Safety factor, used to obtain design-values of the sleeve bearingcapacity.
+        Default = 1.2
 
     Returns
     -------
@@ -309,19 +317,23 @@ def create_multi_cpt_payload(
         pile_tip_levels_nap=list(pile_tip_levels_nap),
         list_soil_properties=soil_properties_list,
         pile_properties=pile_properties,
+        friction_range_strategy=friction_range_strategy,
+        pile_head_level_nap=pile_head_level_nap,
+        stiff_construction=stiff_construction,
+        rel_pile_load=relative_pile_load,
+        soil_load=soil_load_sls,
+        excavation_param_t=excavation_param_t,
+        use_almere_rules=use_almere_rules,
+        gamma_f_nk=gamma_f_nk,
+        gamma_r_b=gamma_r_b,
+        gamma_r_s=gamma_r_s,
     )
 
     # Add optional properties
     if excavation_depth_nap is not None:
         multi_cpt_payload["excavation_depth_nap"] = excavation_depth_nap
-    if excavation_param_t is not None:
-        multi_cpt_payload["excavation_param_t"] = excavation_param_t
-    if pile_head_level_nap is not None:
-        multi_cpt_payload["pile_head_level_nap"] = pile_head_level_nap
     if pile_load_sls is not None:
         multi_cpt_payload["pile_load"] = pile_load_sls
-    if relative_pile_load is not None:
-        multi_cpt_payload["rel_pile_load"] = relative_pile_load
     if apply_qc3_reduction is not None:
         multi_cpt_payload["apply_qc3_reduction"] = apply_qc3_reduction
     if negative_shaft_friction is not None:
@@ -334,24 +346,10 @@ def create_multi_cpt_payload(
         multi_cpt_payload[
             "fixed_positive_friction_range_nap"
         ] = fixed_positive_friction_range_nap
-    if gamma_f_nk is not None:
-        multi_cpt_payload["gamma_f_nk"] = gamma_f_nk
-    if gamma_r_s is not None:
-        multi_cpt_payload["gamma_r_s"] = gamma_r_s
-    if gamma_r_b is not None:
-        multi_cpt_payload["gamma_r_b"] = gamma_r_b
     if overrule_xi is not None:
         multi_cpt_payload["overrule_xi"] = overrule_xi
-    if soil_load_sls is not None:
-        multi_cpt_payload["soil_load"] = soil_load_sls
-    if use_almere_rules is not None:
-        multi_cpt_payload["use_almere_rules"] = use_almere_rules
     if cpts_group is not None:
         multi_cpt_payload["cpts_group"] = cpts_group
-    if friction_range_strategy is not None:
-        multi_cpt_payload["friction_range_strategy"] = friction_range_strategy
-    if stiff_construction is not None:
-        multi_cpt_payload["stiff_construction"] = stiff_construction
 
     return multi_cpt_payload, results_kwargs
 
