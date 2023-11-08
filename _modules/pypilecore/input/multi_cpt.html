@@ -74,7 +74,7 @@
 
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">pygef.cpt</span> <span class="kn">import</span> <span class="n">CPTData</span>
 
@@ -87,31 +87,28 @@
     <span class="n">cptdata_objects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CPTData</span><span class="p">],</span>
     <span class="n">classify_tables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
     <span class="n">groundwater_level_nap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">friction_range_strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;manual&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span> <span class="s2">&quot;settlement_driven&quot;</span><span class="p">],</span>
     <span class="n">pile_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">],</span>
     <span class="n">specification</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;concrete&quot;</span><span class="p">,</span> <span class="s2">&quot;steel&quot;</span><span class="p">,</span> <span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="s2">&quot;wood&quot;</span><span class="p">],</span>
     <span class="n">installation</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">],</span>
     <span class="n">pile_shape</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="s2">&quot;rect&quot;</span><span class="p">],</span>
-    <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">cpts_group</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">use_almere_rules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">soil_load_sls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">overrule_xi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">gamma_f_nk</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">gamma_r_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">gamma_r_b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">friction_range_strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+        <span class="s2">&quot;manual&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span> <span class="s2">&quot;settlement_driven&quot;</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span>
+    <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">cpts_group</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fixed_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fixed_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">negative_shaft_friction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">apply_qc3_reduction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">relative_pile_load</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_pile_load</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
     <span class="n">pile_load_sls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">soil_load_sls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;surface&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;surface&quot;</span><span class="p">,</span>
     <span class="n">excavation_depth_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">excavation_param_t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">individual_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+    <span class="n">excavation_param_t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">individual_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
     <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">individual_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+    <span class="n">individual_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
     <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">diameter_base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">diameter_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -131,6 +128,11 @@
     <span class="n">is_auger</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_almere_rules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">overrule_xi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gamma_f_nk</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">gamma_r_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">gamma_r_b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
@@ -177,19 +179,25 @@
 
 <span class="sd">    groundwater_level_nap:</span>
 <span class="sd">        The groundwater level. Unit: [m] w.r.t. NAP.</span>
+<span class="sd">    pile_type:</span>
+<span class="sd">        The equaly named entry in the &quot;pile_type_specification&quot; settings.</span>
 <span class="sd">    friction_range_strategy:</span>
 <span class="sd">        Sets the method to determine the sleeve friction zones on the pile. The soil</span>
 <span class="sd">        friction in the positive zone contributes to the bearing capacity, while the</span>
 <span class="sd">        negative zone adds an extra load on the pile. Accepted values: &quot;manual&quot;,</span>
-<span class="sd">        &quot;lower_bound&quot; or &quot;settlement_driven&quot;.</span>
-<span class="sd">    pile_type:</span>
-<span class="sd">        The equaly named entry in the &quot;pile_type_specification&quot; settings.</span>
+<span class="sd">        &quot;lower_bound&quot; (default) or &quot;settlement_driven&quot;.</span>
 <span class="sd">    specification:</span>
 <span class="sd">        The equaly named entry in the &quot;pile_type_specification&quot; settings.</span>
 <span class="sd">    installation:</span>
 <span class="sd">        The equaly named entry in the &quot;pile_type_specification&quot; settings.</span>
 <span class="sd">    pile_shape:</span>
 <span class="sd">        The shape of the pile.</span>
+<span class="sd">    stiff_construction:</span>
+<span class="sd">        Set to True if it&#39;s a stiff costruction. This will have influence on the xi factor</span>
+<span class="sd">        if you don&#39;t overrule it. Default = False.</span>
+<span class="sd">    cpts_group:</span>
+<span class="sd">        CPTs that are considered one group. Items must relate to the alias of the CPTData</span>
+<span class="sd">        objects in `cptdata_objects`.</span>
 <span class="sd">    fixed_negative_friction_range_nap:</span>
 <span class="sd">        Optionally sets the fixed depth range between which the negative sleeve friction</span>
 <span class="sd">        is calculated. If an array of format [top, bottom], the range is set between top</span>
@@ -215,26 +223,31 @@
 <span class="sd">        The fraction of the maximum bearing capacity that is used as pilehead force in</span>
 <span class="sd">        the settlement calculations. The input value can range between 0.0 and 1.0,</span>
 <span class="sd">        where 1.0 translates to a pile load of 100% of the maximum bearing capacity.</span>
-<span class="sd">        When the pile_load parameter is provided, rel_pile_load will be ignored.</span>
+<span class="sd">        When the pile_load_sls parameter is provided, rel_pile_load will be ignored.</span>
 
 <span class="sd">        When multiple pile-tip levels are considered, the applied pile load will vary</span>
 <span class="sd">        with each pile-tip level, depending on the bearing capacity.</span>
+
+<span class="sd">        Default = 0.7</span>
 <span class="sd">    pile_load_sls:</span>
 <span class="sd">        Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.</span>
+<span class="sd">    soil_load_sls:</span>
+<span class="sd">        Load on soil surface [kPa], used to calculate soil settlement. This is only required</span>
+<span class="sd">        with the settlement-driven friction-range strategy.</span>
+<span class="sd">        Default = 0.0</span>
 <span class="sd">    pile_head_level_nap:</span>
 <span class="sd">        The level of the pile head. Can be:</span>
 
 <span class="sd">            - float;</span>
 <span class="sd">                This is interpreted as an absolute level in [m w.r.t. NAP];</span>
-<span class="sd">            - Literal[&quot;surface&quot;].</span>
+<span class="sd">            - Literal[&quot;surface&quot;] (default).</span>
 <span class="sd">                In this case, the soil_properties.service_level</span>
 <span class="sd">                property is used.</span>
-
 <span class="sd">    excavation_depth_nap:</span>
 <span class="sd">        Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.</span>
 <span class="sd">    excavation_param_t:</span>
 <span class="sd">        Excavation parameter depending on pile installation method and/or phasing.</span>
-<span class="sd">            - Use 1.0 for post-excavation installation with vibration (i.e. hammering).</span>
+<span class="sd">            - Use 1.0 (default) for post-excavation installation with vibration (i.e. hammering).</span>
 <span class="sd">            - Use 0.5 for reduced-vibration installation, or pile installation prior to</span>
 <span class="sd">              excavation method.</span>
 
@@ -305,6 +318,23 @@
 <span class="sd">        (e). Typically values are 1.0 for piles cast in place, and 0.75 for other pile</span>
 <span class="sd">        types. The value is inferred from the pile_type_specifications, but can be</span>
 <span class="sd">        overwritten.</span>
+<span class="sd">    use_almere_rules:</span>
+<span class="sd">        If set to True the contribution, produced by the positive shaft friction, to the</span>
+<span class="sd">        total bearing capacity is limited to at most 75% the contribution provided by</span>
+<span class="sd">        the pile tip. ref: https://www.almere.nl/fileadmin/user_upload/Richtlijnen_Constructie_Gem._Almere_vanaf_01-01-2017_versie_3.0a.pdf</span>
+<span class="sd">    overrule_xi:</span>
+<span class="sd">        Set a fixed value for xi in all calculations. Use with caution. This will</span>
+<span class="sd">        overrule the calculation of xi-values based on the group-size, variation-</span>
+<span class="sd">        coefficient and construction stiffness.</span>
+<span class="sd">    gamma_f_nk:</span>
+<span class="sd">        Safety factor for design-values of the negative sleeve friction force.</span>
+<span class="sd">        Default = 1.0</span>
+<span class="sd">    gamma_r_s:</span>
+<span class="sd">        Safety factor, used to obtain design-values of the pile-tip bearingcapacity.</span>
+<span class="sd">        Default = 1.2</span>
+<span class="sd">    gamma_r_b:</span>
+<span class="sd">        Safety factor, used to obtain design-values of the sleeve bearingcapacity.</span>
+<span class="sd">        Default = 1.2</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -359,19 +389,23 @@
         <span class="n">pile_tip_levels_nap</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pile_tip_levels_nap</span><span class="p">),</span>
         <span class="n">list_soil_properties</span><span class="o">=</span><span class="n">soil_properties_list</span><span class="p">,</span>
         <span class="n">pile_properties</span><span class="o">=</span><span class="n">pile_properties</span><span class="p">,</span>
+        <span class="n">friction_range_strategy</span><span class="o">=</span><span class="n">friction_range_strategy</span><span class="p">,</span>
+        <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">pile_head_level_nap</span><span class="p">,</span>
+        <span class="n">stiff_construction</span><span class="o">=</span><span class="n">stiff_construction</span><span class="p">,</span>
+        <span class="n">rel_pile_load</span><span class="o">=</span><span class="n">relative_pile_load</span><span class="p">,</span>
+        <span class="n">soil_load</span><span class="o">=</span><span class="n">soil_load_sls</span><span class="p">,</span>
+        <span class="n">excavation_param_t</span><span class="o">=</span><span class="n">excavation_param_t</span><span class="p">,</span>
+        <span class="n">use_almere_rules</span><span class="o">=</span><span class="n">use_almere_rules</span><span class="p">,</span>
+        <span class="n">gamma_f_nk</span><span class="o">=</span><span class="n">gamma_f_nk</span><span class="p">,</span>
+        <span class="n">gamma_r_b</span><span class="o">=</span><span class="n">gamma_r_b</span><span class="p">,</span>
+        <span class="n">gamma_r_s</span><span class="o">=</span><span class="n">gamma_r_s</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Add optional properties</span>
     <span class="k">if</span> <span class="n">excavation_depth_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_depth_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_depth_nap</span>
-    <span class="k">if</span> <span class="n">excavation_param_t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_param_t&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_param_t</span>
-    <span class="k">if</span> <span class="n">pile_head_level_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;pile_head_level_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_head_level_nap</span>
     <span class="k">if</span> <span class="n">pile_load_sls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;pile_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_load_sls</span>
-    <span class="k">if</span> <span class="n">relative_pile_load</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;rel_pile_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relative_pile_load</span>
     <span class="k">if</span> <span class="n">apply_qc3_reduction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;apply_qc3_reduction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_qc3_reduction</span>
     <span class="k">if</span> <span class="n">negative_shaft_friction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -384,24 +418,10 @@
         <span class="n">multi_cpt_payload</span><span class="p">[</span>
             <span class="s2">&quot;fixed_positive_friction_range_nap&quot;</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">fixed_positive_friction_range_nap</span>
-    <span class="k">if</span> <span class="n">gamma_f_nk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_f_nk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_f_nk</span>
-    <span class="k">if</span> <span class="n">gamma_r_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_s&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_s</span>
-    <span class="k">if</span> <span class="n">gamma_r_b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_b</span>
     <span class="k">if</span> <span class="n">overrule_xi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;overrule_xi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overrule_xi</span>
-    <span class="k">if</span> <span class="n">soil_load_sls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;soil_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">soil_load_sls</span>
-    <span class="k">if</span> <span class="n">use_almere_rules</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;use_almere_rules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_almere_rules</span>
     <span class="k">if</span> <span class="n">cpts_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;cpts_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpts_group</span>
-    <span class="k">if</span> <span class="n">friction_range_strategy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;friction_range_strategy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">friction_range_strategy</span>
-    <span class="k">if</span> <span class="n">stiff_construction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;stiff_construction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stiff_construction</span>
 
     <span class="k">return</span> <span class="n">multi_cpt_payload</span><span class="p">,</span> <span class="n">results_kwargs</span></div>
 
