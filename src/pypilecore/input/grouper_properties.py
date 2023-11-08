@@ -35,6 +35,8 @@ def create_grouper_payload(
     ]
     | None = _dft_optimize_result_by,  # type: ignore
     resolution: float = 0.5,
+    overrule_nan: float = 0.0,
+    skip_nan: bool = False,
 ) -> dict:
     """
     Creates a dictionary with the payload content for the PileCore endpoint
@@ -116,6 +118,14 @@ def create_grouper_payload(
         Default is 0.5
         The resolution of clusters algorithm. If resolution is 1 the cluster boundary conditions can be met
         (number clusters is number CPTs). Depending on the number of CPTs this can take some time.
+    overrule_nan:
+        Default is 0.0
+        The default behavior is to replace NaN with zero, for one of the following
+        attributes ["R_b_cal", "F_nk_cal", "R_s_cal"].
+    skip_nan:
+        Default is False
+        If True the CPTs are skipped that have NaN values in one of the following
+        attributes ["R_b_cal", "F_nk_cal", "R_s_cal"], this means that they are not used in the grouper method.
 
     Raises
     ------
@@ -155,23 +165,30 @@ def create_grouper_payload(
     cpt_objects = []
     pile_tip_level_object = {}
     for name, cpt_result in cpt_results_dict.items():
-        isnan = False
+        has_nan = False
         # check if coordinate are set
-        if cpt_result.soil_properties.x is None:
-            raise ValueError(f" CPT {name} does not have a x-coordinate")
-        if cpt_result.soil_properties.y is None:
-            raise ValueError(f"CPT {name} does not have a y-coordinate")
+        if cpt_result.soil_properties.x is None or cpt_result.soil_properties.y is None:
+            raise ValueError(
+                f" CPT {name} does not have a x-coordinate or y-coordinate"
+            )
 
         for item in ["R_b_cal", "F_nk_cal", "R_s_cal"]:
             if np.isnan(cpt_result.table.__getattribute__(item)).any():
-                isnan = True
-                logging.error(
-                    f"CPT {name} has NaN values are present in column {item}. "
-                    f"Not included in grouper payload."
-                )
-                break
+                if skip_nan:
+                    has_nan = True
+                    logging.warning(
+                        f"CPT {name} has NaN values are present in column {item}. "
+                        f"Not included in grouper payload."
+                    )
+
+                    break
+                else:
+                    logging.warning(
+                        f"CPT {name} has NaN values are present in column {item}. "
+                        f"Replace NaN with {overrule_nan}."
+                    )
         # skip CPT that are not valid.
-        if isnan:
+        if has_nan:
             continue
 
         # map pile tip levels to object
@@ -180,9 +197,15 @@ def create_grouper_payload(
         # add bearing capacity result to object
         cpt_objects.append(
             {
-                "bottom_bearing_capacity": cpt_result.table.R_b_cal.tolist(),
-                "negative_friction": cpt_result.table.F_nk_cal.tolist(),
-                "shaft_bearing_capacity": cpt_result.table.R_s_cal.tolist(),
+                "bottom_bearing_capacity": np.nan_to_num(
+                    cpt_result.table.R_b_cal, nan=overrule_nan
+                ).tolist(),
+                "negative_friction": np.nan_to_num(
+                    cpt_result.table.F_nk_cal, nan=overrule_nan
+                ).tolist(),
+                "shaft_bearing_capacity": np.nan_to_num(
+                    cpt_result.table.R_s_cal, nan=overrule_nan
+                ).tolist(),
                 "name": name,
                 "coordinates": {
                     "x": cpt_result.soil_properties.x,
