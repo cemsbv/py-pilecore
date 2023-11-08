@@ -1,12 +1,18 @@
+import logging
 from typing import List
 
+import numpy as np
 import pytest
 from pygef.cpt import CPTData
 
 from pypilecore.input import (
+    create_grouper_payload,
     create_pile_properties_payload,
     create_soil_properties_payload,
 )
+from pypilecore.results import MultiCPTBearingResults
+
+LOGGER = logging.getLogger(__name__)
 
 
 def test_create_soil_properties_payload(
@@ -296,4 +302,42 @@ def test_create_pile_properties_payload_green_path() -> None:
             installation="1",
             pile_shape="rect",
             diameter_base=0.5,
+        )
+
+
+def test_create_grouper_payload(
+    caplog, mock_multi_cpt_bearing_response, mock_results_passover
+) -> None:
+    cptgroupresults = MultiCPTBearingResults.from_api_response(
+        mock_multi_cpt_bearing_response, mock_results_passover
+    )
+
+    create_grouper_payload(
+        cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
+    )
+
+    # test value error
+    single_cpt_results = cptgroupresults.cpt_results.cpt_results_dict["9"]
+    with pytest.raises(ValueError):
+        single_cpt_results.soil_properties.__setattr__("_x", None)
+        create_grouper_payload(
+            cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
+        )
+    single_cpt_results.soil_properties.__setattr__("_x", 0)
+
+    arr = single_cpt_results.table.__getattribute__("R_b_cal")
+    arr[-1] = np.nan
+    with caplog.at_level(logging.WARNING):
+        single_cpt_results.table.__setattr__("R_b_cal", arr)
+        create_grouper_payload(
+            cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
+        )
+
+        assert "CPT 9 has NaN values are present in column R_b_cal. " in caplog.text
+
+    arr = single_cpt_results.table.__getattribute__("pile_tip_level_nap")
+    single_cpt_results.table.__setattr__("pile_tip_level_nap", arr[:-1])
+    with pytest.raises(ValueError):
+        create_grouper_payload(
+            cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
         )

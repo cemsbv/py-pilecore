@@ -22,10 +22,26 @@ def mock_multi_cpt_bearing_response() -> dict:
 @pytest.fixture
 def mock_results_passover() -> dict:
     return {
-        "9": {"ref_height": 11.41, "surface_level_nap": 11.41},
-        "7": {"ref_height": 10.98, "surface_level_nap": 10.98},
-        "5": {"ref_height": 10.96, "surface_level_nap": 10.96},
-        "12": {"ref_height": 11.56, "surface_level_nap": 11.56},
+        "9": {
+            "ref_height": 11.41,
+            "surface_level_nap": 11.41,
+            "location": {"x": 0, "y": 0},
+        },
+        "7": {
+            "ref_height": 10.98,
+            "surface_level_nap": 10.98,
+            "location": {"x": 2, "y": 1},
+        },
+        "5": {
+            "ref_height": 10.96,
+            "surface_level_nap": 10.96,
+            "location": {"x": 2, "y": 2},
+        },
+        "12": {
+            "ref_height": 11.56,
+            "surface_level_nap": 11.56,
+            "location": {"x": 3, "y": 3},
+        },
     }
 
 
