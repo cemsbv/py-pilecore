@@ -118,6 +118,12 @@ def create_multi_cpt_payload(
         The equaly named entry in the "pile_type_specification" settings.
     pile_shape:
         The shape of the pile.
+    stiff_construction:
+        Set to True if it's a stiff costruction. This will have influence on the xi factor
+        if you don't overrule it.
+    cpts_group:
+        CPTs that are considered one group. Items must relate to the alias of the CPTData
+        objects in `cptdata_objects`.
     fixed_negative_friction_range_nap:
         Optionally sets the fixed depth range between which the negative sleeve friction
         is calculated. If an array of format [top, bottom], the range is set between top
@@ -149,6 +155,9 @@ def create_multi_cpt_payload(
         with each pile-tip level, depending on the bearing capacity.
     pile_load_sls:
         Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.
+    soil_load_sls:
+        Load on soil surface, used to calculate soil settlement. This is only required
+        with the settlement-driven friction-range strategy.
     pile_head_level_nap:
         The level of the pile head. Can be:
 
@@ -157,7 +166,6 @@ def create_multi_cpt_payload(
             - Literal["surface"].
                 In this case, the soil_properties.service_level
                 property is used.
-
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
     excavation_param_t:
@@ -233,6 +241,20 @@ def create_multi_cpt_payload(
         (e). Typically values are 1.0 for piles cast in place, and 0.75 for other pile
         types. The value is inferred from the pile_type_specifications, but can be
         overwritten.
+    use_almere_rules:
+        If set to True the contribution, produced by the positive shaft friction, to the
+        total bearing capacity is limited to at most 75% the contribution provided by
+        the pile tip. ref: https://www.almere.nl/fileadmin/user_upload/Richtlijnen_Constructie_Gem._Almere_vanaf_01-01-2017_versie_3.0a.pdf
+    overrule_xi:
+        Set a fixed value for xi in all calculations. Use with caution. This will
+        overrule the calculation of xi-values based on the group-size, variation-
+        coefficient and construction stiffness.
+    gamma_f_nk:
+        Safety factor for design-values of the negative sleeve friction force.
+    gamma_r_s:
+        Safety factor, used to obtain design-values of the pile-tip bearingcapacity.
+    gamma_r_b:
+        Safety factor, used to obtain design-values of the sleeve bearingcapacity.
 
     Returns
     -------
