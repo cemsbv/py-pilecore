@@ -98,6 +98,20 @@
 
 
 <div class="viewcode-block" id="get_multi_cpt_api_result"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_multi_cpt_api_result">[docs]</a><span class="k">def</span> <span class="nf">get_multi_cpt_api_result</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/compression/multiple-cpts/results&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
+    <span class="p">)</span>
     <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
         <span class="s2">&quot;/compression/multiple-cpts/results&quot;</span><span class="p">,</span>
@@ -111,6 +125,20 @@
 
 
 <div class="viewcode-block" id="get_multi_cpt_api_report"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_multi_cpt_api_report">[docs]</a><span class="k">def</span> <span class="nf">get_multi_cpt_api_report</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/compression/multiple-cpts/report&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
+    <span class="p">)</span>
     <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
         <span class="s2">&quot;/compression/multiple-cpts/report&quot;</span><span class="p">,</span>

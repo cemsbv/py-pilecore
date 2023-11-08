@@ -72,9 +72,11 @@
   <h1>Source code for pypilecore.input.grouper_properties</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Polygon</span><span class="p">,</span> <span class="n">mapping</span>
 
 <span class="kn">from</span> <span class="nn">..results</span> <span class="kn">import</span> <span class="n">SingleCPTBearingResults</span>
@@ -105,6 +107,8 @@
     <span class="p">]</span>
     <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">_dft_optimize_result_by</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
     <span class="n">resolution</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">overrule_nan</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">skip_nan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
@@ -186,6 +190,14 @@
 <span class="sd">        Default is 0.5</span>
 <span class="sd">        The resolution of clusters algorithm. If resolution is 1 the cluster boundary conditions can be met</span>
 <span class="sd">        (number clusters is number CPTs). Depending on the number of CPTs this can take some time.</span>
+<span class="sd">    overrule_nan:</span>
+<span class="sd">        Default is 0.0</span>
+<span class="sd">        The default behavior is to replace NaN with zero, for one of the following</span>
+<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_cal&quot;, &quot;R_s_cal&quot;].</span>
+<span class="sd">    skip_nan:</span>
+<span class="sd">        Default is False</span>
+<span class="sd">        If True the CPTs are skipped that have NaN values in one of the following</span>
+<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_cal&quot;, &quot;R_s_cal&quot;], this means that they are not used in the grouper method.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -225,17 +237,31 @@
     <span class="n">cpt_objects</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">pile_tip_level_object</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">cpt_result</span> <span class="ow">in</span> <span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">has_nan</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># check if coordinate are set</span>
-        <span class="k">if</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a x-coordinate&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a y-coordinate&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot; CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a x-coordinate or y-coordinate&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;R_b_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;F_nk_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;R_s_cal&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has NaN values are present in column </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">.&quot;</span>
-                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">))</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">skip_nan</span><span class="p">:</span>
+                    <span class="n">has_nan</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has NaN values are present in column </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Not included in grouper payload.&quot;</span>
+                    <span class="p">)</span>
+
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has NaN values are present in column </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Replace NaN with </span><span class="si">{</span><span class="n">overrule_nan</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="p">)</span>
+        <span class="c1"># skip CPT that are not valid.</span>
+        <span class="k">if</span> <span class="n">has_nan</span><span class="p">:</span>
+            <span class="k">continue</span>
 
         <span class="c1"># map pile tip levels to object</span>
         <span class="n">pile_tip_level_object</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -243,9 +269,15 @@
         <span class="c1"># add bearing capacity result to object</span>
         <span class="n">cpt_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">&quot;bottom_bearing_capacity&quot;</span><span class="p">:</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_b_cal</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-                <span class="s2">&quot;negative_friction&quot;</span><span class="p">:</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">F_nk_cal</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-                <span class="s2">&quot;shaft_bearing_capacity&quot;</span><span class="p">:</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_s_cal</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s2">&quot;bottom_bearing_capacity&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+                    <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_b_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s2">&quot;negative_friction&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+                    <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">F_nk_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s2">&quot;shaft_bearing_capacity&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+                    <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_s_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
                 <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">cpt_result</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
@@ -256,11 +288,16 @@
     <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;cpt_objects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpt_objects</span>
 
     <span class="c1"># validate pile tip levels</span>
-    <span class="n">raw_lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">frozenset</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">pile_tip_level_object</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+    <span class="n">raw_lengths</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nb">frozenset</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">pile_tip_level_object</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;For the grouper payload must all CPT&#39;s have a valid bearing capacity for all pile tip levels. </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The PileCore grouper requires all CPTs to have a valid bearing capacity for all pile tip levels. </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">pile_tip_level</span> <span class="ow">in</span> <span class="n">pile_tip_level_object</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Pile tip levels are not similar for CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> with length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Pile tip levels are not similar for CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> with length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;upper boundary: </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">, lower boundary: </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -300,13 +337,15 @@
     <span class="n">report_payload</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">grouper_payload</span><span class="p">)</span>
     <span class="n">report_payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
         <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">sub_groups</span><span class="o">=</span><span class="n">grouper_response</span><span class="p">,</span>
+            <span class="n">sub_groups</span><span class="o">=</span><span class="n">grouper_response</span><span class="p">[</span><span class="s2">&quot;sub_groups&quot;</span><span class="p">],</span>
             <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
-            <span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span>
+            <span class="n">project_number</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span>
             <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">)</span>
+    <span class="c1"># remove not used attributes</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">report_payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">report_payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cpt_objects&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">report_payload</span></div>
 </pre></div>
 

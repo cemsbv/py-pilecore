@@ -189,6 +189,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties"><code class="docutils literal notranslate"><span class="pre">SoilProperties</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties.cpt_table"><code class="docutils literal notranslate"><span class="pre">SoilProperties.cpt_table</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties.layer_table"><code class="docutils literal notranslate"><span class="pre">SoilProperties.layer_table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties.x"><code class="docutils literal notranslate"><span class="pre">SoilProperties.x</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties.y"><code class="docutils literal notranslate"><span class="pre">SoilProperties.y</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties.test_id"><code class="docutils literal notranslate"><span class="pre">SoilProperties.test_id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties.ref_height"><code class="docutils literal notranslate"><span class="pre">SoilProperties.ref_height</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties.groundwater_level_ref"><code class="docutils literal notranslate"><span class="pre">SoilProperties.groundwater_level_ref</span></code></a></li>
@@ -289,9 +291,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.api.get_multi_cpt_api_result">
 <span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_result" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<dd><p>Wrapper around the PileCore endpoint “/compression/multiple-cpts/results”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
+<li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -299,9 +308,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.api.get_multi_cpt_api_report">
 <span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_report" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<dd><p>Wrapper around the PileCore endpoint “/compression/multiple-cpts/report”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
+<li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1438,7 +1454,7 @@ parameter used in negative friction calculation according to NEN-9997-1 7.3.2.2 
 <h2>Soil properties: Results<a class="headerlink" href="#soil-properties-results" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.soil_properties.</span></span><span class="sig-name descname"><span class="pre">SoilProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_level_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groundwater_level_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/soil_properties.html#SoilProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.soil_properties.</span></span><span class="sig-name descname"><span class="pre">SoilProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_level_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groundwater_level_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/soil_properties.html#SoilProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties" title="Permalink to this definition"></a></dt>
 <dd><p>A class for soil properties.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.cpt_table">
@@ -1450,6 +1466,18 @@ parameter used in negative friction calculation according to NEN-9997-1 7.3.2.2 
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.layer_table">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">layer_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable" title="pypilecore.results.soil_properties.LayerTable"><span class="pre">LayerTable</span></a></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.layer_table" title="Permalink to this definition"></a></dt>
 <dd><p>The LayerTable object</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.x">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.x" title="Permalink to this definition"></a></dt>
+<dd><p>x-coordinate of the CPT</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.y">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.y" title="Permalink to this definition"></a></dt>
+<dd><p>y-coordinate of the CPT</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1744,7 +1772,7 @@ the response of a “compression/multiple-cpts/results” endpoint call.</p>
 <span id="cptgrouperinput"></span><h2>CPT grouper: Input<a class="headerlink" href="#cpt-grouper-input" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.input.grouper_properties.create_grouper_payload">
-<span class="sig-prename descclassname"><span class="pre">pypilecore.input.grouper_properties.</span></span><span class="sig-name descname"><span class="pre">create_grouper_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_results_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">building_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_grid_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_shaft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centre_to_centre_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stiff_construction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_result_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['minimum_pile_level',</span> <span class="pre">'number_of_cpts',</span> <span class="pre">'number_of_consecutive_pile_levels']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/input/grouper_properties.html#create_grouper_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.input.grouper_properties.create_grouper_payload" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypilecore.input.grouper_properties.</span></span><span class="sig-name descname"><span class="pre">create_grouper_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_results_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">building_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_grid_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_shaft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centre_to_centre_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stiff_construction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_result_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['minimum_pile_level',</span> <span class="pre">'number_of_cpts',</span> <span class="pre">'number_of_consecutive_pile_levels']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrule_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/input/grouper_properties.html#create_grouper_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.input.grouper_properties.create_grouper_payload" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a dictionary with the payload content for the PileCore endpoint
 “/grouper/group_cpts”</p>
 <p class="rubric">Notes</p>
@@ -1817,6 +1845,12 @@ Rotation of the squares used in the centre to centre validation [degrees]</p></l
 <li><p><strong>resolution</strong> (<em>float</em>) – Default is 0.5
 The resolution of clusters algorithm. If resolution is 1 the cluster boundary conditions can be met
 (number clusters is number CPTs). Depending on the number of CPTs this can take some time.</p></li>
+<li><p><strong>overrule_nan</strong> (<em>float</em>) – Default is 0.0
+The default behavior is to replace NaN with zero, for one of the following
+attributes [“R_b_cal”, “F_nk_cal”, “R_s_cal”].</p></li>
+<li><p><strong>skip_nan</strong> (<em>bool</em>) – Default is False
+If True the CPTs are skipped that have NaN values in one of the following
+attributes [“R_b_cal”, “F_nk_cal”, “R_s_cal”], this means that they are not used in the grouper method.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>

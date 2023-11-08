@@ -469,6 +469,8 @@
         <span class="n">surface_level_ref</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">groundwater_level_ref</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -486,6 +488,10 @@
 <span class="sd">            The elevation of the groundwater w.r.t. the vertical reference [m].</span>
 <span class="sd">        test_id:</span>
 <span class="sd">            Identifier of the CPT</span>
+<span class="sd">        x:</span>
+<span class="sd">            x coordinate of CPT</span>
+<span class="sd">        y:</span>
+<span class="sd">            y coordinate of CPT</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_table</span> <span class="o">=</span> <span class="n">cpt_table</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_layer_table</span> <span class="o">=</span> <span class="n">layer_table</span>
@@ -493,6 +499,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_test_id</span> <span class="o">=</span> <span class="n">test_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_groundwater_level_ref</span> <span class="o">=</span> <span class="n">groundwater_level_ref</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_surface_level_ref</span> <span class="o">=</span> <span class="n">surface_level_ref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cpt_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CPTTable</span><span class="p">:</span>
@@ -506,11 +514,13 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;x-coordinate of the CPT&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;y-coordinate of the CPT&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">test_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>

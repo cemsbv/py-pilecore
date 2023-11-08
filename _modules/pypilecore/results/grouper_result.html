@@ -648,7 +648,7 @@
             <span class="p">)</span>
             <span class="n">valid_pile_level</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">)[</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">net_design_bearing_capacity</span><span class="p">)</span>
-                <span class="o">&lt;=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">pile_load_uls</span>
+                <span class="o">&gt;=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">pile_load_uls</span>
             <span class="p">]</span>
             <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="n">group_id</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_pile_level</span><span class="p">),</span> <span class="n">valid_pile_level</span><span class="p">)</span>
             <span class="n">group_id_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
