@@ -397,6 +397,8 @@ class SoilProperties:
         surface_level_ref: float,
         groundwater_level_ref: float,
         test_id: str | None = None,
+        x: float | None = None,
+        y: float | None = None,
     ):
         """
         Parameters
@@ -414,6 +416,10 @@ class SoilProperties:
             The elevation of the groundwater w.r.t. the vertical reference [m].
         test_id:
             Identifier of the CPT
+        x:
+            x coordinate of CPT
+        y:
+            y coordinate of CPT
         """
         self._cpt_table = cpt_table
         self._layer_table = layer_table
@@ -421,6 +427,8 @@ class SoilProperties:
         self._test_id = test_id
         self._groundwater_level_ref = groundwater_level_ref
         self._surface_level_ref = surface_level_ref
+        self._x = x
+        self._y = y
 
     @property
     def cpt_table(self) -> CPTTable:
@@ -434,11 +442,13 @@ class SoilProperties:
 
     @property
     def x(self) -> float | None:
-        return None
+        """x-coordinate of the CPT"""
+        return self._x
 
     @property
     def y(self) -> float | None:
-        return None
+        """y-coordinate of the CPT"""
+        return self._y
 
     @property
     def test_id(self) -> str | None:

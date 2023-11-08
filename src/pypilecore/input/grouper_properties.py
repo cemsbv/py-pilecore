@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import logging
 from copy import deepcopy
 from typing import Any, Dict, List, Literal
 
+import numpy as np
 from shapely.geometry import Polygon, mapping
 
 from ..results import SingleCPTBearingResults
@@ -33,6 +35,8 @@ def create_grouper_payload(
     ]
     | None = _dft_optimize_result_by,  # type: ignore
     resolution: float = 0.5,
+    overrule_nan: float = 0.0,
+    skip_nan: bool = False,
 ) -> dict:
     """
     Creates a dictionary with the payload content for the PileCore endpoint
@@ -114,6 +118,14 @@ def create_grouper_payload(
         Default is 0.5
         The resolution of clusters algorithm. If resolution is 1 the cluster boundary conditions can be met
         (number clusters is number CPTs). Depending on the number of CPTs this can take some time.
+    overrule_nan:
+        Default is 0.0
+        The default behavior is to replace NaN with zero, for one of the following
+        attributes ["R_b_cal", "F_nk_cal", "R_s_cal"].
+    skip_nan:
+        Default is False
+        If True the CPTs are skipped that have NaN values in one of the following
+        attributes ["R_b_cal", "F_nk_cal", "R_s_cal"], this means that they are not used in the grouper method.
 
     Raises
     ------
@@ -153,17 +165,31 @@ def create_grouper_payload(
     cpt_objects = []
     pile_tip_level_object = {}
     for name, cpt_result in cpt_results_dict.items():
+        has_nan = False
         # check if coordinate are set
-        if cpt_result.soil_properties.x is None:
-            raise ValueError(f" CPT {name} does not have a x-coordinate")
-        if cpt_result.soil_properties.y is None:
-            raise ValueError(f"CPT {name} does not have a y-coordinate")
+        if cpt_result.soil_properties.x is None or cpt_result.soil_properties.y is None:
+            raise ValueError(
+                f" CPT {name} does not have a x-coordinate or y-coordinate"
+            )
 
         for item in ["R_b_cal", "F_nk_cal", "R_s_cal"]:
-            if cpt_result.table.__getattribute__(item).isnull().values.any():
-                raise ValueError(
-                    f"CPT {name} has NaN values are present in column {item}."
-                )
+            if np.isnan(cpt_result.table.__getattribute__(item)).any():
+                if skip_nan:
+                    has_nan = True
+                    logging.warning(
+                        f"CPT {name} has NaN values are present in column {item}. "
+                        f"Not included in grouper payload."
+                    )
+
+                    break
+                else:
+                    logging.warning(
+                        f"CPT {name} has NaN values are present in column {item}. "
+                        f"Replace NaN with {overrule_nan}."
+                    )
+        # skip CPT that are not valid.
+        if has_nan:
+            continue
 
         # map pile tip levels to object
         pile_tip_level_object[name] = cpt_result.table.pile_tip_level_nap.tolist()
@@ -171,9 +197,15 @@ def create_grouper_payload(
         # add bearing capacity result to object
         cpt_objects.append(
             {
-                "bottom_bearing_capacity": cpt_result.table.R_b_cal.tolist(),
-                "negative_friction": cpt_result.table.F_nk_cal.tolist(),
-                "shaft_bearing_capacity": cpt_result.table.R_s_cal.tolist(),
+                "bottom_bearing_capacity": np.nan_to_num(
+                    cpt_result.table.R_b_cal, nan=overrule_nan
+                ).tolist(),
+                "negative_friction": np.nan_to_num(
+                    cpt_result.table.F_nk_cal, nan=overrule_nan
+                ).tolist(),
+                "shaft_bearing_capacity": np.nan_to_num(
+                    cpt_result.table.R_s_cal, nan=overrule_nan
+                ).tolist(),
                 "name": name,
                 "coordinates": {
                     "x": cpt_result.soil_properties.x,
@@ -184,11 +216,16 @@ def create_grouper_payload(
     payload["cpt_objects"] = cpt_objects
 
     # validate pile tip levels
-    raw_lengths = [frozenset(values) for values in pile_tip_level_object.values()]
+    raw_lengths = [
+        frozenset(np.round(values, 1)) for values in pile_tip_level_object.values()
+    ]
     if len(list(set(raw_lengths))) > 1:
-        msg = "For the grouper payload must all CPT's have a valid bearing capacity for all pile tip levels. \n"
+        msg = "The PileCore grouper requires all CPTs to have a valid bearing capacity for all pile tip levels. \n"
         for name, pile_tip_level in pile_tip_level_object.items():
-            msg += f"Pile tip levels are not similar for CPT {name} with length {len(pile_tip_level)}. \n"
+            msg += (
+                f"Pile tip levels are not similar for CPT {name} with length {len(pile_tip_level)}, "
+                f"upper boundary: {max(pile_tip_level)}, lower boundary: {min(pile_tip_level)}. \n"
+            )
         raise ValueError(msg)
     payload["pile_tip_level"] = list(raw_lengths[0])
 
@@ -228,11 +265,13 @@ def create_grouper_report_payload(
     report_payload = deepcopy(grouper_payload)
     report_payload.update(
         dict(
-            sub_groups=grouper_response,
+            sub_groups=grouper_response["sub_groups"],
             author=author,
-            project_id=project_id,
+            project_number=project_id,
             project_name=project_name,
         ),
     )
+    # remove not used attributes
     _ = report_payload.pop("pile_tip_level")
+    _ = report_payload.pop("cpt_objects")
     return report_payload

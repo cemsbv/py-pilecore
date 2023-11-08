@@ -315,6 +315,8 @@ class SingleCPTBearingResultsContainer:
                     surface_level_ref=cpt_input[cpt_results["test_id"]][
                         "surface_level_nap"
                     ],
+                    x=cpt_input[cpt_results["test_id"]].get("location", {}).get("x"),
+                    y=cpt_input[cpt_results["test_id"]].get("location", {}).get("y"),
                 )
                 for cpt_results in cpt_results_list
             }
