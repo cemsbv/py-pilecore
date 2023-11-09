@@ -280,6 +280,16 @@ def create_multi_cpt_payload(
         - if `pile_shape`=="rect" & `width_base_large` is None
         - if `pile_shape` not in ["rect", "round"]
     """
+    # Input validation
+    if excavation_depth_nap is not None and excavation_param_t is None:
+        raise ValueError(
+            "`excavation_param_t` cannot be None when `excavation_depth_nap` is not None."
+        )
+    if relative_pile_load is None and pile_load_sls is None:
+        raise ValueError(
+            "Need at least a value for one of: [`relative_pile_load`, `pile_load_sls`]"
+        )
+
     soil_properties_list, results_kwargs = create_soil_properties_payload(
         cptdata_objects=cptdata_objects,
         classify_tables=classify_tables,
