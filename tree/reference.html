@@ -480,7 +480,7 @@ applied conform 7.6.2.3(e) of NEN 9997-1. If omitted (or null: default), the
 value is inferred from the pile type: only True for auger piles (when
 pile_properties.is_auger == True). If a boolean is provided, the qc3 reduction
 is/isn’t applied, regardless of the pile type.</p></li>
-<li><p><strong>relative_pile_load</strong> (<em>float</em>) – <p>The fraction of the maximum bearing capacity that is used as pilehead force in
+<li><p><strong>relative_pile_load</strong> (<em>float</em><em> | </em><em>None</em>) – <p>The fraction of the maximum bearing capacity that is used as pilehead force in
 the settlement calculations. The input value can range between 0.0 and 1.0,
 where 1.0 translates to a pile load of 100% of the maximum bearing capacity.
 When the pile_load_sls parameter is provided, rel_pile_load will be ignored.</p>
