@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2023-11-09
+
+### Features
+
+- Minor fixups in PileCore_multi_cpt notebook
+- Validate excavation and pile-load input in function create_multi_cpt_payload
+- Accept None for `relative_pile_load`
+
 ## [0.2.0] - 2023-11-08
 
 ### Testing
