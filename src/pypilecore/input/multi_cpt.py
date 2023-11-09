@@ -28,7 +28,7 @@ def create_multi_cpt_payload(
     fixed_positive_friction_range_nap: Tuple[float, str | float] | None = None,
     negative_shaft_friction: float | None = None,
     apply_qc3_reduction: bool | None = None,
-    relative_pile_load: float = 0.7,
+    relative_pile_load: float | None = 0.7,
     pile_load_sls: float | None = None,
     soil_load_sls: float = 0.0,
     pile_head_level_nap: float | Literal["surface"] = "surface",
