@@ -6,8 +6,8 @@ from typing import Dict, List, Literal, Mapping, Sequence, Tuple
 
 from pygef.cpt import CPTData
 
-from .pile_properties import create_pile_properties_payload
-from .soil_properties import create_soil_properties_payload
+from pypilecore.input.pile_properties import create_pile_properties_payload
+from pypilecore.input.soil_properties import create_soil_properties_payload
 
 
 def create_multi_cpt_payload(

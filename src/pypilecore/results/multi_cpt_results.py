@@ -8,10 +8,13 @@ import numpy as np
 import pandas as pd
 from matplotlib.axes import Axes
 
-from ..exceptions import UserError
-from .load_settlement import get_load_settlement_plot
-from .pile_properties import PileProperties, create_pile_properties_from_api_response
-from .single_cpt_results import SingleCPTBearingResults
+from pypilecore.exceptions import UserError
+from pypilecore.results.load_settlement import get_load_settlement_plot
+from pypilecore.results.pile_properties import (
+    PileProperties,
+    create_pile_properties_from_api_response,
+)
+from pypilecore.results.single_cpt_results import SingleCPTBearingResults
 
 Number = Union[float, int]
 

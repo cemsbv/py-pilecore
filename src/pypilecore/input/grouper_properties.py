@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Literal
 import numpy as np
 from shapely.geometry import Polygon, mapping
 
-from ..results import SingleCPTBearingResults
+from pypilecore.results import SingleCPTBearingResults
 
 _dft_optimize_result_by = [
     "minimum_pile_level",
