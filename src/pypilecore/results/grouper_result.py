@@ -527,6 +527,15 @@ class GrouperResults:
         Plot contains the:
 
             - cpts within a subgroup
+                - green:
+                    Subgroups is spatially coherent, which means there are no other CPTs in between the members
+                    of the subgroup and follows the NEN9997-1 3.2.3 centre to centre validation
+                - orange:
+                    Subgroups is spatially coherent, which means there are no other CPTs in between the members
+                    of the subgroup and does not follow the NEN9997-1 3.2.3 centre to centre validation
+                - red:
+                    Subgroups is not spatially coherent, which means there are other CPTs in between the
+                    members of the subgroup and does not follow the NEN9997-1 3.2.3 centre to centre validation
             - valid depth of the subgroup
 
         Parameters
