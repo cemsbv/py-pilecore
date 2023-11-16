@@ -46,6 +46,20 @@ def mock_results_passover() -> dict:
 
 
 @pytest.fixture
+def mock_multi_cpt_bearing_response_2() -> dict:
+    with open("tests/response/multi_cpt_bearing_response_2.json", "r") as file:
+        data = json.load(file)
+    return data
+
+
+@pytest.fixture
+def mock_results_passover_2() -> dict:
+    with open("tests/response/results_passover_dump.json", "r") as file:
+        data = json.load(file)
+    return data
+
+
+@pytest.fixture
 def mock_classify_response() -> dict:
     with open("tests/response/classify_response.json", "r") as file:
         data = json.load(file)

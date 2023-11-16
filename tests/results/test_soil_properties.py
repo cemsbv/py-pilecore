@@ -82,8 +82,40 @@ def test_cpt_table():
     with pytest.raises(TypeError):
         cpt_table.plot_friction_ratio(axes=1)
 
-    # Test empty CPTTable object
+
+def test_cpt_table_empty():
+    
     cpt_table = CPTTable.from_api_response({})
+
+    assert isinstance(cpt_table.depth_nap, np.ndarray)
+    assert isinstance(cpt_table.qc, np.ndarray)
+    assert isinstance(cpt_table.qc_original, np.ndarray)
+    assert isinstance(cpt_table.qc_chamfered, np.ndarray)
+    assert isinstance(cpt_table.qc1, np.ndarray)
+    assert isinstance(cpt_table.qc2, np.ndarray)
+    assert isinstance(cpt_table.fs, np.ndarray)
+    assert isinstance(cpt_table.friction_ratio, np.ndarray)
+    assert isinstance(cpt_table.qc_has_been_chamfered, bool)
+    assert isinstance(cpt_table.qc_has_been_reduced, bool)
+
+    assert isinstance(cpt_table.to_pandas(), DataFrame)
+
+    assert isinstance(cpt_table.plot_qc(), Axes)
+    plt.close("all")
+    assert isinstance(cpt_table.plot_friction_ratio(), Axes)
+    plt.close("all")
+
+
+def test_cpt_table_missing_fs():
+    cpt_table = CPTTable(
+        depth_nap=[0.0, 0.01],
+        qc=[15, 15],
+        qc_original=[15, 15],
+        qc_chamfered=[15, 15],
+        qc1=[None, None],
+        qc2=[None, None],
+        fs=None,
+    )
 
     assert isinstance(cpt_table.depth_nap, np.ndarray)
     assert isinstance(cpt_table.qc, np.ndarray)
