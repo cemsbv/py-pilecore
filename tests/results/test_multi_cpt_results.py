@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -45,21 +46,30 @@ single_cpt_result_columns = [
 ]
 
 
+@pytest.mark.parametrize(
+    "api_response_name,results_passover_name,n_cpts,ptl",
+    [
+        ("mock_multi_cpt_bearing_response", "mock_results_passover", 4, 0.0),
+        ("mock_multi_cpt_bearing_response_2", "mock_results_passover_2", 21, 0.0),
+    ],
+)
 def test_multi_cpt_bearing_results(
-    mock_multi_cpt_bearing_response, mock_results_passover
+    api_response_name, results_passover_name, n_cpts, ptl, request
 ) -> None:
+    api_response = request.getfixturevalue(api_response_name)
+    results_passover = request.getfixturevalue(results_passover_name)
     cptgroupresults = MultiCPTBearingResults.from_api_response(
-        mock_multi_cpt_bearing_response, mock_results_passover
+        api_response, results_passover
     )
 
     # Check result object attributes/properties
     assert isinstance(cptgroupresults.pile_properties, PileProperties)
     assert isinstance(cptgroupresults.cpt_names, list)
-    assert len(cptgroupresults.cpt_names) == 4
+    assert len(cptgroupresults.cpt_names) == n_cpts
 
     # Check plotting method
     assert isinstance(
-        cptgroupresults.plot_load_settlement(pile_tip_level_nap=0.0), Axes
+        cptgroupresults.plot_load_settlement(pile_tip_level_nap=ptl), Axes
     )
     plt.close("all")
 
