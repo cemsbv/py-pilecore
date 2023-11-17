@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2023-11-17
+
+### Testing
+
+- Add tests for multi_cpt_result and soil_properties result objects
+
+### Documentation
+
+- *(grouper)* Update plot a summary docstring
+
+### Miscellaneous Tasks
+
+- *(notebook)* Rearrangement of the PileCore_multi_cpt_grouper jupyter-notebook
+- Add coveralls badge to readme
+
+### Refactor
+
+- Replace relative imports
+
 ## [0.2.1] - 2023-11-09
 
 ### Features
