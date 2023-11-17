@@ -22,7 +22,9 @@ def wait_until_ticket_is_ready(client: NucleiClient, ticket: Response) -> None:
         status = response.json()["state"]
 
     if status == "FAILURE":
-        raise RuntimeError(f'{response.json()["msg"]}\n{response.json()["traceback"]}')
+        raise RuntimeError(
+            f'Status: {response.json()["status_code"]}. {response.json()["msg"]}'
+        )
 
 
 def get_multi_cpt_api_result(client: NucleiClient, payload: dict) -> dict:
