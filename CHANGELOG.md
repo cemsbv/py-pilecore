@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3] - 2023-11-17
+
+### Bug Fixes
+
+- Get-task-status doesn't return traceback, but status_code
+
 ## [0.2.2] - 2023-11-17
 
 ### Testing

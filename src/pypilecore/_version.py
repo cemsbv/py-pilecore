@@ -4,4 +4,4 @@ try:
     __version__ = version("py-pilecore")
 # during CI
 except PackageNotFoundError:
-    __version__ = "0.2.2"
+    __version__ = "0.2.3"
