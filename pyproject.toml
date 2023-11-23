@@ -15,6 +15,7 @@ dependencies = [
     'matplotlib>=3.8,<4',
     "tqdm[notebook]>4,<5",
     "natsort>8,<9",
+    "shapely>=2,<3",
 ]
 license = { file = "LICENSE" }
 readme = "README.md"
