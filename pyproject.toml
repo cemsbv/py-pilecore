@@ -11,7 +11,7 @@ dependencies = [
     'pygef>0.8,<1',
     'numpy>1,<2',
     'pandas>2,<3',
-    'cems-nuclei[client]>0.3,<1',
+    'cems-nuclei[client]>=0.5,<1',
     'matplotlib>=3.8,<4',
     "tqdm[notebook]>4,<5",
     "natsort>8,<9",
