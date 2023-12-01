@@ -84,7 +84,6 @@ def test_cpt_table():
 
 
 def test_cpt_table_empty():
-    
     cpt_table = CPTTable.from_api_response({})
 
     assert isinstance(cpt_table.depth_nap, np.ndarray)
