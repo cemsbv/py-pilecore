@@ -299,7 +299,7 @@
                 <span class="sa">f</span><span class="s2">&quot;upper boundary: </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">, lower boundary: </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">payload</span></div>
 
