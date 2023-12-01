@@ -313,9 +313,12 @@ def test_create_grouper_payload(
         mock_multi_cpt_bearing_response, mock_results_passover
     )
 
-    create_grouper_payload(
+    payload = create_grouper_payload(
         cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
     )
+
+    # check if pile tip levels are sorted
+    assert payload["pile_tip_level"] == [1.0, 0.5, 0.0, -0.5]
 
     # test value error
     single_cpt_results = cptgroupresults.cpt_results.cpt_results_dict["9"]

@@ -227,7 +227,7 @@ def create_grouper_payload(
                 f"upper boundary: {max(pile_tip_level)}, lower boundary: {min(pile_tip_level)}. \n"
             )
         raise ValueError(msg)
-    payload["pile_tip_level"] = list(raw_lengths[0])
+    payload["pile_tip_level"] = sorted(list(raw_lengths[0]), reverse=True)
 
     return payload
 
