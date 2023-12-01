@@ -15,9 +15,9 @@ def create_multi_cpt_payload(
     cptdata_objects: List[CPTData],
     classify_tables: Dict[str, dict],
     groundwater_level_nap: float,
-    pile_type: Literal["A", "B", "C", "D", "E", "F", "G"],
-    specification: Literal["concrete", "steel", "micro", "wood"],
-    installation: Literal["1", "2", "3", "4", "5", "6", "7"],
+    pile_type: Literal["concrete", "steel", "micro", "wood"],
+    specification: Literal["1", "2", "3", "4", "5", "6", "7"],
+    installation: Literal["A", "B", "C", "D", "E", "F", "G"],
     pile_shape: Literal["round", "rect"],
     friction_range_strategy: Literal[
         "manual", "lower_bound", "settlement_driven"
@@ -25,7 +25,8 @@ def create_multi_cpt_payload(
     stiff_construction: bool = False,
     cpts_group: List[str] | None = None,
     fixed_negative_friction_range_nap: Tuple[float, float] | None = None,
-    fixed_positive_friction_range_nap: Tuple[float, str | float] | None = None,
+    fixed_positive_friction_range_nap: Tuple[float, Literal["ptl"] | float]
+    | None = None,
     negative_shaft_friction: float | None = None,
     apply_qc3_reduction: bool | None = None,
     relative_pile_load: float | None = 0.7,
@@ -34,9 +35,11 @@ def create_multi_cpt_payload(
     pile_head_level_nap: float | Literal["surface"] = "surface",
     excavation_depth_nap: float | None = None,
     excavation_param_t: float = 1.0,
-    individual_negative_friction_range_nap: Mapping[str, Tuple[float, str]]
+    individual_negative_friction_range_nap: Mapping[str, Tuple[float, float]]
     | None = None,
-    individual_positive_friction_range_nap: Mapping[str, Tuple[float, str]]
+    individual_positive_friction_range_nap: Mapping[
+        str, Tuple[float, Literal["ptl"] | float]
+    ]
     | None = None,
     diameter_base: float | None = None,
     diameter_shaft: float | None = None,

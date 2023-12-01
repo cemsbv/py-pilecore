@@ -26,9 +26,11 @@ def create_soil_properties_payload(
     groundwater_level_nap: float,
     friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     excavation_depth_nap: float | None = None,
-    individual_negative_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    individual_negative_friction_range_nap: Mapping[Any, Tuple[float, float]]
     | None = None,
-    individual_positive_friction_range_nap: Mapping[Any, Tuple[float, str]]
+    individual_positive_friction_range_nap: Mapping[
+        Any, Tuple[float, Literal["ptl"] | float]
+    ]
     | None = None,
 ) -> Tuple[List[dict], Dict[str, dict]]:
     """
