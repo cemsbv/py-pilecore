@@ -351,6 +351,7 @@
         <span class="bp">cls</span><span class="p">,</span> <span class="n">response_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SingleClusterResult&quot;</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;table&quot;</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
                 <span class="n">cpt_names</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">],</span>
                 <span class="n">coordinates</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">],</span>
@@ -364,7 +365,37 @@
                 <span class="n">spatial_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;spatial_check&quot;</span><span class="p">],</span>
                 <span class="n">variation_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;variation_check&quot;</span><span class="p">],</span>
                 <span class="n">centre_to_centre_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;centre_to_centre_check&quot;</span><span class="p">],</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">SingleClusterData</span><span class="p">(</span><span class="o">**</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;table&quot;</span><span class="p">]),</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">SingleClusterData</span><span class="p">(</span>
+                    <span class="n">characteristic_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
+                        <span class="s2">&quot;characteristic_bearing_capacity&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">design_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;design_bearing_capacity&quot;</span><span class="p">],</span>
+                    <span class="n">design_negative_friction</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;design_negative_friction&quot;</span><span class="p">],</span>
+                    <span class="n">group_centre_to_centre_validation</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">group_centre_to_centre_validation_15</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation_15&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">group_centre_to_centre_validation_20</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation_20&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">group_centre_to_centre_validation_25</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation_25&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">mean_calculated_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
+                        <span class="s2">&quot;mean_calculated_bearing_capacity&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">min_calculated_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
+                        <span class="s2">&quot;min_calculated_bearing_capacity&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">net_design_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;net_design_bearing_capacity&quot;</span><span class="p">],</span>
+                    <span class="n">nominal_cpt</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;nominal_cpt&quot;</span><span class="p">],</span>
+                    <span class="n">pile_tip_level</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">],</span>
+                    <span class="n">variation_coefficient</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;variation_coefficient&quot;</span><span class="p">],</span>
+                    <span class="n">xi_factor</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;xi_factor&quot;</span><span class="p">],</span>
+                    <span class="n">xi_values</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;xi_values&quot;</span><span class="p">],</span>
+                <span class="p">),</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>

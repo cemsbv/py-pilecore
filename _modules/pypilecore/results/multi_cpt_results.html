@@ -525,13 +525,46 @@
         <span class="n">cpt_results_dict</span> <span class="o">=</span> <span class="n">SingleCPTBearingResultsContainer</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span>
             <span class="n">cpt_results_list</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;cpts&quot;</span><span class="p">],</span> <span class="n">cpt_input</span><span class="o">=</span><span class="n">cpt_input</span>
         <span class="p">)</span>
-
+        <span class="n">group_results</span> <span class="o">=</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;group_results&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">cpt_results</span><span class="o">=</span><span class="n">cpt_results_dict</span><span class="p">,</span>
             <span class="n">pile_properties</span><span class="o">=</span><span class="n">create_pile_properties_from_api_response</span><span class="p">(</span>
                 <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;pile_properties&quot;</span><span class="p">]</span>
             <span class="p">),</span>
-            <span class="n">group_results_table</span><span class="o">=</span><span class="n">CPTGroupResultsTable</span><span class="p">(</span><span class="o">**</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;group_results&quot;</span><span class="p">]),</span>
+            <span class="n">group_results_table</span><span class="o">=</span><span class="n">CPTGroupResultsTable</span><span class="p">(</span>
+                <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">],</span>
+                <span class="n">R_s_k</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_s_k&quot;</span><span class="p">],</span>
+                <span class="n">R_b_k</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_b_k&quot;</span><span class="p">],</span>
+                <span class="n">R_c_k</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_c_k&quot;</span><span class="p">],</span>
+                <span class="n">R_c_d</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_c_d&quot;</span><span class="p">],</span>
+                <span class="n">F_nk_cal_mean</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;F_nk_cal_mean&quot;</span><span class="p">],</span>
+                <span class="n">F_nk_k</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;F_nk_k&quot;</span><span class="p">],</span>
+                <span class="n">F_nk_d</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;F_nk_d&quot;</span><span class="p">],</span>
+                <span class="n">R_c_d_net</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_c_d_net&quot;</span><span class="p">],</span>
+                <span class="n">F_c_k</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;F_c_k&quot;</span><span class="p">],</span>
+                <span class="n">F_c_k_tot</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;F_c_k_tot&quot;</span><span class="p">],</span>
+                <span class="n">s_b</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;s_b&quot;</span><span class="p">],</span>
+                <span class="n">s_e</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;s_e&quot;</span><span class="p">],</span>
+                <span class="n">s_e_mean</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;s_e_mean&quot;</span><span class="p">],</span>
+                <span class="n">R_b_mob_ratio</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_b_mob_ratio&quot;</span><span class="p">],</span>
+                <span class="n">R_s_mob_ratio</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_s_mob_ratio&quot;</span><span class="p">],</span>
+                <span class="n">k_v_b</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;k_v_b&quot;</span><span class="p">],</span>
+                <span class="n">k_v_1</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;k_v_1&quot;</span><span class="p">],</span>
+                <span class="n">R_c_min</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_c_min&quot;</span><span class="p">],</span>
+                <span class="n">R_c_max</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_c_max&quot;</span><span class="p">],</span>
+                <span class="n">R_c_mean</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_c_mean&quot;</span><span class="p">],</span>
+                <span class="n">R_c_std</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_c_std&quot;</span><span class="p">],</span>
+                <span class="n">R_s_mean</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_s_mean&quot;</span><span class="p">],</span>
+                <span class="n">R_b_mean</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;R_b_mean&quot;</span><span class="p">],</span>
+                <span class="n">var_coef</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;var_coef&quot;</span><span class="p">],</span>
+                <span class="n">n_cpts</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;n_cpts&quot;</span><span class="p">],</span>
+                <span class="n">use_group_average</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;use_group_average&quot;</span><span class="p">],</span>
+                <span class="n">xi_normative</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;xi_normative&quot;</span><span class="p">],</span>
+                <span class="n">xi_value</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;xi_value&quot;</span><span class="p">],</span>
+                <span class="n">cpt_Rc_min</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;cpt_Rc_min&quot;</span><span class="p">],</span>
+                <span class="n">cpt_Rc_max</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;cpt_Rc_max&quot;</span><span class="p">],</span>
+                <span class="n">cpt_normative</span><span class="o">=</span><span class="n">group_results</span><span class="p">[</span><span class="s2">&quot;cpt_normative&quot;</span><span class="p">],</span>
+            <span class="p">),</span>
             <span class="n">gamma_f_nk</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;calculation_params&quot;</span><span class="p">][</span><span class="s2">&quot;gamma_f_nk&quot;</span><span class="p">],</span>
             <span class="n">gamma_r_b</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;calculation_params&quot;</span><span class="p">][</span><span class="s2">&quot;gamma_r_b&quot;</span><span class="p">],</span>
             <span class="n">gamma_r_s</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;calculation_params&quot;</span><span class="p">][</span><span class="s2">&quot;gamma_r_s&quot;</span><span class="p">],</span>
