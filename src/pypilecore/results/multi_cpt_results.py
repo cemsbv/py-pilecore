@@ -30,6 +30,8 @@ class CPTGroupResultsTable:
         R_s_k: Sequence[float],
         R_b_k: Sequence[float],
         R_c_k: Sequence[float],
+        R_s_d: Sequence[float],
+        R_b_d: Sequence[float],
         R_c_d: Sequence[float],
         F_nk_cal_mean: Sequence[float],
         F_nk_k: Sequence[float],
@@ -70,6 +72,10 @@ class CPTGroupResultsTable:
             The characteristic value of the bottom bearingcapacity [kN].
         R_c_k:
             The characteristic value of the total compressive bearingcapacity [kN].
+        R_s_d:
+            The design value of the shaft bearingcapacity  [kN].
+        R_b_d:
+            The design value of the bottom bearingcapacity [kN].
         R_c_d:
             The design value of the total bearingcapacity [kN].
         F_nk_cal_mean:
@@ -137,6 +143,10 @@ class CPTGroupResultsTable:
         """The characteristic value of the bottom bearingcapacity [kN]."""
         self.R_c_k = np.array(R_c_k).astype(np.float64)
         """The characteristic value of the total compressive bearingcapacity [kN]."""
+        self.R_s_d = np.array(R_s_d).astype(np.float64)
+        """The design value of the shaft bearingcapacity  [kN]."""
+        self.R_b_d = np.array(R_b_d).astype(np.float64)
+        """The design value of the bottom bearingcapacity [kN]."""
         self.R_c_d = np.array(R_c_d).astype(np.float64)
         """The design value of the total bearingcapacity [kN]."""
         self.F_nk_cal_mean = np.array(F_nk_cal_mean).astype(np.float64)
@@ -464,6 +474,16 @@ class MultiCPTBearingResults:
                 R_s_k=group_results["R_s_k"],
                 R_b_k=group_results["R_b_k"],
                 R_c_k=group_results["R_c_k"],
+                R_s_d=group_results["R_s_d"]
+                if "R_s_d" in group_results
+                else np.full_like(
+                    group_results["pile_tip_level_nap"], fill_value=np.nan
+                ),  # For backwards compatibility with PileCore-API < 2.9.0
+                R_b_d=group_results["R_b_d"]
+                if "R_b_d" in group_results
+                else np.full_like(
+                    group_results["pile_tip_level_nap"], fill_value=np.nan
+                ),  # For backwards compatibility with PileCore-API < 2.9.0,
                 R_c_d=group_results["R_c_d"],
                 F_nk_cal_mean=group_results["F_nk_cal_mean"],
                 F_nk_k=group_results["F_nk_k"],
