@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.5] - 2023-12-05
+
+### Miscellaneous Tasks
+
+- Update gitignore
+
+### Bug Fixes
+
+- *(grouper)* Use design value for grouper negative friction (#42)
+- *(grouper)* Make sure that pile tip levels are sorted (#38)
+
+### Refactor
+
+- Reword GrouperResults.plot docstring
+
+### Documentation
+
+- *(notebook)* Update example notebook
+
 ## [0.2.3] - 2023-11-17
 
 ### Bug Fixes
