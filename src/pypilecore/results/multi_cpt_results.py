@@ -453,13 +453,46 @@ class MultiCPTBearingResults:
         cpt_results_dict = SingleCPTBearingResultsContainer.from_api_response(
             cpt_results_list=response_dict["cpts"], cpt_input=cpt_input
         )
-
+        group_results = response_dict["group_results"]
         return cls(
             cpt_results=cpt_results_dict,
             pile_properties=create_pile_properties_from_api_response(
                 response_dict["pile_properties"]
             ),
-            group_results_table=CPTGroupResultsTable(**response_dict["group_results"]),
+            group_results_table=CPTGroupResultsTable(
+                pile_tip_level_nap=group_results["pile_tip_level_nap"],
+                R_s_k=group_results["R_s_k"],
+                R_b_k=group_results["R_b_k"],
+                R_c_k=group_results["R_c_k"],
+                R_c_d=group_results["R_c_d"],
+                F_nk_cal_mean=group_results["F_nk_cal_mean"],
+                F_nk_k=group_results["F_nk_k"],
+                F_nk_d=group_results["F_nk_d"],
+                R_c_d_net=group_results["R_c_d_net"],
+                F_c_k=group_results["F_c_k"],
+                F_c_k_tot=group_results["F_c_k_tot"],
+                s_b=group_results["s_b"],
+                s_e=group_results["s_e"],
+                s_e_mean=group_results["s_e_mean"],
+                R_b_mob_ratio=group_results["R_b_mob_ratio"],
+                R_s_mob_ratio=group_results["R_s_mob_ratio"],
+                k_v_b=group_results["k_v_b"],
+                k_v_1=group_results["k_v_1"],
+                R_c_min=group_results["R_c_min"],
+                R_c_max=group_results["R_c_max"],
+                R_c_mean=group_results["R_c_mean"],
+                R_c_std=group_results["R_c_std"],
+                R_s_mean=group_results["R_s_mean"],
+                R_b_mean=group_results["R_b_mean"],
+                var_coef=group_results["var_coef"],
+                n_cpts=group_results["n_cpts"],
+                use_group_average=group_results["use_group_average"],
+                xi_normative=group_results["xi_normative"],
+                xi_value=group_results["xi_value"],
+                cpt_Rc_min=group_results["cpt_Rc_min"],
+                cpt_Rc_max=group_results["cpt_Rc_max"],
+                cpt_normative=group_results["cpt_normative"],
+            ),
             gamma_f_nk=response_dict["calculation_params"]["gamma_f_nk"],
             gamma_r_b=response_dict["calculation_params"]["gamma_r_b"],
             gamma_r_s=response_dict["calculation_params"]["gamma_r_s"],

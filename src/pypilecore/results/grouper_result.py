@@ -279,6 +279,7 @@ class SingleClusterResult:
         cls, response_dict: dict, pile_load_uls: float
     ) -> "SingleClusterResult":
         try:
+            table = response_dict["table"]
             return cls(
                 cpt_names=response_dict["names"],
                 coordinates=response_dict["coordinates"],
@@ -292,7 +293,37 @@ class SingleClusterResult:
                 spatial_check=response_dict["spatial_check"],
                 variation_check=response_dict["variation_check"],
                 centre_to_centre_check=response_dict["centre_to_centre_check"],
-                data=SingleClusterData(**response_dict["table"]),
+                data=SingleClusterData(
+                    characteristic_bearing_capacity=table[
+                        "characteristic_bearing_capacity"
+                    ],
+                    design_bearing_capacity=table["design_bearing_capacity"],
+                    design_negative_friction=table["design_negative_friction"],
+                    group_centre_to_centre_validation=table[
+                        "group_centre_to_centre_validation"
+                    ],
+                    group_centre_to_centre_validation_15=table[
+                        "group_centre_to_centre_validation_15"
+                    ],
+                    group_centre_to_centre_validation_20=table[
+                        "group_centre_to_centre_validation_20"
+                    ],
+                    group_centre_to_centre_validation_25=table[
+                        "group_centre_to_centre_validation_25"
+                    ],
+                    mean_calculated_bearing_capacity=table[
+                        "mean_calculated_bearing_capacity"
+                    ],
+                    min_calculated_bearing_capacity=table[
+                        "min_calculated_bearing_capacity"
+                    ],
+                    net_design_bearing_capacity=table["net_design_bearing_capacity"],
+                    nominal_cpt=table["nominal_cpt"],
+                    pile_tip_level=table["pile_tip_level"],
+                    variation_coefficient=table["variation_coefficient"],
+                    xi_factor=table["xi_factor"],
+                    xi_values=table["xi_values"],
+                ),
             )
         except KeyError as e:
             raise KeyError(

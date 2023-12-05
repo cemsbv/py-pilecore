@@ -241,6 +241,7 @@ class SingleCPTBearingResults:
         x: float | None = None,
         y: float | None = None,
     ) -> "SingleCPTBearingResults":
+        results_table = cpt_results_dict["results_table"]
         return cls(
             soil_properties=SoilProperties(
                 cpt_table=CPTTable.from_api_response(
@@ -256,7 +257,45 @@ class SingleCPTBearingResults:
                 y=y,
             ),
             pile_head_level_nap=cpt_results_dict["annotations"]["pile_head_level_nap"],
-            results_table=CPTResultsTable(**cpt_results_dict["results_table"]),
+            results_table=CPTResultsTable(
+                pile_tip_level_nap=results_table["pile_tip_level_nap"],
+                F_nk_cal=results_table["F_nk_cal"],
+                F_nk_k=results_table["F_nk_k"],
+                F_nk_d=results_table["F_nk_d"],
+                R_b_cal=results_table["R_b_cal"],
+                R_b_k=results_table["R_b_k"],
+                R_b_d=results_table["R_b_d"],
+                R_s_cal=results_table["R_s_cal"],
+                R_s_k=results_table["R_s_k"],
+                R_s_d=results_table["R_s_d"],
+                R_c_cal=results_table["R_c_cal"],
+                R_c_k=results_table["R_c_k"],
+                R_c_d=results_table["R_c_d"],
+                R_c_d_net=results_table["R_c_d_net"],
+                F_c_k=results_table["F_c_k"],
+                F_c_k_tot=results_table["F_c_k_tot"],
+                negative_friction_range_nap_top=results_table[
+                    "negative_friction_range_nap_top"
+                ],
+                negative_friction_range_nap_btm=results_table[
+                    "negative_friction_range_nap_btm"
+                ],
+                positive_friction_range_nap_top=results_table[
+                    "positive_friction_range_nap_top"
+                ],
+                positive_friction_range_nap_btm=results_table[
+                    "positive_friction_range_nap_btm"
+                ],
+                q_b_max=results_table["q_b_max"],
+                q_s_max_mean=results_table["q_s_max_mean"],
+                qc1=results_table["qc1"],
+                qc2=results_table["qc2"],
+                qc3=results_table["qc3"],
+                s_b=results_table["s_b"],
+                s_el=results_table["s_el"],
+                k_v_b=results_table["k_v_b"],
+                k_v_1=results_table["k_v_1"],
+            ),
         )
 
     @property
