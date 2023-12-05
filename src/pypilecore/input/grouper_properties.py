@@ -121,11 +121,11 @@ def create_grouper_payload(
     overrule_nan:
         Default is 0.0
         The default behavior is to replace NaN with zero, for one of the following
-        attributes ["R_b_cal", "F_nk_cal", "R_s_cal"].
+        attributes ["R_b_cal", "F_nk_d", "R_s_cal"].
     skip_nan:
         Default is False
         If True the CPTs are skipped that have NaN values in one of the following
-        attributes ["R_b_cal", "F_nk_cal", "R_s_cal"], this means that they are not used in the grouper method.
+        attributes ["R_b_cal", "F_nk_d", "R_s_cal"], this means that they are not used in the grouper method.
 
     Raises
     ------
@@ -172,7 +172,7 @@ def create_grouper_payload(
                 f" CPT {name} does not have a x-coordinate or y-coordinate"
             )
 
-        for item in ["R_b_cal", "F_nk_cal", "R_s_cal"]:
+        for item in ["R_b_cal", "F_nk_d", "R_s_cal"]:
             if np.isnan(cpt_result.table.__getattribute__(item)).any():
                 if skip_nan:
                     has_nan = True
@@ -201,7 +201,7 @@ def create_grouper_payload(
                     cpt_result.table.R_b_cal, nan=overrule_nan
                 ).tolist(),
                 "negative_friction": np.nan_to_num(
-                    cpt_result.table.F_nk_cal, nan=overrule_nan
+                    cpt_result.table.F_nk_d, nan=overrule_nan
                 ).tolist(),
                 "shaft_bearing_capacity": np.nan_to_num(
                     cpt_result.table.R_s_cal, nan=overrule_nan
