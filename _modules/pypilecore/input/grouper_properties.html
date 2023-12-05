@@ -193,11 +193,11 @@
 <span class="sd">    overrule_nan:</span>
 <span class="sd">        Default is 0.0</span>
 <span class="sd">        The default behavior is to replace NaN with zero, for one of the following</span>
-<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_cal&quot;, &quot;R_s_cal&quot;].</span>
+<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_d&quot;, &quot;R_s_cal&quot;].</span>
 <span class="sd">    skip_nan:</span>
 <span class="sd">        Default is False</span>
 <span class="sd">        If True the CPTs are skipped that have NaN values in one of the following</span>
-<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_cal&quot;, &quot;R_s_cal&quot;], this means that they are not used in the grouper method.</span>
+<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_d&quot;, &quot;R_s_cal&quot;], this means that they are not used in the grouper method.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -244,7 +244,7 @@
                 <span class="sa">f</span><span class="s2">&quot; CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a x-coordinate or y-coordinate&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;R_b_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;F_nk_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;R_s_cal&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;R_b_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;F_nk_d&quot;</span><span class="p">,</span> <span class="s2">&quot;R_s_cal&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">))</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">skip_nan</span><span class="p">:</span>
                     <span class="n">has_nan</span> <span class="o">=</span> <span class="kc">True</span>
@@ -273,7 +273,7 @@
                     <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_b_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
                 <span class="s2">&quot;negative_friction&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
-                    <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">F_nk_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
+                    <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
                 <span class="s2">&quot;shaft_bearing_capacity&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
                     <span class="n">cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_s_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
