@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2023-12-05
+
+### Features
+
+- Extract R_s_d and R_b_d from group_results_table (requires PileCore-API >= 2.9.0)
+
+### Refactor
+
+- Pass payload properties explicitly in `from_api_response` methods, instead of dumping the content as keyword arguments
+
 ## [0.2.5] - 2023-12-05
 
 ### Miscellaneous Tasks
