@@ -156,7 +156,7 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
     # via stack-data
-pyarrow==13.0.0
+pyarrow==14.0.2
     # via polars
 pycodestyle==2.10.0
     # via
