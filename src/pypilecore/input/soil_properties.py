@@ -26,12 +26,14 @@ def create_soil_properties_payload(
     groundwater_level_nap: float,
     friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     excavation_depth_nap: float | None = None,
+    master_ocr: float | None = None,
     individual_negative_friction_range_nap: Mapping[Any, Tuple[float, float]]
     | None = None,
     individual_positive_friction_range_nap: Mapping[
         Any, Tuple[float, Literal["ptl"] | float]
     ]
     | None = None,
+    individual_ocr: Mapping[Any, float] | None = None,
 ) -> Tuple[List[dict], Dict[str, dict]]:
     """
     Creates a dictionary with the `soil_properties` payload content for the PileCore
@@ -79,12 +81,18 @@ def create_soil_properties_payload(
         "lower_bound" or "settlement_driven".
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
+    ocr:
+        The Over-Consolidation-Ratio [-] of the foundation layer.
     individual_negative_friction_range_nap:
         A dictionary, mapping `CPTData.alias` values to fixed negative-friction ranges.
         For a specification of the values, see `fixed_negative_friction_range_nap`
     individual_positive_friction_range_nap:
         A dictionary, mapping `CPTData.alias` values to fixed positive-friction ranges.
         For a specification of the values, see `fixed_positive_friction_range_nap`
+    individual_ocr:
+        A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]
+        values of the foundation layer. This will overrule the general `ocr` setting for
+        these specific CPTs only.
 
     Returns
     -------
@@ -157,6 +165,14 @@ def create_soil_properties_payload(
                 soil_properties[
                     "fixed_positive_friction_range_nap"
                 ] = individual_positive_friction_range_nap[cpt.alias]
+
+        # Optionally add OCR parameter
+        if individual_ocr is not None and cpt.alias in individual_ocr.keys():
+            ocr: float | None = individual_ocr[cpt.alias]
+        else:
+            ocr = master_ocr
+        if ocr is not None:
+            soil_properties["ocr"] = ocr
 
         soil_properties_list.append(soil_properties)
         results_passover[cpt.alias] = {
