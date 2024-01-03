@@ -615,6 +615,58 @@ def test_create_multi_cpt_payload_extended_rect_pile(
     assert len(payload.keys()) == 0
 
 
+def test_create_multi_cpt_payload_extended_ocr(
+    cpt: CPTData, mock_classify_response: dict
+) -> None:
+    """
+    Test creating the multi_cpt_results payload with the `create_multi_cpt_payload`
+    function with extended OCR arguments.
+    """
+
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[0, 1],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: mock_classify_response},
+        groundwater_level_nap=-2.5,
+        ocr=2.0,
+        pile_type="concrete",
+        specification="1",
+        installation="A",
+        pile_shape="round",
+        diameter_base=0.3,
+    )
+
+    # Check the payload content
+
+    list_soil_properties = payload.pop("list_soil_properties")
+    assert isinstance(list_soil_properties, list)
+    assert "ocr" in list_soil_properties[0].keys()
+    assert np.isclose(list_soil_properties[0]["ocr"], 2.0)
+
+    # Case 2: set OCR with individual_ocr parameter
+
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[0, 1],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: mock_classify_response},
+        groundwater_level_nap=-2.5,
+        ocr=1.0,
+        individual_ocr={cpt.alias: 2.0},
+        pile_type="concrete",
+        specification="1",
+        installation="A",
+        pile_shape="round",
+        diameter_base=0.3,
+    )
+
+    # Check the payload content
+
+    list_soil_properties = payload.pop("list_soil_properties")
+    assert isinstance(list_soil_properties, list)
+    assert "ocr" in list_soil_properties[0].keys()
+    assert np.isclose(list_soil_properties[0]["ocr"], 2.0)
+
+
 def test_create_multi_cpt_payload_errors(
     cpt: CPTData, mock_classify_response: dict
 ) -> None:

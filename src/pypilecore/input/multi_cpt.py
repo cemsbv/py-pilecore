@@ -24,6 +24,7 @@ def create_multi_cpt_payload(
     ] = "lower_bound",
     stiff_construction: bool = False,
     cpts_group: List[str] | None = None,
+    ocr: float | None = None,
     fixed_negative_friction_range_nap: Tuple[float, float] | None = None,
     fixed_positive_friction_range_nap: Tuple[float, Literal["ptl"] | float]
     | None = None,
@@ -41,6 +42,7 @@ def create_multi_cpt_payload(
         str, Tuple[float, Literal["ptl"] | float]
     ]
     | None = None,
+    individual_ocr: Mapping[str, float] | None = None,
     diameter_base: float | None = None,
     diameter_shaft: float | None = None,
     width_base_large: float | None = None,
@@ -129,6 +131,8 @@ def create_multi_cpt_payload(
     cpts_group:
         CPTs that are considered one group. Items must relate to the alias of the CPTData
         objects in `cptdata_objects`.
+    ocr:
+        The Over-Consolidation-Ratio [-] of the foundation layer.
     fixed_negative_friction_range_nap:
         Optionally sets the fixed depth range between which the negative sleeve friction
         is calculated. If an array of format [top, bottom], the range is set between top
@@ -189,6 +193,10 @@ def create_multi_cpt_payload(
     individual_positive_friction_range_nap:
         A dictionary, mapping ``CPTData.alias`` values to fixed positive-friction ranges.
         For a specification of the values, see ``fixed_positive_friction_range_nap``
+    individual_ocr:
+        A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]
+        values of the foundation layer. This will overrule the general `ocr` setting for
+        these specific CPTs only.
     diameter_base:
         Pile base diameter [m].
         Only relevant if ``pile_shape`` = "round".
@@ -299,8 +307,10 @@ def create_multi_cpt_payload(
         groundwater_level_nap=groundwater_level_nap,
         friction_range_strategy=friction_range_strategy,
         excavation_depth_nap=excavation_depth_nap,
+        master_ocr=ocr,
         individual_negative_friction_range_nap=individual_negative_friction_range_nap,
         individual_positive_friction_range_nap=individual_positive_friction_range_nap,
+        individual_ocr=individual_ocr,
     )
     pile_properties = create_pile_properties_payload(
         pile_type=pile_type,
