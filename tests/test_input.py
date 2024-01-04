@@ -369,7 +369,9 @@ def test_create_multi_cpt_payload_defaults(
     # Check the payload content
 
     # We don't completely check the soil_properties list here
-    assert isinstance(payload.pop("list_soil_properties"), list)
+    list_soil_properties = payload.pop("list_soil_properties")
+    assert isinstance(list_soil_properties, list)
+    assert len(list_soil_properties) == 1
 
     assert payload.pop("excavation_param_t") == 1.0
     assert payload.pop("pile_head_level_nap") == "surface"
@@ -513,6 +515,8 @@ def test_create_multi_cpt_payload_extended_rect_pile(
     function with extended arguments for a rect pile.
     """
 
+    assert isinstance(cpt.alias, str)
+
     payload, _ = create_multi_cpt_payload(
         pile_tip_levels_nap=[0, 1],
         cptdata_objects=[cpt],
@@ -561,7 +565,9 @@ def test_create_multi_cpt_payload_extended_rect_pile(
     # Check the payload content
 
     # We don't completely check the soil_properties list here
-    assert isinstance(payload.pop("list_soil_properties"), list)
+    list_soil_properties = payload.pop("list_soil_properties")
+    assert isinstance(list_soil_properties, list)
+    assert len(list_soil_properties) == 1
 
     assert payload.pop("excavation_param_t") == 0.5
     assert payload.pop("pile_head_level_nap") == 5.0
@@ -628,20 +634,21 @@ def test_create_multi_cpt_payload_extended_ocr(
         cptdata_objects=[cpt],
         classify_tables={cpt.alias: mock_classify_response},
         groundwater_level_nap=-2.5,
-        ocr=2.0,
         pile_type="concrete",
         specification="1",
         installation="A",
         pile_shape="round",
         diameter_base=0.3,
+        ocr=2.5,
     )
 
     # Check the payload content
 
-    list_soil_properties = payload.pop("list_soil_properties")
+    list_soil_properties = payload.get("list_soil_properties")
     assert isinstance(list_soil_properties, list)
+    assert len(list_soil_properties) == 1
     assert "ocr" in list_soil_properties[0].keys()
-    assert np.isclose(list_soil_properties[0]["ocr"], 2.0)
+    assert np.isclose(list_soil_properties[0]["ocr"], 2.5)
 
     # Case 2: set OCR with individual_ocr parameter
 
@@ -650,13 +657,13 @@ def test_create_multi_cpt_payload_extended_ocr(
         cptdata_objects=[cpt],
         classify_tables={cpt.alias: mock_classify_response},
         groundwater_level_nap=-2.5,
-        ocr=1.0,
-        individual_ocr={cpt.alias: 2.0},
         pile_type="concrete",
         specification="1",
         installation="A",
         pile_shape="round",
         diameter_base=0.3,
+        ocr=1.0,
+        individual_ocr={cpt.alias: 2.0},
     )
 
     # Check the payload content
