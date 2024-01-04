@@ -15,10 +15,6 @@ transform = {
     "peat": "V",
 }
 
-# Create input_table
-results_passover = {}
-soil_properties_list = []
-
 
 def create_soil_properties_payload(
     cptdata_objects: List[CPTData],
@@ -103,6 +99,10 @@ def create_soil_properties_payload(
         Dictionary with keyword arguments for the `pilecore.MultiCPTBearingResults`
         object.
     """
+    # Initialize outputs
+    results_passover = {}
+    soil_properties_list = []
+
     for cpt in tqdm(cptdata_objects, desc="Create soil properties payload"):
         # Construct the cpt_data payload
         cpt_data = dict(
