@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2024-01-04
+
+### Bug Fixes
+
+- Update ocr parameters & height_base in multi-cpt-grouper notebook
+- Fix response variable scope
+
+### Features
+
+- *(ocr)* Add ocr input to multi-cpt bearing
+
 ## [0.3.0] - 2023-12-05
 
 ### Features
