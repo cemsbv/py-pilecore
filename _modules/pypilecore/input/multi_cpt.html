@@ -96,6 +96,7 @@
     <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span>
     <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">cpts_group</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ocr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fixed_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fixed_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span>
     <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -113,6 +114,7 @@
         <span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span>
     <span class="p">]</span>
     <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">individual_ocr</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">diameter_base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">diameter_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">width_base_large</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -201,6 +203,8 @@
 <span class="sd">    cpts_group:</span>
 <span class="sd">        CPTs that are considered one group. Items must relate to the alias of the CPTData</span>
 <span class="sd">        objects in `cptdata_objects`.</span>
+<span class="sd">    ocr:</span>
+<span class="sd">        The Over-Consolidation-Ratio [-] of the foundation layer.</span>
 <span class="sd">    fixed_negative_friction_range_nap:</span>
 <span class="sd">        Optionally sets the fixed depth range between which the negative sleeve friction</span>
 <span class="sd">        is calculated. If an array of format [top, bottom], the range is set between top</span>
@@ -261,6 +265,10 @@
 <span class="sd">    individual_positive_friction_range_nap:</span>
 <span class="sd">        A dictionary, mapping ``CPTData.alias`` values to fixed positive-friction ranges.</span>
 <span class="sd">        For a specification of the values, see ``fixed_positive_friction_range_nap``</span>
+<span class="sd">    individual_ocr:</span>
+<span class="sd">        A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]</span>
+<span class="sd">        values of the foundation layer. This will overrule the general `ocr` setting for</span>
+<span class="sd">        these specific CPTs only.</span>
 <span class="sd">    diameter_base:</span>
 <span class="sd">        Pile base diameter [m].</span>
 <span class="sd">        Only relevant if ``pile_shape`` = &quot;round&quot;.</span>
@@ -371,8 +379,10 @@
         <span class="n">groundwater_level_nap</span><span class="o">=</span><span class="n">groundwater_level_nap</span><span class="p">,</span>
         <span class="n">friction_range_strategy</span><span class="o">=</span><span class="n">friction_range_strategy</span><span class="p">,</span>
         <span class="n">excavation_depth_nap</span><span class="o">=</span><span class="n">excavation_depth_nap</span><span class="p">,</span>
+        <span class="n">master_ocr</span><span class="o">=</span><span class="n">ocr</span><span class="p">,</span>
         <span class="n">individual_negative_friction_range_nap</span><span class="o">=</span><span class="n">individual_negative_friction_range_nap</span><span class="p">,</span>
         <span class="n">individual_positive_friction_range_nap</span><span class="o">=</span><span class="n">individual_positive_friction_range_nap</span><span class="p">,</span>
+        <span class="n">individual_ocr</span><span class="o">=</span><span class="n">individual_ocr</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">pile_properties</span> <span class="o">=</span> <span class="n">create_pile_properties_payload</span><span class="p">(</span>
         <span class="n">pile_type</span><span class="o">=</span><span class="n">pile_type</span><span class="p">,</span>
