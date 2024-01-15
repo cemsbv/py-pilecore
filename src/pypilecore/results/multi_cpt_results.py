@@ -385,6 +385,7 @@ class SingleCPTBearingResultsContainer:
             values=column_name,
             index="pile_tip_level_nap",
             columns="test_id",
+            dropna=False,
         )
         return results.sort_values("pile_tip_level_nap", ascending=False)
 
