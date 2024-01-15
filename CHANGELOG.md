@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - 2024-01-15
+
+### Bug Fixes
+
+- Don't filter NaN values in the table result from SingleCPTBearingResultsContainer.get_results_per_cpt()
+
 ## [0.3.1] - 2024-01-04
 
 ### Bug Fixes
@@ -25,22 +31,22 @@ All notable changes to this project will be documented in this file.
 
 ## [0.2.5] - 2023-12-05
 
-### Miscellaneous Tasks
-
-- Update gitignore
-
 ### Bug Fixes
 
 - *(grouper)* Use design value for grouper negative friction (#42)
 - *(grouper)* Make sure that pile tip levels are sorted (#38)
 
-### Refactor
-
-- Reword GrouperResults.plot docstring
-
 ### Documentation
 
 - *(notebook)* Update example notebook
+
+### Miscellaneous Tasks
+
+- Update gitignore
+
+### Refactor
+
+- Reword GrouperResults.plot docstring
 
 ## [0.2.3] - 2023-11-17
 
@@ -49,10 +55,6 @@ All notable changes to this project will be documented in this file.
 - Get-task-status doesn't return traceback, but status_code
 
 ## [0.2.2] - 2023-11-17
-
-### Testing
-
-- Add tests for multi_cpt_result and soil_properties result objects
 
 ### Documentation
 
@@ -67,6 +69,10 @@ All notable changes to this project will be documented in this file.
 
 - Replace relative imports
 
+### Testing
+
+- Add tests for multi_cpt_result and soil_properties result objects
+
 ## [0.2.1] - 2023-11-09
 
 ### Features
@@ -76,26 +82,6 @@ All notable changes to this project will be documented in this file.
 - Accept None for `relative_pile_load`
 
 ## [0.2.0] - 2023-11-08
-
-### Testing
-
-- Add create_multi_cpt_payload unit-tests
-- Add soilproperties tests
-- Omit tests folder in superlinter
-- Add multi-cpt-results tests
-- Refactor pile_properties tests
-- Add results/test_pile_properties tests
-- Move grouper tests to "results" folder
-- Add create_pile_properties_payload tests
-- Rename test_soil to test_input
-
-### Documentation
-
-- Add missing create_multi_cpt_payload arguments docstrings
-- Update `getting started`
-- Add items to reference & fix docstrings & typing
-- Add single- & multi-cpt-results docstrings
-- Init pages (#10)
 
 ### Bug Fixes
 
@@ -112,14 +98,13 @@ All notable changes to this project will be documented in this file.
 
 - Thijs Lukkezen <t.lukkezen@cemsbv.io>
 
-### Deps
+### Documentation
 
-- Update mypy==1.6.1 & black==23.10.1
-
-### Refactor
-
-- Don't use relative imports
-- [**breaking**] Use classify dict not dataframe (#13)
+- Add missing create_multi_cpt_payload arguments docstrings
+- Update `getting started`
+- Add items to reference & fix docstrings & typing
+- Add single- & multi-cpt-results docstrings
+- Init pages (#10)
 
 ### Features
 
@@ -140,18 +125,33 @@ All notable changes to this project will be documented in this file.
 - *(docs)* Add docs test and deploy job
 - *(changelog)* Update changelog version & add auto-generate settings
 
+### Refactor
+
+- Don't use relative imports
+- [**breaking**] Use classify dict not dataframe (#13)
+
+### Testing
+
+- Add create_multi_cpt_payload unit-tests
+- Add soilproperties tests
+- Omit tests folder in superlinter
+- Add multi-cpt-results tests
+- Refactor pile_properties tests
+- Add results/test_pile_properties tests
+- Move grouper tests to "results" folder
+- Add create_pile_properties_payload tests
+- Rename test_soil to test_input
+
+### Deps
+
+- Update mypy==1.6.1 & black==23.10.1
+
 ## [0.0.1] - 2023-10-20
 
 ### Documentation
 
 - Add docstrings to "create_payload" functions
 - Update README
-
-### Styling
-
-- Add github workflow job "lint" & update superlinter to v5
-- Add .flake8 file
-- Add run_super_linters.sh bash script
 
 ### Features
 
@@ -163,5 +163,11 @@ All notable changes to this project will be documented in this file.
 
 - Init pyproject.toml
 - Update .gitignore
+
+### Styling
+
+- Add github workflow job "lint" & update superlinter to v5
+- Add .flake8 file
+- Add run_super_linters.sh bash script
 
 <!-- CEMS BV. -->
