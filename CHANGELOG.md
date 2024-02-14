@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.3] - 2024-02-14
+
+### Bug Fixes
+
+- *(ci)* Use PyPi tokenless authentication
+
+### Features
+
+- *(individual-friction-ranges)* Set soil-properties friction-range-strategy to "manual" when providing a value in the individual-friction-range input
+
 ## [0.3.2] - 2024-01-15
 
 ### Bug Fixes
