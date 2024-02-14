@@ -149,22 +149,24 @@ def create_soil_properties_payload(
             else cpt.delivered_vertical_position_offset - 1,
             coordinates=dict(x=cpt.delivered_location.x, y=cpt.delivered_location.y),
         )
+        
         # Optionally add cpt-specific friction-range parameters
-        if friction_range_strategy == "manual":
-            if (
-                individual_negative_friction_range_nap is not None
-                and cpt.alias in individual_negative_friction_range_nap.keys()
-            ):
-                soil_properties[
-                    "fixed_negative_friction_range_nap"
-                ] = individual_negative_friction_range_nap[cpt.alias]
-            if (
-                individual_positive_friction_range_nap is not None
-                and cpt.alias in individual_positive_friction_range_nap.keys()
-            ):
-                soil_properties[
-                    "fixed_positive_friction_range_nap"
-                ] = individual_positive_friction_range_nap[cpt.alias]
+        if (
+            individual_negative_friction_range_nap is not None
+            and cpt.alias in individual_negative_friction_range_nap.keys()
+        ):
+            soil_properties[
+                "fixed_negative_friction_range_nap"
+            ] = individual_negative_friction_range_nap[cpt.alias]
+            soil_properties["friction_range_strategy"] = "manual"
+        if (
+            individual_positive_friction_range_nap is not None
+            and cpt.alias in individual_positive_friction_range_nap.keys()
+        ):
+            soil_properties[
+                "fixed_positive_friction_range_nap"
+            ] = individual_positive_friction_range_nap[cpt.alias]
+            soil_properties["friction_range_strategy"] = "manual"
 
         # Optionally add OCR parameter
         if individual_ocr is not None and cpt.alias in individual_ocr.keys():
