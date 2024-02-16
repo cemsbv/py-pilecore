@@ -23,7 +23,7 @@ def wait_until_ticket_is_ready(client: NucleiClient, ticket: Response) -> None:
 
     if status == "FAILURE":
         raise RuntimeError(
-            f'Status: {response.json()["status_code"]}. {response.json()["msg"]}'
+            f'Status: {response.json()["msg"]}. {response.json()["msg"]}'
         )
 
 
