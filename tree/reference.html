@@ -292,13 +292,14 @@
 <span id="api"></span><h2>Application programming interface (API)<a class="headerlink" href="#application-programming-interface-api" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.api.get_multi_cpt_api_result">
-<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_result" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_result" title="Permalink to this definition"></a></dt>
 <dd><p>Wrapper around the PileCore endpoint “/compression/multiple-cpts/results”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
 <li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – if True, print additional information to the console</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -309,13 +310,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.api.get_multi_cpt_api_report">
-<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_report" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_multi_cpt_api_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_multi_cpt_api_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_multi_cpt_api_report" title="Permalink to this definition"></a></dt>
 <dd><p>Wrapper around the PileCore endpoint “/compression/multiple-cpts/report”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
 <li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – if True, print additional information to the console</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -326,13 +328,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.api.get_groups_api_result">
-<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_groups_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_groups_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_groups_api_result" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_groups_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_groups_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_groups_api_result" title="Permalink to this definition"></a></dt>
 <dd><p>Wrapper around the PileCore endpoint “/grouper/group_cpts”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
 <li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – if True, print additional information to the console</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -343,13 +346,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.api.get_optimize_groups_api_result">
-<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_optimize_groups_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_optimize_groups_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_optimize_groups_api_result" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_optimize_groups_api_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_optimize_groups_api_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_optimize_groups_api_result" title="Permalink to this definition"></a></dt>
 <dd><p>Wrapper around the PileCore endpoint “/grouper/optimize_groups”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
 <li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_payload()</cite></p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – if True, print additional information to the console</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -360,13 +364,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.api.get_groups_api_report">
-<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_groups_api_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_groups_api_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_groups_api_report" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypilecore.api.</span></span><span class="sig-name descname"><span class="pre">get_groups_api_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/api.html#get_groups_api_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.api.get_groups_api_report" title="Permalink to this definition"></a></dt>
 <dd><p>Wrapper around the PileCore endpoint “/grouper/generate_grouper_report”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>NucleiClient</em>) – client object created by [nuclei](<a class="reference external" href="https://github.com/cemsbv/nuclei">https://github.com/cemsbv/nuclei</a>)</p></li>
 <li><p><strong>payload</strong> (<em>dict</em>) – the payload of the request, can be created by calling <cite>create_grouper_report_payload()</cite></p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – if True, print additional information to the console</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
