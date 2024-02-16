@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.4] - 2024-02-16
+
+### Bug Fixes
+
+- Raise RuntimeError with /get-task-status response "msg" value instead of "status_code" when "state"=="FAILURE"
+
 ## [0.3.3] - 2024-02-14
 
 ### Bug Fixes
