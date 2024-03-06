@@ -1,63 +1,140 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any, Dict, FrozenSet, Literal, Tuple
+
+import matplotlib.patches as patches
 import pandas as pd
+from matplotlib import pyplot as plt
 
-from pypilecore.results import GrouperResults, MultiCPTBearingResults
 
-
-def merge_grouper_and_single_bearing_results(
-    grouper_results: GrouperResults,
-    multi_cpt_bearing_results: MultiCPTBearingResults,
-) -> pd.DataFrame:
+@dataclass(frozen=False)
+class BearingTable:
     """
-    Creates a DataFrame with the maximum net design bearing capacity (R_c_d_net) for every CPT.
+    *Not meant to be instantiated by the user.*
 
-    Parameters
-    ----------
-    grouper_results:
-       The container that holds multiple SingleClusterResult objects
-    multi_cpt_bearing_results:
-       The container that holds multiple SingleCPTBearingResults objects
-
-    Returns
-    -------
-    df:
-        A DataFrame that holds the maximum net design bearing capacity (R_c_d_net) for every CPT.
+    Attributes:
+    ------------
+    x:
+        x-coordinate
+    y:
+        y-coordinate
+    pile_tip_level_nap:
+        pile tip level [m w.r.t NAP]
+    R_c_d_net:
+        net design bearing capacity [kN]
+    test_id:
+        Name of the CPT
     """
-    data = {}
-    # iterate over single cpt result
-    for _key, result in multi_cpt_bearing_results.cpt_results.cpt_results_dict.items():
-        # iterate over pile tip levels single cpt result
-        for z, var in zip(result.table.pile_tip_level_nap, result.table.R_c_d_net):
-            if result.soil_properties.x is None or result.soil_properties.y is None:
-                raise ValueError(
-                    f"CPT: {_key} does not have any coordinates set. Please update the SingleCPTBearingResults."
-                )
-            data[
-                frozenset(
-                    [
-                        round(result.soil_properties.x, 2),
-                        round(result.soil_properties.y, 2),
-                        round(z, 1),
-                    ]
-                )
-            ] = {
-                "x": result.soil_properties.x,
-                "y": result.soil_properties.y,
-                "z": z,
-                "var": var,
-                "CPT": _key,
-            }
 
-    # iterate over subgroups result
-    for cluster in grouper_results.clusters:
-        # iterate over cpts in subgroup
-        for x, y in cluster.coordinates:
-            # iterate over pile tip levels group cpt result
-            for z, var in zip(
-                cluster.data.pile_tip_level, cluster.data.net_design_bearing_capacity
-            ):
-                __key = frozenset([round(x, 2), round(y, 2), round(z, 1)])
-                # if group result is larger than single result, set group result.
-                if var > data[__key]["var"]:
-                    data[__key]["var"] = var
+    x: float
+    y: float
+    pile_tip_level_nap: float
+    R_c_d_net: float
+    test_id: str
 
-    return pd.DataFrame(data.values())
+
+@dataclass(frozen=True)
+class BearingResults:
+    """Object containing the results of the maximum net design bearing capacity (R_c_d_net) for every CPT."""
+
+    data: Dict[FrozenSet[Any], BearingTable]
+
+    def to_pandas(self) -> pd.DataFrame:
+        """Get the pandas.DataFrame representation"""
+        return pd.DataFrame([var.__dict__ for var in self.data.values()])
+
+    def to_pivot_table(self) -> pd.DataFrame:
+        """
+        Returns a pandas dataframe, organized per CPT (test-id) and pile-tip-level-nap.
+        """
+        results = pd.pivot_table(
+            self.to_pandas(),
+            values="R_c_d_net",
+            index="pile_tip_level_nap",
+            columns="test_id",
+            dropna=False,
+        )
+        return results.sort_values("pile_tip_level_nap", ascending=False)
+
+    def plot(
+        self,
+        hue: Literal["colormap", "category"] = "colormap",
+        pile_load_uls: float = 100,
+        figsize: Tuple[int, int] | None = None,
+        **kwargs: Any,
+    ) -> plt.Figure:
+        """
+        Plot a 3D scatterplot of the valid ULS load.
+
+        Parameters
+        ----------
+        hue
+            default is colormap
+            The marker colors methode. If colormap is used the colors represent the `R_c_d_net` value.
+            The category option sets the colors to valid ULS loads. Please use the pile_load_uls attribute to set
+            the required bearing capacity.
+        pile_load_uls
+            default is 100 kN
+            ULS load in kN. Used to determine if a pile tip level configuration is valid.
+        figsize:
+            Size of the activate figure, as the `plt.figure()` argument.
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
+
+        Returns
+        -------
+        figure:
+            The `Figure` object where the data was plotted on.
+        """
+        kwargs_subplot = {
+            "figsize": figsize,
+            "tight_layout": True,
+        }
+
+        kwargs_subplot.update(kwargs)
+        fig = plt.figure(**kwargs_subplot)
+        axes = fig.add_subplot(projection="3d")
+        df = self.to_pandas()
+        # create color list based on hue option
+        if hue == "category":
+            colors = [
+                "red" if var < pile_load_uls else "green" for var in df["R_c_d_net"]
+            ]
+        else:
+            colors = df["R_c_d_net"].tolist()
+        # create scatter plot
+        cmap = axes.scatter(
+            df["x"],
+            df["y"],
+            df["pile_tip_level_nap"],
+            c=colors,
+        )
+        axes.set_xlabel("X")
+        axes.set_ylabel("Y")
+        axes.set_zlabel("Z [m w.r.t NAP]")
+
+        if hue == "category":
+            fig.legend(
+                title="$R_{c;d;net}$ [kN]",
+                title_fontsize=18,
+                fontsize=15,
+                loc="lower right",
+                handles=[
+                    patches.Patch(
+                        facecolor=color,
+                        label=label,
+                        alpha=0.9,
+                        linewidth=2,
+                        edgecolor="black",
+                    )
+                    for label, color in zip(
+                        [f">= {pile_load_uls}", f"< {pile_load_uls}"],
+                        ["green", "red"],
+                    )
+                ],
+            )
+        else:
+            fig.colorbar(cmap, orientation="vertical", label="$R_{c;d;net}$ [kN]")
+
+        return fig

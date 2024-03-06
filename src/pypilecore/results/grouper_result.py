@@ -9,6 +9,9 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from shapely import MultiPoint
 
+from pypilecore.results.multi_cpt_results import MultiCPTBearingResults
+from pypilecore.results.post_processing import BearingResults, BearingTable
+
 
 @dataclass(frozen=True)
 class SingleClusterData:
@@ -479,6 +482,61 @@ class GrouperResults:
             for item in response_dict["sub_groups"]
         ]
         return cls(clusters=results)
+
+    def merge_grouper_and_single_bearing_results(
+        self,
+        multi_cpt_bearing_results: MultiCPTBearingResults,
+    ) -> "BearingResults":
+        """
+        Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.
+
+        Parameters
+        ----------
+        multi_cpt_bearing_results:
+           The container that holds multiple SingleCPTBearingResults objects
+        """
+        _data = {}
+
+        # iterate over single cpt result
+        for (
+            _key,
+            result,
+        ) in multi_cpt_bearing_results.cpt_results.cpt_results_dict.items():
+            # iterate over pile tip levels single cpt result
+            for z, var in zip(result.table.pile_tip_level_nap, result.table.R_c_d_net):
+                if result.soil_properties.x is None or result.soil_properties.y is None:
+                    raise ValueError(
+                        f"CPT: {_key} does not have any coordinates set. Please update the SingleCPTBearingResults."
+                    )
+                _data[
+                    frozenset(
+                        [
+                            _key,
+                            round(z, 1),
+                        ]
+                    )
+                ] = BearingTable(
+                    x=result.soil_properties.x,
+                    y=result.soil_properties.y,
+                    pile_tip_level_nap=round(z, 1),
+                    R_c_d_net=var,
+                    test_id=_key,
+                )
+
+        # iterate over subgroups result
+        for cluster in self.clusters:
+            # iterate over cpts in subgroup
+            for name in cluster.cpt_names:
+                # iterate over pile tip levels group cpt result
+                for z, var in zip(
+                    cluster.data.pile_tip_level,
+                    cluster.data.net_design_bearing_capacity,
+                ):
+                    __key = frozenset([name, round(z, 1)])
+                    # if group result is larger than single result, set group result.
+                    if var > _data[__key].R_c_d_net:
+                        _data[__key].R_c_d_net = var
+        return BearingResults(data=_data)
 
     def map(
         self,
