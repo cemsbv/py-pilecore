@@ -149,7 +149,7 @@ def create_soil_properties_payload(
             else cpt.delivered_vertical_position_offset - 1,
             coordinates=dict(x=cpt.delivered_location.x, y=cpt.delivered_location.y),
         )
-        
+
         # Optionally add cpt-specific friction-range parameters
         if (
             individual_negative_friction_range_nap is not None
