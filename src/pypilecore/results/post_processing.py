@@ -1,5 +1,6 @@
 import pandas as pd
-from results import GrouperResults, MultiCPTBearingResults
+
+from pypilecore.results import GrouperResults, MultiCPTBearingResults
 
 
 def merge_grouper_and_single_bearing_results(
@@ -26,6 +27,10 @@ def merge_grouper_and_single_bearing_results(
     for _key, result in multi_cpt_bearing_results.cpt_results.cpt_results_dict.items():
         # iterate over pile tip levels single cpt result
         for z, var in zip(result.table.pile_tip_level_nap, result.table.R_c_d_net):
+            if result.soil_properties.x is None or result.soil_properties.y is None:
+                raise ValueError(
+                    f"CPT: {_key} does not have any coordinates set. Please update the SingleCPTBearingResults."
+                )
             data[
                 frozenset(
                     [
@@ -50,9 +55,9 @@ def merge_grouper_and_single_bearing_results(
             for z, var in zip(
                 cluster.data.pile_tip_level, cluster.data.net_design_bearing_capacity
             ):
-                _key = frozenset([round(x, 2), round(y, 2), round(z, 1)])
+                __key = frozenset([round(x, 2), round(y, 2), round(z, 1)])
                 # if group result is larger than single result, set group result.
-                if var > data[_key]["var"]:
-                    data[_key]["var"] = var
+                if var > data[__key]["var"]:
+                    data[__key]["var"] = var
 
     return pd.DataFrame(data.values())
