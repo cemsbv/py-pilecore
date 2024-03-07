@@ -13,6 +13,20 @@ def mock_group_cpts_response() -> dict:
 
 
 @pytest.fixture
+def mock_group_multi_cpt_bearing_response() -> dict:
+    with open("tests/response/group_multi_response.json", "r") as file:
+        data = json.load(file)
+    return data
+
+
+@pytest.fixture
+def mock_group_results_passover() -> dict:
+    with open("tests/response/group_passover_dump.json", "r") as file:
+        data = json.load(file)
+    return data
+
+
+@pytest.fixture
 def mock_multi_cpt_bearing_response() -> dict:
     with open("tests/response/multi_cpt_bearing_response.json", "r") as file:
         data = json.load(file)
