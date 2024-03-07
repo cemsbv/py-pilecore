@@ -1,64 +1,336 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, FrozenSet, Literal, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Tuple
 
 import matplotlib.patches as patches
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+from numpy.typing import NDArray
+
+from pypilecore.results.soil_properties import SoilProperties, get_soil_layer_handles
+
+if TYPE_CHECKING:
+    from pypilecore.results.grouper_result import SingleClusterResult
 
 
 @dataclass(frozen=False)
-class BearingTable:
+class MaxBearingTable:
     """
     *Not meant to be instantiated by the user.*
 
     Attributes:
     ------------
-    x:
-        x-coordinate
-    y:
-        y-coordinate
     pile_tip_level_nap:
         pile tip level [m w.r.t NAP]
     R_c_d_net:
         net design bearing capacity [kN]
+    R_b_cal:
+        The calculated value of the bottom bearingcapacity [kN]
+    R_s_cal:
+        The calculated value of the shaft bearingcapacity [kN].
+    F_nk_d:
+        The design value of the negative shaft friction force [kN].
     test_id:
         Name of the CPT
     """
 
-    x: float
-    y: float
-    pile_tip_level_nap: float
-    R_c_d_net: float
-    test_id: str
-
-
-@dataclass(frozen=True)
-class BearingResults:
-    """Object containing the results of the maximum net design bearing capacity (R_c_d_net) for every CPT."""
-
-    data: Dict[FrozenSet[Any], BearingTable]
+    pile_tip_level_nap: NDArray[np.float64]
+    R_c_d_net: NDArray[np.float64]
+    F_nk_d: NDArray[np.float64]
+    origin: NDArray[np.str_]
 
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
-        return pd.DataFrame([var.__dict__ for var in self.data.values()])
+        return pd.DataFrame(self.__dict__).dropna(axis=1)
 
-    def to_pivot_table(self) -> pd.DataFrame:
+    def __update__(self, cluster: "SingleClusterResult", idx: int) -> None:
+        # find corresponding pile tip level
+        for i, z in enumerate(self.pile_tip_level_nap):
+            j = np.abs(np.array(cluster.data.pile_tip_level) - z).argmin()
+
+            # check bearing capacity
+            if cluster.data.net_design_bearing_capacity[j] > self.R_c_d_net[i]:
+                # replace data
+                self.R_c_d_net[i] = cluster.data.net_design_bearing_capacity[j]
+                self.F_nk_d[i] = cluster.data.design_negative_friction[j]
+                self.origin[i] = f"Cluster{idx}"
+
+
+class MaxBearingResult:
+    """
+    Object that contains the results of a PileCore single-cpt calculation.
+
+    *Not meant to be instantiated by the user.*
+    """
+
+    def __init__(
+        self,
+        soil_properties: SoilProperties,
+        pile_head_level_nap: float,
+        results_table: MaxBearingTable,
+    ) -> None:
         """
-        Returns a pandas dataframe, organized per CPT (test-id) and pile-tip-level-nap.
+        Parameters
+        ----------
+        soil_properties
+            The object with soil properties
+        pile_head_level_nap
+            The elevation of the pile-head, in [m] w.r.t. NAP.
+        results_table
+            The object with CPT results.
         """
-        results = pd.pivot_table(
+        self._sp = soil_properties
+        self._pile_head_level_nap = pile_head_level_nap
+        self._results_table = results_table
+
+    @property
+    def soil_properties(self) -> SoilProperties:
+        """
+        The SoilProperties object.
+        """
+        return self._sp
+
+    @property
+    def pile_head_level_nap(self) -> float:
+        """
+        The elevation of the pile-head in [m] w.r.t. NAP.
+        """
+        return self._pile_head_level_nap
+
+    @property
+    def table(self) -> MaxBearingTable:
+        """The object with single-CPT results table traces."""
+        return self._results_table
+
+    def plot_bearing_capacities(
+        self,
+        axes: Optional[Axes] = None,
+        figsize: Tuple[float, float] = (8, 10),
+        add_legend: bool = True,
+        **kwargs: Any,
+    ) -> Axes:
+        """
+        Plot the bearing calculation results on an `Axes' object.
+
+        Parameters
+        ----------
+        axes:
+            Optional `Axes` object where the bearing capacities can be plotted on.
+            If not provided, a new `plt.Figure` will be activated and the `Axes`
+            object will be created and returned.
+        figsize:
+            Size of the activate figure, as the `plt.figure()` argument.
+        add_legend:
+            Add a legend to the second axes object
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
+
+        Returns
+        -------
+        axes:
+            The `Axes` object where the bearing capacities were plotted on.
+        """
+
+        # Create axes objects if not provided
+        if axes is not None:
+            if not isinstance(axes, Axes):
+                raise ValueError(
+                    "'axes' argument to plot_bearing_capacities() must be a `pyplot.axes.Axes` object or None."
+                )
+        else:
+            kwargs_subplot = {
+                "figsize": figsize,
+                "tight_layout": True,
+            }
+
+            kwargs_subplot.update(kwargs)
+
+            _, axes = plt.subplots(1, 1, **kwargs_subplot)
+
+            if not isinstance(axes, Axes):
+                raise ValueError(
+                    "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
+                )
+
+        # add horizontal lines
+        axes.axhline(
+            y=self.soil_properties.groundwater_level_ref,
+            color="tab:blue",
+            linestyle="--",
+            label="Groundwater level",
+        )
+        axes.axhline(
+            y=self.soil_properties.surface_level_ref,
+            color="tab:brown",
+            linestyle="--",
+            label="Surface level",
+        )
+
+        # add bearing result subplot
+        axes.plot(
+            np.array(self.table.F_nk_d),
+            self.table.pile_tip_level_nap,
+            color="tab:orange",
+            label="Fnk;d",
+        )
+        axes.plot(
+            np.array(self.table.R_c_d_net),
+            self.table.pile_tip_level_nap,
+            label=r"Rc;net;d",
+            lw=3,
+            color="tab:blue",
+        )
+        axes.set_xlabel("Force [kN]")
+
+        # add legend
+        if add_legend:
+            axes.legend(
+                loc="upper left",
+                bbox_to_anchor=(1, 1),
+            )
+
+        # set grid
+        axes.grid()
+
+        return axes
+
+    def plot_bearing_overview(
+        self,
+        figsize: Tuple[float, float] = (10.0, 12.0),
+        width_ratios: Tuple[float, float, float] = (1, 0.1, 2),
+        add_legend: bool = True,
+        **kwargs: Any,
+    ) -> Figure:
+        """
+        Plot an overview of the bearing-capacities, including the .
+
+        Parameters
+        ----------
+        figsize:
+            Size of the activate figure, as the `plt.figure()` argument.
+        width_ratios:
+            Tuple of width-ratios of the subplots, as the `plt.GridSpec` argument.
+        add_legend:
+            Add a legend to the second axes object
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
+
+        Returns
+        -------
+        fig:
+            The matplotlib Figure
+        """
+
+        kwargs_subplot = {
+            "gridspec_kw": {"width_ratios": width_ratios},
+            "sharey": "row",
+            "figsize": figsize,
+            "tight_layout": True,
+        }
+
+        kwargs_subplot.update(kwargs)
+
+        fig, _ = plt.subplots(
+            1,
+            3,
+            **kwargs_subplot,
+        )
+
+        ax_qc, ax_layers, ax_bearing = fig.axes
+        ax_rf = ax_qc.twiny()
+        assert isinstance(ax_rf, Axes)
+
+        # Plot bearing capacities
+        self.soil_properties.cpt_table.plot_qc(ax_qc, add_legend=False)
+        self.soil_properties.cpt_table.plot_friction_ratio(ax_rf, add_legend=False)
+        self.soil_properties.plot_layers(ax_layers, add_legend=False)
+        self.plot_bearing_capacities(axes=ax_bearing, add_legend=False)
+
+        if add_legend:
+            ax_qc_legend_handles_list = ax_qc.get_legend_handles_labels()[0]
+            ax_rf_legend_handles_list = ax_rf.get_legend_handles_labels()[0]
+            ax_layers_legend_handles_list = get_soil_layer_handles()
+
+            # Omit last 2 duplicate "bearing" handles
+            # (groundwater_level and surface_level):
+            ax_bearing_legend_handles_list = ax_bearing.get_legend_handles_labels()[0][
+                2:
+            ]
+
+            handles_list = [
+                *ax_qc_legend_handles_list,
+                *ax_rf_legend_handles_list,
+                *ax_layers_legend_handles_list,
+                *ax_bearing_legend_handles_list,
+            ]
+
+            ax_bearing.legend(
+                handles=handles_list,
+                loc="upper left",
+                bbox_to_anchor=(1, 1),
+                title="name: " + self.soil_properties.test_id
+                if self.soil_properties.test_id is not None
+                else "name: unknown",
+            )
+
+        return fig
+
+
+@dataclass(frozen=True)
+class MaxBearingResults:
+    """Object containing the results for the maximum net design bearing capacity (R_c_d_net) for every CPT."""
+
+    cpt_results_dict: Dict[str, MaxBearingResult]
+
+    def get_results_per_cpt(self, column_name: str) -> pd.DataFrame:
+        """
+        Returns a pandas dataframe with a single result-item, organized per CPT
+        (test-id) and pile-tip-level-nap.
+
+        Parameters
+        ----------
+        column_name:
+            The name of the result-item / column name of the single-cpt-results table.
+        """
+        if column_name not in self.to_pandas().columns or column_name in [
+            "pile_tip_level_nap",
+            "test_id",
+        ]:
+            raise ValueError("Invalid column_name provided.")
+
+        results = pd.pivot(
             self.to_pandas(),
-            values="R_c_d_net",
+            values=column_name,
             index="pile_tip_level_nap",
             columns="test_id",
-            dropna=False,
         )
         return results.sort_values("pile_tip_level_nap", ascending=False)
 
+    def to_pandas(self) -> pd.DataFrame:
+        """Returns a total overview of all single-cpt results in a pandas.DataFrame representation."""
+        df_list: List[pd.DataFrame] = []
+
+        for test_id in self.cpt_results_dict:
+            df = self.cpt_results_dict[test_id].table.to_pandas()
+            df = df.assign(test_id=test_id)
+            df = df.assign(x=self.cpt_results_dict[test_id].soil_properties.x)
+            df = df.assign(y=self.cpt_results_dict[test_id].soil_properties.y)
+            df_list.append(df)
+
+        cpt_results_df = pd.concat(df_list)
+        cpt_results_df = cpt_results_df.assign(
+            pile_tip_level_nap=cpt_results_df.pile_tip_level_nap.round(1)
+        )
+
+        return cpt_results_df
+
     def plot(
         self,
+        projection: Optional[Literal["3d"]] = "3d",
         hue: Literal["colormap", "category"] = "colormap",
         pile_load_uls: float = 100,
         figsize: Tuple[int, int] | None = None,
@@ -69,6 +341,9 @@ class BearingResults:
 
         Parameters
         ----------
+        projection
+            default is 3d
+            The projection type of the subplot. use None to create a 2D plot
         hue
             default is colormap
             The marker colors methode. If colormap is used the colors represent the `R_c_d_net` value.
@@ -94,7 +369,7 @@ class BearingResults:
 
         kwargs_subplot.update(kwargs)
         fig = plt.figure(**kwargs_subplot)
-        axes = fig.add_subplot(projection="3d")
+        axes = fig.add_subplot(projection=projection)
         df = self.to_pandas()
         # create color list based on hue option
         if hue == "category":
@@ -104,15 +379,33 @@ class BearingResults:
         else:
             colors = df["R_c_d_net"].tolist()
         # create scatter plot
-        cmap = axes.scatter(
-            df["x"],
-            df["y"],
-            df["pile_tip_level_nap"],
-            c=colors,
-        )
-        axes.set_xlabel("X")
-        axes.set_ylabel("Y")
-        axes.set_zlabel("Z [m w.r.t NAP]")
+        if projection == "3d":
+            cmap = axes.scatter(
+                df["x"],
+                df["y"],
+                df["pile_tip_level_nap"],
+                c=colors,
+            )
+            axes.set_xlabel("X")
+            axes.set_ylabel("Y")
+            axes.set_zlabel("Z [m w.r.t NAP]")
+
+            # set cpt names
+            for key, result in self.cpt_results_dict.items():
+                axes.text(
+                    result.soil_properties.x,
+                    result.soil_properties.y,
+                    result.table.pile_tip_level_nap.max(),
+                    key,
+                    "z",
+                )
+        else:
+            cmap = axes.scatter(
+                df["test_id"],
+                df["pile_tip_level_nap"],
+                c=colors,
+            )
+            axes.set_ylabel("Z [m w.r.t NAP]")
 
         if hue == "category":
             fig.legend(
