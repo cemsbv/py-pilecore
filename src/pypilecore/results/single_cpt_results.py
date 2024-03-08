@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import lru_cache
 from typing import Any, Optional, Sequence, Tuple, Union
 
 import numpy as np
@@ -201,7 +200,6 @@ class CPTResultsTable:
                 f"Inputs for LayerTable must have same lengths, but got lengths: {dict_lengths}"
             )
 
-    @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
         return pd.DataFrame(self.__dict__).dropna(axis=1)
