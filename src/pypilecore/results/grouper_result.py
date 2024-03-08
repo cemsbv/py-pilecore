@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import natsort
 import numpy as np
@@ -328,7 +328,7 @@ class SingleClusterResult:
                     ],
                     net_design_bearing_capacity=table["net_design_bearing_capacity"],
                     nominal_cpt=table["nominal_cpt"],
-                    pile_tip_level=table["pile_tip_level"],
+                    pile_tip_level=[round(elem, 2) for elem in table["pile_tip_level"]],
                     variation_coefficient=table["variation_coefficient"],
                     xi_factor=table["xi_factor"],
                     xi_values=table["xi_values"],
@@ -532,7 +532,7 @@ class GrouperResults:
         """
         Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.
         """
-        max_bearing = {}
+        max_bearing: Dict[str, Any] = {}
 
         # iterate over single cpt result
         for (
