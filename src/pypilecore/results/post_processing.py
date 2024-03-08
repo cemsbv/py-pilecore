@@ -45,12 +45,6 @@ class MaxBearingTable:
     F_nk_d: NDArray[np.float64]
     origin: NDArray[np.str_]
 
-    # make dataclass hashable
-    # https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass
-    def __hash__(self) -> int:
-        return hash(self.__dict__.values())
-
-    @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
         return pd.DataFrame(self.__dict__).dropna(axis=1)
@@ -257,11 +251,6 @@ class MaxBearingResults:
 
     cpt_results_dict: Dict[str, "MaxBearingResult"]
 
-    # make dataclass hashable
-    # https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass
-    def __hash__(self) -> int:
-        return hash(self.__dict__.values())
-
     def get_results_per_cpt(self, column_name: str) -> pd.DataFrame:
         """
         Returns a pandas dataframe with a single result-item, organized per CPT
@@ -286,7 +275,6 @@ class MaxBearingResults:
         )
         return results.sort_values("pile_tip_level_nap", ascending=False)
 
-    @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Returns a total overview of all single-cpt results in a pandas.DataFrame representation."""
         df_list: List[pd.DataFrame] = []
