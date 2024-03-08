@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cached_property
 from typing import Any, List, Tuple
 
 import natsort
@@ -495,7 +496,7 @@ class GrouperResults:
             clusters=results, multi_cpt_bearing_results=multi_cpt_bearing_results
         )
 
-    @property
+    @cached_property
     def max_bearing_results(self) -> "MaxBearingResults":
         """
         Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.
@@ -524,7 +525,12 @@ class GrouperResults:
         for i, cluster in enumerate(self.clusters):
             # iterate over cpts in subgroup
             for name in cluster.cpt_names:
-                # iterate over pile tip levels group cpt result
+                if name not in _data.keys():
+                    raise ValueError(
+                        "CPT names dont math between MultiCPTBearingResults object and GrouperResults. "
+                        "Make sure that you use the same MultiCPTBearingResults as you generated "
+                        "the subgroups/clusters."
+                    )
                 _data[name].table.__update__(cluster, i)
 
         return MaxBearingResults(cpt_results_dict=_data)
