@@ -121,7 +121,9 @@ class CPTResultsTable:
             The 1-dimensional stiffness modulus at pile head [MN/mm].
         """
 
-        self.pile_tip_level_nap = np.array(pile_tip_level_nap).astype(np.float64)
+        self.pile_tip_level_nap = (
+            np.array(pile_tip_level_nap).astype(np.float64).round(decimals=2)
+        )
         """The pile-tip level in [m] w.r.t. the reference."""
         self.F_nk_cal = np.array(F_nk_cal).astype(np.float64)
         """The calculated value of the negative shaft friction force [kN]."""

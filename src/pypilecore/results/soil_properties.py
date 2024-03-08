@@ -144,7 +144,7 @@ class CPTTable:
         if depth_nap is None:
             self.depth_nap = np.array([depth_nap]).astype(np.float64)
         else:
-            self.depth_nap = np.array(depth_nap).astype(np.float64)
+            self.depth_nap = np.array(depth_nap).astype(np.float64).round(decimals=2)
 
         """The depth [m] w.r.t. NAP"""
         self.qc = np.array(qc).astype(np.float64)

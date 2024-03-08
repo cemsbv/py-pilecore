@@ -1,22 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from functools import cached_property, lru_cache
-from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Tuple
+from typing import Any, Dict, List, Literal, Optional, Tuple
 
 import matplotlib.patches as patches
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
-from matplotlib.collections import PatchCollection
 from matplotlib.figure import Figure
 from numpy.typing import NDArray
 
 from pypilecore.results.soil_properties import SoilProperties, get_soil_layer_handles
-
-if TYPE_CHECKING:
-    from pypilecore.results.grouper_result import SingleClusterResult
 
 
 @dataclass(frozen=True)
@@ -30,14 +25,10 @@ class MaxBearingTable:
         pile tip level [m w.r.t NAP]
     R_c_d_net:
         net design bearing capacity [kN]
-    R_b_cal:
-        The calculated value of the bottom bearingcapacity [kN]
-    R_s_cal:
-        The calculated value of the shaft bearingcapacity [kN].
     F_nk_d:
         The design value of the negative shaft friction force [kN].
-    test_id:
-        Name of the CPT
+    origin:
+        Name of the calculation methode
     """
 
     pile_tip_level_nap: NDArray[np.float64]

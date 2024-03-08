@@ -135,7 +135,9 @@ class CPTGroupResultsTable:
         cpt_normative:
             The normative CPT. Can be "group average" if that was found to be the normative scenario.
         """
-        self.pile_tip_level_nap = np.array(pile_tip_level_nap).astype(np.float64)
+        self.pile_tip_level_nap = (
+            np.array(pile_tip_level_nap).astype(np.float64).round(decimals=2)
+        )
         """The pile-tip level [m] w.r.t. NAP."""
         self.R_s_k = np.array(R_s_k).astype(np.float64)
         """The characteristic value of the shaft bearingcapacity  [kN]."""
