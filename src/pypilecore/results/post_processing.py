@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cached_property
 from typing import Any, Dict, List, Literal, Optional, Tuple
 
 import matplotlib.patches as patches
@@ -8,8 +9,10 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
+from matplotlib.collections import PatchCollection
 from matplotlib.figure import Figure
 from numpy.typing import NDArray
+from scipy.spatial import Delaunay
 
 from pypilecore.results.soil_properties import SoilProperties, get_soil_layer_handles
 
@@ -266,6 +269,29 @@ class MaxBearingResults:
         )
         return results.sort_values("pile_tip_level_nap", ascending=False)
 
+    @cached_property
+    def triangulation(self) -> List[dict]:
+        points = {
+            (point.soil_properties.x, point.soil_properties.y): key
+            for key, point in self.cpt_results_dict.items()
+        }
+        _points = list(points.keys())
+        tri = Delaunay(
+            _points,
+            incremental=False,
+            furthest_site=False,
+            qhull_options="Qbb",
+        )
+        geometries = np.array(_points)[tri.simplices]
+
+        return [
+            {
+                "geometry": geometry.tolist(),
+                "test_id": [points[(xy[0], xy[1])] for xy in geometry],
+            }
+            for geometry in geometries
+        ]
+
     def to_pandas(self) -> pd.DataFrame:
         """Returns a total overview of all single-cpt results in a pandas.DataFrame representation."""
         df_list: List[pd.DataFrame] = []
@@ -385,5 +411,108 @@ class MaxBearingResults:
             )
         else:
             fig.colorbar(cmap, orientation="vertical", label="$R_{c;d;net}$ [kN]")
+
+        return fig
+
+    def map(
+        self,
+        pile_tip_level_nap: float,
+        pile_load_uls: float = 100,
+        figsize: Tuple[int, int] | None = None,
+        **kwargs: Any,
+    ) -> plt.Figure:
+        """
+        Plot a map of the valid ULS load for a given depth.
+
+        Parameters
+        ----------
+        pile_tip_level_nap:
+            Pile tip level to generate map.
+        pile_load_uls
+            default is 100 kN
+            ULS load in kN. Used to determine if a pile tip level configuration is valid.
+        figsize:
+            Size of the activate figure, as the `plt.figure()` argument.
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
+
+        Returns
+        -------
+        figure:
+            The `Figure` object where the data was plotted on.
+        """
+        kwargs_subplot = {
+            "figsize": figsize,
+            "tight_layout": True,
+        }
+
+        kwargs_subplot.update(kwargs)
+        fig, axes = plt.subplots(**kwargs_subplot)
+
+        # filter data
+        df = (
+            self.to_pandas()
+            .where(self.to_pandas()["pile_tip_level_nap"] == pile_tip_level_nap)
+            .dropna()
+        )
+
+        if df.empty:
+            raise ValueError(
+                "Pile tip level is not valid pile tip level. "
+                "Please select one of the following pile tip level: "
+                f"[{(self.to_pandas()['pile_tip_level_nap']).unique()}]"
+            )
+
+        df["valid"] = [
+            False if var < pile_load_uls else True for var in df["R_c_d_net"]
+        ]
+
+        # iterate over geometry
+        _patches = []
+        for tri in self.triangulation:
+            color = (
+                "green"
+                if all(df.where(df["test_id"].isin(tri["test_id"])).dropna()["valid"])
+                else "red"
+            )
+            _patches.append(
+                patches.Polygon(
+                    np.array(tri["geometry"]), facecolor=color, edgecolor="grey"
+                )
+            )
+
+        collection = PatchCollection(_patches, match_original=True)
+        axes.add_collection(collection)
+        # add the cpt names
+        axes.scatter(
+            df["x"],
+            df["y"],
+            c=["green" if val else "red" for val in df["valid"]],
+        )
+        for label, x, y in zip(df["test_id"], df["x"], df["y"]):
+            axes.annotate(label, xy=(x, y), xytext=(3, 3), textcoords="offset points")
+        axes.set_xlabel("X")
+        axes.set_ylabel("Y")
+        axes.ticklabel_format(useOffset=False)
+        fig.legend(
+            title="$R_{c;d;net}$ [kN]",
+            title_fontsize=18,
+            fontsize=15,
+            loc="lower right",
+            handles=[
+                patches.Patch(
+                    facecolor=color,
+                    label=label,
+                    alpha=0.9,
+                    linewidth=2,
+                    edgecolor="black",
+                )
+                for label, color in zip(
+                    [f">= {pile_load_uls}", f"< {pile_load_uls}"],
+                    ["green", "red"],
+                )
+            ],
+        )
+        axes.set_title(f"Pile tip level at: {pile_tip_level_nap} [m w.r.t NAP]")
 
         return fig

@@ -16,6 +16,7 @@ dependencies = [
     "tqdm[notebook]>4,<5",
     "natsort>8,<9",
     "shapely>=2,<3",
+    "scipy>1.10, <2",
 ]
 license = { file = "LICENSE" }
 readme = "README.md"
