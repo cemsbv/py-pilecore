@@ -12,7 +12,6 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PatchCollection
 from matplotlib.figure import Figure
 from numpy.typing import NDArray
-from scipy.spatial import Delaunay
 
 from pypilecore.results.soil_properties import SoilProperties, get_soil_layer_handles
 
@@ -20,7 +19,7 @@ if TYPE_CHECKING:
     from pypilecore.results.grouper_result import SingleClusterResult
 
 
-@dataclass(frozen=False)
+@dataclass(frozen=True)
 class MaxBearingTable:
     """
     *Not meant to be instantiated by the user.*
@@ -46,68 +45,37 @@ class MaxBearingTable:
     F_nk_d: NDArray[np.float64]
     origin: NDArray[np.str_]
 
+    # make dataclass hashable
+    # https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass
+    def __hash__(self) -> int:
+        return hash(self.__dict__.values())
+
+    @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
         return pd.DataFrame(self.__dict__).dropna(axis=1)
 
-    def __update__(self, cluster: "SingleClusterResult", idx: int) -> None:
-        # find corresponding pile tip level
-        for i, z in enumerate(self.pile_tip_level_nap):
-            j = np.abs(np.array(cluster.data.pile_tip_level) - z).argmin()
 
-            # check bearing capacity
-            if cluster.data.net_design_bearing_capacity[j] > self.R_c_d_net[i]:
-                # replace data
-                self.R_c_d_net[i] = cluster.data.net_design_bearing_capacity[j]
-                self.F_nk_d[i] = cluster.data.design_negative_friction[j]
-                self.origin[i] = f"Cluster{idx}"
-
-
+@dataclass(frozen=True)
 class MaxBearingResult:
     """
     Object that contains the results of a PileCore single-cpt calculation.
 
     *Not meant to be instantiated by the user.*
+
+    Attributes
+    ----------
+    soil_properties
+        The object with soil properties
+    pile_head_level_nap
+        The elevation of the pile-head, in [m] w.r.t. NAP.
+    results_table
+        The object with CPT results.
     """
 
-    def __init__(
-        self,
-        soil_properties: SoilProperties,
-        pile_head_level_nap: float,
-        results_table: MaxBearingTable,
-    ) -> None:
-        """
-        Parameters
-        ----------
-        soil_properties
-            The object with soil properties
-        pile_head_level_nap
-            The elevation of the pile-head, in [m] w.r.t. NAP.
-        results_table
-            The object with CPT results.
-        """
-        self._sp = soil_properties
-        self._pile_head_level_nap = pile_head_level_nap
-        self._results_table = results_table
-
-    @property
-    def soil_properties(self) -> SoilProperties:
-        """
-        The SoilProperties object.
-        """
-        return self._sp
-
-    @property
-    def pile_head_level_nap(self) -> float:
-        """
-        The elevation of the pile-head in [m] w.r.t. NAP.
-        """
-        return self._pile_head_level_nap
-
-    @property
-    def table(self) -> MaxBearingTable:
-        """The object with single-CPT results table traces."""
-        return self._results_table
+    soil_properties: SoilProperties
+    pile_head_level_nap: float
+    table: MaxBearingTable
 
     def plot_bearing_capacities(
         self,
@@ -318,24 +286,6 @@ class MaxBearingResults:
         )
         return results.sort_values("pile_tip_level_nap", ascending=False)
 
-    @cached_property
-    def triangulation(self) -> List[dict]:
-        points = {
-            (point.soil_properties.x, point.soil_properties.y): key
-            for key, point in self.cpt_results_dict.items()
-        }
-
-        tri = Delaunay(list(points.keys()))
-        geometries = np.array(list(points.keys()))[tri.simplices]
-
-        return [
-            {
-                "geomery": geometry.tolist(),
-                "test_id": [points[(xy[0], xy[1])] for xy in geometry],
-            }
-            for geometry in geometries
-        ]
-
     @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Returns a total overview of all single-cpt results in a pandas.DataFrame representation."""
@@ -456,96 +406,5 @@ class MaxBearingResults:
             )
         else:
             fig.colorbar(cmap, orientation="vertical", label="$R_{c;d;net}$ [kN]")
-
-        return fig
-
-    def map(
-        self,
-        pile_tip_level_nap: float,
-        pile_load_uls: float = 100,
-        figsize: Tuple[int, int] | None = None,
-        **kwargs: Any,
-    ) -> plt.Figure:
-        """
-        Plot a map of the valid ULS load for a given depth.
-
-        Parameters
-        ----------
-        pile_tip_level_nap:
-            Pile tip level to generate map.
-        pile_load_uls
-            default is 100 kN
-            ULS load in kN. Used to determine if a pile tip level configuration is valid.
-        figsize:
-            Size of the activate figure, as the `plt.figure()` argument.
-        **kwargs:
-            All additional keyword arguments are passed to the `pyplot.subplots()` call.
-
-        Returns
-        -------
-        figure:
-            The `Figure` object where the data was plotted on.
-        """
-        kwargs_subplot = {
-            "figsize": figsize,
-            "tight_layout": True,
-        }
-
-        kwargs_subplot.update(kwargs)
-        fig, axes = plt.subplots(**kwargs_subplot)
-
-        # filter data
-        df = (
-            self.to_pandas()
-            .where(self.to_pandas()["pile_tip_level_nap"] == pile_tip_level_nap)
-            .dropna()
-        )
-        df["valid"] = [
-            False if var < pile_load_uls else True for var in df["R_c_d_net"]
-        ]
-
-        # iterate over geometry
-        _patches = []
-        for tri in self.triangulation:
-            color = (
-                "green"
-                if all(df.where(df["test_id"].isin(tri["test_id"])).dropna()["valid"])
-                else "red"
-            )
-            _patches.append(
-                patches.Polygon(
-                    np.array(tri["geomery"]), facecolor=color, edgecolor="grey"
-                )
-            )
-
-        collection = PatchCollection(_patches, match_original=True)
-        axes.add_collection(collection)
-        axes.set_xlabel("X")
-        axes.set_ylabel("Y")
-
-        fig.legend(
-            title="$R_{c;d;net}$ [kN]",
-            title_fontsize=18,
-            fontsize=15,
-            loc="lower right",
-            handles=[
-                patches.Patch(
-                    facecolor=color,
-                    label=label,
-                    alpha=0.9,
-                    linewidth=2,
-                    edgecolor="black",
-                )
-                for label, color in zip(
-                    [f">= {pile_load_uls}", f"< {pile_load_uls}"],
-                    ["green", "red"],
-                )
-            ],
-        )
-
-        # add the cpt names
-        axes.scatter(
-            df["x"], df["y"], c=["green" if val else "red" for val in df["valid"]]
-        )
 
         return fig

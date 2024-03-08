@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass
 from functools import cached_property
 from typing import Any, List, Tuple
@@ -468,6 +469,36 @@ class GrouperResults:
     clusters: List[SingleClusterResult]
     multi_cpt_bearing_results: MultiCPTBearingResults
 
+    def __post_init__(self) -> None:
+        for cluster in self.clusters:
+            for cpt_name in cluster.cpt_names:
+                # check if the cpt names in the SingleClusterResults are also present
+                # in the MultiCPTBearingResults
+                if (
+                    cpt_name
+                    not in self.multi_cpt_bearing_results.cpt_results.cpt_results_dict.keys()
+                ):
+                    raise ValueError(
+                        "CPT names dont match between MultiCPTBearingResults object and GrouperResults. "
+                        "Make sure that you use the same MultiCPTBearingResults as you generated "
+                        "the subgroups/clusters with."
+                    )
+
+                # Check that all the pile tip levels in the SingleClusterResults are
+                # also present in the MultiCPTBearingResults
+                for pile_tip_level in cluster.data.pile_tip_level:
+                    if (
+                        pile_tip_level
+                        not in self.multi_cpt_bearing_results.cpt_results.cpt_results_dict[
+                            cpt_name
+                        ].table.pile_tip_level_nap
+                    ):
+                        raise ValueError(
+                            "Pile tip levels dont match between MultiCPTBearingResults object and GrouperResults. "
+                            "Make sure that you use the same MultiCPTBearingResults as you generated "
+                            "the subgroups/clusters with."
+                        )
+
     @classmethod
     def from_api_response(
         cls,
@@ -501,39 +532,72 @@ class GrouperResults:
         """
         Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.
         """
-        _data = {}
+        max_bearing = {}
 
         # iterate over single cpt result
         for (
-            _key,
-            result,
+            cpt_name,
+            _single_cpt_result,
         ) in self.multi_cpt_bearing_results.cpt_results.cpt_results_dict.items():
-            _data[_key] = MaxBearingResult(
-                pile_head_level_nap=result.pile_head_level_nap,
-                soil_properties=result.soil_properties,
-                results_table=MaxBearingTable(
-                    pile_tip_level_nap=result.table.pile_tip_level_nap,
-                    R_c_d_net=result.table.R_c_d_net,
-                    F_nk_d=result.table.F_nk_d,
+            single_cpt_result = deepcopy(_single_cpt_result)
+            max_bearing[cpt_name] = dict(
+                pile_head_level_nap=single_cpt_result.pile_head_level_nap,
+                soil_properties=single_cpt_result.soil_properties,
+                results_table=dict(
+                    pile_tip_level_nap=single_cpt_result.table.pile_tip_level_nap,
+                    R_c_d_net=single_cpt_result.table.R_c_d_net,
+                    F_nk_d=single_cpt_result.table.F_nk_d,
                     origin=np.array(
-                        ["SingleCPT"] * len(result.table.pile_tip_level_nap)
+                        ["SingleCPT"] * len(single_cpt_result.table.pile_tip_level_nap)
                     ).astype(str),
                 ),
             )
 
         # iterate over subgroups result
-        for i, cluster in enumerate(self.clusters):
+        for cluster_idx, cluster in enumerate(self.clusters):
             # iterate over cpts in subgroup
-            for name in cluster.cpt_names:
-                if name not in _data.keys():
-                    raise ValueError(
-                        "CPT names dont math between MultiCPTBearingResults object and GrouperResults. "
-                        "Make sure that you use the same MultiCPTBearingResults as you generated "
-                        "the subgroups/clusters."
-                    )
-                _data[name].table.__update__(cluster, i)
+            for cpt_name in cluster.cpt_names:
+                # iterate over pile tip levels in the cluster results for the cpt
+                for cluster_ptl_idx, ptl in enumerate(cluster.data.pile_tip_level):
+                    # find corresponding pile tip level index in the max_bearing results
+                    max_bearing_ptl_idx = np.abs(
+                        max_bearing[cpt_name]["results_table"]["pile_tip_level_nap"]
+                        - ptl
+                    ).argmin()
 
-        return MaxBearingResults(cpt_results_dict=_data)
+                    # check bearing capacity
+                    if (
+                        cluster.data.net_design_bearing_capacity[cluster_ptl_idx]
+                        > max_bearing[cpt_name]["results_table"]["R_c_d_net"][
+                            max_bearing_ptl_idx
+                        ]
+                    ):
+                        # replace data
+                        max_bearing[cpt_name]["results_table"]["R_c_d_net"][
+                            max_bearing_ptl_idx
+                        ] = cluster.data.net_design_bearing_capacity[cluster_ptl_idx]
+                        max_bearing[cpt_name]["results_table"]["F_nk_d"][
+                            max_bearing_ptl_idx
+                        ] = cluster.data.design_negative_friction[cluster_ptl_idx]
+                        max_bearing[cpt_name]["results_table"]["origin"][
+                            max_bearing_ptl_idx
+                        ] = f"Group-{cluster_idx}"
+
+        return MaxBearingResults(
+            cpt_results_dict={
+                cpt_name: MaxBearingResult(
+                    pile_head_level_nap=data["pile_head_level_nap"],
+                    soil_properties=data["soil_properties"],
+                    table=MaxBearingTable(
+                        pile_tip_level_nap=data["results_table"]["pile_tip_level_nap"],
+                        R_c_d_net=data["results_table"]["R_c_d_net"],
+                        F_nk_d=data["results_table"]["F_nk_d"],
+                        origin=data["results_table"]["origin"],
+                    ),
+                )
+                for cpt_name, data in max_bearing.items()
+            }
+        )
 
     def map(
         self,
