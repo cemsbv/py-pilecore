@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any, Optional, Sequence, Tuple, Union
 
 import numpy as np
@@ -7,6 +8,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from numpy.typing import NDArray
 
 from pypilecore.results.soil_properties import (
     CPTTable,
@@ -18,179 +20,72 @@ from pypilecore.results.soil_properties import (
 Number = Union[float, int]
 
 
+@dataclass(frozen=True)
 class CPTResultsTable:
     """Object containing the results of a single CPT."""
 
-    def __init__(
-        self,
-        pile_tip_level_nap: Sequence[float],
-        F_nk_cal: Sequence[float],
-        F_nk_k: Sequence[float],
-        F_nk_d: Sequence[float],
-        R_b_cal: Sequence[float],
-        R_b_k: Sequence[float],
-        R_b_d: Sequence[float],
-        R_s_cal: Sequence[float],
-        R_s_k: Sequence[float],
-        R_s_d: Sequence[float],
-        R_c_cal: Sequence[float],
-        R_c_k: Sequence[float],
-        R_c_d: Sequence[float],
-        R_c_d_net: Sequence[float],
-        F_c_k: Sequence[float],
-        F_c_k_tot: Sequence[float],
-        negative_friction_range_nap_top: Sequence[float | None],
-        negative_friction_range_nap_btm: Sequence[float | None],
-        positive_friction_range_nap_top: Sequence[float],
-        positive_friction_range_nap_btm: Sequence[float],
-        q_b_max: Sequence[float],
-        q_s_max_mean: Sequence[float],
-        qc1: Sequence[float],
-        qc2: Sequence[float],
-        qc3: Sequence[float],
-        s_b: Sequence[float],
-        s_el: Sequence[float],
-        k_v_b: Sequence[float],
-        k_v_1: Sequence[float],
-    ):
-        """
-        Parameters
-        ----------
-        pile_tip_level_nap:
-            The pile-tip level in [m] w.r.t. the reference.
-        F_nk_cal:
-            The calculated value of the negative shaft friction force [kN].
-        F_nk_k:
-            The characteristic value of the negative shaft friction force [kN].
-        F_nk_d:
-            The design value of the negative shaft friction force [kN].
-        R_b_cal:
-            The calculated value of the bottom bearingcapacity [kN].
-        R_b_k:
-            The characteristic value of the bottom bearingcapacity [kN].
-        R_b_d:
-            The design value of the bottom bearingcapacity [kN].
-        R_s_cal:
-            The calculated value of the shaft bearingcapacity [kN].
-        R_s_k:
-            The characteristic value of the shaft bearingcapacity [kN].
-        R_s_d:
-            The design value of the shaft bearingcapacity [kN].
-        R_c_cal:
-            The calculated value of the total compressive bearingcapacity [kN].
-        R_c_k:
-            The characteristic value of the total compressive bearingcapacity [kN].
-        R_c_d:
-            The design value of the total compressive bearingcapacity [kN].
-        R_c_d_net:
-            The net design value of the total bearingcapacity [kN] (netto =
-            excluding design negative friction force.).
-        F_c_k:
-            The compressive force on the pile-head [kN].
-        F_c_k_tot:
-            The characteristic value of the total compressive pile load [kN]
-            (building-load + neg. friction force).
-        negative_friction_range_nap_top:
-            The top boundary of the negative friction interval [m] w.r.t. NAP.
-            Can be None when the friction force was provided directly.
-        negative_friction_range_nap_btm:
-            The bottom boundary of the negative friction interval [m] w.r.t. NAP.
-            Can be None when the friction force was provided directly.
-        positive_friction_range_nap_top:
-            The top boundary of the positive friction interval [m] w.r.t. NAP.
-        positive_friction_range_nap_btm:
-            The bottom boundary of the positive friction interval [m] w.r.t. NAP.
-        q_b_max:
-            The maximum bottom bearing resistance [MPa].
-        q_s_max_mean:
-            The maximum shaft bearing resistance [MPa].
-        qc1:
-            The average friction resistance in Koppejan trajectory I, :math:`q_{c;I;gem}` [MPa] .
-        qc2:
-            The average friction resistance in Koppejan trajectory II, :math:`q_{c;II;gem}` [MPa] .
-        qc3:
-            The average friction resistance in Koppejan trajectory III, :math:`q_{c;III;gem}` [MPa] .
-        s_b:
-            The settlement of the pile bottom [mm].
-        s_el:
-            The elastic shortening of the pile due to elastic strain [mm].
-        k_v_b:
-            The 1-dimensional stiffness modulus at pile bottom [kN/m].
-        k_v_1:
-            The 1-dimensional stiffness modulus at pile head [MN/mm].
-        """
+    pile_tip_level_nap: NDArray[np.float64]
+    """The pile-tip level in [m] w.r.t. the reference."""
+    F_nk_cal: NDArray[np.float64]
+    """The calculated value of the negative shaft friction force [kN]."""
+    F_nk_k: NDArray[np.float64]
+    """The characteristic value of the negative shaft friction force [kN]."""
+    F_nk_d: NDArray[np.float64]
+    """The design value of the negative shaft friction force [kN]."""
+    R_b_cal: NDArray[np.float64]
+    """The calculated value of the bottom bearingcapacity [kN]."""
+    R_b_k: NDArray[np.float64]
+    """The characteristic value of the bottom bearingcapacity [kN]."""
+    R_b_d: NDArray[np.float64]
+    """The design value of the bottom bearingcapacity [kN]."""
+    R_s_cal: NDArray[np.float64]
+    """The calculated value of the shaft bearingcapacity [kN]."""
+    R_s_k: NDArray[np.float64]
+    """The characteristic value of the shaft bearingcapacity [kN]."""
+    R_s_d: NDArray[np.float64]
+    """The design value of the shaft bearingcapacity [kN]."""
+    R_c_cal: NDArray[np.float64]
+    """The calculated value of the total compressive bearingcapacity [kN]."""
+    R_c_k: NDArray[np.float64]
+    """The characteristic value of the total compressive bearingcapacity [kN]."""
+    R_c_d: NDArray[np.float64]
+    """The design value of the total compressive bearingcapacity [kN]."""
+    R_c_d_net: NDArray[np.float64]
+    """The net design value of the total bearingcapacity [kN] (netto =excluding design negative friction force.)."""
+    F_c_k: NDArray[np.float64]
+    """The compressive force on the pile-head [kN]."""
+    F_c_k_tot: NDArray[np.float64]
+    """The characteristic value of the total compressive pile load [kN](building-load + neg. friction force)."""
+    negative_friction_range_nap_top: NDArray[np.float64]
+    """The top boundary of the negative friction interval [m] w.r.t. NAP.
+    Can be None when the friction force was provided directly."""
+    negative_friction_range_nap_btm: NDArray[np.float64]
+    """The bottom boundary of the negative friction interval [m] w.r.t. NAP.
+    Can be None when the friction force was provided directly."""
+    positive_friction_range_nap_top: NDArray[np.float64]
+    """The top boundary of the positive friction interval [m] w.r.t. NAP."""
+    positive_friction_range_nap_btm: NDArray[np.float64]
+    """The bottom boundary of the positive friction interval [m] w.r.t. NAP."""
+    q_b_max: NDArray[np.float64]
+    """The maximum bottom bearing resistance [MPa]."""
+    q_s_max_mean: NDArray[np.float64]
+    """The maximum shaft bearing resistance [MPa]."""
+    qc1: NDArray[np.float64]
+    """The average friction resistance in Koppejan trajectory I, :math:`q_{c;I;gem}` [MPa] ."""
+    qc2: NDArray[np.float64]
+    """The average friction resistance in Koppejan trajectory II, :math:`q_{c;II;gem}` [MPa] ."""
+    qc3: NDArray[np.float64]
+    """The average friction resistance in Koppejan trajectory III, :math:`q_{c;III;gem}` [MPa] ."""
+    s_b: NDArray[np.float64]
+    """The settlement of the pile bottom [mm]."""
+    s_el: NDArray[np.float64]
+    """The elastic shortening of the pile due to elastic strain [mm]."""
+    k_v_b: NDArray[np.float64]
+    """The 1-dimensional stiffness modulus at pile bottom [kN/m]."""
+    k_v_1: NDArray[np.float64]
+    """The 1-dimensional stiffness modulus at pile head [MN/mm]."""
 
-        self.pile_tip_level_nap = (
-            np.array(pile_tip_level_nap).astype(np.float64).round(decimals=2)
-        )
-        """The pile-tip level in [m] w.r.t. the reference."""
-        self.F_nk_cal = np.array(F_nk_cal).astype(np.float64)
-        """The calculated value of the negative shaft friction force [kN]."""
-        self.F_nk_k = np.array(F_nk_k).astype(np.float64)
-        """The characteristic value of the negative shaft friction force [kN]."""
-        self.F_nk_d = np.array(F_nk_d).astype(np.float64)
-        """The design value of the negative shaft friction force [kN]."""
-        self.R_b_cal = np.array(R_b_cal).astype(np.float64)
-        """The calculated value of the bottom bearingcapacity [kN]."""
-        self.R_b_k = np.array(R_b_k).astype(np.float64)
-        """The characteristic value of the bottom bearingcapacity [kN]."""
-        self.R_b_d = np.array(R_b_d).astype(np.float64)
-        """The design value of the bottom bearingcapacity [kN]."""
-        self.R_s_cal = np.array(R_s_cal).astype(np.float64)
-        """The calculated value of the shaft bearingcapacity [kN]."""
-        self.R_s_k = np.array(R_s_k).astype(np.float64)
-        """The characteristic value of the shaft bearingcapacity [kN]."""
-        self.R_s_d = np.array(R_s_d).astype(np.float64)
-        """The design value of the shaft bearingcapacity [kN]."""
-        self.R_c_cal = np.array(R_c_cal).astype(np.float64)
-        """The calculated value of the total compressive bearingcapacity [kN]."""
-        self.R_c_k = np.array(R_c_k).astype(np.float64)
-        """The characteristic value of the total compressive bearingcapacity [kN]."""
-        self.R_c_d = np.array(R_c_d).astype(np.float64)
-        """The design value of the total compressive bearingcapacity [kN]."""
-        self.R_c_d_net = np.array(R_c_d_net).astype(np.float64)
-        """The net design value of the total bearingcapacity [kN] (netto =excluding design negative friction force.)."""
-        self.F_c_k = np.array(F_c_k).astype(np.float64)
-        """The compressive force on the pile-head [kN]."""
-        self.F_c_k_tot = np.array(F_c_k_tot).astype(np.float64)
-        """The characteristic value of the total compressive pile load [kN](building-load + neg. friction force)."""
-        self.negative_friction_range_nap_top = np.array(
-            negative_friction_range_nap_top
-        ).astype(np.float64)
-        """The top boundary of the negative friction interval [m] w.r.t. NAP.
-        Can be None when the friction force was provided directly."""
-        self.negative_friction_range_nap_btm = np.array(
-            negative_friction_range_nap_btm
-        ).astype(np.float64)
-        """The bottom boundary of the negative friction interval [m] w.r.t. NAP.
-        Can be None when the friction force was provided directly."""
-        self.positive_friction_range_nap_top = np.array(
-            positive_friction_range_nap_top
-        ).astype(np.float64)
-        """The top boundary of the positive friction interval [m] w.r.t. NAP."""
-        self.positive_friction_range_nap_btm = np.array(
-            positive_friction_range_nap_btm
-        ).astype(np.float64)
-        """The bottom boundary of the positive friction interval [m] w.r.t. NAP."""
-        self.q_b_max = np.array(q_b_max).astype(np.float64)
-        """The maximum bottom bearing resistance [MPa]."""
-        self.q_s_max_mean = np.array(q_s_max_mean).astype(np.float64)
-        """The maximum shaft bearing resistance [MPa]."""
-        self.qc1 = np.array(qc1).astype(np.float64)
-        """The average friction resistance in Koppejan trajectory I, :math:`q_{c;I;gem}` [MPa] ."""
-        self.qc2 = np.array(qc2).astype(np.float64)
-        """The average friction resistance in Koppejan trajectory II, :math:`q_{c;II;gem}` [MPa] ."""
-        self.qc3 = np.array(qc3).astype(np.float64)
-        """The average friction resistance in Koppejan trajectory III, :math:`q_{c;III;gem}` [MPa] ."""
-        self.s_b = np.array(s_b).astype(np.float64)
-        """The settlement of the pile bottom [mm]."""
-        self.s_el = np.array(s_el).astype(np.float64)
-        """The elastic shortening of the pile due to elastic strain [mm]."""
-        self.k_v_b = np.array(k_v_b).astype(np.float64)
-        """The 1-dimensional stiffness modulus at pile bottom [kN/m]."""
-        self.k_v_1 = np.array(k_v_1).astype(np.float64)
-        """The 1-dimensional stiffness modulus at pile head [MN/mm]."""
-
+    def __post_init__(self) -> None:
         dict_lengths = {}
         for key, value in self.__dict__.items():
             if not np.all(np.isnan(value)):
@@ -199,6 +94,79 @@ class CPTResultsTable:
             raise ValueError(
                 f"Inputs for LayerTable must have same lengths, but got lengths: {dict_lengths}"
             )
+
+    @classmethod
+    def from_sequences(
+        cls,
+        pile_tip_level_nap: Sequence[Number],
+        F_nk_cal: Sequence[Number],
+        F_nk_k: Sequence[Number],
+        F_nk_d: Sequence[Number],
+        R_b_cal: Sequence[Number],
+        R_b_k: Sequence[Number],
+        R_b_d: Sequence[Number],
+        R_s_cal: Sequence[Number],
+        R_s_k: Sequence[Number],
+        R_s_d: Sequence[Number],
+        R_c_cal: Sequence[Number],
+        R_c_k: Sequence[Number],
+        R_c_d: Sequence[Number],
+        R_c_d_net: Sequence[Number],
+        F_c_k: Sequence[Number],
+        F_c_k_tot: Sequence[Number],
+        negative_friction_range_nap_top: Sequence[Number],
+        negative_friction_range_nap_btm: Sequence[Number],
+        positive_friction_range_nap_top: Sequence[Number],
+        positive_friction_range_nap_btm: Sequence[Number],
+        q_b_max: Sequence[Number],
+        q_s_max_mean: Sequence[Number],
+        qc1: Sequence[Number],
+        qc2: Sequence[Number],
+        qc3: Sequence[Number],
+        s_b: Sequence[Number],
+        s_el: Sequence[Number],
+        k_v_b: Sequence[Number],
+        k_v_1: Sequence[Number],
+    ) -> CPTResultsTable:
+        return cls(
+            pile_tip_level_nap=np.array(pile_tip_level_nap).astype(np.float64),
+            F_nk_cal=np.array(F_nk_cal).astype(np.float64),
+            F_nk_k=np.array(F_nk_k).astype(np.float64),
+            F_nk_d=np.array(F_nk_d).astype(np.float64),
+            R_b_cal=np.array(R_b_cal).astype(np.float64),
+            R_b_k=np.array(R_b_k).astype(np.float64),
+            R_b_d=np.array(R_b_d).astype(np.float64),
+            R_s_cal=np.array(R_s_cal).astype(np.float64),
+            R_s_k=np.array(R_s_k).astype(np.float64),
+            R_s_d=np.array(R_s_d).astype(np.float64),
+            R_c_cal=np.array(R_c_cal).astype(np.float64),
+            R_c_k=np.array(R_c_k).astype(np.float64),
+            R_c_d=np.array(R_c_d).astype(np.float64),
+            R_c_d_net=np.array(R_c_d_net).astype(np.float64),
+            F_c_k=np.array(F_c_k).astype(np.float64),
+            F_c_k_tot=np.array(F_c_k_tot).astype(np.float64),
+            negative_friction_range_nap_top=np.array(
+                negative_friction_range_nap_top
+            ).astype(np.float64),
+            negative_friction_range_nap_btm=np.array(
+                negative_friction_range_nap_btm
+            ).astype(np.float64),
+            positive_friction_range_nap_top=np.array(
+                positive_friction_range_nap_top
+            ).astype(np.float64),
+            positive_friction_range_nap_btm=np.array(
+                positive_friction_range_nap_btm
+            ).astype(np.float64),
+            q_b_max=np.array(q_b_max).astype(np.float64),
+            q_s_max_mean=np.array(q_s_max_mean).astype(np.float64),
+            qc1=np.array(qc1).astype(np.float64),
+            qc2=np.array(qc2).astype(np.float64),
+            qc3=np.array(qc3).astype(np.float64),
+            s_b=np.array(s_b).astype(np.float64),
+            s_el=np.array(s_el).astype(np.float64),
+            k_v_b=np.array(k_v_b).astype(np.float64),
+            k_v_1=np.array(k_v_1).astype(np.float64),
+        )
 
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
@@ -257,7 +225,7 @@ class SingleCPTBearingResults:
                 y=y,
             ),
             pile_head_level_nap=cpt_results_dict["annotations"]["pile_head_level_nap"],
-            results_table=CPTResultsTable(
+            results_table=CPTResultsTable.from_sequences(
                 pile_tip_level_nap=results_table["pile_tip_level_nap"],
                 F_nk_cal=results_table["F_nk_cal"],
                 F_nk_k=results_table["F_nk_k"],

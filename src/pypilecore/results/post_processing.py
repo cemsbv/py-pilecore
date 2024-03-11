@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Literal, Optional, Tuple
+from functools import lru_cache
+from typing import Any, Dict, List, Literal, Optional, Sequence, Tuple
 
 import matplotlib.patches as patches
 import numpy as np
@@ -14,28 +15,60 @@ from numpy.typing import NDArray
 from pypilecore.results.soil_properties import SoilProperties, get_soil_layer_handles
 
 
-@dataclass(frozen=True)
 class MaxBearingTable:
     """
-    *Not meant to be instantiated by the user.*
+    Object that contains the results belonging to the maximum net design bearing capacity (R_c_d_net) for a single CPT.
 
-    Attributes:
-    ------------
-    pile_tip_level_nap:
-        pile tip level [m w.r.t NAP]
-    R_c_d_net:
-        net design bearing capacity [kN]
-    F_nk_d:
-        The design value of the negative shaft friction force [kN].
-    origin:
-        Name of the calculation methode
+    *Not meant to be instantiated by the user.*
     """
 
-    pile_tip_level_nap: NDArray[np.float64]
-    R_c_d_net: NDArray[np.float64]
-    F_nk_d: NDArray[np.float64]
-    origin: NDArray[np.str_]
+    def __init__(
+        self,
+        pile_tip_level_nap: Sequence[float],
+        R_c_d_net: Sequence[float],
+        F_nk_d: Sequence[float],
+        origin: Sequence[str],
+    ):
+        """
+        Object that contains the results belonging to the maximum net design bearing capacity (R_c_d_net) for a single CPT.
 
+        Parameters
+        ----------
+        pile_tip_level_nap
+            The elevation of the pile-tip, in [m] w.r.t. NAP.
+        R_c_d_net
+            The maximum net design bearing capacity, in [kN].
+        F_nk_d
+            The net design bearing capacity, in [kN].
+        origin
+            The origin of the CPT data.
+        """
+        self._pile_tip_level_nap = pile_tip_level_nap
+        self._R_c_d_net = R_c_d_net
+        self._F_nk_d = F_nk_d
+        self._origin = origin
+
+    @property
+    def pile_tip_level_nap(self) -> NDArray[np.float64]:
+        """The elevation of the pile-tip, in [m] w.r.t. NAP."""
+        return np.array(self._pile_tip_level_nap).astype(np.float64)
+
+    @property
+    def R_c_d_net(self) -> NDArray[np.float64]:
+        """The maximum net design bearing capacity, in [kN]."""
+        return np.array(self._R_c_d_net).astype(np.float64)
+
+    @property
+    def F_nk_d(self) -> NDArray[np.float64]:
+        """The net design bearing capacity, in [kN]."""
+        return np.array(self._F_nk_d).astype(np.float64)
+
+    @property
+    def origin(self) -> NDArray[np.str_]:
+        """The origin of the CPT data."""
+        return np.array(self._origin).astype(np.str_)
+
+    @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
         return pd.DataFrame(self.__dict__).dropna(axis=1)
@@ -236,11 +269,19 @@ class MaxBearingResult:
         return fig
 
 
-@dataclass(frozen=True)
 class MaxBearingResults:
     """Object containing the results for the maximum net design bearing capacity (R_c_d_net) for every CPT."""
 
-    cpt_results_dict: Dict[str, "MaxBearingResult"]
+    def __init__(self, cpt_results_dict: Dict[str, MaxBearingResult]):
+        """
+        Object containing the results for the maximum net design bearing capacity (R_c_d_net) for every CPT.
+
+        Parameters
+        ----------
+        cpt_results_dict
+            The results for the maximum net design bearing capacity (R_c_d_net) for every CPT.
+        """
+        self._cpt_results_dict = cpt_results_dict
 
     def get_results_per_cpt(self, column_name: str) -> pd.DataFrame:
         """

@@ -12,6 +12,10 @@ from pypilecore.input import (
     create_soil_properties_payload,
 )
 from pypilecore.results import MultiCPTBearingResults
+from pypilecore.results.single_cpt_results import (
+    CPTResultsTable,
+    SingleCPTBearingResults,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -322,28 +326,57 @@ def test_create_grouper_payload(
 
     # test value error
     single_cpt_results = cptgroupresults.cpt_results.cpt_results_dict["9"]
+    x_coord = single_cpt_results.soil_properties.x
+    single_cpt_results.soil_properties.__setattr__("_x", None)
     with pytest.raises(ValueError):
-        single_cpt_results.soil_properties.__setattr__("_x", None)
         create_grouper_payload(
             cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
         )
-    single_cpt_results.soil_properties.__setattr__("_x", 0)
+    single_cpt_results.soil_properties.__setattr__("_x", x_coord)
 
-    arr = single_cpt_results.table.__getattribute__("R_b_cal")
-    arr[-1] = np.nan
+    # Test warning for NaN value in single-cpt results table
+    cpt_results_dict = dict(
+        test_cpt=SingleCPTBearingResults(
+            soil_properties=single_cpt_results.soil_properties,
+            pile_head_level_nap=single_cpt_results.pile_head_level_nap,
+            results_table=CPTResultsTable.from_sequences(
+                pile_tip_level_nap=[-10, -11],
+                F_nk_cal=[50, 50],
+                F_nk_k=[50, 50],
+                F_nk_d=[50, 50],
+                R_b_cal=[100, np.nan],
+                R_b_k=[100, 100],
+                R_b_d=[100, 100],
+                R_s_cal=[100, 100],
+                R_s_k=[100, 100],
+                R_s_d=[100, 100],
+                R_c_cal=[200, 200],
+                R_c_k=[200, 200],
+                R_c_d=[200, 200],
+                R_c_d_net=[100, 100],
+                F_c_k=[0, 0],
+                F_c_k_tot=[100, 100],
+                negative_friction_range_nap_btm=[-1, -1],
+                negative_friction_range_nap_top=[0, 0],
+                positive_friction_range_nap_btm=[-8, -8],
+                positive_friction_range_nap_top=[-1, -1],
+                q_b_max=[100, 100],
+                q_s_max_mean=[100, 100],
+                qc1=[100, 100],
+                qc2=[100, 100],
+                qc3=[100, 100],
+                s_b=[1, 1],
+                s_el=[1, 1],
+                k_v_b=[100, 100],
+                k_v_1=[100, 100],
+            ),
+        )
+    )
     with caplog.at_level(logging.WARNING):
-        single_cpt_results.table.__setattr__("R_b_cal", arr)
-        create_grouper_payload(
-            cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
-        )
+        create_grouper_payload(cpt_results_dict, pile_load_uls=100)
 
-        assert "CPT 9 has NaN values are present in column R_b_cal. " in caplog.text
-
-    arr = single_cpt_results.table.__getattribute__("pile_tip_level_nap")
-    single_cpt_results.table.__setattr__("pile_tip_level_nap", arr[:-1])
-    with pytest.raises(ValueError):
-        create_grouper_payload(
-            cptgroupresults.cpt_results.cpt_results_dict, pile_load_uls=100
+        assert (
+            "CPT test_cpt has NaN values are present in column R_b_cal. " in caplog.text
         )
 
 
