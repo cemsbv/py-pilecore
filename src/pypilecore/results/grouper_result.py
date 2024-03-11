@@ -487,12 +487,13 @@ class GrouperResults:
                 # Check that all the pile tip levels in the SingleClusterResults are
                 # also present in the MultiCPTBearingResults
                 for pile_tip_level in cluster.data.pile_tip_level:
-                    if (
-                        pile_tip_level
-                        not in self.multi_cpt_bearing_results.cpt_results.cpt_results_dict[
+                    if not np.isclose(
+                        pile_tip_level,
+                        self.multi_cpt_bearing_results.cpt_results.cpt_results_dict[
                             cpt_name
-                        ].table.pile_tip_level_nap
-                    ):
+                        ].table.pile_tip_level_nap,
+                        rtol=1e-2,
+                    ).any():
                         raise ValueError(
                             "Pile tip levels dont match between MultiCPTBearingResults object and GrouperResults. "
                             "Make sure that you use the same MultiCPTBearingResults as you generated "
