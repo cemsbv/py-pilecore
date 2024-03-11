@@ -3,12 +3,13 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Sequence, Tuple
 
 import natsort
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from numpy.typing import NDArray
 from shapely import MultiPoint
 
 from pypilecore.results.multi_cpt_results import MultiCPTBearingResults
@@ -19,68 +20,167 @@ from pypilecore.results.post_processing import (
 )
 
 
-@dataclass(frozen=True)
 class SingleClusterData:
     """
+    Data for a single CPT subgroup
     *Not meant to be instantiated by the user.*
-
-    Attributes:
-    ------------
-    characteristic_bearing_capacity: List[float]
-        characteristic bearing capacity [kN]
-    design_bearing_capacity: List[float]
-        design bearing capacity [kN]
-    design_negative_friction: List[float]
-        design negative friction [kN]
-    group_centre_to_centre_validation: List[bool]
-        group centre to centre validation
-    group_centre_to_centre_validation_15: List[bool]
-        group centre to centre validation 15 meter
-    group_centre_to_centre_validation_20: List[bool]
-        group centre to centre validation 20 meter
-    group_centre_to_centre_validation_25: List[bool]
-        group centre to centre validation 25 meter
-    mean_calculated_bearing_capacity: List[float]
-        mean calculated bearing capacity [kN]
-    min_calculated_bearing_capacity: List[float]
-        min calculated bearing capacity [kN]
-    net_design_bearing_capacity: List[float]
-        net design bearing capacity [kN]
-    nominal_cpt: List[str]
-        nominal cpt
-    pile_tip_level: List[float]
-        pile tip level [m w.r.t NAP]
-    variation_coefficient: List[float]
-        variation coefficient [-]
-    xi_factor: List[str]
-        xi factor
-    xi_values: List[float]
-        xi values [-]
     """
 
-    characteristic_bearing_capacity: List[float]
-    design_bearing_capacity: List[float]
-    design_negative_friction: List[float]
-    group_centre_to_centre_validation: List[bool]
-    group_centre_to_centre_validation_15: List[bool]
-    group_centre_to_centre_validation_20: List[bool]
-    group_centre_to_centre_validation_25: List[bool]
-    mean_calculated_bearing_capacity: List[float]
-    min_calculated_bearing_capacity: List[float]
-    net_design_bearing_capacity: List[float]
-    nominal_cpt: List[str]
-    pile_tip_level: List[float]
-    variation_coefficient: List[float]
-    xi_factor: List[str]
-    xi_values: List[float]
+    def __init__(
+        self,
+        characteristic_bearing_capacity: Sequence[float],
+        design_bearing_capacity: Sequence[float],
+        design_negative_friction: Sequence[float],
+        group_centre_to_centre_validation: Sequence[bool],
+        group_centre_to_centre_validation_15: Sequence[bool],
+        group_centre_to_centre_validation_20: Sequence[bool],
+        group_centre_to_centre_validation_25: Sequence[bool],
+        mean_calculated_bearing_capacity: Sequence[float],
+        min_calculated_bearing_capacity: Sequence[float],
+        net_design_bearing_capacity: Sequence[float],
+        nominal_cpt: Sequence[str],
+        pile_tip_level: Sequence[float],
+        variation_coefficient: Sequence[float],
+        xi_factor: Sequence[str],
+        xi_values: Sequence[float],
+    ):
+        """
+        Parameters
+        ----------
+        characteristic_bearing_capacity:
+            characteristic bearing capacity [kN]
+        design_bearing_capacity:
+            design bearing capacity [kN]
+        design_negative_friction:
+            design negative friction [kN]
+        group_centre_to_centre_validation:
+            group centre to centre validation
+        group_centre_to_centre_validation_15:
+            group centre to centre validation 15 meter
+        group_centre_to_centre_validation_20:
+            group centre to centre validation 20 meter
+        group_centre_to_centre_validation_25:
+            group centre to centre validation 25 meter
+        mean_calculated_bearing_capacity:
+            mean calculated bearing capacity [kN]
+        min_calculated_bearing_capacity:
+            min calculated bearing capacity [kN]
+        net_design_bearing_capacity:
+            net design bearing capacity [kN]
+        nominal_cpt:
+            nominal cpt
+        pile_tip_level:
+            pile tip level [m w.r.t NAP]
+        variation_coefficient:
+            variation coefficient [-]
+        xi_factor:
+            xi factor
+        xi_values:
+            xi values [-]
+        """
+        self._characteristic_bearing_capacity = characteristic_bearing_capacity
+        self._design_bearing_capacity = design_bearing_capacity
+        self._design_negative_friction = design_negative_friction
+        self._group_centre_to_centre_validation = group_centre_to_centre_validation
+        self._group_centre_to_centre_validation_15 = (
+            group_centre_to_centre_validation_15
+        )
+        self._group_centre_to_centre_validation_20 = (
+            group_centre_to_centre_validation_20
+        )
+        self._group_centre_to_centre_validation_25 = (
+            group_centre_to_centre_validation_25
+        )
+        self._mean_calculated_bearing_capacity = mean_calculated_bearing_capacity
+        self._min_calculated_bearing_capacity = min_calculated_bearing_capacity
+        self._net_design_bearing_capacity = net_design_bearing_capacity
+        self._nominal_cpt = nominal_cpt
+        self._pile_tip_level = pile_tip_level
+        self._variation_coefficient = variation_coefficient
+        self._xi_factor = xi_factor
+        self._xi_values = xi_values
 
-    def __post_init__(self) -> None:
         raw_lengths = [len(values) for values in self.__dict__.values()]
         if len(list(set(raw_lengths))) > 1:
             raise ValueError("All values in this dataclass must have the same length.")
 
     @property
-    def dataframe(self) -> pd.DataFrame:
+    def characteristic_bearing_capacity(self) -> NDArray[np.float64]:
+        """Characteristic bearing capacity [kN]"""
+        return np.array(self._characteristic_bearing_capacity).astype(np.float64)
+    
+    @property
+    def design_bearing_capacity(self) -> NDArray[np.float64]:
+        """Design bearing capacity [kN]"""
+        return np.array(self._design_bearing_capacity).astype(np.float64)
+    
+    @property
+    def design_negative_friction(self) -> NDArray[np.float64]:
+        """Design negative friction [kN]"""
+        return np.array(self._design_negative_friction).astype(np.float64)
+    
+    @property
+    def group_centre_to_centre_validation(self) -> NDArray[np.bool_]:
+        """Group centre to centre validation"""
+        return np.array(self._group_centre_to_centre_validation).astype(np.bool_)
+    
+    @property
+    def group_centre_to_centre_validation_15(self) -> NDArray[np.bool_]:
+        """Group centre to centre validation 15 meter"""
+        return np.array(self._group_centre_to_centre_validation_15).astype(np.bool_)
+    
+    @property
+    def group_centre_to_centre_validation_20(self) -> NDArray[np.bool_]:
+        """Group centre to centre validation 20 meter"""
+        return np.array(self._group_centre_to_centre_validation_20).astype(np.bool_)
+    
+    @property
+    def group_centre_to_centre_validation_25(self) -> NDArray[np.bool_]:
+        """Group centre to centre validation 25 meter"""
+        return np.array(self._group_centre_to_centre_validation_25).astype(np.bool_)
+    
+    @property
+    def mean_calculated_bearing_capacity(self) -> NDArray[np.float64]:
+        """Mean calculated bearing capacity [kN]"""
+        return np.array(self._mean_calculated_bearing_capacity).astype(np.float64)
+    
+    @property
+    def min_calculated_bearing_capacity(self) -> NDArray[np.float64]:
+        """Min calculated bearing capacity [kN]"""
+        return np.array(self._min_calculated_bearing_capacity).astype(np.float64)
+    
+    @property
+    def net_design_bearing_capacity(self) -> NDArray[np.float64]:
+        """Net design bearing capacity [kN]"""
+        return np.array(self._net_design_bearing_capacity).astype(np.float64)
+    
+    @property
+    def nominal_cpt(self) -> NDArray[np.str_]:
+        """Nominal cpt"""
+        return np.array(self._nominal_cpt).astype(str)
+    
+    @property
+    def pile_tip_level(self) -> NDArray[np.float64]:
+        """Pile tip level [m w.r.t NAP]"""
+        return np.array(self._pile_tip_level).astype(np.float64)
+    
+    @property
+    def variation_coefficient(self) -> NDArray[np.float64]:
+        """Variation coefficient [-]"""
+        return np.array(self._variation_coefficient).astype(np.float64)
+    
+    @property
+    def xi_factor(self) -> NDArray[np.str_]:
+        """Xi factor"""
+        return np.array(self._xi_factor).astype(str)
+    
+    @property
+    def xi_values(self) -> NDArray[np.float64]:
+        """Xi values [-]"""
+        return np.array(self._xi_values).astype(np.float64)
+    
+    @cached_property
+    def to_pandas(self) -> pd.DataFrame:
         return pd.DataFrame(self.__dict__)
 
     def plot_variation_coefficient(
