@@ -667,9 +667,10 @@ class GrouperResults:
                     ).argmin()
 
                     # check bearing capacity
-                    if (
-                        cluster.data.net_design_bearing_capacity[cluster_ptl_idx]
-                        > max_bearing[cpt_name]["results_table"]["R_c_d_net"][
+                    if cluster.data.net_design_bearing_capacity[
+                        cluster_ptl_idx
+                    ] > np.nan_to_num(
+                        max_bearing[cpt_name]["results_table"]["R_c_d_net"][
                             max_bearing_ptl_idx
                         ]
                     ):
