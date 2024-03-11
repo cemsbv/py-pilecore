@@ -12,7 +12,7 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PatchCollection
 from matplotlib.figure import Figure
 from numpy.typing import NDArray
-from scipy.spatial import Delaunay
+from scipy.spatial import Delaunay, Voronoi, voronoi_plot_2d
 
 from pypilecore.results.soil_properties import SoilProperties, get_soil_layer_handles
 
@@ -418,6 +418,8 @@ class MaxBearingResults:
         self,
         pile_tip_level_nap: float,
         pile_load_uls: float = 100,
+        show_delaunay_vertices: bool = True,
+        show_voronoi_vertices: bool = False,
         figsize: Tuple[int, int] | None = None,
         **kwargs: Any,
     ) -> plt.Figure:
@@ -468,21 +470,42 @@ class MaxBearingResults:
         ]
 
         # iterate over geometry
-        _patches = []
-        for tri in self.triangulation:
-            color = (
-                "green"
-                if all(df.where(df["test_id"].isin(tri["test_id"])).dropna()["valid"])
-                else "red"
-            )
-            _patches.append(
-                patches.Polygon(
-                    np.array(tri["geometry"]), facecolor=color, edgecolor="grey"
+        if show_delaunay_vertices:
+            _patches = []
+            for tri in self.triangulation:
+                color = (
+                    "green"
+                    if all(
+                        df.where(df["test_id"].isin(tri["test_id"])).dropna()["valid"]
+                    )
+                    else "red"
                 )
+                _patches.append(
+                    patches.Polygon(
+                        np.array(tri["geometry"]), facecolor=color, edgecolor="grey"
+                    )
+                )
+
+            collection = PatchCollection(_patches, match_original=True)
+            axes.add_collection(collection)
+
+        if show_voronoi_vertices:
+            points = [
+                (point.soil_properties.x, point.soil_properties.y)
+                for point in self.cpt_results_dict.values()
+            ]
+            vor = Voronoi(points)
+            voronoi_plot_2d(
+                vor,
+                show_vertices=False,
+                show_points=False,
+                ax=axes,
+                line_colors="black",
+                line_alpha=0.7,
+                line_width=0.1,
+                point_size=0.0,
             )
 
-        collection = PatchCollection(_patches, match_original=True)
-        axes.add_collection(collection)
         # add the cpt names
         axes.scatter(
             df["x"],
