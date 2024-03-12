@@ -341,6 +341,7 @@ class MaxBearingResults:
         )
         return results.sort_values("pile_tip_level_nap", ascending=False)
 
+    @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Returns a total overview of all single-cpt results in a pandas.DataFrame representation."""
         df_list: List[pd.DataFrame] = []
