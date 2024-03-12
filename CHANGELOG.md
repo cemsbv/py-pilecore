@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2024-03-12
+
+### Bug Fixes
+
+- Final max-bearing fixups & Add unittests
+- Do array comparison on float with np.isclose()
+- Remove dataclass hash & to_pandas caching
+- Make sure that all pile tip levels have same order
+- Remove dataclass hash & to_pandas caching
+- Fix MaxBearingResults initiation & refactor
+- Update unit test
+- Add missing pile definitions plot
+
+### Features
+
+- Rotate x-labels in 2D max-bearing plot
+- Add lru_cache on MaxBearingResults.to_pandas
+- Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
+- Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
+- Denote CPT name in MaxBeraingTable.origin attribute
+- Add delaunay map
+- Resolve comments in mr
+- Add result bearing 3d plots to notebook
+- Add 3D plots for bearing results
+- Combine grouper and single results
+- *(api)* Add verbose argument to functions in api module
+
+### Miscellaneous Tasks
+
+- Update example notebook
+- Revert
+
+### Styling
+
+- Lint file
+- Format file and fix typing errors
+
 ## [0.3.4] - 2024-02-16
 
 ### Bug Fixes
