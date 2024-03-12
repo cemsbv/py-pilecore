@@ -71,7 +71,14 @@ class MaxBearingTable:
     @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
-        return pd.DataFrame(self.__dict__).dropna(axis=1)
+        return pd.DataFrame(
+            dict(
+                pile_tip_level_nap=self.pile_tip_level_nap,
+                R_c_d_net=self.R_c_d_net,
+                F_nk_d=self.F_nk_d,
+                origin=self.origin,
+            )
+        )
 
 
 @dataclass(frozen=True)
@@ -94,6 +101,10 @@ class MaxBearingResult:
     soil_properties: SoilProperties
     pile_head_level_nap: float
     table: MaxBearingTable
+
+    def to_pandas(self) -> pd.DataFrame:
+        """Get the pandas.DataFrame representation"""
+        return self.table.to_pandas()
 
     def plot_bearing_capacities(
         self,
