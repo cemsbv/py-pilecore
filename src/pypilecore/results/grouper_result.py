@@ -108,77 +108,77 @@ class SingleClusterData:
     def characteristic_bearing_capacity(self) -> NDArray[np.float64]:
         """Characteristic bearing capacity [kN]"""
         return np.array(self._characteristic_bearing_capacity).astype(np.float64)
-    
+
     @property
     def design_bearing_capacity(self) -> NDArray[np.float64]:
         """Design bearing capacity [kN]"""
         return np.array(self._design_bearing_capacity).astype(np.float64)
-    
+
     @property
     def design_negative_friction(self) -> NDArray[np.float64]:
         """Design negative friction [kN]"""
         return np.array(self._design_negative_friction).astype(np.float64)
-    
+
     @property
     def group_centre_to_centre_validation(self) -> NDArray[np.bool_]:
         """Group centre to centre validation"""
         return np.array(self._group_centre_to_centre_validation).astype(np.bool_)
-    
+
     @property
     def group_centre_to_centre_validation_15(self) -> NDArray[np.bool_]:
         """Group centre to centre validation 15 meter"""
         return np.array(self._group_centre_to_centre_validation_15).astype(np.bool_)
-    
+
     @property
     def group_centre_to_centre_validation_20(self) -> NDArray[np.bool_]:
         """Group centre to centre validation 20 meter"""
         return np.array(self._group_centre_to_centre_validation_20).astype(np.bool_)
-    
+
     @property
     def group_centre_to_centre_validation_25(self) -> NDArray[np.bool_]:
         """Group centre to centre validation 25 meter"""
         return np.array(self._group_centre_to_centre_validation_25).astype(np.bool_)
-    
+
     @property
     def mean_calculated_bearing_capacity(self) -> NDArray[np.float64]:
         """Mean calculated bearing capacity [kN]"""
         return np.array(self._mean_calculated_bearing_capacity).astype(np.float64)
-    
+
     @property
     def min_calculated_bearing_capacity(self) -> NDArray[np.float64]:
         """Min calculated bearing capacity [kN]"""
         return np.array(self._min_calculated_bearing_capacity).astype(np.float64)
-    
+
     @property
     def net_design_bearing_capacity(self) -> NDArray[np.float64]:
         """Net design bearing capacity [kN]"""
         return np.array(self._net_design_bearing_capacity).astype(np.float64)
-    
+
     @property
     def nominal_cpt(self) -> NDArray[np.str_]:
         """Nominal cpt"""
         return np.array(self._nominal_cpt).astype(str)
-    
+
     @property
     def pile_tip_level(self) -> NDArray[np.float64]:
         """Pile tip level [m w.r.t NAP]"""
         return np.array(self._pile_tip_level).astype(np.float64)
-    
+
     @property
     def variation_coefficient(self) -> NDArray[np.float64]:
         """Variation coefficient [-]"""
         return np.array(self._variation_coefficient).astype(np.float64)
-    
+
     @property
     def xi_factor(self) -> NDArray[np.str_]:
         """Xi factor"""
         return np.array(self._xi_factor).astype(str)
-    
+
     @property
     def xi_values(self) -> NDArray[np.float64]:
         """Xi values [-]"""
         return np.array(self._xi_values).astype(np.float64)
-    
+
     @cached_property
     def to_pandas(self) -> pd.DataFrame:
         return pd.DataFrame(self.__dict__)

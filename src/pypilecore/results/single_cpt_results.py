@@ -218,6 +218,7 @@ class SingleCPTBearingResults:
                 layer_table=LayerTable.from_api_response(
                     cpt_results_dict["layer_table"]
                 ),
+                test_id=cpt_results_dict.get("test_id"),
                 ref_height=ref_height,
                 surface_level_ref=surface_level_ref,
                 groundwater_level_ref=cpt_results_dict["groundwater_level_nap"],
