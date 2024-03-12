@@ -449,6 +449,7 @@ class MaxBearingResults:
                 c=colors,
             )
             axes.set_ylabel("Z [m w.r.t NAP]")
+            axes.tick_params(axis="x", labelrotation=90)
 
         if hue == "category":
             fig.legend(
