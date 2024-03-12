@@ -648,9 +648,8 @@ class GrouperResults:
                     pile_tip_level_nap=single_cpt_result.table.pile_tip_level_nap,
                     R_c_d_net=single_cpt_result.table.R_c_d_net,
                     F_nk_d=single_cpt_result.table.F_nk_d,
-                    origin=np.array(
-                        ["SingleCPT"] * len(single_cpt_result.table.pile_tip_level_nap)
-                    ).astype(str),
+                    origin=[f"CPT:{cpt_name}"]
+                    * len(single_cpt_result.table.pile_tip_level_nap),
                 ),
             )
 
@@ -683,7 +682,7 @@ class GrouperResults:
                         ] = cluster.data.design_negative_friction[cluster_ptl_idx]
                         max_bearing[cpt_name]["results_table"]["origin"][
                             max_bearing_ptl_idx
-                        ] = f"Group-{cluster_idx}"
+                        ] = f"Group:{cluster_idx}"
 
         return MaxBearingResults(
             cpt_results_dict={
