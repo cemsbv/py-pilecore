@@ -207,7 +207,9 @@
 <span class="sd">        cpt_normative:</span>
 <span class="sd">            The normative CPT. Can be &quot;group average&quot; if that was found to be the normative scenario.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level_nap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pile_tip_level_nap</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level_nap</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pile_tip_level_nap</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">)</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The pile-tip level [m] w.r.t. NAP.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">R_s_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_s_k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The characteristic value of the shaft bearingcapacity  [kN].&quot;&quot;&quot;</span>
@@ -381,8 +383,7 @@
 <span class="sd">        cpt_results_dict:</span>
 <span class="sd">            A dictionary that maps the cpt-names to SingleCPTBearingResults objects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span> <span class="o">=</span> <span class="n">cpt_results_dict</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A dictionary that maps the cpt-names to SingleCPTBearingResults objects.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dict</span> <span class="o">=</span> <span class="n">cpt_results_dict</span>
 
 <div class="viewcode-block" id="SingleCPTBearingResultsContainer.from_api_response"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span>
@@ -412,6 +413,11 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a test-id as a string, but got: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">test_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpt_results</span><span class="p">(</span><span class="n">test_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cpt_results_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SingleCPTBearingResults</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The dictionary that maps the cpt-names to SingleCPTBearingResults objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dict</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">test_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
