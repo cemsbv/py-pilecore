@@ -311,8 +311,7 @@ class SingleCPTBearingResultsContainer:
         cpt_results_dict:
             A dictionary that maps the cpt-names to SingleCPTBearingResults objects.
         """
-        self.cpt_results_dict = cpt_results_dict
-        """A dictionary that maps the cpt-names to SingleCPTBearingResults objects."""
+        self._cpt_results_dict = cpt_results_dict
 
     @classmethod
     def from_api_response(
@@ -342,6 +341,11 @@ class SingleCPTBearingResultsContainer:
             raise TypeError(f"Expected a test-id as a string, but got: {type(test_id)}")
 
         return self.get_cpt_results(test_id)
+
+    @property
+    def cpt_results_dict(self) -> Dict[str, SingleCPTBearingResults]:
+        """The dictionary that maps the cpt-names to SingleCPTBearingResults objects."""
+        return self._cpt_results_dict
 
     @property
     def test_ids(self) -> List[str]:
