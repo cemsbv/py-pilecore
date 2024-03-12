@@ -283,6 +283,40 @@ class MaxBearingResults:
         """
         self._cpt_results_dict = cpt_results_dict
 
+    def __getitem__(self, test_id: str) -> MaxBearingResult:
+        if not isinstance(test_id, str):
+            raise TypeError(f"Expected a test-id as a string, but got: {type(test_id)}")
+
+        return self.get_cpt_results(test_id)
+
+    @property
+    def cpt_results_dict(self) -> Dict[str, MaxBearingResult]:
+        """The dictionary with the MaxBearingResult for each CPT."""
+        return self._cpt_results_dict
+
+    @property
+    def test_ids(self) -> List[str]:
+        """The test-ids of the CPTs."""
+        return list(self.cpt_results_dict.keys())
+
+    @property
+    def results(self) -> List[MaxBearingResult]:
+        """The computed results, as a list of MaxBearingResult objects."""
+        return list(self.cpt_results_dict.values())
+
+    def get_cpt_results(self, test_id: str) -> MaxBearingResult:
+        """
+        Returns the `MaxBearingResult` object for the provided test_id.
+        """
+
+        if test_id not in self.cpt_results_dict.keys():
+            raise ValueError(
+                f"No Cpt-results were calculated for this test-id: {test_id}. "
+                "Please check the spelling or run a new calculation for this CPT."
+            )
+
+        return self.cpt_results_dict[test_id]
+
     def get_results_per_cpt(self, column_name: str) -> pd.DataFrame:
         """
         Returns a pandas dataframe with a single result-item, organized per CPT
