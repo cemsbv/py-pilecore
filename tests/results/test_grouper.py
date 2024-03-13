@@ -102,4 +102,4 @@ def test_grouper_results_max_bearing(
 
     # Check that only the last R_c_d_net values of CPT 24 are NaN
     assert np.isnan(mbr["24"].table.R_c_d_net[10:]).all()
-    assert ~ np.isnan(mbr["24"].table.R_c_d_net[:10]).any()
+    assert ~np.isnan(mbr["24"].table.R_c_d_net[:10]).any()
