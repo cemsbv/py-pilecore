@@ -105,3 +105,22 @@ CPT grouper: Results
     :members:
     :inherited-members:
     :member-order: bysource
+
+
+Post-Processing: Results
+-------------------------
+
+.. autoclass:: pypilecore.results.post_processing.MaxBearingResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+.. autoclass:: pypilecore.results.post_processing.MaxBearingResult
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+.. autoclass:: pypilecore.results.post_processing.MaxBearingTable
+    :members:
+    :inherited-members:
+    :member-order: bysource
