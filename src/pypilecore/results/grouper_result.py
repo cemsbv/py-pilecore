@@ -211,7 +211,7 @@ class SingleClusterData:
         """
         Plot the bearing capacity and variation coefficient in a subplot
 
-        Notes
+        Note
         ------
         For the `Net bearing capacity` subplot there are two colors plotted:
          - orange:  conservative bearing capacity
@@ -251,7 +251,7 @@ class SingleClusterData:
         """
         Plot the spacing checks in a subplot
 
-        Notes
+        Note
         ------
         For the `spacing` subplot there are two colors plotted:
          - red:     invalid spacing
@@ -308,7 +308,7 @@ class SingleClusterData:
         """
         Plot the xi factor in a subplot
 
-        Notes
+        Note
         ------
         For the `xi factor` subplot there are two colors plotted:
          - olive:   xi3
@@ -499,7 +499,7 @@ class SingleClusterResult:
             - xi factor
             - centre to centre validation
 
-        Notes
+        Note
         ------
         For the `Net bearing capacity` subplot there are two colors plotted:
          - orange:  conservative bearing capacity
@@ -775,6 +775,9 @@ class GrouperResults:
     ) -> plt.Figure:
         """
         Plot a summary of the valid subgroups.
+
+        Note
+        -----
         Plot contains the:
 
             - cpts within a subgroup

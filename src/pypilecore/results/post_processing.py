@@ -9,8 +9,10 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
+from matplotlib.collections import PatchCollection
 from matplotlib.figure import Figure
 from numpy.typing import NDArray
+from scipy.spatial import Delaunay, Voronoi, voronoi_plot_2d
 
 from pypilecore.results.soil_properties import SoilProperties, get_soil_layer_handles
 
@@ -94,7 +96,7 @@ class MaxBearingResult:
         The object with soil properties
     pile_head_level_nap
         The elevation of the pile-head, in [m] w.r.t. NAP.
-    results_table
+    table
         The object with CPT results.
     """
 
@@ -371,6 +373,59 @@ class MaxBearingResults:
 
         return cpt_results_df
 
+    @lru_cache()
+    def triangulation(self, pile_tip_level_nap: float) -> List[Dict[str, list]]:
+        """
+        Delaunay tessellation based on the CPT location
+
+        Returns
+        -------
+        collection: List
+            A list of dictionaries containing the tessellation
+            geometry and corresponding cpt names:
+
+                - geometry: List[Tuple[float, float]]
+                - test_id: List[str]
+
+        """
+        _lookup = {
+            (point.soil_properties.x, point.soil_properties.y): key
+            for key, point in self.cpt_results_dict.items()
+        }
+        # select point with valid bearing capacity at pile tip level
+        _points = (
+            self.to_pandas()
+            .loc[
+                (self.to_pandas()["pile_tip_level_nap"] == pile_tip_level_nap)
+                & (~pd.isna(self.to_pandas()["R_c_d_net"])),
+                ["x", "y"],
+            ]
+            .to_numpy()
+            .tolist()
+        )
+
+        # check if enough points Delaunay
+        if len(_points) < 4:
+            raise ValueError(
+                "Not enough points at this pile tip level to construct "
+                "the delaunay tessellation based on the CPT location."
+            )
+        tri = Delaunay(
+            _points,
+            incremental=False,
+            furthest_site=False,
+            qhull_options="Qbb",
+        )
+        geometries = np.array(_points)[tri.simplices]
+
+        return [
+            {
+                "geometry": geometry.tolist(),
+                "test_id": [_lookup[(xy[0], xy[1])] for xy in geometry],
+            }
+            for geometry in geometries
+        ]
+
     def plot(
         self,
         projection: Optional[Literal["3d"]] = "3d",
@@ -413,20 +468,20 @@ class MaxBearingResults:
         kwargs_subplot.update(kwargs)
         fig = plt.figure(**kwargs_subplot)
         axes = fig.add_subplot(projection=projection)
+        df = self.to_pandas().dropna()
         # create color list based on hue option
         if hue == "category":
             colors = [
-                "red" if var < pile_load_uls else "green"
-                for var in self.to_pandas()["R_c_d_net"]
+                "red" if var < pile_load_uls else "green" for var in df["R_c_d_net"]
             ]
         else:
-            colors = self.to_pandas()["R_c_d_net"].tolist()
+            colors = df["R_c_d_net"].tolist()
         # create scatter plot
         if projection == "3d":
             cmap = axes.scatter(
-                self.to_pandas()["x"],
-                self.to_pandas()["y"],
-                self.to_pandas()["pile_tip_level_nap"],
+                df["x"],
+                df["y"],
+                df["pile_tip_level_nap"],
                 c=colors,
             )
             axes.set_xlabel("X")
@@ -444,12 +499,13 @@ class MaxBearingResults:
                 )
         else:
             cmap = axes.scatter(
-                self.to_pandas()["test_id"],
-                self.to_pandas()["pile_tip_level_nap"],
+                df["test_id"],
+                df["pile_tip_level_nap"],
                 c=colors,
             )
             axes.set_ylabel("Z [m w.r.t NAP]")
             axes.tick_params(axis="x", labelrotation=90)
+            axes.grid()
 
         if hue == "category":
             fig.legend(
@@ -473,5 +529,150 @@ class MaxBearingResults:
             )
         else:
             fig.colorbar(cmap, orientation="vertical", label="$R_{c;d;net}$ [kN]")
+
+        return fig
+
+    def map(
+        self,
+        pile_tip_level_nap: float,
+        pile_load_uls: float = 100,
+        show_delaunay_vertices: bool = True,
+        show_voronoi_vertices: bool = False,
+        figsize: Tuple[int, int] | None = None,
+        **kwargs: Any,
+    ) -> plt.Figure:
+        """
+        Plot a map of the valid ULS load for a given depth.
+
+        Note
+        ------
+        Based on the Delaunay methode a tessellation is created with
+        the location of the CPT's. Each triangle is then colored according to
+        the bearing capacity of the CPT its based on. If any of the CPT does
+        not meet the required capacity the triangle becomes also invalid.
+
+        Warnings
+        --------
+        Please note that this map indication of valid ULS zones does not always comply with the
+        NEN 9997-1+C2:2017. It is therefore that the interpretation provided by this methode must
+        be carefully validated by a geotechnical engineer.
+
+        Parameters
+        ----------
+        pile_tip_level_nap:
+            Pile tip level to generate map.
+        pile_load_uls
+            default is 100 kN
+            ULS load in kN. Used to determine if a pile tip level configuration is valid.
+        show_delaunay_vertices
+            default is True
+            Add delaunay vertices to the figure
+        show_voronoi_vertices
+            default is False
+            Add voronoi vertices to the figure
+        figsize:
+            Size of the activate figure, as the `plt.figure()` argument.
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
+
+        Returns
+        -------
+        figure:
+            The `Figure` object where the data was plotted on.
+        """
+        kwargs_subplot = {
+            "figsize": figsize,
+            "tight_layout": True,
+        }
+
+        kwargs_subplot.update(kwargs)
+        fig, axes = plt.subplots(**kwargs_subplot)
+
+        # filter data
+        df = (
+            self.to_pandas()
+            .loc[self.to_pandas()["pile_tip_level_nap"] == pile_tip_level_nap]
+            .dropna()
+        )
+
+        if df.empty:
+            raise ValueError(
+                "Pile tip level is not valid pile tip level. "
+                "Please select one of the following pile tip level: "
+                f"[{(self.to_pandas()['pile_tip_level_nap']).unique()}]"
+            )
+
+        df["valid"] = [
+            False if var < pile_load_uls else True for var in df["R_c_d_net"]
+        ]
+
+        # iterate over geometry
+        if show_delaunay_vertices:
+            _patches = []
+            for tri in self.triangulation(pile_tip_level_nap):
+                color = (
+                    "green"
+                    if all(
+                        df.where(df["test_id"].isin(tri["test_id"])).dropna()["valid"]
+                    )
+                    else "red"
+                )
+                _patches.append(
+                    patches.Polygon(
+                        np.array(tri["geometry"]), facecolor=color, edgecolor="grey"
+                    )
+                )
+
+            collection = PatchCollection(_patches, match_original=True)
+            axes.add_collection(collection)
+
+        if show_voronoi_vertices:
+            points = [
+                (point.soil_properties.x, point.soil_properties.y)
+                for point in self.cpt_results_dict.values()
+            ]
+            vor = Voronoi(points)
+            voronoi_plot_2d(
+                vor,
+                show_vertices=False,
+                show_points=False,
+                ax=axes,
+                line_colors="black",
+                line_alpha=0.7,
+                line_width=0.1,
+                point_size=0.0,
+            )
+
+        # add the cpt names
+        axes.scatter(
+            df["x"],
+            df["y"],
+            c=["green" if val else "red" for val in df["valid"]],
+        )
+        for label, x, y in zip(df["test_id"], df["x"], df["y"]):
+            axes.annotate(label, xy=(x, y), xytext=(3, 3), textcoords="offset points")
+        axes.set_xlabel("X")
+        axes.set_ylabel("Y")
+        axes.ticklabel_format(useOffset=False)
+        fig.legend(
+            title="$R_{c;d;net}$ [kN]",
+            title_fontsize=18,
+            fontsize=15,
+            loc="lower right",
+            handles=[
+                patches.Patch(
+                    facecolor=color,
+                    label=label,
+                    alpha=0.9,
+                    linewidth=2,
+                    edgecolor="black",
+                )
+                for label, color in zip(
+                    [f">= {pile_load_uls}", f"< {pile_load_uls}"],
+                    ["green", "red"],
+                )
+            ],
+        )
+        axes.set_title(f"Pile tip level at: {pile_tip_level_nap} [m w.r.t NAP]")
 
         return fig
