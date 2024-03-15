@@ -553,9 +553,10 @@ class MaxBearingResults:
 
         Warnings
         --------
-        Please note that this map indication of valid ULS zones does not always comply with the
-        NEN 9997-1+C2:2017. It is therefore that the interpretation provided by this methode must
-        be carefully validated by a geotechnical engineer.
+        Please note that this map indication of valid ULS zones is intended as a visual aid to help
+        the geotechnical engineer. It does not necessarily comply with the NEN 9997-1+C2:2017 since the NEN is open
+        to interpretation. It is therefore that the interpretation provided by this methode must be carefully
+        validated by a geotechnical engineer.
 
         Parameters
         ----------
