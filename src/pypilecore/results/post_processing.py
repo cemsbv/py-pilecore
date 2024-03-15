@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from functools import cached_property, lru_cache
+from functools import lru_cache
 from typing import Any, Dict, List, Literal, Optional, Sequence, Tuple
 
 import matplotlib.patches as patches
@@ -373,8 +373,8 @@ class MaxBearingResults:
 
         return cpt_results_df
 
-    @cached_property
-    def triangulation(self) -> List[Dict[str, list]]:
+    @lru_cache()
+    def triangulation(self, pile_tip_level_nap: float) -> List[Dict[str, list]]:
         """
         Delaunay tessellation based on the CPT location
 
@@ -387,11 +387,28 @@ class MaxBearingResults:
                 - test_id: List[str]
 
         """
-        points = {
+        _lookup = {
             (point.soil_properties.x, point.soil_properties.y): key
             for key, point in self.cpt_results_dict.items()
         }
-        _points = list(points.keys())
+        # select point with valid bearing capacity at pile tip level
+        _points = (
+            self.to_pandas()
+            .loc[
+                (self.to_pandas()["pile_tip_level_nap"] == pile_tip_level_nap)
+                & (~pd.isna(self.to_pandas()["R_c_d_net"])),
+                ["x", "y"],
+            ]
+            .to_numpy()
+            .tolist()
+        )
+
+        # check if enough points Delaunay
+        if len(_points) < 4:
+            raise ValueError(
+                "Not enough points at this pile tip level to construct "
+                "the delaunay tessellation based on the CPT location."
+            )
         tri = Delaunay(
             _points,
             incremental=False,
@@ -403,7 +420,7 @@ class MaxBearingResults:
         return [
             {
                 "geometry": geometry.tolist(),
-                "test_id": [points[(xy[0], xy[1])] for xy in geometry],
+                "test_id": [_lookup[(xy[0], xy[1])] for xy in geometry],
             }
             for geometry in geometries
         ]
@@ -450,20 +467,20 @@ class MaxBearingResults:
         kwargs_subplot.update(kwargs)
         fig = plt.figure(**kwargs_subplot)
         axes = fig.add_subplot(projection=projection)
+        df = self.to_pandas().dropna()
         # create color list based on hue option
         if hue == "category":
             colors = [
-                "red" if var < pile_load_uls else "green"
-                for var in self.to_pandas()["R_c_d_net"]
+                "red" if var < pile_load_uls else "green" for var in df["R_c_d_net"]
             ]
         else:
-            colors = self.to_pandas()["R_c_d_net"].tolist()
+            colors = df["R_c_d_net"].tolist()
         # create scatter plot
         if projection == "3d":
             cmap = axes.scatter(
-                self.to_pandas()["x"],
-                self.to_pandas()["y"],
-                self.to_pandas()["pile_tip_level_nap"],
+                df["x"],
+                df["y"],
+                df["pile_tip_level_nap"],
                 c=colors,
             )
             axes.set_xlabel("X")
@@ -481,12 +498,13 @@ class MaxBearingResults:
                 )
         else:
             cmap = axes.scatter(
-                self.to_pandas()["test_id"],
-                self.to_pandas()["pile_tip_level_nap"],
+                df["test_id"],
+                df["pile_tip_level_nap"],
                 c=colors,
             )
             axes.set_ylabel("Z [m w.r.t NAP]")
             axes.tick_params(axis="x", labelrotation=90)
+            axes.grid()
 
         if hue == "category":
             fig.legend(
@@ -527,11 +545,16 @@ class MaxBearingResults:
 
         Notes:
         -------
-        Based on the Delaunay triangulation a tessellation is created with
+        Based on the Delaunay methode a tessellation is created with
         the location of the CPT's. Each triangle is then colored according to
         the bearing capacity of the CPT its based on. If any of the CPT does
         not meet the required capacity the triangle becomes also invalid.
 
+        Warning:
+        --------
+        Please note that this map indication of valid ULS zones does not always comply with the
+        NEN 9997-1+C2:2017. It is therefore that the interpretation provided by this methode must
+        be carefully validated by a geotechnical engineer.
 
         Parameters
         ----------
@@ -567,7 +590,7 @@ class MaxBearingResults:
         # filter data
         df = (
             self.to_pandas()
-            .where(self.to_pandas()["pile_tip_level_nap"] == pile_tip_level_nap)
+            .loc[self.to_pandas()["pile_tip_level_nap"] == pile_tip_level_nap]
             .dropna()
         )
 
@@ -585,7 +608,7 @@ class MaxBearingResults:
         # iterate over geometry
         if show_delaunay_vertices:
             _patches = []
-            for tri in self.triangulation:
+            for tri in self.triangulation(pile_tip_level_nap):
                 color = (
                     "green"
                     if all(
