@@ -29,8 +29,9 @@ def create_pile_properties_payload(
     Creates a dictionary with the `pile_properties` payload content for the PileCore
     endpoints.
 
-    Note that
-    the dictionary should be converted to a jsonifyable message before it can be passed
+    Note
+    ----
+    The dictionary should be converted to a jsonifyable message before it can be passed
     to a `requests` call directly, for instance with
     `nuclei.client.utils.python_types_to_message()`.
 

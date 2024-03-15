@@ -35,7 +35,7 @@ def create_soil_properties_payload(
     Creates a dictionary with the `soil_properties` payload content for the PileCore
     endpoints.
 
-    Notes
+    Note
     ------
     the dictionary should be converted to a jsonifyable message before it can be passed
     to a `requests` call directly, for instance with

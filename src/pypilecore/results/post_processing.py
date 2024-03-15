@@ -383,6 +383,7 @@ class MaxBearingResults:
         collection: List
             A list of dictionaries containing the tessellation
             geometry and corresponding cpt names:
+
                 - geometry: List[Tuple[float, float]]
                 - test_id: List[str]
 
@@ -543,14 +544,14 @@ class MaxBearingResults:
         """
         Plot a map of the valid ULS load for a given depth.
 
-        Notes:
-        -------
+        Note
+        ------
         Based on the Delaunay methode a tessellation is created with
         the location of the CPT's. Each triangle is then colored according to
         the bearing capacity of the CPT its based on. If any of the CPT does
         not meet the required capacity the triangle becomes also invalid.
 
-        Warning:
+        Warnings
         --------
         Please note that this map indication of valid ULS zones does not always comply with the
         NEN 9997-1+C2:2017. It is therefore that the interpretation provided by this methode must

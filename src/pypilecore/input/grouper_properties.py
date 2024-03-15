@@ -43,7 +43,7 @@ def create_grouper_payload(
     "/grouper/group_cpts"
 
 
-    Notes
+    Note
     ------
     The grouper uses pile bearing capacity results calculated by PileCore or other software to
     form  subgroups of the total group of CPT’s belonging to this project.
@@ -55,7 +55,6 @@ def create_grouper_payload(
           pile-tip levels. (Bearing check)
         - is spatially coherent, which means there are no other CPTs in between the members
           of the subgroup. (Spatial check)
-
 
     Additionally, centre to centre validation (include_centre_to_centre_check; NEN9997-1 3.2.3) can be
     added to the cluster method. This check adds restrictions to the maximum allowable R;c;cal outliers
