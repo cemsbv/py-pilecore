@@ -41,6 +41,11 @@ Bearing calculation: Results
     :inherited-members:
     :member-order: bysource
 
+.. autoclass:: pypilecore.results.single_cpt_results.SingleCPTBearingResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
 .. autoclass:: pypilecore.results.multi_cpt_results.CPTGroupResultsTable
     :members:
     :inherited-members:
