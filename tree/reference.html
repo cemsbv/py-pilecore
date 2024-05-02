@@ -78,6 +78,14 @@
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.to_pandas"><code class="docutils literal notranslate"><span class="pre">SingleCPTBearingResultsContainer.to_pandas()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults"><code class="docutils literal notranslate"><span class="pre">SingleCPTBearingResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.soil_properties"><code class="docutils literal notranslate"><span class="pre">SingleCPTBearingResults.soil_properties</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.pile_head_level_nap"><code class="docutils literal notranslate"><span class="pre">SingleCPTBearingResults.pile_head_level_nap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.table"><code class="docutils literal notranslate"><span class="pre">SingleCPTBearingResults.table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.plot_bearing_capacities"><code class="docutils literal notranslate"><span class="pre">SingleCPTBearingResults.plot_bearing_capacities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.plot_bearing_overview"><code class="docutils literal notranslate"><span class="pre">SingleCPTBearingResults.plot_bearing_overview()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.CPTGroupResultsTable"><code class="docutils literal notranslate"><span class="pre">CPTGroupResultsTable</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.CPTGroupResultsTable.pile_tip_level_nap"><code class="docutils literal notranslate"><span class="pre">CPTGroupResultsTable.pile_tip_level_nap</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.CPTGroupResultsTable.R_s_k"><code class="docutils literal notranslate"><span class="pre">CPTGroupResultsTable.R_s_k</span></code></a></li>
@@ -786,7 +794,7 @@ which is returned in the response of a “compression/multiple-cpts/results” e
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.cpt_results_dict">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_results_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">SingleCPTBearingResults</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.cpt_results_dict" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_results_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults" title="pypilecore.results.single_cpt_results.SingleCPTBearingResults"><span class="pre">SingleCPTBearingResults</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.cpt_results_dict" title="Permalink to this definition"></a></dt>
 <dd><p>The dictionary that maps the cpt-names to SingleCPTBearingResults objects.</p>
 </dd></dl>
 
@@ -798,7 +806,7 @@ which is returned in the response of a “compression/multiple-cpts/results” e
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.results">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SingleCPTBearingResults</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.results" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults" title="pypilecore.results.single_cpt_results.SingleCPTBearingResults"><span class="pre">SingleCPTBearingResults</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.multi_cpt_results.SingleCPTBearingResultsContainer.results" title="Permalink to this definition"></a></dt>
 <dd><p>The computed results, as a list of SingleCPTBearingResults objects.</p>
 </dd></dl>
 
@@ -808,7 +816,7 @@ which is returned in the response of a “compression/multiple-cpts/results” e
 <dd><p>Returns the <cite>SingleCPTBearingResults</cite> object for the provided test_id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleCPTBearingResults</span></code></p>
+<dd class="field-odd"><p><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults" title="pypilecore.results.single_cpt_results.SingleCPTBearingResults"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleCPTBearingResults</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -835,6 +843,77 @@ which is returned in the response of a “compression/multiple-cpts/results” e
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.results.single_cpt_results.SingleCPTBearingResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.single_cpt_results.</span></span><span class="sig-name descname"><span class="pre">SingleCPTBearingResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil_properties</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_head_level_nap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results_table</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/single_cpt_results.html#SingleCPTBearingResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults" title="Permalink to this definition"></a></dt>
+<dd><p>Object that contains the results of a PileCore single-cpt calculation.</p>
+<p><em>Not meant to be instantiated by the user.</em></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.single_cpt_results.SingleCPTBearingResults.soil_properties">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">soil_properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.soil_properties.SoilProperties" title="pypilecore.results.soil_properties.SoilProperties"><span class="pre">SoilProperties</span></a></em><a class="headerlink" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.soil_properties" title="Permalink to this definition"></a></dt>
+<dd><p>The SoilProperties object.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.single_cpt_results.SingleCPTBearingResults.pile_head_level_nap">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pile_head_level_nap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.pile_head_level_nap" title="Permalink to this definition"></a></dt>
+<dd><p>The elevation of the pile-head in [m] w.r.t. NAP.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.single_cpt_results.SingleCPTBearingResults.table">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">CPTResultsTable</span></em><a class="headerlink" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.table" title="Permalink to this definition"></a></dt>
+<dd><p>The object with single-CPT results table traces.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.single_cpt_results.SingleCPTBearingResults.plot_bearing_capacities">
+<span class="sig-name descname"><span class="pre">plot_bearing_capacities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/single_cpt_results.html#SingleCPTBearingResults.plot_bearing_capacities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.plot_bearing_capacities" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the bearing calculation results on an <a href="#id2"><span class="problematic" id="id3">`</span></a>Axes’ object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Axes</span></code>]) – Optional <cite>Axes</cite> object where the bearing capacities can be plotted on.
+If not provided, a new <cite>plt.Figure</cite> will be activated and the <cite>Axes</cite>
+object will be created and returned.</p></li>
+<li><p><strong>figsize</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Size of the activate figure, as the <cite>plt.figure()</cite> argument.</p></li>
+<li><p><strong>add_legend</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Add a legend to the second axes object</p></li>
+<li><p><strong>**kwargs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <cite>Axes</cite> object where the bearing capacities were plotted on.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.single_cpt_results.SingleCPTBearingResults.plot_bearing_overview">
+<span class="sig-name descname"><span class="pre">plot_bearing_overview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10.0,</span> <span class="pre">12.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width_ratios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0.1,</span> <span class="pre">2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/single_cpt_results.html#SingleCPTBearingResults.plot_bearing_overview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults.plot_bearing_overview" title="Permalink to this definition"></a></dt>
+<dd><p>Plot an overview of the bearing-capacities, including the .</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Size of the activate figure, as the <cite>plt.figure()</cite> argument.</p></li>
+<li><p><strong>width_ratios</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Tuple of width-ratios of the subplots, as the <cite>plt.GridSpec</cite> argument.</p></li>
+<li><p><strong>add_legend</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Add a legend to the second axes object</p></li>
+<li><p><strong>**kwargs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matplotlib Figure</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fig</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1901,7 +1980,7 @@ therefore should represent the main orientation of the building.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cpt_results_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>SingleCPTBearingResults</em><em>]</em>) – Dictionary with key as CPT name and value a SingleCPTBearingResults class</p></li>
+<li><p><strong>cpt_results_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults" title="pypilecore.results.single_cpt_results.SingleCPTBearingResults"><em>SingleCPTBearingResults</em></a><em>]</em>) – Dictionary with key as CPT name and value a SingleCPTBearingResults class</p></li>
 <li><p><strong>pile_load_uls</strong> (<em>float</em>) – ULS load in kN. Used to determine if a grouping configuration is valid.</p></li>
 <li><p><strong>stiff_construction</strong> (<em>bool</em>) – Default is False
 Attribute use to get the xi3 and xi4 value. True if it is a stiff construction</p></li>
@@ -2117,8 +2196,8 @@ NEN9997-1 3.2.3 centre to centre validation.</p>
 <dt class="sig sig-object py" id="pypilecore.results.grouper_result.SingleClusterResult">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.grouper_result.</span></span><span class="sig-name descname"><span class="pre">SingleClusterResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_pile_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_pile_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_consecutive_pile_levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre_to_centre_check</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#SingleClusterResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.SingleClusterResult" title="Permalink to this definition"></a></dt>
 <dd><p><em>Not meant to be instantiated by the user.</em></p>
-<section id="id2">
-<h3>Attributes:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<section id="id4">
+<h3>Attributes:<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>cpt_names: List[str]</dt><dd><p>List of cpt names present in this cluster</p>
 </dd>
@@ -2605,7 +2684,7 @@ Add voronoi vertices to the figure</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypilecore.results.post_processing.MaxBearingResult.plot_bearing_capacities">
 <span class="sig-name descname"><span class="pre">plot_bearing_capacities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/post_processing.html#MaxBearingResult.plot_bearing_capacities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.post_processing.MaxBearingResult.plot_bearing_capacities" title="Permalink to this definition"></a></dt>
-<dd><p>Plot the bearing calculation results on an <a href="#id3"><span class="problematic" id="id4">`</span></a>Axes’ object.</p>
+<dd><p>Plot the bearing calculation results on an <a href="#id5"><span class="problematic" id="id6">`</span></a>Axes’ object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
