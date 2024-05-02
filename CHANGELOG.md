@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 2024-05-02
+
+### Documentation
+
+- Add SingleCPTBearingResults reference to docs
+- Update warning description
+
+### Features
+
+- *(#40)* Pass soil_load=0.0 when input is None.
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+- Delaunay tessellation (#63)
+
+### Miscellaneous Tasks
+
+- Upgrade dependencies with pip-compile
+
 ## [0.4.0] - 2024-03-12
 
 ### Bug Fixes
@@ -87,6 +117,11 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - *(grouper)* Use design value for grouper negative friction (#42)
+- *(grouper)* Use design value for grouper negative friction (#42)
+- *(grouper)* Make sure that pile tip levels are sorted (#38)
+- *(grouper)* Make sure that pile tip levels are sorted (#38)
+- *(grouper)* Make sure that pile tip levels are sorted (#38)
+- *(grouper)* Make sure that pile tip levels are sorted (#38)
 - *(grouper)* Make sure that pile tip levels are sorted (#38)
 
 ### Documentation
@@ -139,6 +174,60 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Notebook and grouper workflow (#18)
+- Thijs Lukkezen <t.lukkezen@cemsbv.io>
 - Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
 - Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
 - Plot empty friction ratio in CPTTable.plot_friction_ratio()
@@ -147,16 +236,86 @@ All notable changes to this project will be documented in this file.
 - Fix adding diameter_shaft property logic
 - *(test)* Coverage warning no data was collected
 
-### Co-authored-by
-
-- Thijs Lukkezen <t.lukkezen@cemsbv.io>
-
 ### Documentation
 
 - Add missing create_multi_cpt_payload arguments docstrings
 - Update `getting started`
 - Add items to reference & fix docstrings & typing
 - Add single- & multi-cpt-results docstrings
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
 - Init pages (#10)
 
 ### Features
@@ -166,21 +325,84 @@ All notable changes to this project will be documented in this file.
 - Add _shape class-attribute to Round- & RectPileProperties
 - Raise ValueError for invalid pile_properties `height_base` input.
 - Add notebook example (#17)
+- Add notebook example (#17)
+- Add notebook example (#17)
+- Add notebook example (#17)
 - Cast CPTGroupResultsTable attributes to numpy arrays
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
 - *(grouper)* Add grouper implementation (#7)
 
 ### Miscellaneous Tasks
 
 - Parse each commit message line as commit for changelog
+- Add notebook example (#17)
 - Add public/ to .gitignore
 - Add pypi release job to ci (#14)
+- Add pypi release job to ci (#14)
 - *(docs)* Update branches name
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
+- Init pages (#10)
 - *(docs)* Add docs test and deploy job
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
+- *(grouper)* Add grouper implementation (#7)
 - *(changelog)* Update changelog version & add auto-generate settings
 
 ### Refactor
 
 - Don't use relative imports
+- [**breaking**] Use classify dict not dataframe (#13)
+- [**breaking**] Use classify dict not dataframe (#13)
+- [**breaking**] Use classify dict not dataframe (#13)
+- [**breaking**] Use classify dict not dataframe (#13)
 - [**breaking**] Use classify dict not dataframe (#13)
 
 ### Testing
