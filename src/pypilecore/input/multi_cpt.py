@@ -344,7 +344,7 @@ def create_multi_cpt_payload(
         pile_head_level_nap=pile_head_level_nap,
         stiff_construction=stiff_construction,
         rel_pile_load=relative_pile_load,
-        soil_load=soil_load_sls,
+        soil_load=soil_load_sls if soil_load_sls is not None else 0.0,
         excavation_param_t=excavation_param_t,
         use_almere_rules=use_almere_rules,
         gamma_f_nk=gamma_f_nk,
