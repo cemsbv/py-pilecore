@@ -738,3 +738,26 @@ def test_create_multi_cpt_payload_errors(
             installation="1",
             pile_shape="rect",
         )
+
+def test_soil_load_is_always_float(
+    cpt: CPTData, mock_classify_response: dict
+) -> None:
+    """
+    Check that a soil-load value `float(0)` is passed even when the soil_load_sls
+    argument is None.
+    """
+
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[0, 1],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: mock_classify_response},
+        groundwater_level_nap=-2.5,
+        pile_type="concrete",
+        specification="1",
+        installation="A",
+        pile_shape="round",
+        diameter_base=0.3,
+        soil_load_sls=None,
+    )
+
+    assert np.isclose(payload.pop("soil_load"), 0.0)
