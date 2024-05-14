@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.axes import Axes
+from matplotlib.patches import Patch
 
 from pypilecore.exceptions import UserError
 from pypilecore.results.load_settlement import get_load_settlement_plot
@@ -547,6 +548,150 @@ class MultiCPTBearingResults:
     def group_results_table(self) -> CPTGroupResultsTable:
         """The CPTGroupResultsTable dataclass, containing the group results."""
         return self._group_results_table
+
+    def boxplot(
+        self,
+        attribute: str,
+        axes: Axes | None = None,
+        figsize: Tuple[float, float] = (6.0, 6.0),
+        show_sqrt: bool = False,
+        **kwargs: Any,
+    ) -> Axes:
+        """
+        Plot a box and whisker plot for a given attribute.
+
+
+        .. code-block:: none
+
+                     MAX      Q1   median  Q3       MIN
+                               |-----:-----|
+                      |--------|     :     |--------|
+                               |-----:-----|
+
+        Parameters
+        ----------
+        attribute:
+            result attribute to create boxplot. Please note that the attribute name must be present in
+            the `CPTResultsTable` and `CPTGroupResultsTable` class.
+        axes:
+            Optional `Axes` object where the boxplot data can be plotted on.
+            If not provided, a new `plt.Figure` will be activated and the `Axes`
+            object will be created and returned.
+        figsize:
+            Size of the activate figure, as the `plt.figure()` argument.
+        show_sqrt:
+            Add sqrt(2) bandwidth to figure
+        **kwargs:
+            All additional keyword arguments are passed to the `pyplot.subplots()` call.
+
+        Returns
+        -------
+        axes:
+            The `Axes` object where the settlement curves were plotted on
+        """
+
+        # Create axes objects if not provided
+        if axes is not None:
+            if not isinstance(axes, Axes):
+                raise ValueError(
+                    "'axes' argument to boxplot() must be a `pyplot.axes.Axes` object or None."
+                )
+        else:
+            kwargs_subplot = {
+                "figsize": figsize,
+                "tight_layout": True,
+            }
+
+            kwargs_subplot.update(kwargs)
+
+            _, axes = plt.subplots(
+                1,
+                1,
+                **kwargs_subplot,
+            )
+
+            if not isinstance(axes, Axes):
+                raise ValueError(
+                    "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
+                )
+
+        # Collect data from single calculation
+        data = np.array(
+            [
+                item.table.__getattribute__(attribute)
+                for item in self.cpt_results.results
+            ]
+        )
+
+        # Draw a box and whisker plot
+        axes.boxplot(
+            np.flip(data, axis=0),
+            labels=np.flip(self.group_results_table.pile_tip_level_nap),
+            whis=(0, 100),
+            autorange=True,
+            vert=False,
+            patch_artist=True,
+            showmeans=True,
+            zorder=0,
+        )
+
+        # ad additional bandwidth of sqrt(2) of the mean value
+        if show_sqrt:
+            axes.scatter(
+                np.flip(data.mean(axis=0)) * np.sqrt(2),
+                np.flip(
+                    np.arange(len(self.group_results_table.pile_tip_level_nap)) + 1
+                ),
+                marker="^",
+                color="tab:purple",
+                zorder=1,
+            )
+            axes.scatter(
+                np.flip(data.mean(axis=0)) / np.sqrt(2),
+                np.flip(
+                    np.arange(len(self.group_results_table.pile_tip_level_nap)) + 1
+                ),
+                marker="^",
+                color="tab:purple",
+                zorder=1,
+            )
+
+        # Draw group result over single result
+        axes.scatter(
+            np.flip(self.group_results_table.__getattribute__(attribute)),
+            np.flip(np.arange(len(self.group_results_table.pile_tip_level_nap)) + 1),
+            marker="o",
+            color="tab:red",
+            zorder=1,
+        )
+
+        # Draw group result over single result
+        for i, x in enumerate(data.mean(axis=0)):
+            axes.annotate(f"{x.round(0)}", xy=(x, i + 1))
+
+        # add legend to figure
+        axes.legend(
+            handles=[
+                Patch(color=clr, label=key)
+                for (key, clr) in {
+                    "Single;min:max": "black",
+                    "Single;Q25:Q75": "tab:blue",
+                    "Single;Q50": "tab:orange",
+                    "Single;mean": "tab:green",
+                    "Single;mean;sqrt": "tab:purple",
+                    "Group;normative": "tab:red",
+                }.items()
+            ],
+            loc="upper left",
+            bbox_to_anchor=(1, 1),
+            title=f"Bandwidth {attribute}",
+        )
+
+        # set label
+        axes.set_ylabel("Depth [m NAP]")
+        axes.set_xlabel(f"{attribute}")
+
+        return axes
 
     def plot_load_settlement(
         self,
