@@ -597,10 +597,10 @@ class MultiCPTBearingResults:
         ):
             raise ValueError(
                 f"""
-                {attribute} is not present in CPTResultsTable or CPTGroupResultsTable class. 
-                Please select on of the following attributes: 
+                {attribute} is not present in CPTResultsTable or CPTGroupResultsTable class.
+                Please select on of the following attributes:
                 {
-                    set(self.cpt_results.results[0].table.__dict__.keys()) 
+                    set(self.cpt_results.results[0].table.__dict__.keys())
                      & set(self.group_results_table.__dict__.keys())
                 }
                 """
