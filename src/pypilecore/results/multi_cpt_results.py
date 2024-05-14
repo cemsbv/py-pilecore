@@ -563,7 +563,7 @@ class MultiCPTBearingResults:
 
         .. code-block:: none
 
-                     MAX      Q1   median  Q3       MIN
+                     MIN      Q1   median  Q3       MAX
                                |-----:-----|
                       |--------|     :     |--------|
                                |-----:-----|
@@ -589,6 +589,22 @@ class MultiCPTBearingResults:
         axes:
             The `Axes` object where the settlement curves were plotted on
         """
+
+        # validate attribute
+        if (
+            attribute not in self.cpt_results.results[0].table.__dict__.keys()
+            or attribute not in self.group_results_table.__dict__.keys()
+        ):
+            raise ValueError(
+                f"""
+                {attribute} is not present in CPTResultsTable or CPTGroupResultsTable class. 
+                Please select on of the following attributes: 
+                {
+                    set(self.cpt_results.results[0].table.__dict__.keys()) 
+                     & set(self.group_results_table.__dict__.keys())
+                }
+                """
+            )
 
         # Create axes objects if not provided
         if axes is not None:
@@ -667,7 +683,7 @@ class MultiCPTBearingResults:
 
         # Draw group result over single result
         for i, x in enumerate(data.mean(axis=0)):
-            axes.annotate(f"{x.round(0)}", xy=(x, i + 1))
+            axes.annotate(f"{x.round(2)}", xy=(x, i + 1))
 
         # add legend to figure
         axes.legend(
