@@ -72,6 +72,8 @@ def test_multi_cpt_bearing_results(
         cptgroupresults.plot_load_settlement(pile_tip_level_nap=ptl), Axes
     )
     plt.close("all")
+    assert isinstance(cptgroupresults.boxplot(attribute="k_v_1"), Axes)
+    plt.close("all")
 
     # Check CPTGroupResultsTable object
     group_table = cptgroupresults.group_results_table
