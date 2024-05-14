@@ -65,6 +65,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.cpt_results"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults.cpt_results</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.cpt_names"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults.cpt_names</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.group_results_table"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults.group_results_table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.boxplot"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults.boxplot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.plot_load_settlement"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults.plot_load_settlement()</span></code></a></li>
 </ul>
 </li>
@@ -745,6 +746,38 @@ Default = True</p></li>
 <dt class="sig sig-object py" id="pypilecore.results.multi_cpt_results.MultiCPTBearingResults.group_results_table">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">group_results_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.multi_cpt_results.CPTGroupResultsTable" title="pypilecore.results.multi_cpt_results.CPTGroupResultsTable"><span class="pre">CPTGroupResultsTable</span></a></em><a class="headerlink" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.group_results_table" title="Permalink to this definition"></a></dt>
 <dd><p>The CPTGroupResultsTable dataclass, containing the group results.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.multi_cpt_results.MultiCPTBearingResults.boxplot">
+<span class="sig-name descname"><span class="pre">boxplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6.0,</span> <span class="pre">6.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_sqrt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/multi_cpt_results.html#MultiCPTBearingResults.boxplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.boxplot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a box and whisker plot for a given attribute.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>MIN      Q1   median  Q3       MAX
+          |-----:-----|
+ |--------|     :     |--------|
+          |-----:-----|
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attribute</strong> (<em>str</em>) – result attribute to create boxplot. Please note that the attribute name must be present in
+the <cite>CPTResultsTable</cite> and <cite>CPTGroupResultsTable</cite> class.</p></li>
+<li><p><strong>axes</strong> (<em>Axes</em><em> | </em><em>None</em>) – Optional <cite>Axes</cite> object where the boxplot data can be plotted on.
+If not provided, a new <cite>plt.Figure</cite> will be activated and the <cite>Axes</cite>
+object will be created and returned.</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Size of the activate figure, as the <cite>plt.figure()</cite> argument.</p></li>
+<li><p><strong>show_sqrt</strong> (<em>bool</em>) – Add sqrt(2) bandwidth to figure</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) – All additional keyword arguments are passed to the <cite>pyplot.subplots()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <cite>Axes</cite> object where the settlement curves were plotted on</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>axes</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
