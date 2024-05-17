@@ -313,9 +313,9 @@ def create_multi_cpt_payload(
         individual_ocr=individual_ocr,
     )
     pile_properties = create_pile_properties_payload(
-        pile_type=pile_type,
-        specification=specification,
-        installation=installation,
+        pile_type=str(pile_type),
+        specification=str(specification),
+        installation=str(installation),
         pile_shape=pile_shape,
         diameter_base=diameter_base,
         diameter_shaft=diameter_shaft,
