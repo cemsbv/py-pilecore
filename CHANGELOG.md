@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.2] - 2024-05-17
+
+### Features
+
+- *(#64)* Auto convert pile-type-specification inputs to strings
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+- Bandwidth of attribute; resolve #69 (#70)
+
 ## [0.4.1] - 2024-05-02
 
 ### Documentation
