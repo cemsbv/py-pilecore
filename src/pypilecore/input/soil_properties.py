@@ -30,6 +30,7 @@ def create_soil_properties_payload(
     ]
     | None = None,
     individual_ocr: Mapping[Any, float] | None = None,
+    verbose: bool = False,
 ) -> Tuple[List[dict], Dict[str, dict]]:
     """
     Creates a dictionary with the `soil_properties` payload content for the PileCore
@@ -89,6 +90,8 @@ def create_soil_properties_payload(
         A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]
         values of the foundation layer. This will overrule the general `ocr` setting for
         these specific CPTs only.
+    verbose:
+        If True, show progress bars and status messages in stdout.
 
     Returns
     -------
@@ -103,7 +106,15 @@ def create_soil_properties_payload(
     results_passover = {}
     soil_properties_list = []
 
-    for cpt in tqdm(cptdata_objects, desc="Create soil properties payload"):
+    pbar = None
+    if verbose:
+        pbar = tqdm(total=len(cptdata_objects))
+    for cpt in cptdata_objects:
+        # Push verbose message
+        if pbar:
+            pbar.update()
+            pbar.set_description(f"Create soil properties payload for CPT: {cpt.alias}")
+
         # Construct the cpt_data payload
         cpt_data = dict(
             depth=np.array(cpt.data["depth"], dtype=float),

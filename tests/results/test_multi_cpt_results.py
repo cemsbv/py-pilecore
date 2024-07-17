@@ -5,12 +5,12 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from pandas import DataFrame
 
+from pypilecore.common.piles import PileProperties
 from pypilecore.results import MultiCPTBearingResults, SingleCPTBearingResults
 from pypilecore.results.multi_cpt_results import (
     CPTGroupResultsTable,
     SingleCPTBearingResultsContainer,
 )
-from pypilecore.results.pile_properties import PileProperties
 from pypilecore.results.single_cpt_results import CPTResultsTable
 from pypilecore.results.soil_properties import SoilProperties
 

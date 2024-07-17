@@ -6,7 +6,7 @@ from typing import Dict, List, Literal, Mapping, Sequence, Tuple
 
 from pygef.cpt import CPTData
 
-from pypilecore.input.pile_properties import create_pile_properties_payload
+from pypilecore.common.piles import PileProperties
 from pypilecore.input.soil_properties import create_soil_properties_payload
 
 
@@ -15,10 +15,7 @@ def create_multi_cpt_payload(
     cptdata_objects: List[CPTData],
     classify_tables: Dict[str, dict],
     groundwater_level_nap: float,
-    pile_type: Literal["concrete", "steel", "micro", "wood"],
-    specification: Literal["1", "2", "3", "4", "5", "6", "7"],
-    installation: Literal["A", "B", "C", "D", "E", "F", "G"],
-    pile_shape: Literal["round", "rect"],
+    pile: PileProperties,
     friction_range_strategy: Literal[
         "manual", "lower_bound", "settlement_driven"
     ] = "lower_bound",
@@ -43,24 +40,6 @@ def create_multi_cpt_payload(
     ]
     | None = None,
     individual_ocr: Mapping[str, float] | None = None,
-    diameter_base: float | None = None,
-    diameter_shaft: float | None = None,
-    width_base_large: float | None = None,
-    width_base_small: float | None = None,
-    width_shaft_large: float | None = None,
-    width_shaft_small: float | None = None,
-    height_base: float | None = None,
-    settlement_curve: float | None = None,
-    adhesion: float | None = None,
-    alpha_p: float | None = None,
-    alpha_s_clay: float | None = None,
-    alpha_s_sand: float | None = None,
-    beta_p: float | None = None,
-    pile_tip_factor_s: float | None = None,
-    elastic_modulus: float | None = None,
-    is_auger: float | None = None,
-    is_low_vibrating: float | None = None,
-    negative_fr_delta_factor: float | None = None,
     use_almere_rules: bool = False,
     overrule_xi: float | None = None,
     gamma_f_nk: float = 1.0,
@@ -112,19 +91,13 @@ def create_multi_cpt_payload(
 
     groundwater_level_nap:
         The groundwater level. Unit: [m] w.r.t. NAP.
-    pile_type:
-        The equaly named entry in the "pile_type_specification" settings.
+    pile:
+        A PileProperties object.
     friction_range_strategy:
         Sets the method to determine the sleeve friction zones on the pile. The soil
         friction in the positive zone contributes to the bearing capacity, while the
         negative zone adds an extra load on the pile. Accepted values: "manual",
         "lower_bound" (default) or "settlement_driven".
-    specification:
-        The equaly named entry in the "pile_type_specification" settings.
-    installation:
-        The equaly named entry in the "pile_type_specification" settings.
-    pile_shape:
-        The shape of the pile.
     stiff_construction:
         Set to True if it's a stiff costruction. This will have influence on the xi factor
         if you don't overrule it. Default = False.
@@ -197,66 +170,6 @@ def create_multi_cpt_payload(
         A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]
         values of the foundation layer. This will overrule the general `ocr` setting for
         these specific CPTs only.
-    diameter_base:
-        Pile base diameter [m].
-        Only relevant if ``pile_shape`` = "round".
-    diameter_shaft:
-        Pile shaft diameter [m].
-        Only relevant if ``pile_shape`` = "round".
-    width_base_large:
-        Largest dimension of the pile base [m].
-        Only relevant if ``pile_shape`` = "rect".
-    width_base_small:
-        Smallest dimension of the pile base [m].
-        Only relevant if ``pile_shape`` = "rect".
-    width_shaft_large:
-        Largest dimension of the pile shaft [m].
-        Only relevant if ``pile_shape`` = "rect".
-    width_shaft_small:
-        Smallest dimension of the pile shaft [m].
-        Only relevant if ``pile_shape`` = "rect".
-    height_base:
-        Height of pile base [m]. If None, a pile with constant dimension is inferred.
-        Cannot be None if diameter_base and diameter_shaft are unequal.
-    settlement_curve:
-        Settlement lines for figures 7.n and 7.o of NEN-9997-1 As defined in table 7.c
-        of NEN-9997-1. The value is inferred from the pile_type_specifications, but can
-        be overwritten.
-    adhesion:
-        Optional adhesion value [kPa], use it if the pile shaft has undergone a special
-        treatment. Examples: - adhesion = 50 kN/m2 for synthetic coating - adhesion = 20
-        kN/m2 for bentonite - adhesion = 10 kN/m2 for bitumen coating See 7.3.2.2(d) of
-        NEN 9997-1 for examples.
-    alpha_p:
-        Alpha p factor used in pile tip resistance calculation. The value is inferred
-        from the pile_type_specifications, but can be overwritten.
-    alpha_s_clay:
-        Alpha s factor for soft layers used in the positive friction calculation. If
-        None the factor is determined as specified in table 7.d of NEN 9997-1.
-    alpha_s_sand:
-        Alpha s factor for coarse layers used in the positive friction calculation. The
-        value is inferred from the pile_type_specifications, but can be overwritten.
-    beta_p:
-        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).
-        The value is inferred from the pile dimension properties, but can be overwritten.
-    pile_tip_factor_s:
-        Factor s used in pile tip resistance calculation as per NEN 9997-1 7.6.2.3 (h).
-        The value is inferred from the pile dimension properties, but can be overwritten.
-    elastic_modulus:
-        Modulus of elasticity of the pile [Mpa]. The value is inferred from the
-        pile_type_specifications, but can be overwritten.
-    is_auger:
-        Determines weather the pile the pile is an auger pile or not. The value is
-        inferred from the pile_type_specifications, but can be overwritten.
-    is_low_vibrating:
-        Determines weather the pile has an installation type with low vibration. The
-        value is inferred from the pile_type_specifications, but can be overwritten.
-    negative_fr_delta_factor:
-        factor * φ = δ. This parameter will be multiplied with phi to get the delta
-        parameter used in negative friction calculation according to NEN-9997-1 7.3.2.2
-        (e). Typically values are 1.0 for piles cast in place, and 0.75 for other pile
-        types. The value is inferred from the pile_type_specifications, but can be
-        overwritten.
     use_almere_rules:
         If set to True the contribution, produced by the positive shaft friction, to the
         total bearing capacity is limited to at most 75% the contribution provided by
@@ -287,9 +200,8 @@ def create_multi_cpt_payload(
     Raises
     ------
     ValueError:
-        - if `pile_shape`=="round" & `diameter_base` is None
-        - if `pile_shape`=="rect" & `width_base_large` is None
-        - if `pile_shape` not in ["rect", "round"]
+        - If `excavation_depth_nap` is not None and `excavation_param_t` is None.
+        - If both `relative_pile_load` and `pile_load_sls` are None.
     """
     # Input validation
     if excavation_depth_nap is not None and excavation_param_t is None:
@@ -312,34 +224,10 @@ def create_multi_cpt_payload(
         individual_positive_friction_range_nap=individual_positive_friction_range_nap,
         individual_ocr=individual_ocr,
     )
-    pile_properties = create_pile_properties_payload(
-        pile_type=str(pile_type),
-        specification=str(specification),
-        installation=str(installation),
-        pile_shape=pile_shape,
-        diameter_base=diameter_base,
-        diameter_shaft=diameter_shaft,
-        width_base_large=width_base_large,
-        width_base_small=width_base_small,
-        width_shaft_large=width_shaft_large,
-        width_shaft_small=width_shaft_small,
-        height_base=height_base,
-        settlement_curve=settlement_curve,
-        adhesion=adhesion,
-        alpha_p=alpha_p,
-        alpha_s_clay=alpha_s_clay,
-        alpha_s_sand=alpha_s_sand,
-        beta_p=beta_p,
-        pile_tip_factor_s=pile_tip_factor_s,
-        elastic_modulus=elastic_modulus,
-        is_auger=is_auger,
-        is_low_vibrating=is_low_vibrating,
-        negative_fr_delta_factor=negative_fr_delta_factor,
-    )
     multi_cpt_payload: dict = dict(
         pile_tip_levels_nap=list(pile_tip_levels_nap),
         list_soil_properties=soil_properties_list,
-        pile_properties=pile_properties,
+        pile_properties=pile.serialize_payload(),
         friction_range_strategy=friction_range_strategy,
         pile_head_level_nap=pile_head_level_nap,
         stiff_construction=stiff_construction,

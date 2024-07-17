@@ -120,17 +120,6 @@ def test_grouper_triangulation(
     mock_multi_cpt_bearing_response_3,
     mock_results_passover_3,
 ) -> None:
-    # import json
-    #
-    # with open("tests/response/group_cpts_response_3.json", "r") as file:
-    #     mock_group_cpts_response_3 = json.load(file)
-    #
-    # with open("tests/response/multi_cpt_bearing_response_3.json", "r") as file:
-    #     mock_multi_cpt_bearing_response_3 = json.load(file)
-    #
-    # with open("tests/response/results_passover_dump_3.json", "r") as file:
-    #     mock_results_passover_3 = json.load(file)
-
     mcb = MultiCPTBearingResults.from_api_response(
         response_dict=mock_multi_cpt_bearing_response_3,
         cpt_input=mock_results_passover_3,

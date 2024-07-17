@@ -9,6 +9,7 @@ import natsort
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 from numpy.typing import NDArray
 from shapely import MultiPoint
 
@@ -184,7 +185,7 @@ class SingleClusterData:
         return pd.DataFrame(self.__dict__)
 
     def plot_variation_coefficient(
-        self, axes: plt.Axes | None = None, **kwargs: Any
+        self, axes: Axes | None = None, **kwargs: Any
     ) -> None:
         """
         Plot the bearing capacity and variation coefficient in a subplot
@@ -206,7 +207,7 @@ class SingleClusterData:
         axes.set_xlabel("Variation coefficient [-]")
 
     def plot_bearing_capacity(
-        self, axes: plt.Axes | None = None, pile_load_uls: float = 0.0, **kwargs: Any
+        self, axes: Axes | None = None, pile_load_uls: float = 0.0, **kwargs: Any
     ) -> None:
         """
         Plot the bearing capacity and variation coefficient in a subplot
