@@ -500,7 +500,6 @@ class RectPileGeometryComponent(_BasePileGeometryComponent):
             and bottom_boundary_nap < component_head_level_nap
         ):
             z_offset = component_head_level_nap
-            x_offset = self.secondary_dimension / 2
             height = (
                 max(component_tip_level_nap, bottom_boundary_nap)
                 - component_head_level_nap
