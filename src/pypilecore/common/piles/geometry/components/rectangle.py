@@ -416,8 +416,8 @@ class RectPileGeometryComponent(_BasePileGeometryComponent):
             **kwargs,
         )
 
-        x_offset = self.secondary_dimension / 2
-        y_offset = self.tertiary_dimension / 2
+        x_offset = -self.secondary_dimension / 2
+        y_offset = -self.tertiary_dimension / 2
 
         axes.add_patch(
             patches.Rectangle(
@@ -508,7 +508,7 @@ class RectPileGeometryComponent(_BasePileGeometryComponent):
 
             axes.add_patch(
                 patches.Rectangle(
-                    (x_offset, z_offset),
+                    (self.cross_section_bounds[0], z_offset),
                     self.secondary_dimension,
                     height,
                     facecolor=facecolor,
