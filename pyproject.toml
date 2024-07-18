@@ -81,7 +81,7 @@ disallow_untyped_calls = true
 warn_return_any = false
 no_implicit_reexport = true
 strict_equality = true
-ignore_missing_imports = true
+install_types = true
 
 [[tool.mypy.overrides]]
 module = [
@@ -93,5 +93,6 @@ module = [
     "shapely.*",
     "pytest.*",
     "scipy.*",
+    "numpy.*",
 ]
 ignore_missing_imports = true
