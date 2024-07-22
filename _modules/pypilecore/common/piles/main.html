@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypilecore.common.piles.main &mdash; py-pilecore 0.4.2 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tree/getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tree/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pypilecore.common.piles.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pypilecore.common.piles.main</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">pypilecore.common.piles.geometry</span> <span class="kn">import</span> <span class="n">PileGeometry</span>
+<span class="kn">from</span> <span class="nn">pypilecore.common.piles.geometry.components</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PrimaryPileComponentDimension</span><span class="p">,</span>
+    <span class="n">RectPileGeometryComponent</span><span class="p">,</span>
+    <span class="n">RoundPileGeometryComponent</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pypilecore.common.piles.geometry.materials</span> <span class="kn">import</span> <span class="n">MATERIALS</span><span class="p">,</span> <span class="n">PileMaterial</span>
+<span class="kn">from</span> <span class="nn">pypilecore.common.piles.type</span> <span class="kn">import</span> <span class="n">PileType</span>
+
+
+<div class="viewcode-block" id="PileProperties"><a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.PileProperties">[docs]</a><span class="k">class</span> <span class="nc">PileProperties</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The PileProperties class represents all properties of a pile.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">geometry</span><span class="p">:</span> <span class="n">PileGeometry</span><span class="p">,</span> <span class="n">pile_type</span><span class="p">:</span> <span class="n">PileType</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Represents all properties of a pile.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        geometry: PileGeometry</span>
+<span class="sd">            The geometry of the pile.</span>
+<span class="sd">        pile_type: PileType</span>
+<span class="sd">            The type of the pile.</span>
+<span class="sd">        name: str, optional</span>
+<span class="sd">            The name of the pile, by default None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span> <span class="o">=</span> <span class="n">geometry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pile_type</span> <span class="o">=</span> <span class="n">pile_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+
+<div class="viewcode-block" id="PileProperties.from_api_response"><a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.PileProperties.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pile_properties</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileProperties</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiates a PileProperties from a response dictionary.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        pile_properties: dict</span>
+<span class="sd">            A dictionary that is retrieved from the API response payload at &quot;/pile_properties&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        PileProperties</span>
+<span class="sd">            A pile properties object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">PileGeometry</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">pile_properties</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]),</span>
+            <span class="n">pile_type</span><span class="o">=</span><span class="n">PileType</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">pile_properties</span><span class="p">[</span><span class="s2">&quot;pile_type&quot;</span><span class="p">]),</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">pile_properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileGeometry</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The geometry of the pile.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pile_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileType</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The type of the pile.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pile_type</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the pile.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+<div class="viewcode-block" id="PileProperties.serialize_payload"><a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.PileProperties.serialize_payload">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize the pile properties to a dictionary payload for the API.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary payload containing the geometry, pile type, and name (if set).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">(),</span>
+            <span class="s2">&quot;pile_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">(),</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">return</span> <span class="n">payload</span></div></div>
+
+
+<div class="viewcode-block" id="create_basic_pile"><a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.create_basic_pile">[docs]</a><span class="k">def</span> <span class="nf">create_basic_pile</span><span class="p">(</span>
+    <span class="n">pile_shape</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">pile_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">main_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">specification</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">installation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">height_base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">core_secondary_dimension</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">core_tertiary_dimension</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">base_secondary_dimension</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">base_tertiary_dimension</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">core_diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">base_diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pile_material</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">custom_material</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">settlement_curve</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">adhesion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_s_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_s_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">beta_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pile_tip_factor_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_auger</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileProperties</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a basic pile with the provided parameters.</span>
+<span class="sd">    A &quot;basic&quot; pile is a pile with a basic geometry, containing at most 2 components,</span>
+<span class="sd">    namely a core component and an optional shell/widened-base component.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pile_shape : str</span>
+<span class="sd">        The shape of the pile. Either &quot;round&quot; or &quot;rect&quot;.</span>
+<span class="sd">    pile_name : str, optional</span>
+<span class="sd">        The name of the pile, by default None.</span>
+<span class="sd">    main_type : str, optional</span>
+<span class="sd">        The main type of the standard pile type definition, by default None.</span>
+<span class="sd">    specification : str | int | float, optional</span>
+<span class="sd">        The specification of the standard pile type definition, by default None.</span>
+<span class="sd">        Required if `main_type` is provided.</span>
+<span class="sd">    installation : str, optional</span>
+<span class="sd">        The installation of the standard pile type definition, by default None.</span>
+<span class="sd">    height_base : float, optional</span>
+<span class="sd">        The height [m] of the base component, by default None.</span>
+<span class="sd">        Required if base dimensions are provided.</span>
+<span class="sd">    core_secondary_dimension : float, optional</span>
+<span class="sd">        The largest dimension [m] of the core component&#39;s cross-section, by default None.</span>
+<span class="sd">        Required for rectangular piles.</span>
+<span class="sd">    core_tertiary_dimension : float, optional</span>
+<span class="sd">        The smallest dimension [m] of the core component&#39;s cross-section, by default None.</span>
+<span class="sd">    base_secondary_dimension : float, optional</span>
+<span class="sd">        The largest dimension [m] of the base/shell component&#39;s cross-section, by default None.</span>
+<span class="sd">    base_tertiary_dimension : float, optional</span>
+<span class="sd">        The smallest dimension [m] of the base/shell component&#39;s cross-section, by default None.</span>
+<span class="sd">    core_diameter : float, optional</span>
+<span class="sd">        The diameter [m] of the core component&#39;s cross-section, by default None.</span>
+<span class="sd">        Required for round piles.</span>
+<span class="sd">    base_diameter : float, optional</span>
+<span class="sd">        The diameter [m] of the base/shell component&#39;s cross-section, by default None.</span>
+<span class="sd">    pile_material : str, optional</span>
+<span class="sd">        The material of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    custom_material : dict, optional</span>
+<span class="sd">        A custom material for the pile, by default None.</span>
+<span class="sd">    settlement_curve : int, optional</span>
+<span class="sd">        The settlement curve of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    adhesion : float, optional</span>
+<span class="sd">        The adhesion of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    alpha_p : float, optional</span>
+<span class="sd">        The alpha_p of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    alpha_s_clay : float, optional</span>
+<span class="sd">        The alpha_s_clay of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    alpha_s_sand : float, optional</span>
+<span class="sd">        The alpha_s_sand of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    beta_p : float, optional</span>
+<span class="sd">        The beta_p of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    pile_tip_factor_s : float, optional</span>
+<span class="sd">        The pile tip factor s of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    is_auger : bool, optional</span>
+<span class="sd">        Whether the pile is an auger pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    is_low_vibrating : bool, optional</span>
+<span class="sd">        Whether the pile is low vibrating, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    negative_fr_delta_factor : float, optional</span>
+<span class="sd">        The negative friction delta factor of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PileProperties</span>
+<span class="sd">        The pile properties object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">materials</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">PileMaterial</span><span class="p">(</span><span class="o">**</span><span class="n">material_value</span><span class="p">)</span> <span class="k">for</span> <span class="n">material_value</span> <span class="ow">in</span> <span class="n">MATERIALS</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">custom_material</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">materials</span> <span class="o">=</span> <span class="p">[</span><span class="n">PileMaterial</span><span class="p">(</span><span class="o">**</span><span class="n">custom_material</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="n">pile_shape</span> <span class="o">==</span> <span class="s2">&quot;round&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">core_diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`core_diameter` must be provided for a round pile.&quot;</span><span class="p">)</span>
+
+        <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RoundPileGeometryComponent</span> <span class="o">|</span> <span class="n">RectPileGeometryComponent</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">RoundPileGeometryComponent</span><span class="p">(</span>
+                <span class="n">diameter</span><span class="o">=</span><span class="n">core_diameter</span><span class="p">,</span>
+                <span class="n">primary_dimension</span><span class="o">=</span><span class="n">PrimaryPileComponentDimension</span><span class="p">(</span>
+                    <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">material</span><span class="o">=</span><span class="n">pile_material</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">base_diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">RoundPileGeometryComponent</span><span class="p">(</span>
+                    <span class="n">diameter</span><span class="o">=</span><span class="n">base_diameter</span><span class="p">,</span>
+                    <span class="n">primary_dimension</span><span class="o">=</span><span class="n">PrimaryPileComponentDimension</span><span class="p">(</span>
+                        <span class="n">length</span><span class="o">=</span><span class="n">height_base</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">material</span><span class="o">=</span><span class="n">pile_material</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">pile_shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rect&quot;</span><span class="p">,</span> <span class="s2">&quot;rectangle&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">core_secondary_dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;`core_secondary_dimension` must be provided for a rectangular pile.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">components</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">RectPileGeometryComponent</span><span class="p">(</span>
+                <span class="n">primary_dimension</span><span class="o">=</span><span class="n">PrimaryPileComponentDimension</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                <span class="n">secondary_dimension</span><span class="o">=</span><span class="n">core_secondary_dimension</span><span class="p">,</span>
+                <span class="n">tertiary_dimension</span><span class="o">=</span><span class="n">core_tertiary_dimension</span><span class="p">,</span>
+                <span class="n">material</span><span class="o">=</span><span class="n">pile_material</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">base_secondary_dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">RectPileGeometryComponent</span><span class="p">(</span>
+                    <span class="n">secondary_dimension</span><span class="o">=</span><span class="n">base_secondary_dimension</span><span class="p">,</span>
+                    <span class="n">tertiary_dimension</span><span class="o">=</span><span class="n">base_tertiary_dimension</span><span class="p">,</span>
+                    <span class="n">primary_dimension</span><span class="o">=</span><span class="n">PrimaryPileComponentDimension</span><span class="p">(</span>
+                        <span class="n">length</span><span class="o">=</span><span class="n">height_base</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">material</span><span class="o">=</span><span class="n">pile_material</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid pile shape: </span><span class="si">{</span><span class="n">pile_shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">PileGeometry</span><span class="p">(</span>
+        <span class="n">components</span><span class="o">=</span><span class="n">components</span><span class="p">,</span>
+        <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span>
+        <span class="n">pile_tip_factor_s</span><span class="o">=</span><span class="n">pile_tip_factor_s</span><span class="p">,</span>
+        <span class="n">beta_p</span><span class="o">=</span><span class="n">beta_p</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">main_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">specification</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Specification must be provided if main type is provided.&quot;</span><span class="p">)</span>
+
+        <span class="n">standard_pile</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;main_type&quot;</span><span class="p">:</span> <span class="n">main_type</span><span class="p">,</span>
+            <span class="s2">&quot;specification&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">specification</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">installation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">standard_pile</span><span class="p">[</span><span class="s2">&quot;installation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">installation</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">standard_pile</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">pile_type</span> <span class="o">=</span> <span class="n">PileType</span><span class="p">(</span>
+        <span class="n">standard_pile</span><span class="o">=</span><span class="n">standard_pile</span><span class="p">,</span>
+        <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">alpha_s_sand</span><span class="p">,</span>
+        <span class="n">alpha_s_clay</span><span class="o">=</span><span class="n">alpha_s_clay</span><span class="p">,</span>
+        <span class="n">alpha_p</span><span class="o">=</span><span class="n">alpha_p</span><span class="p">,</span>
+        <span class="n">alpha_t_sand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">settlement_curve</span><span class="o">=</span><span class="n">settlement_curve</span><span class="p">,</span>
+        <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">negative_fr_delta_factor</span><span class="p">,</span>
+        <span class="n">adhesion</span><span class="o">=</span><span class="n">adhesion</span><span class="p">,</span>
+        <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">is_low_vibrating</span><span class="p">,</span>
+        <span class="n">is_auger</span><span class="o">=</span><span class="n">is_auger</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">PileProperties</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span> <span class="n">pile_type</span><span class="o">=</span><span class="n">pile_type</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pile_name</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

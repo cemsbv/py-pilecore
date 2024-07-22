@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypilecore.common.piles.geometry.materials &mdash; py-pilecore 0.4.2 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tree/getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tree/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pypilecore.common.piles.geometry.materials</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pypilecore.common.piles.geometry.materials</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+
+<span class="n">MATERIALS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;concrete&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;concrete&quot;</span><span class="p">,</span> <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#525252&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;steel&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;steel&quot;</span><span class="p">,</span> <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="mi">195000</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#E2E2E2&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;wood&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;wood&quot;</span><span class="p">,</span> <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#BD7205&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;grout&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;grout&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="mi">15000</span><span class="p">,</span>
+        <span class="s2">&quot;yield_stress&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#8A8A8A&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;grout_extorted&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;grout_extorted&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">,</span>
+        <span class="s2">&quot;yield_stress&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#8A8A8A&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="Color"><a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.Color">[docs]</a><span class="k">class</span> <span class="nc">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Color class represents an RGB color.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">red</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">green</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Represents an RGB color.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        red : int</span>
+<span class="sd">            The red component of the RGB color.</span>
+<span class="sd">        green : int</span>
+<span class="sd">            The green component of the RGB color.</span>
+<span class="sd">        blue : int</span>
+<span class="sd">            The blue component of the RGB color.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">red</span> <span class="o">=</span> <span class="n">red</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">green</span> <span class="o">=</span> <span class="n">green</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blue</span> <span class="o">=</span> <span class="n">blue</span>
+
+<div class="viewcode-block" id="Color.from_hex"><a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.Color.from_hex">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_hex</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">hex</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiate a Color object from a hexadecimal color string.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        hex : str</span>
+<span class="sd">            The hexadecimal representation of the RGB color.</span>
+<span class="sd">            example: &quot;#ff0000&quot; for red.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        Color</span>
+<span class="sd">            A Color object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">hex</span> <span class="o">=</span> <span class="nb">hex</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">red</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">hex</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+            <span class="n">green</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">hex</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+            <span class="n">blue</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">hex</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The hexadecimal representation of the RGB color. e.g. &quot;#ff0000&quot; for red.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;#</span><span class="si">{:02x}{:02x}{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Color.serialize_payload"><a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.Color.serialize_payload">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialize the RGB color to a dictionary payload for the API.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">}</span></div></div>
+
+
+<div class="viewcode-block" id="PileMaterial"><a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.PileMaterial">[docs]</a><span class="k">class</span> <span class="nc">PileMaterial</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The PileMaterial class represents a material that can be used in a pile geometry component.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">elastic_modulus</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">yield_stress</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Represents a material that can be used in a pile geometry component.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the material.</span>
+<span class="sd">        elastic_modulus : float</span>
+<span class="sd">            The elastic modulus [MPa] of the material.</span>
+<span class="sd">        yield_stress : float, optional</span>
+<span class="sd">            The yield stress [MPa] of the material, by default None.</span>
+<span class="sd">        color : Color or str or dict, optional</span>
+<span class="sd">            The color of the material, by default None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elastic_modulus</span> <span class="o">=</span> <span class="n">elastic_modulus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_yield_stress</span> <span class="o">=</span> <span class="n">yield_stress</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">from_hex</span><span class="p">(</span><span class="nb">hex</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span>
+                <span class="n">red</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">],</span>
+                <span class="n">green</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="s2">&quot;g&quot;</span><span class="p">],</span>
+                <span class="n">blue</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
+
+<div class="viewcode-block" id="PileMaterial.from_api_response"><a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.PileMaterial.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">material</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileMaterial</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiates a PileMaterial from a material object in the API response payload.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            material: A dictionary that is retrieved from the API response payload at &quot;/pile_properties/geometry/materials/[i]&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">from_hex</span><span class="p">(</span><span class="nb">hex</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span>
+                <span class="n">red</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">][</span><span class="s2">&quot;r&quot;</span><span class="p">],</span>
+                <span class="n">green</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">][</span><span class="s2">&quot;g&quot;</span><span class="p">],</span>
+                <span class="n">blue</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">][</span><span class="s2">&quot;b&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="n">elastic_modulus</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;elastic_modulus&quot;</span><span class="p">],</span>
+            <span class="n">yield_stress</span><span class="o">=</span><span class="n">material</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;yield_stress&quot;</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the material&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elastic_modulus</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The elastic modulus [MPa] of the material&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elastic_modulus</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">yield_stress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The yield stress [MPa] of the material&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yield_stress</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span> <span class="o">|</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The color of the material&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span>
+
+<div class="viewcode-block" id="PileMaterial.serialize_payload"><a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.PileMaterial.serialize_payload">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize the material to a dictionary payload for the API.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary payload containing the material&#39;s name, elastic modulus, and color.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastic_modulus</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">payload</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

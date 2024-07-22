@@ -104,7 +104,11 @@
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Polling ticket status&quot;</span><span class="p">)</span>
         <span class="n">status_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-status&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span>
+            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;/get-task-status&quot;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
+            <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span>
+            <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Check if the status response is OK</span>
@@ -125,6 +129,7 @@
             <span class="n">result_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
                 <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span>
+                <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
                 <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span>
                 <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
@@ -157,13 +162,16 @@
     <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
         <span class="s2">&quot;/compression/multiple-cpts/results&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
         <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_multi_cpt_api_report"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_multi_cpt_api_report">[docs]</a><span class="k">def</span> <span class="nf">get_multi_cpt_api_report</span><span class="p">(</span>
@@ -188,12 +196,15 @@
     <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
         <span class="s2">&quot;/compression/multiple-cpts/report&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
         <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_groups_api_result"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_groups_api_result">[docs]</a><span class="k">def</span> <span class="nf">get_groups_api_result</span><span class="p">(</span>
@@ -218,13 +229,16 @@
     <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
         <span class="s2">&quot;/grouper/group_cpts&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
         <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_optimize_groups_api_result"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_optimize_groups_api_result">[docs]</a><span class="k">def</span> <span class="nf">get_optimize_groups_api_result</span><span class="p">(</span>
@@ -249,13 +263,16 @@
     <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
         <span class="s2">&quot;/grouper/optimize_groups&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
         <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_groups_api_report"><a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_groups_api_report">[docs]</a><span class="k">def</span> <span class="nf">get_groups_api_report</span><span class="p">(</span>
@@ -280,13 +297,16 @@
     <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
         <span class="s2">&quot;/grouper/generate_grouper_report&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
         <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span><span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="p">)</span></div>
 </pre></div>
 
            </div>

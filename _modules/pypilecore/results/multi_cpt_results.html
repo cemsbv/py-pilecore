@@ -81,12 +81,9 @@
 <span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
 <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Patch</span>
 
+<span class="kn">from</span> <span class="nn">pypilecore.common.piles</span> <span class="kn">import</span> <span class="n">PileProperties</span>
 <span class="kn">from</span> <span class="nn">pypilecore.exceptions</span> <span class="kn">import</span> <span class="n">UserError</span>
 <span class="kn">from</span> <span class="nn">pypilecore.results.load_settlement</span> <span class="kn">import</span> <span class="n">get_load_settlement_plot</span>
-<span class="kn">from</span> <span class="nn">pypilecore.results.pile_properties</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">PileProperties</span><span class="p">,</span>
-    <span class="n">create_pile_properties_from_api_response</span><span class="p">,</span>
-<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pypilecore.results.single_cpt_results</span> <span class="kn">import</span> <span class="n">SingleCPTBearingResults</span>
 
 <span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
@@ -546,7 +543,7 @@
         <span class="n">group_results</span> <span class="o">=</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;group_results&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">cpt_results</span><span class="o">=</span><span class="n">cpt_results_dict</span><span class="p">,</span>
-            <span class="n">pile_properties</span><span class="o">=</span><span class="n">create_pile_properties_from_api_response</span><span class="p">(</span>
+            <span class="n">pile_properties</span><span class="o">=</span><span class="n">PileProperties</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span>
                 <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;pile_properties&quot;</span><span class="p">]</span>
             <span class="p">),</span>
             <span class="n">group_results_table</span><span class="o">=</span><span class="n">CPTGroupResultsTable</span><span class="p">(</span>
@@ -714,7 +711,7 @@
         <span class="c1"># Draw a box and whisker plot</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-            <span class="n">labels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">),</span>
+            <span class="n">tick_labels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">),</span>
             <span class="n">whis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
             <span class="n">autorange</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">vert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -814,6 +811,12 @@
 <span class="sd">        axes:</span>
 <span class="sd">            The `Axes` object where the settlement curves were plotted on</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate required properties are present</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pp</span><span class="o">.</span><span class="n">pile_type</span><span class="o">.</span><span class="n">settlement_curve</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;No settlement curve is defined for the pile-type. &quot;</span>
+                <span class="s2">&quot;Please define a settlement curve in the pile-type properties.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Validate axes</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">Axes</span><span class="p">)):</span>
@@ -841,8 +844,8 @@
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">get_load_settlement_plot</span><span class="p">(</span>
-            <span class="n">settlement_curve</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pp</span><span class="o">.</span><span class="n">settlement_curve</span><span class="p">,</span>
-            <span class="n">d_eq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pp</span><span class="o">.</span><span class="n">equiv_base_diameter</span><span class="p">,</span>
+            <span class="n">settlement_curve</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pp</span><span class="o">.</span><span class="n">pile_type</span><span class="o">.</span><span class="n">settlement_curve</span><span class="p">,</span>
+            <span class="n">d_eq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pp</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">equiv_diameter_pile_tip</span><span class="p">,</span>
             <span class="n">s_b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">s_b</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
             <span class="n">f_c_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">F_c_k</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
             <span class="n">f_nk_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">F_nk_k</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
