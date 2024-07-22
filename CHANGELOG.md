@@ -2,15 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2024-07-22
+
+### Miscellaneous Tasks
+
+- !refactor: pile properties in line with pilecore api v3 definition (#72)
+- * chore(deps): Regenerate requirements.txt with pip-compile & python3.9
+- * !feat: Refactor PileProperties object & schema mapping to API-V3.0
+- * chore: Update mypy settings
+- * fix: RectangleGeometryComponent.plot() offset fix
+- * chore: Import pile objects in parent modules
+- * docs: Update PileProperties objects in docs
+- * chore: fix linting
+- * perf(deps): bump nuclei to v1.0.0 and fix API version in NUCLEI CLIENT
+- * docs(notebook): add pile geometry definitions figure to notebook
+- * chore(deps): bump dependencies with pip-compile
+- * chore(docs): add image to git trace
+- * fix: resolve Matplotlib deprecation warning
+- * fix: resolve runtime warning, close figures
+- * build: bump python version to 9.10 for docs jobs
+- ---------
+- Thijs Lukkezen <t.lukkezen@cemsbv.io>
+- Robin Wimmers <r.wimmers@cemsbv.io>
+
 ## [0.4.2] - 2024-05-17
 
 ### Features
 
 - *(#64)* Auto convert pile-type-specification inputs to strings
-- Bandwidth of attribute; resolve #69 (#70)
-- Bandwidth of attribute; resolve #69 (#70)
-- Bandwidth of attribute; resolve #69 (#70)
-- Bandwidth of attribute; resolve #69 (#70)
 - Bandwidth of attribute; resolve #69 (#70)
 - Bandwidth of attribute; resolve #69 (#70)
 - Bandwidth of attribute; resolve #69 (#70)
@@ -27,13 +46,6 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - *(#40)* Pass soil_load=0.0 when input is None.
-- Delaunay tessellation (#63)
-- Delaunay tessellation (#63)
-- Delaunay tessellation (#63)
-- Delaunay tessellation (#63)
-- Delaunay tessellation (#63)
-- Delaunay tessellation (#63)
-- Delaunay tessellation (#63)
 - Delaunay tessellation (#63)
 - Delaunay tessellation (#63)
 - Delaunay tessellation (#63)
@@ -132,9 +144,6 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - *(grouper)* Use design value for grouper negative friction (#42)
-- *(grouper)* Use design value for grouper negative friction (#42)
-- *(grouper)* Make sure that pile tip levels are sorted (#38)
-- *(grouper)* Make sure that pile tip levels are sorted (#38)
 - *(grouper)* Make sure that pile tip levels are sorted (#38)
 - *(grouper)* Make sure that pile tip levels are sorted (#38)
 - *(grouper)* Make sure that pile tip levels are sorted (#38)
@@ -215,33 +224,6 @@ All notable changes to this project will be documented in this file.
 - Notebook and grouper workflow (#18)
 - Notebook and grouper workflow (#18)
 - Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
-- Notebook and grouper workflow (#18)
 - Thijs Lukkezen <t.lukkezen@cemsbv.io>
 - Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
 - Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
@@ -289,49 +271,6 @@ All notable changes to this project will be documented in this file.
 - Init pages (#10)
 - Init pages (#10)
 - Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
-- Init pages (#10)
 
 ### Features
 
@@ -341,30 +280,7 @@ All notable changes to this project will be documented in this file.
 - Raise ValueError for invalid pile_properties `height_base` input.
 - Add notebook example (#17)
 - Add notebook example (#17)
-- Add notebook example (#17)
-- Add notebook example (#17)
 - Cast CPTGroupResultsTable attributes to numpy arrays
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
-- *(grouper)* Add grouper implementation (#7)
 - *(grouper)* Add grouper implementation (#7)
 - *(grouper)* Add grouper implementation (#7)
 - *(grouper)* Add grouper implementation (#7)
@@ -390,7 +306,6 @@ All notable changes to this project will be documented in this file.
 - Add notebook example (#17)
 - Add public/ to .gitignore
 - Add pypi release job to ci (#14)
-- Add pypi release job to ci (#14)
 - *(docs)* Update branches name
 - Init pages (#10)
 - Init pages (#10)
@@ -414,8 +329,6 @@ All notable changes to this project will be documented in this file.
 ### Refactor
 
 - Don't use relative imports
-- [**breaking**] Use classify dict not dataframe (#13)
-- [**breaking**] Use classify dict not dataframe (#13)
 - [**breaking**] Use classify dict not dataframe (#13)
 - [**breaking**] Use classify dict not dataframe (#13)
 - [**breaking**] Use classify dict not dataframe (#13)
