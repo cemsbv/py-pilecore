@@ -107,6 +107,8 @@ def test_grouper_results_max_bearing(
         assert isinstance(mbr1.plot_bearing_capacities(), plt.Axes)
         assert isinstance(mbr1.plot_bearing_overview(), plt.Figure)
 
+        plt.close("all")
+
         for colname in ["pile_tip_level_nap", "R_c_d_net", "F_nk_d", "origin"]:
             assert isinstance(mbr1.table.__getattribute__(colname), np.ndarray)
 
