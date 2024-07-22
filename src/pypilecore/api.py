@@ -32,7 +32,11 @@ def wait_until_ticket_is_ready(
         if verbose:
             logging.info("Polling ticket status")
         status_response = client.call_endpoint(
-            "PileCore", "/get-task-status", schema=ticket.json(), return_response=True
+            "PileCore",
+            "/get-task-status",
+            version="v3",
+            schema=ticket.json(),
+            return_response=True,
         )
 
         # Check if the status response is OK
@@ -53,6 +57,7 @@ def wait_until_ticket_is_ready(
             result_response = client.call_endpoint(
                 "PileCore",
                 "/get-task-result",
+                version="v3",
                 schema=ticket.json(),
                 return_response=True,
             )
@@ -85,13 +90,16 @@ def get_multi_cpt_api_result(
     ticket = client.call_endpoint(
         "PileCore",
         "/compression/multiple-cpts/results",
+        version="v3",
         schema=payload,
         return_response=True,
     )
 
     wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
 
-    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+    return client.call_endpoint(
+        "PileCore", "/get-task-result", version="v3", schema=ticket.json()
+    )
 
 
 def get_multi_cpt_api_report(
@@ -116,12 +124,15 @@ def get_multi_cpt_api_report(
     ticket = client.call_endpoint(
         "PileCore",
         "/compression/multiple-cpts/report",
+        version="v3",
         schema=payload,
         return_response=True,
     )
     wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
 
-    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+    return client.call_endpoint(
+        "PileCore", "/get-task-result", version="v3", schema=ticket.json()
+    )
 
 
 def get_groups_api_result(
@@ -146,13 +157,16 @@ def get_groups_api_result(
     ticket = client.call_endpoint(
         "PileCore",
         "/grouper/group_cpts",
+        version="v3",
         schema=payload,
         return_response=True,
     )
 
     wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
 
-    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+    return client.call_endpoint(
+        "PileCore", "/get-task-result", version="v3", schema=ticket.json()
+    )
 
 
 def get_optimize_groups_api_result(
@@ -177,13 +191,16 @@ def get_optimize_groups_api_result(
     ticket = client.call_endpoint(
         "PileCore",
         "/grouper/optimize_groups",
+        version="v3",
         schema=payload,
         return_response=True,
     )
 
     wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
 
-    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+    return client.call_endpoint(
+        "PileCore", "/get-task-result", version="v3", schema=ticket.json()
+    )
 
 
 def get_groups_api_report(
@@ -208,10 +225,13 @@ def get_groups_api_report(
     ticket = client.call_endpoint(
         "PileCore",
         "/grouper/generate_grouper_report",
+        version="v3",
         schema=payload,
         return_response=True,
     )
 
     wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
 
-    return client.call_endpoint("PileCore", "/get-task-result", schema=ticket.json())
+    return client.call_endpoint(
+        "PileCore", "/get-task-result", version="v3", schema=ticket.json()
+    )

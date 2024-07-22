@@ -54,15 +54,43 @@ Bearing calculation: Results
 Pile properties: Results
 ------------------------
 
-.. autoclass:: pypilecore.results.pile_properties.RoundPileProperties
+.. autofunction:: pypilecore.common.piles.create_basic_pile
+
+.. autoclass:: pypilecore.common.piles.PileProperties
     :members:
     :inherited-members:
     :member-order: bysource
 
-.. autoclass:: pypilecore.results.pile_properties.RectPileProperties
+.. autoclass:: pypilecore.common.piles.type.PileType
     :members:
     :inherited-members:
     :member-order: bysource
+
+.. autoclass:: pypilecore.common.piles.geometry.PileGeometry
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+.. autoclass:: pypilecore.common.piles.geometry._BasePileGeometryComponent
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+.. autoclass:: pypilecore.common.piles.geometry.PrimaryPileComponentDimension
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+.. autoclass:: pypilecore.common.piles.geometry.PileMaterial
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+.. autoclass:: pypilecore.common.piles.geometry.Color
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
 
 Soil properties: Results
 ------------------------

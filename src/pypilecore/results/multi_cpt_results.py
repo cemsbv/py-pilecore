@@ -9,12 +9,9 @@ import pandas as pd
 from matplotlib.axes import Axes
 from matplotlib.patches import Patch
 
+from pypilecore.common.piles import PileProperties
 from pypilecore.exceptions import UserError
 from pypilecore.results.load_settlement import get_load_settlement_plot
-from pypilecore.results.pile_properties import (
-    PileProperties,
-    create_pile_properties_from_api_response,
-)
 from pypilecore.results.single_cpt_results import SingleCPTBearingResults
 
 Number = Union[float, int]
@@ -474,7 +471,7 @@ class MultiCPTBearingResults:
         group_results = response_dict["group_results"]
         return cls(
             cpt_results=cpt_results_dict,
-            pile_properties=create_pile_properties_from_api_response(
+            pile_properties=PileProperties.from_api_response(
                 response_dict["pile_properties"]
             ),
             group_results_table=CPTGroupResultsTable(
@@ -642,7 +639,7 @@ class MultiCPTBearingResults:
         # Draw a box and whisker plot
         axes.boxplot(
             np.flip(data, axis=0),
-            labels=np.flip(self.group_results_table.pile_tip_level_nap),
+            tick_labels=np.flip(self.group_results_table.pile_tip_level_nap),
             whis=(0, 100),
             autorange=True,
             vert=False,
@@ -742,6 +739,12 @@ class MultiCPTBearingResults:
         axes:
             The `Axes` object where the settlement curves were plotted on
         """
+        # Validate required properties are present
+        if self._pp.pile_type.settlement_curve is None:
+            raise ValueError(
+                "No settlement curve is defined for the pile-type. "
+                "Please define a settlement curve in the pile-type properties."
+            )
 
         # Validate axes
         if (axes is not None) and (not isinstance(axes, Axes)):
@@ -769,8 +772,8 @@ class MultiCPTBearingResults:
             )
 
         return get_load_settlement_plot(
-            settlement_curve=self._pp.settlement_curve,
-            d_eq=self._pp.equiv_base_diameter,
+            settlement_curve=self._pp.pile_type.settlement_curve,
+            d_eq=self._pp.geometry.equiv_diameter_pile_tip,
             s_b=self.group_results_table.s_b[idx],
             f_c_k=self.group_results_table.F_c_k[idx],
             f_nk_k=self.group_results_table.F_nk_k[idx],
