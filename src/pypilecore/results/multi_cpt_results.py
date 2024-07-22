@@ -639,7 +639,7 @@ class MultiCPTBearingResults:
         # Draw a box and whisker plot
         axes.boxplot(
             np.flip(data, axis=0),
-            labels=np.flip(self.group_results_table.pile_tip_level_nap),
+            tick_labels=np.flip(self.group_results_table.pile_tip_level_nap),
             whis=(0, 100),
             autorange=True,
             vert=False,
