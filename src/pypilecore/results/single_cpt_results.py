@@ -170,7 +170,7 @@ class CPTResultsTable:
 
     def to_pandas(self) -> pd.DataFrame:
         """Get the pandas.DataFrame representation"""
-        return pd.DataFrame(self.__dict__).dropna(axis=1)
+        return pd.DataFrame(self.__dict__).dropna(axis=0, how="all")
 
 
 class SingleCPTBearingResults:

@@ -215,7 +215,7 @@ class CPTGroupResultsTable:
     @lru_cache
     def to_pandas(self) -> pd.DataFrame:
         """The pandas.DataFrame representation"""
-        return pd.DataFrame(self.__dict__).dropna(axis=1)
+        return pd.DataFrame(self.__dict__).dropna(axis=0, how="all")
 
     def plot_bearing_capacities(
         self,
