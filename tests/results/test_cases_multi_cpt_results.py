@@ -34,20 +34,20 @@ def test_cases_multi_cpt_results_init_valid_input(
 
     assert cases_multicpt_results.cpt_results_dataframe.columns.to_list() == [
         "case_name",
-        "result_type",
+        "result_name",
         "test_id",
         "x",
         "y",
         "pile_tip_level_nap",
         "result",
-        "result_units",
+        "result_unit",
     ]
     assert cases_multicpt_results.cpt_group_results_dataframe.columns.to_list() == [
         "case_name",
-        "result_type",
+        "result_name",
         "pile_tip_level_nap",
         "result",
-        "result_units",
+        "result_unit",
     ]
 
 
