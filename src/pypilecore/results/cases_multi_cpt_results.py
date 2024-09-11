@@ -78,7 +78,7 @@ class CasesMultiCPTBearingResults:
         for case_name, case_results in results_per_case.items():
             for result_definition in CPTResultDefinitions:
                 df = case_results.cpt_results.get_results_per_cpt(
-                    column_name=result_definition.value.name
+                    column_name=result_definition.name
                 )
                 for idx_row, row in df.iterrows():
                     for test_id, result in row.items():
@@ -234,7 +234,7 @@ def _validate_results_per_case(
             raise ValueError(
                 "All MultiCPTBearingResults objects must have the same test ids."
             )
-        print(list(results.cpt_results.to_pandas().pile_tip_level_nap.unique()))
+
         if (
             list(results.cpt_results.to_pandas().pile_tip_level_nap.unique())
             != pile_tip_levels_nap

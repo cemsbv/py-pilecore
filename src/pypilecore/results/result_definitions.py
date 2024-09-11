@@ -2,6 +2,9 @@ from __future__ import annotations  # noqa: F404
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import List
+
+from natsort import natsorted
 
 
 @dataclass
@@ -112,6 +115,11 @@ class CPTResultDefinitions(Enum):
             raise ValueError(
                 f"Result with name '{name}' not found in 'CPTResultDefinitions'."
             )
+
+    @classmethod
+    def natsorted_names(cls) -> List[str]:
+        """Returns the names of the enum in natsorted order."""
+        return natsorted([r.name for r in cls])
 
 
 class CPTGroupResultDefinitions(Enum):
