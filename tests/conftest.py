@@ -127,8 +127,8 @@ def cpt() -> CPTData:
 
 @pytest.fixture
 def mock_cases_multi_cpt_bearing_results_valid_data(
-    mock_multi_cpt_bearing_response, mock_results_passover
-):
+    mock_multi_cpt_bearing_response: dict, mock_results_passover: dict
+) -> dict:
     cptgroupresults = MultiCPTBearingResults.from_api_response(
         mock_multi_cpt_bearing_response, mock_results_passover
     )
@@ -151,10 +151,10 @@ def mock_cases_multi_cpt_bearing_results_valid_data(
 
 @pytest.fixture
 def mock_cases_multi_cpt_bearing_results_different_cpts(
-    mock_multi_cpt_bearing_response,
-    mock_multi_cpt_bearing_response_less_cpts,
-    mock_results_passover,
-):
+    mock_multi_cpt_bearing_response: dict,
+    mock_multi_cpt_bearing_response_less_cpts: dict,
+    mock_results_passover: dict,
+) -> dict:
     cptgroupresults = MultiCPTBearingResults.from_api_response(
         mock_multi_cpt_bearing_response, mock_results_passover
     )
@@ -181,10 +181,10 @@ def mock_cases_multi_cpt_bearing_results_different_cpts(
 
 @pytest.fixture
 def mock_cases_multi_cpt_bearing_results_different_pile_tip_levels(
-    mock_multi_cpt_bearing_response,
-    mock_multi_cpt_bearing_response_less_pile_tip_levels,
-    mock_results_passover,
-):
+    mock_multi_cpt_bearing_response: dict,
+    mock_multi_cpt_bearing_response_less_pile_tip_levels: dict,
+    mock_results_passover: dict,
+) -> dict:
     cptgroupresults = MultiCPTBearingResults.from_api_response(
         mock_multi_cpt_bearing_response, mock_results_passover
     )

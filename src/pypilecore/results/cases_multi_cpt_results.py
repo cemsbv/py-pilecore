@@ -14,25 +14,6 @@ class CasesMultiCPTBearingResults:
     """
     Container class for the results of multiple cases of MultiCPTBearingResults.
     It expects that all MultiCPTBearingResults objects have the same pile tip levels and same test ids.
-
-    Properties
-    ----------
-    cases : List[Hashable]
-        The case names.
-    multicpt_bearing_results : List[MultiCPTBearingResults]
-        The MultiCPTBearingResults objects.
-    test_ids : List[str]
-        The test ids of all MultiCPTBearingResults objects.
-    pile_tip_levels_nap : List[float]
-        The pile tip levels NAP of all MultiCPTBearingResults objects.
-    cpt_locations : Dict[str, Location]
-        The mapping between test_id (key) and the location (value) of the cpt.
-    cpt_results_dataframe : pd.DataFrame
-        The dataframe with all the CPT results.
-        Available columns: case_name, result_type, test_id, x, y, pile_tip_level_nap, result, result_units.
-    cpt_group_results_dataframe : pd.DataFrame
-        The dataframe with CPT group results.
-        Available columns: case_name, result_type, pile_tip_level_nap, result, result_units.
     """
 
     def __init__(
@@ -50,8 +31,8 @@ class CasesMultiCPTBearingResults:
             The keys of the dictionary are the case names.
             All MultiCPTBearingResults objects must have the same pile tip levels and same test ids.
         cpt_locations : Dict[str, Location]
-            The mapping between test_id (key) and the location (value) of the cpt.
-            The keys must contain all the `test_id`s used in the MultiCPTBearingResults objects.
+            The mapping between `test_id` (key) and the `location` (value) of the cpt.
+            The keys must contain all the `test_id` (s) used in the MultiCPTBearingResults objects.
 
         Raises
         ------
@@ -61,7 +42,7 @@ class CasesMultiCPTBearingResults:
         ValueError
             If `results_per_case` is an empty dictionary.
             If not all MultiCPTBearingResults objects have the same pile tip levels and test ids.
-            If not all the `test_id`s used in the MultiCPTBearingResults objects are in the keys of `cpt_locations`.
+            If not all the `test_id` (s) used in the MultiCPTBearingResults objects are in the keys of `cpt_locations`.
         """
         # Validate results cases
         self._validate_results_per_case(results_per_case)
@@ -223,7 +204,7 @@ class CasesMultiCPTBearingResults:
 
     @property
     def cpt_locations(self) -> Dict[str, Location]:
-        """The mapping between test_id (key) and the location (value) of the cpt."""
+        """The mapping between `test_id` (key) and the `location` (value) of the cpt."""
         return self._cpt_locations
 
     @property
