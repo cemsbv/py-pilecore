@@ -86,7 +86,7 @@ class FigureCPTResultsVersusPtls:
         return self.results.test_ids
 
     @property
-    def figure(self) -> go.Figure:
+    def figure(self) -> go.FigureWidget:
         """The figure widget."""
         return self._figure
 
@@ -124,7 +124,7 @@ class FigureCPTResultsVersusPtls:
         else:
             visible_test_ids = self.get_visible_test_ids()
 
-        # Select data for case name and result type
+        # Select data for case name and result name.
         mask_case_name = (
             self.data["case_name"] == case_name
             if case_name is not None
