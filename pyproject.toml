@@ -99,5 +99,7 @@ module = [
     "numpy.*",
     "pandas.*",
     "IPython.*",
+    "plotly.*",
+    "ipywidgets.*",
 ]
 ignore_missing_imports = true

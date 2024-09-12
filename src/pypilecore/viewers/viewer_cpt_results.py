@@ -84,4 +84,4 @@ class ViewerCptResults:
 
     def display(self) -> DisplayHandle | None:
         """Display the figure."""
-        return display(self._layout)  # type: ignore
+        return display(self._layout)
