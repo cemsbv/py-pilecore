@@ -5,6 +5,7 @@ import pytest
 from pygef.common import Location
 from pygef.cpt import CPTData
 
+from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
 from pypilecore.results.multi_cpt_results import MultiCPTBearingResults
 
 
@@ -207,3 +208,12 @@ def mock_cases_multi_cpt_bearing_results_different_pile_tip_levels(
         "results_per_case": results_per_case,
         "cpt_locations": cpt_locations,
     }
+
+
+@pytest.fixture
+def mock_cases_multi_cpt_bearing_results(
+    mock_cases_multi_cpt_bearing_results_valid_data: dict,
+) -> CasesMultiCPTBearingResults:
+    return CasesMultiCPTBearingResults(
+        **mock_cases_multi_cpt_bearing_results_valid_data
+    )
