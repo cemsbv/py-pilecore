@@ -31,6 +31,13 @@ Bearing calculation: Input
 Bearing calculation: Results
 ----------------------------
 
+.. autoclass:: pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
+
 .. autoclass:: pypilecore.results.multi_cpt_results.MultiCPTBearingResults
     :members:
     :inherited-members:
