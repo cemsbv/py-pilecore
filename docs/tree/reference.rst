@@ -58,6 +58,19 @@ Bearing calculation: Results
     :inherited-members:
     :member-order: bysource
 
+
+.. _bearingCalculationViewers:
+Bearing calculation: Result Viewers
+-----------------------------------
+
+.. autoclass:: pypilecore.viewers.viewer_cpt_results.ViewerCptResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
+
+
 Pile properties: Results
 ------------------------
 
@@ -116,6 +129,8 @@ Soil properties: Results
     :members:
     :inherited-members:
     :member-order: bysource
+
+
 
 
 .. _cptGrouperInput:
