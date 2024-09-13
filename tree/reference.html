@@ -59,6 +59,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#bearing-calculation-results">Bearing calculation: Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.__init__"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cases"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.cases</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.multicpt_bearing_results"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.multicpt_bearing_results</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.test_ids"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.test_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.pile_tip_levels_nap"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.pile_tip_levels_nap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_locations"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.cpt_locations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_results_dataframe"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.cpt_results_dataframe</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_group_results_dataframe"><code class="docutils literal notranslate"><span class="pre">CasesMultiCPTBearingResults.cpt_group_results_dataframe</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.from_api_response"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults.from_api_response()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults.pile_properties"><code class="docutils literal notranslate"><span class="pre">MultiCPTBearingResults.pile_properties</span></code></a></li>
@@ -124,6 +135,24 @@
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.CPTGroupResultsTable.cpt_normative"><code class="docutils literal notranslate"><span class="pre">CPTGroupResultsTable.cpt_normative</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.CPTGroupResultsTable.to_pandas"><code class="docutils literal notranslate"><span class="pre">CPTGroupResultsTable.to_pandas()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.multi_cpt_results.CPTGroupResultsTable.plot_bearing_capacities"><code class="docutils literal notranslate"><span class="pre">CPTGroupResultsTable.plot_bearing_capacities()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bearing-calculation-result-viewers">Bearing calculation: Result Viewers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_results.ViewerCptResults"><code class="docutils literal notranslate"><span class="pre">ViewerCptResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_results.ViewerCptResults.__init__"><code class="docutils literal notranslate"><span class="pre">ViewerCptResults.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_results.ViewerCptResults.display"><code class="docutils literal notranslate"><span class="pre">ViewerCptResults.display()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView"><code class="docutils literal notranslate"><span class="pre">ViewerCptResultsPlanView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.__init__"><code class="docutils literal notranslate"><span class="pre">ViewerCptResultsPlanView.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.display"><code class="docutils literal notranslate"><span class="pre">ViewerCptResultsPlanView.display()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults"><code class="docutils literal notranslate"><span class="pre">ViewerCptGroupResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults.__init__"><code class="docutils literal notranslate"><span class="pre">ViewerCptGroupResults.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults.display"><code class="docutils literal notranslate"><span class="pre">ViewerCptGroupResults.display()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -676,6 +705,83 @@ Default = True</p></li>
 <section id="bearing-calculation-results">
 <span id="bearingcalculationresults"></span><h2>Bearing calculation: Results<a class="headerlink" href="#bearing-calculation-results" title="Permalink to this heading"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.cases_multi_cpt_results.</span></span><span class="sig-name descname"><span class="pre">CasesMultiCPTBearingResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_per_case</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_locations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/cases_multi_cpt_results.html#CasesMultiCPTBearingResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults" title="Permalink to this definition"></a></dt>
+<dd><p>Container class for the results of multiple cases of MultiCPTBearingResults.
+It expects that all MultiCPTBearingResults objects have the same pile tip levels and same test ids.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_per_case</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_locations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/cases_multi_cpt_results.html#CasesMultiCPTBearingResults.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize the class with the results of multiple cases of MultiCPTBearingResults.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results_per_case</strong> (<em>Dict</em><em>[</em><em>Hashable</em><em>, </em><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults" title="pypilecore.results.multi_cpt_results.MultiCPTBearingResults"><em>MultiCPTBearingResults</em></a><em>]</em>) – A dictionary with the results of multiple cases of MultiCPTBearingResults.
+The keys of the dictionary are the case names.
+All MultiCPTBearingResults objects must have the same pile tip levels and same test ids.</p></li>
+<li><p><strong>cpt_locations</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Location</em><em>]</em>) – The mapping between <cite>test_id</cite> (key) and the <cite>location</cite> (value) of the cpt.
+The keys must contain all the <cite>test_id</cite> (s) used in the MultiCPTBearingResults objects.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – If <cite>results_per_case</cite> is not of the expected type.
+    If <cite>cpt_locations</cite> is not of the expected type.</p></li>
+<li><p><strong>ValueError</strong> – If <cite>results_per_case</cite> is an empty dictionary.
+    If not all MultiCPTBearingResults objects have the same pile tip levels and test ids.
+    If not all the <cite>test_id</cite> (s) used in the MultiCPTBearingResults objects are in the keys of <cite>cpt_locations</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cases">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cases</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cases" title="Permalink to this definition"></a></dt>
+<dd><p>The case names.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.multicpt_bearing_results">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multicpt_bearing_results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults" title="pypilecore.results.multi_cpt_results.MultiCPTBearingResults"><span class="pre">MultiCPTBearingResults</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.multicpt_bearing_results" title="Permalink to this definition"></a></dt>
+<dd><p>The MultiCPTBearingResults objects.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.test_ids">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_ids</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.test_ids" title="Permalink to this definition"></a></dt>
+<dd><p>The test ids of all MultiCPTBearingResults objects.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.pile_tip_levels_nap">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pile_tip_levels_nap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.pile_tip_levels_nap" title="Permalink to this definition"></a></dt>
+<dd><p>The pile tip levels NAP of all MultiCPTBearingResults objects.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_locations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_locations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Location</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_locations" title="Permalink to this definition"></a></dt>
+<dd><p>The mapping between <cite>test_id</cite> (key) and the <cite>location</cite> (value) of the cpt.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_results_dataframe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_results_dataframe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_results_dataframe" title="Permalink to this definition"></a></dt>
+<dd><p>The dataframe with all the CPT results.
+Available columns: case_name, result_name, test_id, x, y, pile_tip_level_nap, result, result_unit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_group_results_dataframe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_group_results_dataframe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.cpt_group_results_dataframe" title="Permalink to this definition"></a></dt>
+<dd><p>The dataframe with CPT group results.
+Available columns: case_name, result_name, pile_tip_level_nap, result, result_unit.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pypilecore.results.multi_cpt_results.MultiCPTBearingResults">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.multi_cpt_results.</span></span><span class="sig-name descname"><span class="pre">MultiCPTBearingResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_results_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_properties</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_f_nk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_r_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_r_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soil_load</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/multi_cpt_results.html#MultiCPTBearingResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.multi_cpt_results.MultiCPTBearingResults" title="Permalink to this definition"></a></dt>
 <dd><p>Object that contains the results of a PileCore multi-cpt calculation.</p>
@@ -1162,6 +1268,169 @@ object will be created and returned.</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="bearing-calculation-result-viewers">
+<span id="bearingcalculationviewers"></span><h2>Bearing calculation: Result Viewers<a class="headerlink" href="#bearing-calculation-result-viewers" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_results.ViewerCptResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.viewers.viewer_cpt_results.</span></span><span class="sig-name descname"><span class="pre">ViewerCptResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cases_multi_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_results.html#ViewerCptResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_results.ViewerCptResults" title="Permalink to this definition"></a></dt>
+<dd><p>Viewer for the CPT results of the bearing capacity calculations.</p>
+<dl class="simple">
+<dt>It offers the following layout:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>Dropdown widgets:</dt><dd><ul>
+<li><p>Case: to select the case to show.</p></li>
+<li><p>Result: to select the result to show.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Figure CPT results vs. pile tip level:</dt><dd><ul>
+<li><p>X axis: result values</p></li>
+<li><p>Y axis: pile tip level w.r.t. NAP</p></li>
+<li><p>Each trace represents a different CPT.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_results.ViewerCptResults.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cases_multi_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_results.html#ViewerCptResults.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_results.ViewerCptResults.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize the viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cases_multi_results</strong> (<a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults" title="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults"><em>CasesMultiCPTBearingResults</em></a>) – The results of the bearing capacity calculations.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If ‘cases_multi_results’ are not of type ‘CasesMultiCPTBearingResults’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_results.ViewerCptResults.display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_results.html#ViewerCptResults.display"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_results.ViewerCptResults.display" title="Permalink to this definition"></a></dt>
+<dd><p>Display the figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DisplayHandle</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.viewers.viewer_cpt_results_plan_view.</span></span><span class="sig-name descname"><span class="pre">ViewerCptResultsPlanView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cases_multi_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_results_plan_view.html#ViewerCptResultsPlanView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView" title="Permalink to this definition"></a></dt>
+<dd><p>Viewer for the CPT results of the bearing capacity calculations in
+plan view for a fixed pile tip level (PTL).</p>
+<dl class="simple">
+<dt>It offers the following layout:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>Dropdown widgets:</dt><dd><ul>
+<li><p>Case: to select the case to show.</p></li>
+<li><p>Result: to select the result to show.</p></li>
+<li><p>Pile tip level: to select the pile tip level to show.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Figure CPT results vs. pile tip level:</dt><dd><ul>
+<li><p>X axis: X coordinate.</p></li>
+<li><p>Y axis: Y coordinate.</p></li>
+<li><p>Each point represents a different CPT, but the same pile tip level.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cases_multi_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_results_plan_view.html#ViewerCptResultsPlanView.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize the viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cases_multi_results</strong> (<a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults" title="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults"><em>CasesMultiCPTBearingResults</em></a>) – The results of the bearing capacity calculations.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If ‘cases_multi_results’ are not of type ‘CasesMultiCPTBearingResults’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_results_plan_view.html#ViewerCptResultsPlanView.display"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.display" title="Permalink to this definition"></a></dt>
+<dd><p>Display the figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DisplayHandle</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.viewers.viewer_cpt_group_results.</span></span><span class="sig-name descname"><span class="pre">ViewerCptGroupResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cases_multi_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_group_results.html#ViewerCptGroupResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults" title="Permalink to this definition"></a></dt>
+<dd><p>Viewer for the CPT group results of the bearing capacity calculations.</p>
+<dl class="simple">
+<dt>It offers the following layout:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>Dropdown widgets:</dt><dd><ul>
+<li><p>Result: to select the result to show.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Figure CPT group results vs. pile tip level:</dt><dd><ul>
+<li><p>X axis: result values</p></li>
+<li><p>Y axis: pile tip level w.r.t. NAP</p></li>
+<li><p>Each trace represents a different case.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cases_multi_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_group_results.html#ViewerCptGroupResults.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize the viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cases_multi_results</strong> (<a class="reference internal" href="#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults" title="pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults"><em>CasesMultiCPTBearingResults</em></a>) – The results of the bearing capacity calculations.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If ‘cases_multi_results’ are not of type ‘CasesMultiCPTBearingResults’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults.display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/viewers/viewer_cpt_group_results.html#ViewerCptGroupResults.display"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults.display" title="Permalink to this definition"></a></dt>
+<dd><p>Display the figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DisplayHandle</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>

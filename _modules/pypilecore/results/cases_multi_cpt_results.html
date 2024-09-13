@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypilecore.results.cases_multi_cpt_results &mdash; py-pilecore 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/index.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            py-pilecore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tree/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">py-pilecore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pypilecore.results.cases_multi_cpt_results</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pypilecore.results.cases_multi_cpt_results</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>  <span class="c1"># noqa: F404</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">natsort</span> <span class="kn">import</span> <span class="n">natsorted</span>
+<span class="kn">from</span> <span class="nn">pygef.common</span> <span class="kn">import</span> <span class="n">Location</span>
+
+<span class="kn">from</span> <span class="nn">pypilecore.results.multi_cpt_results</span> <span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
+<span class="kn">from</span> <span class="nn">pypilecore.results.result_definitions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CPTGroupResultDefinitions</span><span class="p">,</span>
+    <span class="n">CPTResultDefinitions</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="CasesMultiCPTBearingResults"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults">[docs]</a><span class="k">class</span> <span class="nc">CasesMultiCPTBearingResults</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Container class for the results of multiple cases of MultiCPTBearingResults.</span>
+<span class="sd">    It expects that all MultiCPTBearingResults objects have the same pile tip levels and same test ids.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CasesMultiCPTBearingResults.__init__"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">],</span>
+        <span class="n">cpt_locations</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Location</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the class with the results of multiple cases of MultiCPTBearingResults.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        results_per_case : Dict[Hashable, MultiCPTBearingResults]</span>
+<span class="sd">            A dictionary with the results of multiple cases of MultiCPTBearingResults.</span>
+<span class="sd">            The keys of the dictionary are the case names.</span>
+<span class="sd">            All MultiCPTBearingResults objects must have the same pile tip levels and same test ids.</span>
+<span class="sd">        cpt_locations : Dict[str, Location]</span>
+<span class="sd">            The mapping between `test_id` (key) and the `location` (value) of the cpt.</span>
+<span class="sd">            The keys must contain all the `test_id` (s) used in the MultiCPTBearingResults objects.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If `results_per_case` is not of the expected type.</span>
+<span class="sd">            If `cpt_locations` is not of the expected type.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `results_per_case` is an empty dictionary.</span>
+<span class="sd">            If not all MultiCPTBearingResults objects have the same pile tip levels and test ids.</span>
+<span class="sd">            If not all the `test_id` (s) used in the MultiCPTBearingResults objects are in the keys of `cpt_locations`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate results cases</span>
+        <span class="n">_validate_results_per_case</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span>
+
+        <span class="c1"># Initialize private variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cases</span> <span class="o">=</span> <span class="n">natsorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results_per_case</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_multicpt_bearing_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">results_per_case</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_test_ids</span> <span class="o">=</span> <span class="n">natsorted</span><span class="p">(</span>
+            <span class="n">results_per_case</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">results_per_case</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">test_ids</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_levels_nap</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span>
+                <span class="n">results_per_case</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">results_per_case</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+            <span class="p">),</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cpt_locations</span><span class="p">(</span><span class="n">cpt_locations</span><span class="p">)</span>
+
+        <span class="c1"># Create cpt_results_dataframe and cpt_group_results_dataframe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cpt_results_dataframe</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cpt_group_results_dataframe</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_cpt_results_dataframe</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to create and set the property `cpt_results_dataframe`.&quot;&quot;&quot;</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">case_name</span><span class="p">,</span> <span class="n">case_results</span> <span class="ow">in</span> <span class="n">results_per_case</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTResultDefinitions</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">case_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">get_results_per_cpt</span><span class="p">(</span>
+                    <span class="n">column_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">idx_row</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">test_id</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="nb">dict</span><span class="p">(</span>
+                                <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
+                                <span class="n">result_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                <span class="n">test_id</span><span class="o">=</span><span class="n">test_id</span><span class="p">,</span>
+                                <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                                <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                                <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">idx_row</span><span class="p">,</span>
+                                <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+                                <span class="n">result_unit</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_cpt_group_results_dataframe</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">result_cases</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to create and set the property `cpt_group_results_dataframe`.&quot;&quot;&quot;</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">case_name</span><span class="p">,</span> <span class="n">case_results</span> <span class="ow">in</span> <span class="n">result_cases</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">case_results</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTGroupResultDefinitions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                    <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="nb">dict</span><span class="p">(</span>
+                            <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
+                            <span class="n">result_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                            <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">],</span>
+                            <span class="n">result</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
+                            <span class="n">result_unit</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_group_results_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_cpt_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Location</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private setter for `cpt_locations`.&quot;&quot;&quot;</span>
+        <span class="c1"># Check data types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected type &#39;List[CPTData]&#39; for &#39;cpt_locations&#39;, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected type &#39;str&#39; for keys of &#39;cpt_locations&#39;, but got </span><span class="si">{</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Location</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected type &#39;Location&#39; for values of &#39;cpt_locations&#39;, but got </span><span class="si">{</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Check that all the `test_id`s used in the MultiCPTBearingResults objects are in the keys.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">test_id</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">test_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_ids</span><span class="p">):</span>
+            <span class="n">missing_test_ids</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">test_id</span> <span class="k">for</span> <span class="n">test_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_ids</span> <span class="k">if</span> <span class="n">test_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Not all `test_id`s used in the MultiCPTBearingResults objects are in the keys of `cpt_locations`. &quot;</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;The following `test_id`s are missing: </span><span class="si">{</span><span class="n">missing_test_ids</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_locations</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cases</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Hashable</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The case names.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cases</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">multicpt_bearing_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MultiCPTBearingResults</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The MultiCPTBearingResults objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multicpt_bearing_results</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The test ids of all MultiCPTBearingResults objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_ids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pile_tip_levels_nap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The pile tip levels NAP of all MultiCPTBearingResults objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_levels_nap</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cpt_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Location</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The mapping between `test_id` (key) and the `location` (value) of the cpt.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_locations</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cpt_results_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The dataframe with all the CPT results.</span>
+<span class="sd">        Available columns: case_name, result_name, test_id, x, y, pile_tip_level_nap, result, result_unit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dataframe</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cpt_group_results_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The dataframe with CPT group results.</span>
+<span class="sd">        Available columns: case_name, result_name, pile_tip_level_nap, result, result_unit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_group_results_dataframe</span></div>
+
+
+<span class="k">def</span> <span class="nf">_validate_results_per_case</span><span class="p">(</span>
+    <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Private method to validate the results_per_case dictionary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    results_per_case : Dict[Hashable, MultiCPTBearingResults]</span>
+<span class="sd">        A dictionary with the results of multiple cases of MultiCPTBearingResults.</span>
+<span class="sd">        The keys of the dictionary are the case names.</span>
+<span class="sd">        All MultiCPTBearingResults objects must have the same pile tip levels and same test ids.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If `results_per_case` is not of the expected type.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `results_per_case` is an empty dictionary.</span>
+<span class="sd">        If not all MultiCPTBearingResults objects have the same pile tip levels and test ids.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected type &#39;Dict[Hashable, MultiCPTBearingResults]&#39; for &#39;results_per_case&#39;, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty dictionary &#39;results_per_case&#39; is not allowed.&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">results_per_case</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected type &#39;MultiCPTBearingResults&#39; for items in &#39;results_per_case&#39;, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="n">test_ids</span> <span class="o">=</span> <span class="n">results_per_case</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">results_per_case</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">test_ids</span>
+    <span class="n">pile_tip_levels_nap</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="n">results_per_case</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">results_per_case</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">results_per_case</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">test_ids</span> <span class="o">!=</span> <span class="n">test_ids</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;All MultiCPTBearingResults objects must have the same test ids.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="o">!=</span> <span class="n">pile_tip_levels_nap</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;All MultiCPTBearingResults objects must have the same pile tip levels.&quot;</span>
+            <span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CEMS BV.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

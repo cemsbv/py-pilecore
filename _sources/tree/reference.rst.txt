@@ -31,6 +31,13 @@ Bearing calculation: Input
 Bearing calculation: Results
 ----------------------------
 
+.. autoclass:: pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
+
 .. autoclass:: pypilecore.results.multi_cpt_results.MultiCPTBearingResults
     :members:
     :inherited-members:
@@ -50,6 +57,32 @@ Bearing calculation: Results
     :members:
     :inherited-members:
     :member-order: bysource
+
+
+.. _bearingCalculationViewers:
+Bearing calculation: Result Viewers
+-----------------------------------
+
+.. autoclass:: pypilecore.viewers.viewer_cpt_results.ViewerCptResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
+
+.. autoclass:: pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
+
+.. autoclass:: pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
 
 Pile properties: Results
 ------------------------
@@ -109,6 +142,8 @@ Soil properties: Results
     :members:
     :inherited-members:
     :member-order: bysource
+
+
 
 
 .. _cptGrouperInput:
