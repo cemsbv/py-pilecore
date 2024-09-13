@@ -71,6 +71,13 @@ Bearing calculation: Result Viewers
     .. automethod:: __init__
 
 
+.. autoclass:: pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
+
 Pile properties: Results
 ------------------------
 

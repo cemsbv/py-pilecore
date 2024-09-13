@@ -5,22 +5,23 @@ from typing import Hashable, List
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from natsort import natsort_keygen
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.results.result_definitions import CPTGroupResultDefinitions
 
 
-class FigureCPTResultsVersusPtls:
+class FigureCPTGroupResultsVersusPtls:
     """
-    Interactive figure to show the CPT results of the bearing capacity calculations
+    Interactive figure to show the CPT grouped results of the bearing capacity calculations
     versus the pile tip levels (PTLs).
 
     The layout of the figure is:
         - X axis: result values.
         - Y axis: pile tip level w.r.t. NAP.
-        - Each trace represents a different CPT.
+        - Each trace represents a different case.
 
-    The figure has a method to switch between cases and results.
+    The figure has a method to switch between results.
     """
 
     def __init__(self, cases_multi_results: CasesMultiCPTBearingResults) -> None:
@@ -45,8 +46,8 @@ class FigureCPTResultsVersusPtls:
             layout=go.Layout(
                 height=800,
                 width=800,
-                title="Results for all CPTs<br>Case: , Result: ",
-                legend_title="CPT",
+                title="Results for all cases<br>Result: ",
+                legend_title="Case",
                 colorway=px.colors.qualitative.Plotly,
                 xaxis_title="",
                 yaxis=go.layout.YAxis(
@@ -73,7 +74,7 @@ class FigureCPTResultsVersusPtls:
     @property
     def data(self) -> pd.DataFrame:
         """The dataframe used to plot the results."""
-        return self.results.cpt_results_dataframe
+        return self.results.cpt_group_results_dataframe
 
     @property
     def cases(self) -> List[Hashable]:
@@ -81,67 +82,83 @@ class FigureCPTResultsVersusPtls:
         return self.results.cases
 
     @property
-    def test_ids(self) -> List[str]:
-        """The test_ids (cpt names) of all the MultiCPTBearingResults."""
-        return self.results.test_ids
-
-    @property
     def figure(self) -> go.FigureWidget:
         """The figure widget."""
         return self._figure
 
-    def get_visible_test_ids(self) -> List[go.Scatter]:
-        """Returns the visible `test_id` (s) in the figure widget."""
+    def get_visible_cases(self) -> List[Hashable]:
+        """
+        Returns the visible cases in the figure widget.
+
+        Notes
+        -----
+            - If there are no traces in the figure, it returns all the case names.
+            - If a case is None, then it is represented as "None".
+        """
+        if len(self.figure.data) == 0:
+            # Select all cases if there are no traces in the figure yet.
+            cases: List[Hashable] = []
+            for case in self.cases:
+                if case is None:
+                    cases.append("None")
+                else:
+                    cases.append(case)
+            return cases
         return [trace.name for trace in self.figure.data if trace.visible is True]
 
-    def show_case_and_result(self, case_name: Hashable, result_name: str) -> None:
-        """Shows the results for all CPTs and pile tip levels for the requested `case_name` and `result_name`.
+    def show_result(self, result_name: str) -> None:
+        """Shows the group results for all pile tip levels for the requested `result_name`.
 
         Parameters
         ----------
-        case_name : str
-            The name of the case to show.
         result_name : str
             The name of the result to show.
 
         Raises
         ------
         ValueError
-            If the `case_name` is not found in the cases.
             If the `result_name` is not found in the CPTResultDefinitions.
         """
-        # Check that case name is in cases.
-        if case_name not in self.cases:
-            raise ValueError(f"Case name '{case_name}' not found in cases.")
-
         # Get the result definition that corresponds to the result name.
-        result_definition = CPTResultDefinitions.get(result_name)
+        result_definition = CPTGroupResultDefinitions.get(result_name)
 
-        # Get the visible test_ids
-        if len(self.figure.data) == 0:
-            # Select all test_ids if there are no traces in the figure yet.
-            visible_test_ids = self.test_ids
-        else:
-            visible_test_ids = self.get_visible_test_ids()
+        # Get the visible cases
+        visible_cases = self.get_visible_cases()
 
-        # Select data for case name and result name.
-        mask_case_name = (
-            self.data["case_name"] == case_name
-            if case_name is not None
-            else self.data["case_name"].isna()
-        )
+        # Select data for result type
         selected_data = self.data.loc[
-            (mask_case_name) & (self.data["result_name"] == result_definition.name)
+            self.data["result_name"] == result_definition.name
         ]
+
+        # Organize data and format depending on result type
+        mode = "lines+markers"
+        marker_size = 6
+        if result_definition in [
+            CPTGroupResultDefinitions.cpt_Rc_min,
+            CPTGroupResultDefinitions.cpt_Rc_max,
+            CPTGroupResultDefinitions.cpt_normative,
+            CPTGroupResultDefinitions.use_group_average,
+            CPTGroupResultDefinitions.xi_normative,
+            CPTGroupResultDefinitions.n_cpts,
+        ]:
+            selected_data = selected_data.sort_values(by="result", key=natsort_keygen())
+            mode = "markers"
+            marker_size = 10
+
         traces = []
-        for test_id in self.test_ids:
-            df = selected_data.loc[selected_data["test_id"] == test_id]
+        for case in self.cases:
+            if case is not None:
+                df = selected_data.loc[selected_data["case_name"] == case]
+            else:
+                df = selected_data.loc[selected_data["case_name"].isna()]
+
             traces.append(
                 go.Scatter(
                     x=df["result"],
                     y=df["pile_tip_level_nap"],
-                    mode="lines+markers",
-                    name=test_id,
+                    mode=mode,
+                    name=case if case is not None else "None",
+                    marker_size=marker_size,
                 )
             )
 
@@ -153,7 +170,7 @@ class FigureCPTResultsVersusPtls:
             self.figure.add_traces(traces)
 
             self.figure.update_layout(
-                title=f"Results for all CPTs<br>Case: {case_name}, Result: {result_definition.value.html}",
+                title=f"CPT Group Results for all cases<br>Result: {result_definition.value.html}",
                 xaxis=go.layout.XAxis(
                     title=f"{result_definition.value.html} [{result_definition.value.unit}]",
                     title_font_size=18,
@@ -162,14 +179,14 @@ class FigureCPTResultsVersusPtls:
             )
 
             self.figure.update_traces(
-                selector=lambda x: x.name in visible_test_ids,
+                selector=lambda x: x.name in visible_cases,
                 patch=dict(
                     visible=True,
                 ),
             )
 
             self.figure.update_traces(
-                selector=lambda x: x.name not in visible_test_ids,
+                selector=lambda x: x.name not in visible_cases,
                 patch=dict(
                     visible="legendonly",
                 ),
