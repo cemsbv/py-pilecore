@@ -2,25 +2,27 @@ from __future__ import annotations  # noqa: F404
 
 from typing import Hashable, List
 
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
 from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.viewers.interactive_figures.utils import get_continuous_color
 
 
-class FigureCPTResultsVersusPtls:
+class FigureCPTResultsPlanView:
     """
     Interactive figure to show the CPT results of the bearing capacity calculations
-    versus the pile tip levels (PTLs).
+    in plan view for a fixed pile tip level (PTL).
 
     The layout of the figure is:
-        - X axis: result values.
-        - Y axis: pile tip level w.r.t. NAP.
-        - Each trace represents a different CPT.
+        - X axis: X coordinate.
+        - Y axis: Y coordinate.
+        - Each point represents a different CPT, but the same pile tip level.
 
-    The figure has a method to switch between cases and results.
+    The figure has a method to switch between case, result and pile tip level.
     """
 
     def __init__(self, cases_multi_results: CasesMultiCPTBearingResults) -> None:
@@ -44,13 +46,16 @@ class FigureCPTResultsVersusPtls:
         self._figure = go.FigureWidget(
             layout=go.Layout(
                 height=800,
-                width=800,
-                title="CPT Results vs. Pile tip level<br>Case: , Result: ",
+                width=1200,
+                title="CPT Results in Plan View<br>Case: , Pile tip level [m NAP]: <br>Result: ",
                 legend_title="CPT",
                 colorway=px.colors.qualitative.Plotly,
-                xaxis_title="",
+                xaxis=go.layout.XAxis(
+                    title="X [m]",
+                    title_font_size=18,
+                ),
                 yaxis=go.layout.YAxis(
-                    title="Pile tip level [m NAP]",
+                    title="Y [m]",
                     title_font_size=18,
                 ),
                 autosize=False,
@@ -86,16 +91,23 @@ class FigureCPTResultsVersusPtls:
         return self.results.test_ids
 
     @property
+    def pile_tip_levels_nap(self) -> List[float]:
+        """The pile tip levels w.r.t. NAP of all the MultiCPTBearingResults."""
+        return self.results.pile_tip_levels_nap
+
+    @property
     def figure(self) -> go.FigureWidget:
         """The figure widget."""
         return self._figure
 
-    def get_visible_test_ids(self) -> List[go.Scatter]:
+    def get_visible_test_ids(self) -> List[str]:
         """Returns the visible `test_id` (s) in the figure widget."""
         return [trace.name for trace in self.figure.data if trace.visible is True]
 
-    def show_case_and_result(self, case_name: Hashable, result_name: str) -> None:
-        """Shows the results for all CPTs and pile tip levels for the requested `case_name` and `result_name`.
+    def show_case_result_and_ptl(
+        self, case_name: Hashable, result_name: str, pile_tip_level_nap: float
+    ) -> None:
+        """Shows the results for all CPTs for the requested `case_name`, `result_name` and `pile_tip_level`.
 
         Parameters
         ----------
@@ -103,12 +115,18 @@ class FigureCPTResultsVersusPtls:
             The name of the case to show.
         result_name : str
             The name of the result to show.
+        pile_tip_level_nap : float
+            The pile tip level w.r.t. NAP to show.
+
 
         Raises
         ------
+        TypeError
+            If the `pile_tip_level_nap` is not of type 'float'.
         ValueError
             If the `case_name` is not found in the cases.
             If the `result_name` is not found in the CPTResultDefinitions.
+            If the `pile_tip_level_nap` is not found in the pile tip levels.
         """
         # Check that case name is in cases.
         if case_name not in self.cases:
@@ -116,6 +134,18 @@ class FigureCPTResultsVersusPtls:
 
         # Get the result definition that corresponds to the result name.
         result_definition = CPTResultDefinitions.get(result_name)
+
+        # Check that pile tip level NAP is in pile tip levels.
+        if not isinstance(pile_tip_level_nap, (int, float)):
+            raise TypeError(
+                f"Expected type 'float' for 'pile_tip_level_nap', but got {type(pile_tip_level_nap)}"
+            )
+        if not any(
+            np.isclose(pile_tip_level_nap, self.pile_tip_levels_nap, rtol=0, atol=1e-4)
+        ):
+            raise ValueError(
+                f"Pile tip level NAP '{pile_tip_level_nap}' not found in pile tip levels NAP."
+            )
 
         # Get the visible test_ids
         if len(self.figure.data) == 0:
@@ -130,20 +160,77 @@ class FigureCPTResultsVersusPtls:
             if case_name is not None
             else self.data["case_name"].isna()
         )
+        mask_pile_tip_level = np.isclose(
+            pile_tip_level_nap,
+            self.data["pile_tip_level_nap"].to_numpy(),
+            rtol=0,
+            atol=1e-4,
+        )
         selected_data = self.data.loc[
-            (mask_case_name) & (self.data["result_name"] == result_definition.name)
+            (mask_case_name)
+            & (self.data["result_name"] == result_definition.name)
+            & (mask_pile_tip_level)
         ]
+
+        # Get the min and max result values for the color scale.
+        result_max = selected_data["result"].max()
+        result_min = selected_data["result"].min()
+        colorscale = px.colors.get_colorscale("picnic")
+
         traces = []
         for test_id in self.test_ids:
             df = selected_data.loc[selected_data["test_id"] == test_id]
+            result = round(df["result"].values[0], 1)
+            color = get_continuous_color(
+                colorscale=colorscale,
+                intermed=(result - result_min) / (result_max - result_min),
+            )
             traces.append(
                 go.Scatter(
-                    x=df["result"],
-                    y=df["pile_tip_level_nap"],
-                    mode="lines+markers",
+                    x=df["x"],
+                    y=df["y"],
+                    text=f"CPT {test_id}<br>{result}",
+                    mode="markers+text",
                     name=test_id,
+                    marker=dict(
+                        size=8,
+                        color=color,
+                        line=dict(
+                            width=0.5,
+                            color="black",
+                        ),
+                    ),
+                    textposition="top center",
+                    hoverinfo="none",
                 )
             )
+
+        # Add the colorbar
+        traces.append(
+            go.Scatter(
+                x=[None],
+                y=[None],
+                mode="markers",
+                name="__colorbar__",
+                marker=dict(
+                    colorscale=colorscale,
+                    showscale=True,
+                    cmin=result_min,
+                    cmax=result_max,
+                    colorbar=dict(
+                        thickness=16,
+                        orientation="h",
+                        x=0.75,
+                        y=1.0,
+                        len=0.5,
+                        title=f"{result_definition.value.html} [{result_definition.value.unit}]",
+                        title_font_size=14,
+                    ),
+                ),
+                hoverinfo="none",
+                showlegend=False,
+            )
+        )
 
         with self.figure.batch_update():
             # Empty traces
@@ -153,12 +240,9 @@ class FigureCPTResultsVersusPtls:
             self.figure.add_traces(traces)
 
             self.figure.update_layout(
-                title=f"CPT Results vs. Pile tip level<br>Case: {case_name}, Result: {result_definition.value.html}",
-                xaxis=go.layout.XAxis(
-                    title=f"{result_definition.value.html} [{result_definition.value.unit}]",
-                    title_font_size=18,
-                ),
-                showlegend=True,
+                title=f"CPT Results in Plan View<br>Case: {case_name}, "
+                + f"Pile tip level [m NAP]: {pile_tip_level_nap}<br>"
+                + f"Result: {result_definition.value.html} [{result_definition.value.unit}]"
             )
 
             self.figure.update_traces(
@@ -172,5 +256,13 @@ class FigureCPTResultsVersusPtls:
                 selector=lambda x: x.name not in visible_test_ids,
                 patch=dict(
                     visible="legendonly",
+                ),
+            )
+
+            self.figure.update_traces(
+                selector=lambda x: x.name == "__colorbar__",
+                patch=dict(
+                    visible=True,
+                    showlegend=False,
                 ),
             )
