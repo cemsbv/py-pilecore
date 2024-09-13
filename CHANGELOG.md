@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2024-09-13
+
+### Documentation
+
+- *(viewer_results)* Add the ViewerCptResults to the sphinx docs
+
+### Features
+
+- *(viewer_results)* Add the results viewer ViewerCptResultsPlanView
+- *(viewer_results)* Add the results viewer ViewerCptGroupResults
+- *(viewer_results)* Add ViewerCptResults class
+- *(cases_multicpt)* Add class CasesMultiCPTBearingResults
+- *(cases_multicpt)* Add class CasesMultiCPTBearingResults (#76)
+- *(cases_multicpt)* Add class CasesMultiCPTBearingResults (#76)
+- *(cases_multicpt)* Add class CasesMultiCPTBearingResults (#76)
+- *(cases_multicpt)* Add class CasesMultiCPTBearingResults (#76)
+- *(cases_multicpt)* Add class CasesMultiCPTBearingResults (#76)
+- *(cases_multicpt)* Add class CasesMultiCPTBearingResults (#76)
+- Pablo Vasconez <p.vasconez@cemsbv.io>
+
+### Miscellaneous Tasks
+
+- *(cases_multicpt)* Add CasesMultiCPTBearingResults to the init of the results module
+
+### Refactor
+
+- *(cases_multicpt)* Refactor ResultTypes to ResultDefinitions
+
+### Testing
+
+- *(viewer_results)* Add tests for the ViewerCptResults
+
 ## [0.5.1] - 2024-09-13
 
 ### Bug Fixes
