@@ -46,7 +46,7 @@ class FigureCPTGroupResultsVersusPtls:
             layout=go.Layout(
                 height=800,
                 width=800,
-                title="Results for all cases<br>Result: ",
+                title="CPT Group Results vs. Pile tip level for all cases<br>Result: ",
                 legend_title="Case",
                 colorway=px.colors.qualitative.Plotly,
                 xaxis_title="",
@@ -170,7 +170,7 @@ class FigureCPTGroupResultsVersusPtls:
             self.figure.add_traces(traces)
 
             self.figure.update_layout(
-                title=f"CPT Group Results for all cases<br>Result: {result_definition.value.html}",
+                title=f"CPT Group Results vs. Pile tip level for all cases<br>Result: {result_definition.value.html}",
                 xaxis=go.layout.XAxis(
                     title=f"{result_definition.value.html} [{result_definition.value.unit}]",
                     title_font_size=18,
