@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2024-09-13
+
+### Bug Fixes
+
+- Use correct axis to remove missing values (resolve #73)
+
 ## [0.5.0] - 2024-07-22
 
 ### Miscellaneous Tasks
