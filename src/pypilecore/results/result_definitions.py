@@ -188,3 +188,8 @@ class CPTGroupResultDefinitions(Enum):
             raise ValueError(
                 f"Result with name '{name}' not found in 'CPTGroupResultDefinitions'."
             )
+
+    @classmethod
+    def natsorted_names(cls) -> List[str]:
+        """Returns the names of the enum in natsorted order."""
+        return natsorted([r.name for r in cls])
