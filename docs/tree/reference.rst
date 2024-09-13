@@ -70,6 +70,12 @@ Bearing calculation: Result Viewers
 
     .. automethod:: __init__
 
+.. autoclass:: pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView
+    :members:
+    :inherited-members:
+    :member-order: bysource
+
+    .. automethod:: __init__
 
 .. autoclass:: pypilecore.viewers.viewer_cpt_group_results.ViewerCptGroupResults
     :members:
