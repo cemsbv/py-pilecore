@@ -158,8 +158,18 @@ def create_soil_properties_payload(
             groundwater_level_nap=groundwater_level_nap
             if groundwater_level_nap is not None
             else cpt.delivered_vertical_position_offset - 1,
-            coordinates=dict(x=cpt.delivered_location.x, y=cpt.delivered_location.y),
         )
+
+        # Optionally add coordinates
+        if (
+            cpt.delivered_location is not None
+            and cpt.delivered_location.x is not None
+            and cpt.delivered_location.y is not None
+        ):
+            soil_properties["coordinates"] = {
+                "x": cpt.delivered_location.x,
+                "y": cpt.delivered_location.y,
+            }
 
         # Optionally add cpt-specific friction-range parameters
         if (
