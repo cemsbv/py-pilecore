@@ -42,7 +42,7 @@ docs = [
 # Get a file with the latest requirements by running bash: `./get-super-linter-requirements.sh`
 lint = [
     "ansible-lint==6.22.1",
-    "black==23.11.0",
+    "black==24.3.0",
     "cfn-lint==0.83.3",
     "cpplint==1.6.1",
     "flake8==6.0.0",
