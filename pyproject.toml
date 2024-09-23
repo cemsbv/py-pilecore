@@ -41,23 +41,16 @@ docs = [
 # See https://github.com/super-linter/super-linter/tree/main/dependencies/python
 # Get a file with the latest requirements by running bash: `./get-super-linter-requirements.sh`
 lint = [
-    "mypy==1.6.1",
-    "mypy-extensions==1.0.0",
-    "tomli==2.0.1",
-    "typing_extensions==4.7.1",
-    "black[jupyter]==23.10.1",
-    "click==8.1.3",
-    "packaging==23.2",
-    "pathspec==0.11.1",
-    "platformdirs==4.1.0",
-    "tomli==2.0.1,",
-    "isort==5.12.0",
+    "ansible-lint==6.22.1",
+    "black==23.11.0",
+    "cfn-lint==0.83.3",
+    "cpplint==1.6.1",
     "flake8==6.0.0",
-    "mccabe==0.7.0",
-    "pycodestyle==2.10.0",
-    "pyflakes==3.0.1",
-    'pandas-stubs>2,<3',
-    'types-tqdm>4,<5',
+    "isort==5.12.0",
+    "mypy==1.7.1",
+    "sqlfluff==2.3.5",
+    "yamllint==1.33.0",
+    "yq==3.2.3",
 ]
 
 [tool.isort]
