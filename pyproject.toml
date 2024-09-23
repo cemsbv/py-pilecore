@@ -37,8 +37,9 @@ docs = [
     "asteroid-sphinx-theme==0.0.3",
     "sphinx_rtd_theme==1.2.0",
 ]
-# lint dependencies from github super-linter v5
+# lint dependencies from github super-linter
 # See https://github.com/super-linter/super-linter/tree/main/dependencies/python
+# Get a file with the latest requirements by running bash: `./get-super-linter-requirements.sh`
 lint = [
     "mypy==1.6.1",
     "mypy-extensions==1.0.0",
