@@ -3,6 +3,7 @@
 docker run \
 --env VALIDATE_ALL_CODEBASE=false \
 --env RUN_LOCAL=true \
+--env DEFAULT_BRANCH=main \
 --env VALIDATE_JSCPD=false \
 --env VALIDATE_CSS=false \
 --env VALIDATE_BASH=false \
@@ -16,4 +17,6 @@ docker run \
 --env PYTHON_ISORT_CONFIG_FILE=pyproject.toml \
 --env PYTHON_MYPY_CONFIG_FILE=pyproject.toml \
 --env PYTHON_FLAKE8_CONFIG_FILE=.flake8 \
--v $(pwd):/tmp/lint github/super-linter:v5
+-v $(pwd):/tmp/lint \
+--rm \
+ghcr.io/super-linter/super-linter:v5
