@@ -15,15 +15,11 @@ babel==2.15.0
 backcall==0.2.0
     # via ipython
 black[jupyter]==23.10.1
-    # via
-    #   black
-    #   py-pilecore (pyproject.toml)
+    # via py-pilecore (pyproject.toml)
 blinker==1.8.2
     # via flask
 cems-nuclei[client]==1.0.0
-    # via
-    #   cems-nuclei
-    #   py-pilecore (pyproject.toml)
+    # via py-pilecore (pyproject.toml)
 certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
@@ -38,9 +34,7 @@ comm==0.2.2
 contourpy==1.2.1
     # via matplotlib
 coverage[toml]==7.6.0
-    # via
-    #   coverage
-    #   coveralls
+    # via coveralls
 coveralls==4.0.1
     # via py-pilecore (pyproject.toml)
 cycler==0.12.1
@@ -185,9 +179,7 @@ plotly-geo==1.0.0
 pluggy==1.5.0
     # via pytest
 polars[pyarrow]==0.19.19
-    # via
-    #   polars
-    #   pygef
+    # via pygef
 prompt-toolkit==3.0.47
     # via ipython
 ptyprocess==0.7.0
@@ -280,9 +272,7 @@ tomli==2.0.1
     #   py-pilecore (pyproject.toml)
     #   pytest
 tqdm[notebook]==4.66.4
-    # via
-    #   py-pilecore (pyproject.toml)
-    #   tqdm
+    # via py-pilecore (pyproject.toml)
 traitlets==5.14.3
     # via
     #   comm
