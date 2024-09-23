@@ -10,7 +10,7 @@ asteroid-sphinx-theme==0.0.3
     # via py-pilecore (pyproject.toml)
 asttokens==2.4.1
     # via stack-data
-babel==2.15.0
+babel==2.16.0
     # via sphinx
 backcall==0.2.0
     # via ipython
@@ -20,7 +20,7 @@ blinker==1.8.2
     # via flask
 cems-nuclei[client]==1.0.0
     # via py-pilecore (pyproject.toml)
-certifi==2024.7.4
+certifi==2024.8.30
     # via requests
 charset-normalizer==3.3.2
     # via requests
@@ -31,15 +31,15 @@ click==8.1.3
     #   py-pilecore (pyproject.toml)
 comm==0.2.2
     # via ipywidgets
-contourpy==1.2.1
+contourpy==1.3.0
     # via matplotlib
-coverage[toml]==7.6.0
+coverage[toml]==7.6.1
     # via coveralls
 coveralls==4.0.1
     # via py-pilecore (pyproject.toml)
 cycler==0.12.1
     # via matplotlib
-dash==2.18.0
+dash==2.18.1
     # via py-pilecore (pyproject.toml)
 dash-core-components==2.0.0
     # via dash
@@ -57,7 +57,7 @@ docutils==0.18.1
     #   sphinx-rtd-theme
 exceptiongroup==1.2.2
     # via pytest
-executing==2.0.1
+executing==2.1.0
     # via stack-data
 flake8==6.0.0
     # via py-pilecore (pyproject.toml)
@@ -67,7 +67,7 @@ fonttools==4.53.1
     # via matplotlib
 gef-file-to-map==0.1.0
     # via pygef
-idna==3.7
+idna==3.10
     # via requests
 imagesize==1.4.1
     # via sphinx
@@ -86,7 +86,7 @@ ipython==8.11.0
     #   cems-nuclei
     #   ipywidgets
     #   py-pilecore (pyproject.toml)
-ipywidgets==8.1.3
+ipywidgets==8.1.5
     # via
     #   py-pilecore (pyproject.toml)
     #   tqdm
@@ -100,17 +100,17 @@ jinja2==3.1.4
     # via
     #   flask
     #   sphinx
-jupyterlab-widgets==3.0.11
+jupyterlab-widgets==3.0.13
     # via ipywidgets
-kiwisolver==1.4.5
+kiwisolver==1.4.7
     # via matplotlib
-lxml==4.9.4
+lxml==5.3.0
     # via pygef
 markupsafe==2.1.5
     # via
     #   jinja2
     #   werkzeug
-matplotlib==3.9.1
+matplotlib==3.9.2
     # via
     #   py-pilecore (pyproject.toml)
     #   pygef
@@ -139,10 +139,9 @@ numpy==1.26.4
     #   pandas
     #   pandas-stubs
     #   py-pilecore (pyproject.toml)
-    #   pyarrow
     #   scipy
     #   shapely
-orjson==3.10.6
+orjson==3.10.7
     # via cems-nuclei
 packaging==23.2
     # via
@@ -152,9 +151,9 @@ packaging==23.2
     #   py-pilecore (pyproject.toml)
     #   pytest
     #   sphinx
-pandas==2.2.2
+pandas==2.2.3
     # via py-pilecore (pyproject.toml)
-pandas-stubs==2.2.2.240603
+pandas-stubs==2.2.2.240807
     # via py-pilecore (pyproject.toml)
 parso==0.8.4
     # via jedi
@@ -172,13 +171,13 @@ platformdirs==4.1.0
     # via
     #   black
     #   py-pilecore (pyproject.toml)
-plotly==5.24.0
+plotly==5.24.1
     # via dash
 plotly-geo==1.0.0
     # via py-pilecore (pyproject.toml)
 pluggy==1.5.0
     # via pytest
-polars[pyarrow]==0.19.19
+polars==1.7.1
     # via pygef
 prompt-toolkit==3.0.47
     # via ipython
@@ -186,8 +185,6 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.3
     # via stack-data
-pyarrow==17.0.0
-    # via polars
 pycodestyle==2.10.0
     # via
     #   flake8
@@ -196,7 +193,7 @@ pyflakes==3.0.1
     # via
     #   flake8
     #   py-pilecore (pyproject.toml)
-pygef==0.10.1
+pygef==0.11.0
     # via py-pilecore (pyproject.toml)
 pygments==2.18.0
     # via
@@ -204,15 +201,15 @@ pygments==2.18.0
     #   sphinx
 pyjwt==2.6.0
     # via cems-nuclei
-pyparsing==3.1.2
+pyparsing==3.1.4
     # via matplotlib
-pytest==8.3.1
+pytest==8.3.3
     # via py-pilecore (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via
     #   matplotlib
     #   pandas
-pytz==2024.1
+pytz==2024.2
     # via pandas
 requests==2.32.3
     # via
@@ -224,7 +221,7 @@ retrying==1.3.4
     # via dash
 scipy==1.13.1
     # via py-pilecore (pyproject.toml)
-shapely==2.0.5
+shapely==2.0.6
     # via py-pilecore (pyproject.toml)
 six==1.16.0
     # via
@@ -244,25 +241,25 @@ sphinx-autodoc-typehints==1.22
     # via py-pilecore (pyproject.toml)
 sphinx-rtd-theme==1.2.0
     # via py-pilecore (pyproject.toml)
-sphinxcontrib-applehelp==1.0.8
+sphinxcontrib-applehelp==2.0.0
     # via sphinx
-sphinxcontrib-devhelp==1.0.6
+sphinxcontrib-devhelp==2.0.0
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.6
+sphinxcontrib-htmlhelp==2.1.0
     # via sphinx
 sphinxcontrib-jquery==4.1
     # via sphinx-rtd-theme
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.8
+sphinxcontrib-qthelp==2.0.0
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.10
+sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 stack-data==0.6.3
     # via ipython
 tenacity==9.0.0
     # via plotly
-tokenize-rt==5.2.0
+tokenize-rt==6.0.0
     # via black
 tomli==2.0.1
     # via
@@ -271,7 +268,7 @@ tomli==2.0.1
     #   mypy
     #   py-pilecore (pyproject.toml)
     #   pytest
-tqdm[notebook]==4.66.4
+tqdm[notebook]==4.66.5
     # via py-pilecore (pyproject.toml)
 traitlets==5.14.3
     # via
@@ -279,7 +276,7 @@ traitlets==5.14.3
     #   ipython
     #   ipywidgets
     #   matplotlib-inline
-types-pytz==2024.1.0.20240417
+types-pytz==2024.2.0.20240913
     # via pandas-stubs
 types-tqdm==4.66.0.20240417
     # via py-pilecore (pyproject.toml)
@@ -291,7 +288,7 @@ typing-extensions==4.7.1
     #   py-pilecore (pyproject.toml)
 tzdata==2024.1
     # via pandas
-urllib3==2.2.2
+urllib3==2.2.3
     # via requests
 wcwidth==0.2.13
     # via prompt-toolkit
@@ -301,7 +298,7 @@ werkzeug==3.0.4
     #   flask
 widgetsnbextension==4.0.13
     # via ipywidgets
-zipp==3.20.1
+zipp==3.20.2
     # via
     #   importlib-metadata
     #   importlib-resources
