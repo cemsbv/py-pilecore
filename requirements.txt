@@ -201,7 +201,7 @@ natsort==8.4.0
     # via py-pilecore (pyproject.toml)
 nest-asyncio==1.6.0
     # via dash
-networkx==3.2.1
+networkx==3.3
     # via cfn-lint
 numpy==1.26.4
     # via
