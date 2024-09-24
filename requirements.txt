@@ -36,7 +36,7 @@ babel==2.16.0
     # via sphinx
 backcall==0.2.0
     # via ipython
-black==23.11.0
+black==24.8.0
     # via
     #   ansible-lint
     #   py-pilecore (pyproject.toml)
