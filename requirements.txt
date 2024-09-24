@@ -42,7 +42,7 @@ black==23.11.0
     #   py-pilecore (pyproject.toml)
 blinker==1.8.2
     # via flask
-boto3==1.35.24
+boto3==1.35.25
     # via aws-sam-translator
 botocore==1.35.24
     # via
