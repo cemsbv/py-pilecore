@@ -410,7 +410,7 @@ typing-extensions==4.12.2
     #   sqlfluff
 tzdata==2024.1
     # via pandas
-urllib3==1.26.20
+urllib3==2.2.3
     # via
     #   botocore
     #   requests
