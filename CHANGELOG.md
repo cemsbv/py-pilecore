@@ -2,6 +2,68 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 2024-09-25
+
+### Features
+
+- *(grouper)* #93 Throw ValueError when providing less than 2 CPTs to create_grouper_payload()
+- *(coords)* #81 Only add coordinates to soil_properties payload when not None
+
+### Miscellaneous Tasks
+
+- Clear nb outputs
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- *(deps)* Bump peaceiris/actions-gh-pages from 3 to 4
+- Dependabot[bot] <support@github.com>
+- *(get-super-linter-dependencies)* Add bash script to fetch superlinter dependencies for tag
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- *(deps)* Bump platformdirs from 3.5.1 to 4.1.0
+- Dependabot[bot] <support@github.com>
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- *(deps)* Bump actions/setup-python from 4 to 5
+- Dependabot[bot] <support@github.com>
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- Dependabot[bot] <support@github.com>
+
+### Testing
+
+- *(multi-cpt-input)* Add minimal testcases for create_multi_cpt_payload(), using openapi-core lib
+
 ## [0.6.0] - 2024-09-13
 
 ### Documentation
