@@ -2556,7 +2556,8 @@ therefore should represent the main orientation of the building.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cpt_results_dict</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults" title="pypilecore.results.single_cpt_results.SingleCPTBearingResults"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleCPTBearingResults</span></code></a>]) – Dictionary with key as CPT name and value a SingleCPTBearingResults class</p></li>
+<li><p><strong>cpt_results_dict</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pypilecore.results.single_cpt_results.SingleCPTBearingResults" title="pypilecore.results.single_cpt_results.SingleCPTBearingResults"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleCPTBearingResults</span></code></a>]) – Dictionary with key as CPT name and value a SingleCPTBearingResults class.
+Should contain at least 2 entries.</p></li>
 <li><p><strong>pile_load_uls</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – ULS load in kN. Used to determine if a grouping configuration is valid.</p></li>
 <li><p><strong>stiff_construction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Default is False
 Attribute use to get the xi3 and xi4 value. True if it is a stiff construction</p></li>
@@ -2603,9 +2604,13 @@ attributes [“R_b_cal”, “F_nk_d”, “R_s_cal”], this means that they ar
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError:</strong> – <ul class="simple">
-<li><p>if NaN values are present in negative friction, bottom or shaft bearing_capacity</p></li>
-<li><p>if x or y coordinate is None</p></li>
-<li><p>if pile tip levels don’t macht for all SingleCPTBearingResults</p></li>
+<li><p>if NaN values are present in negative friction, bottom or shaft bearing_capacity
+    
+    - if x or y coordinate is None
+    
+    - if pile tip levels don’t macht for all SingleCPTBearingResults
+    
+    - if less than 2 valid CPTs are provided</p></li>
 </ul>
 </p>
 </dd>

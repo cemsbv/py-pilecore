@@ -146,7 +146,8 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    cpt_results_dict:</span>
-<span class="sd">        Dictionary with key as CPT name and value a SingleCPTBearingResults class</span>
+<span class="sd">        Dictionary with key as CPT name and value a SingleCPTBearingResults class.</span>
+<span class="sd">        Should contain at least 2 entries.</span>
 <span class="sd">    pile_load_uls</span>
 <span class="sd">        ULS load in kN. Used to determine if a grouping configuration is valid.</span>
 <span class="sd">    stiff_construction</span>
@@ -203,11 +204,11 @@
 <span class="sd">    ValueError:</span>
 <span class="sd">        - if NaN values are present in negative friction, bottom or shaft bearing_capacity</span>
 
-
 <span class="sd">        - if x or y coordinate is None</span>
 
-
 <span class="sd">        - if pile tip levels don&#39;t macht for all SingleCPTBearingResults</span>
+
+<span class="sd">        - if less than 2 valid CPTs are provided</span>
 
 
 <span class="sd">    Returns</span>
@@ -284,6 +285,12 @@
                 <span class="p">},</span>
             <span class="p">}</span>
         <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">cpt_objects</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The PileCore grouper requires at least 2 CPTs with valid bearing capacity.&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;cpt_objects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpt_objects</span>
 
     <span class="c1"># validate pile tip levels</span>
