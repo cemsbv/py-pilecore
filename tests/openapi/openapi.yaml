@@ -1,0 +1,3906 @@
+openapi: 3.0.3
+info:
+  title: PileCore
+  version: 3.0.1
+  description: >-
+    PileCore aims to give you the full pile calculation utilities without an
+    engineer in the loop. This means that calculations must be able to run from
+    start to finish from a set of given parameters. Pilecore is able to
+    determine the tipping point between positive and negative friction and will
+    optimize pile groups automatically.
+
+    ## Access
+
+    A bearer-token is required for this web-API. Sign in or sign up (for free!)
+    on our [nuclei website](https://nuclei.cemsbv.io) and use the "Short-lived
+    Access Token" from the "API Acess Tokens" section.
+
+    ## Python
+
+    For easy usage in a python script, see our open-source SDK
+    [py-pilecore](https://github.com/cemsbv/py-pilecore) or the lightweight
+    library [cems-nuclei](https://github.com/cemsbv/nuclei) (*Application-name =
+    PileCore*).
+
+    ## Addition URLs
+
+    - [CHANGELOG](./../static?filename=CHANGELOG.md): All notable changes to
+    this project will be documented in this file
+
+    - [RELEASE](./../static?filename=RELEASE.md): All major changes to this
+    project will be documented in this file.
+  contact:
+    name: CRUX Engineering Microservices BV (CEMS)
+    email: info@cemsbv.nl
+    url: https://cemsbv.nl/products/pilecore
+servers:
+  - url: /
+    description: Root url
+paths:
+  /healthcheck:
+    get:
+      operationId: web.ping
+      summary: Healthcheck
+      description: Use this endpoint to check the state of the service.
+      tags:
+        - service
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Should be "Service alive"
+  /compression/single-cpt/plot-bearing-capacity:
+    post:
+      operationId: web.compression.plot_compression_single_cpt_bearing_capacity
+      summary: Plot bearing capacity of a single cpt.
+      description: >
+        Post request to plot bearing capacity of a single cpt.
+
+        ## Free account usage 
+
+        This endpoint can be called with CEMS-Nuclei free-tier users with the
+        following restrictions:
+
+        - maximum 5 values in `pile_tip_levels_nap`.
+      tags:
+        - plot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/input_pile_plot'
+                - $ref: >-
+                    #/components/schemas/compression_calculation_single_cpt_input
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+  /compression/single-cpt/results:
+    post:
+      operationId: web.compression.calculation_compression_single_cpt
+      summary: Run a compression calculation of a single CPT.
+      tags:
+        - result
+      description: >
+        Run a pile calculation for a single a pile and obtain a DataFrame with
+        the design values,
+
+        and the `layer_table` used for this calculation.
+
+        ## Free account usage
+
+        This endpoint can be called with CEMS-Nuclei free-tier users with the
+        following restrictions:
+
+        - maximum 5 values in `pile_tip_levels_nap`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/compression_calculation_single_cpt_input'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_single_cpt'
+  /compression/single-cpt/report:
+    post:
+      operationId: web.compression.generate_single_cpt_report
+      summary: Generate a report for a compression calculation of a single cpt.
+      tags:
+        - report
+      description: >
+        This endpoint will generate a report based on a template. The template
+        contains:
+          - Pile specifications
+          - Pile factors
+          - Safety factors
+          - Description of cpt's characteristics and layering
+          - Results of the calculation per pile tip level
+
+        ## Free account usage
+
+        This endpoint can be called with CEMS-Nuclei free-tier users with the
+        following restrictions:
+
+        - maximum 5 values in `pile_tip_levels_nap`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_single_cpt_report'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /grouper/generate_grouper_report:
+    post:
+      operationId: web.grouper.generate_grouper_report
+      summary: Generate a report based on the grouper result.
+      tags:
+        - report
+        - group
+      description: >
+        This endpoint will generate a report based on a template. The template
+        contains:
+          - Filter specifications
+          - Safety factors
+          - Results of the calculation per pile tip level
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/shared_input_groups_meta_data'
+                - $ref: '#/components/schemas/share_input_group_cpts_filter'
+                - $ref: '#/components/schemas/output_grouper'
+                - $ref: '#/components/schemas/report_metadata'
+              required:
+                - sub_groups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /get-task-result:
+    get:
+      operationId: nuclei_cfg.job.get_task_result
+      summary: Get result of a task call
+      description: Get request to get result of a task call
+      tags:
+        - get-task-result
+      parameters:
+        - description: Task ID
+          in: query
+          name: task_id
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - description: Deprecated, use 'task_id'
+          in: query
+          name: id
+          required: false
+          deprecated: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/pdf:
+              schema:
+                anyOf:
+                  - type: string
+                    format: binary
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/output_task_report'
+                  - $ref: '#/components/schemas/output_task_status'
+                  - $ref: '#/components/schemas/output_multi_cpt'
+                  - $ref: '#/components/schemas/output_task_state'
+                  - $ref: '#/components/schemas/output_grouper'
+                  - $ref: '#/components/schemas/output_friction_ranges_lower_bound'
+            application/png:
+              schema:
+                anyOf:
+                  - type: string
+                    format: binary
+        '403':
+          description: Forbidden, you can only access your own created tasks
+  /get-task-status:
+    get:
+      description: Get the results of the celery task created by the user.
+      operationId: nuclei_cfg.job.get_task_status
+      parameters:
+        - description: Task ID
+          in: query
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    example: >-
+                      Task with id ef37b13e-3205-45b6-aa7c-84523b5a3d76 is still
+                      running/pending.
+                    type: string
+                  state:
+                    enum:
+                      - PENDING
+                      - SUCCESS
+                      - FAILURE
+                      - STARTED
+                      - RETRY
+                    example: PENDING
+                    type: string
+                type: object
+          description: OK
+      summary: Get Task Status
+      tags:
+        - get-task-result
+  /compression/multiple-cpts/results:
+    post:
+      operationId: web.compression.calculation_compression_multiple_cpts
+      summary: >-
+        Run a compression calculation with multiple CPTs and get the id of the
+        task back.
+      tags:
+        - result
+      description: >
+        Run a compression calculation and obtain 2 DataFrames (with the
+        get-task-result endpoint):
+          - summary_table: Table containing the characteristic and design values per pile tip level.
+          - all_results: Table containing all the claculated values per cpt and per pile tip level.
+
+        ## Free account usage
+
+        This endpoint can be called with CEMS-Nuclei free-tier users with the
+        following restrictions:
+
+          - maximum 5 values in `pile_tip_levels_nap`. 
+          - maximum 10 values in `list_soil_properties`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/compression_calculation_multi_cpts_input'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /compression/multiple-cpts/plot-bearing-capacity:
+    post:
+      operationId: web.compression.plot_pile_calculation_compression_multiple_cpts
+      summary: >-
+        Plot compression calculation with multiple cpts and get the id of the
+        task back.
+      description: >-
+        Post request to plot compression calculation with multiple cpts and get
+        the id of the task back.
+
+        ## Free account usage
+
+        This endpoint can be called with CEMS-Nuclei free-tier users with the
+        following restrictions:
+
+          - maximum 5 values in `pile_tip_levels_nap`. 
+          - maximum 10 values in `list_soil_properties`.
+      tags:
+        - plot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/input_pile_plot'
+                - $ref: >-
+                    #/components/schemas/compression_calculation_multi_cpts_input
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /compression/multiple-cpts/report:
+    post:
+      operationId: web.compression.generate_multiple_cpts_report
+      summary: >-
+        Generate a report for a pile calculation of multiple cpts and get the id
+        of the task back.
+      tags:
+        - report
+      description: >
+        This endpoint will generate a report based on a template. The template
+        contains:
+          - Pile specifications
+          - Pile factors
+          - Safety factors
+          - cpts info
+          - Combined results of the calculation per pile tip level
+          - Plot bearing capacity
+
+        ## Free account usage
+
+        This endpoint can be called with CEMS-Nuclei free-tier users with the
+        following restrictions:
+
+          - maximum 5 values in `pile_tip_levels_nap`. 
+          - maximum 10 values in `list_soil_properties`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_multi_cpt_report'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /pile_properties/shape:
+    post:
+      operationId: web.piles.get_shape_params
+      summary: Get pile shape factors
+      description: Returns the pile shape factors for the given pile dimensions.
+      tags:
+        - pile_properties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: >
+                The geometry of the pile. The geometry is defined by one or more
+                pile
+
+                components. A friction angle at pile-tip level is also required.
+
+
+                The material definitions are ignored for this endpoint. They are
+                only
+
+                accepted to keep the schema consistent with the pile input in
+                other
+
+                endpoints.
+              properties:
+                components:
+                  $ref: '#/components/schemas/pile_geometry_components_input'
+                phi:
+                  type: number
+                  description: >
+                    Degree of internal friction [deg] of the soil at
+                    pile-tip-level. Defaults to 40 degrees which implies the
+                    assumption that the pile-tip is in a firm sand layer.
+                  default: 40
+                  minimum: 0
+              required:
+                - components
+              example:
+                components:
+                  - outer_shape: rectangle
+                    secondary_dimension: 0.35
+                phi: 40
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pile_shape_properties_output'
+  /pile_properties/type:
+    post:
+      operationId: web.piles.get_type_params
+      summary: Get pile type factors
+      description: Returns the pile type factors for the given default pile type.
+      tags:
+        - pile_properties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/pile_standard_input_nen'
+                - $ref: '#/components/schemas/pile_standard_input_cur'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pile_type_properties_output'
+  /friction-ranges/lower-bound:
+    post:
+      operationId: web.friction_ranges.lower_bound
+      summary: Calculate the lower-bound friction ranges of a single CPT.
+      tags:
+        - friction_ranges
+      description: >-
+        Returns negative and positive lower-bound friction ranges of a single
+        CPT.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_friction_ranges_lower_bound'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /grouper/group_cpts:
+    post:
+      operationId: web.grouper.group_cpts
+      summary: Find groups among the calulated bearing capacities
+      tags:
+        - group
+      description: >
+        Based on the bearing capacities and coordinates of a CPT a cluster
+        algorithm tries to find valid groups.
+
+        Every valid cluster will be regarded as pile subgroup. Valid subgroups
+        have:
+
+          - a variation coefficient less or equal than 12%
+          - a pile load larger or equal than the given attribute
+          - a valid spatial orientation between CPTs.
+
+        After generating the valid sub-groups, a sort-and-filter step provides
+        the optimal result, based on the criterion provided in the 'optimize_by'
+        argument.
+
+        If your workflow involves changing the optimization criterion on the
+        same CPTs, we recommend requesting all generated subgroups by setting
+        the 'optimize_by' parameter  to Null and providing the response to the
+        'optimize_subgroups' endpoint to reduce total runtime.
+
+        ## Free account usage
+
+        This endpoint can be called with CEMS-Nuclei free-tier users with the
+        following restrictions:
+
+        - maximum 30 values in `cpt_objects`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/shared_input_groups_cpt_objects'
+                - $ref: '#/components/schemas/shared_input_groups_meta_data'
+                - $ref: '#/components/schemas/input_groups_cpts_filter'
+                - $ref: '#/components/schemas/share_input_group_cpts_filter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /grouper/optimize_groups:
+    post:
+      operationId: web.grouper.optimize_groups
+      summary: Find optimal groups among intermediate group results.
+      tags:
+        - group
+      description: >
+        Finds optimal groups from a larger set of sub-groups, based on certain
+        optimization criteria. The sub-group input for this endpoint can be
+        obtained from the 'group_cpt' endpoint with the 'optimize_by' parameter
+        set to Null.
+
+
+        Please note that this methode filters the subgroups and relays all
+        attributes of the within a itme of the `sub_groups` array. The request
+        body shows the mimimun requirements to peform the filter method.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_optimize_groups'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_task_id'
+  /grouper/group_metrics:
+    post:
+      operationId: web.grouper.group_metrics
+      summary: Check groups and return metrics for each group.
+      tags:
+        - group
+      description: >
+        Takes sub-group configurations and returns group metrics such as
+        Variation coefficient and xi factors, as well as group validity
+        statements.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_group_metrics'
+      responses:
+        '200':
+          description: >-
+            Grouper result object contains an array of subgroups. For every
+            subgroup the names of the locations are provide. Also the variation
+            coefficient netto bearing capacity, xi values and checks are given.
+            Note that for scenarios where not al cpts are within a subgroup a
+            residual subgroup can be append based on the `sort_values_by`
+            method.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/output_grouper'
+components:
+  schemas:
+    xi:
+      type: number
+      nullable: true
+      default: 1.39
+      description: >
+        Overrules the correlation factor xi_3 or xi_4 from NEN 9997-1+C2_2017
+        Table A.10a and A.10b. Used to calculate the characteristic value of the
+        bearing capacity: R_c;k = R_c;cal / xi.
+
+        **unit: `-`**
+
+
+        ### Partial factors:
+
+        | ξ for n = | 1    | 2    | 3    | 4    | 5    | 7    | 10   |
+
+        |-----------|------|------|------|------|------|------|------| 
+
+        | ξ_1       | 1.39 | 1.32 | 1.30 | 1.28 | 1.28 | 1.27 | 1.25 | 
+
+        | ξ_2       | 1.39 | 1.32 | 1.30 | 1.03 | 1.03 | 1.01 | 1.00 |
+
+
+        ### Partial factors stiff construction:
+
+        | ξ for n = | 1    | 2    | 3    | 4    | 5    | 7    | 10   |
+
+        |-----------|------|------|------|------|------|------|------| 
+
+        | ξ_1       | 1.26 | 1.20 | 1.18 | 1.17 | 1.17 | 1.15 | 1.14 | 
+
+        | ξ_2       | 1.26 | 0.96 | 0.94 | 0.93 | 0.93 | 0.92 | 0.91 |
+    f_nk:
+      type: number
+      nullable: true
+      default: null
+      description: >
+        Sets a fixed value for the negative friction force.
+
+        If provided, the `fixed_negative_friction_range_nap` parameter will be
+        ignored.
+
+        **unit: `kN`**
+    fixed_negative_friction_range_nap:
+      type: array
+      nullable: true
+      items:
+        type: number
+      description: >
+        Sets the fixed depth range between which the negative sleeve friction is
+        calculated. Should be an array object with two values: [top, bottom] in
+        unit `[m] w.r.t NAP`.
+
+        This property is only allowed and required if `friction_range_strategy`
+        = "manual".
+
+        ### Examples
+
+        * `[-1.9, -5.3]` * `[-3.1, -4.9]`
+      minItems: 2
+      maxItems: 2
+      default: null
+      example: null
+    fixed_positive_friction_range_nap:
+      type: array
+      nullable: true
+      items:
+        anyOf:
+          - type: number
+          - type: string
+            enum:
+              - ptl
+      description: >
+        Sets the fixed depth range between which the positive sleeve friction is
+        calculated. Should be an array object with two values: [top, bottom] in
+        unit `[m] w.r.t NAP`.
+
+        If bottom == "ptl", the pile tip level of the calculation is used as
+        value for bottom.
+
+        This property is only allowed and required if `friction_range_strategy`
+        = "manual".
+
+        ### Examples
+
+        * `[-17.3, "ptl"]` * `[-8.1, -14.9]`
+      minItems: 2
+      maxItems: 2
+      default: null
+      example: null
+    nen_pile_properties_input:
+      type: object
+      description: >
+        The definition of the pile used in the bearing calculations. Contains
+        two main
+
+        parts: the `geometry` defines the shape and materials of the pile, and
+        the
+
+        `pile_type` defines properties associated with the pile type and
+
+        installation method.
+      properties:
+        name:
+          type: string
+          nullable: true
+          description: Name of the pile
+        geometry:
+          $ref: '#/components/schemas/pile_geometry_input'
+        pile_type:
+          type: object
+          description: >
+            The pile type specifications of the pile. Defines all properties and
+            calculation factors associated with the pile type and installation
+            method.
+          properties:
+            standard_pile:
+              $ref: '#/components/schemas/pile_standard_input_nen'
+            custom_properties:
+              $ref: '#/components/schemas/pile_type_properties_input'
+      required:
+        - geometry
+        - pile_type
+      example:
+        name: Prefab 350x350
+        geometry:
+          components:
+            - outer_shape: rectangle
+              secondary_dimension: 0.35
+        pile_type:
+          standard_pile:
+            main_type: concrete
+            specification: '1'
+    cur_pile_properties_input:
+      type: object
+      description: >
+        The definition of the pile used in the bearing calculations. Contains
+        two main
+
+        parts: the `geometry` defines the shape and materials of the pile, and
+        the
+
+        `pile_type` defines properties associated with the pile type and
+
+        installation method.
+      properties:
+        name:
+          type: string
+          nullable: true
+          description: Name of the pile
+        geometry:
+          type: object
+          description: >
+            The geometry of the pile. The geometry is defined by one or more
+            pile components and the materials that are used for these
+            components.
+          properties:
+            components:
+              type: array
+              description: >
+                Array of pile components. A maximum of two components are
+                allowed. These components should have the same outer-shape (e.g.
+                round or rectangular). The first component is the core of the
+                pile. Each subsequent component should be a shell around the
+                previous component.
+
+                Current functionality only supports a core component with a
+                linear-elastic material, and an optional second component. The
+                second component can represent the shape of a widened base (with
+                the same material as the core), or a grout shell (with
+                elasto-pastic material).
+
+                In future updates it will be possible to add more components
+                with different shapes and materials, thereby allowing for more
+                complex pile shapes, such as steel tubes, DPA piles, or concrete
+                piles with a hollow core.
+              minItems: 1
+              maxItems: 2
+              items:
+                $ref: '#/components/schemas/round_pile_geometry_component_input'
+            materials:
+              type: array
+              description: >
+                Array of materials that can be assigned to the pile components.
+
+
+                If no material is specified, PileCore will use the default
+                material
+
+                properties in accordance with the `standard_pile` property.
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/linear_elastic_material'
+                  - $ref: '#/components/schemas/elasto_plastic_material'
+                  - $ref: '#/components/schemas/elasto_brittle_material'
+              uniqueItems: true
+        pile_type:
+          type: object
+          description: >
+            The pile type specifications of the pile. Defines all properties and
+            calculation factors associated with the pile type and installation
+            method.
+          properties:
+            standard_pile:
+              $ref: '#/components/schemas/pile_standard_input_cur'
+            custom_properties:
+              allOf:
+                - $ref: '#/components/schemas/pile_type_properties_input'
+                - type: object
+                  properties:
+                    chamfered:
+                      type: number
+      required:
+        - geometry
+        - pile_type
+      example:
+        name: Prefab 350x350
+        geometry:
+          components:
+            - outer_shape: round
+              diameter: 0.1
+            - outer_shape: round
+              diameter: 0.35
+              length: 9
+        pile_type:
+          standard_pile:
+            main_type: anchor
+            specification: '1'
+    pile_standard_input_nen:
+      type: object
+      nullable: true
+      description: >
+        Select standard pile specifications from the NEN9997-1 standard.
+
+        The `standard_pile` properties can be determined using the tables shown
+        below.
+
+        ![standard_piles-NEN9997-1](./../static?filename=standard_piles-NEN9997-1.png)
+        [standard_piles-NEN9997-1](./../static?filename=standard_piles-NEN9997-1.png)
+      properties:
+        installation:
+          type: string
+          nullable: true
+          enum:
+            - A
+            - B
+        main_type:
+          type: string
+          enum:
+            - concrete
+            - steel
+            - wood
+        specification:
+          type: string
+          enum:
+            - '1'
+            - '2'
+            - '3'
+            - '4'
+            - '5'
+            - '6'
+            - '7'
+      required:
+        - main_type
+        - specification
+      example:
+        main_type: concrete
+        specification: '1'
+    pile_standard_input_cur:
+      type: object
+      nullable: true
+      description: >
+        Select standard pile specifications from the CUR-236 standard.
+
+        The `standard_pile` properties can be determined using the tables shown
+        below.
+
+
+        ![standard_piles-CUR236](./../static?filename=standard_piles-CUR236.png)
+        [standard_piles-CUR236](./../static?filename=standard_piles-CUR236.png)
+      properties:
+        installation:
+          type: string
+          nullable: true
+          enum:
+            - A
+            - B
+        main_type:
+          type: string
+          enum:
+            - anchor
+        specification:
+          type: string
+          enum:
+            - '1'
+            - '2'
+            - '3'
+            - '4'
+            - '5'
+      required:
+        - main_type
+        - specification
+      example:
+        main_type: anchor
+        specification: '1'
+    pile_type_properties_input:
+      type: object
+      description: >
+        Custom pile type properties for piles according to the NEN9997-1 or
+        CUR-236 standards.
+      properties:
+        alpha_s_sand:
+          type: number
+          nullable: true
+          description: >
+            Alpha s factor for coarse layers used in the positive friction
+            calculation. The value is inferred from the standard_pile
+            specification, but can be overwritten.
+
+            **unit: `-`**
+        alpha_s_clay:
+          type: number
+          nullable: true
+          description: >
+            Alpha s factor for soft layers used in the positive friction
+            calculation. If None the factor is determined as specified in table
+            7.d of NEN 9997-1.
+
+            **unit: `-`**
+        alpha_p:
+          type: number
+          nullable: true
+          description: >
+            Alpha p factor used in pile tip resistance calculation.
+
+            The value is inferred from the `standard_pile` specification, but
+            can be overwritten.
+
+            **unit: `-`**
+        alpha_t_sand:
+          type: number
+          nullable: true
+          description: >
+            Alpha t factor for shaft friction, used in tension calculation.
+
+            The value is inferred from the `standard_pile` specification, but
+            can be overwritten.
+
+            **unit: `-`**
+        settlement_curve:
+          type: integer
+          nullable: true
+          description: >
+            Settlement lines for figures 7.n and 7.o of NEN-9997-1
+
+            As defined in table 7.c of NEN-9997-1.
+
+            The value is inferred from the `standard_pile` specification, but
+            can be overwritten.
+
+            **unit: `-`**
+        negative_fr_delta_factor:
+          type: number
+          nullable: true
+          description: >
+            factor * φ = δ. This parameter will be multiplied with phi to get
+            the delta parameter used in negative friction calculation according
+            to NEN-9997-1 7.3.2.2 (e). Typically values are 1.0 for piles cast
+            in place, and 0.75 for other pile types. The value is inferred from
+            the `standard_pile` specification, but can be overwritten.
+
+            **unit: `-`**
+        adhesion:
+          type: number
+          nullable: true
+          default: 0
+          description: >
+            Optional adhesion value, use it if the pile shaft has undergone a
+            special treatment. Examples:
+                - adhesion = 50 kN/m2 for synthetic coating
+                - adhesion = 20 kN/m2 for bentonite
+                - adhesion = 10 kN/m2 for bitumen coating
+            See 7.3.2.2(d) of NEN 9997-1 for examples.
+
+            **unit: kPa**
+        is_low_vibrating:
+          type: boolean
+          nullable: true
+          description: >
+            Determines whether the pile has an installation type with low
+            vibration.
+
+            The value is inferred from the `standard_pile` specification, but
+            can be overwritten.
+        is_auger:
+          type: boolean
+          nullable: true
+          default: false
+          description: >
+            Determines whether the pile the pile is an auger pile or not.
+
+            The value is inferred from the `standard_pile` specification, but
+            can be overwritten.
+    pile_geometry_input:
+      type: object
+      description: >
+        The geometry of the pile. The geometry is defined by one or more pile
+        components and the materials that are used for these components.
+      properties:
+        components:
+          $ref: '#/components/schemas/pile_geometry_components_input'
+        materials:
+          type: array
+          description: |
+            Array of materials that can be assigned to the pile components.
+
+            If no material is specified, PileCore will use the default material
+            properties in accordance with the `standard_pile` property.
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/linear_elastic_material'
+              - $ref: '#/components/schemas/elasto_plastic_material'
+              - $ref: '#/components/schemas/elasto_brittle_material'
+          uniqueItems: true
+        custom_properties:
+          type: object
+          description: |
+            Custom pile shape properties.
+          properties:
+            pile_tip_factor_s:
+              type: number
+              nullable: true
+              default: null
+              description: >
+                Factor s used in pile tip resistance calculation as per NEN
+                9997-1 7.6.2.3 (h).
+
+                If omited or Null, the pile_tip_factor_s is inferred from the
+                pile dimensions and soil properties. Providing a number here
+                will overrule the pile_tip_factor_s for all pile tip levels.
+
+                **unit: `-`**
+            beta_p:
+              type: number
+              nullable: true
+              default: null
+              description: >
+                Factor s used in pile tip resistance calculation as per NEN
+                9997-1 7.6.2.3 (h).
+
+                The value is inferred from the dimensions of the pile components
+                , but can be overwritten.
+
+                **unit: `-`**
+      required:
+        - components
+    pile_geometry_components_input:
+      type: array
+      description: >
+        Array of pile components. A maximum of two components are allowed. These
+        components should have the same outer-shape (e.g. round or rectangular).
+        The first component is the core of the pile. Each subsequent component
+        should be a shell around the previous component.
+
+        Current functionality only supports a core component with a
+        linear-elastic material, and an optional second component. The second
+        component can represent the shape of a widened base (with the same
+        material as the core), or a grout shell (with elasto-pastic material).
+
+        In future updates it will be possible to add more components with
+        different shapes and materials, thereby allowing for more complex pile
+        shapes, such as steel tubes, DPA piles, or concrete piles with a hollow
+        core.
+      minItems: 1
+      maxItems: 2
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/rectangular_pile_geometry_component_input'
+          - $ref: '#/components/schemas/round_pile_geometry_component_input'
+    pile_geometry_output:
+      type: object
+      description: >
+        The geometry of the pile. The geometry is defined by one or more pile
+        components and the materials that are used for these components.
+      properties:
+        components:
+          type: array
+          description: |
+            Array of pile components.
+          items:
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/rectangular_pile_geometry_component_output
+              - $ref: '#/components/schemas/round_pile_geometry_component_output'
+        materials:
+          type: array
+          description: |
+            Array of materials that are assigned to the pile components.
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/linear_elastic_material'
+              - $ref: '#/components/schemas/elasto_plastic_material'
+              - $ref: '#/components/schemas/elasto_brittle_material'
+          uniqueItems: true
+        properties:
+          $ref: '#/components/schemas/pile_shape_properties_output'
+      required:
+        - components
+        - materials
+        - properties
+    linear_elastic_material:
+      type: object
+      description: |
+        Material with linear elastic behaviour.
+      properties:
+        name:
+          type: string
+          description: Name of the material. Each material has a unique name.
+        elastic_modulus:
+          type: number
+          nullable: false
+          example: 20000
+          description: |
+            Modulus of elasticity (Young's modulus) of the pile.
+            **unit: Mpa**
+        color:
+          oneOf:
+            - $ref: '#/components/schemas/html_colour'
+            - $ref: '#/components/schemas/rgb_colour'
+      additionalProperties: false
+      required:
+        - name
+        - elastic_modulus
+        - color
+    elasto_brittle_material:
+      type: object
+      description: >
+        Material with elastic-perfectly brittle behaviour. The material is
+        defined by the elastic modulus and the tensile strength. Once the
+        tensile strength is reached, the material will abruptly reduce its
+        tensile strength to zero, meaning that it will not be capable to sustain
+        tensile stresses any more. Linear elastic behaviour is used in
+        compression.
+      properties:
+        name:
+          type: string
+          description: Name of the material. Each material has a unique name.
+        elastic_modulus:
+          type: number
+          nullable: false
+          example: 20000
+          description: |
+            Modulus of elasticity (Young's modulus) of the pile.
+            **unit: Mpa**
+        color:
+          oneOf:
+            - $ref: '#/components/schemas/html_colour'
+            - $ref: '#/components/schemas/rgb_colour'
+        tensile_strength:
+          type: number
+          nullable: false
+          minimum: 0
+          description: |
+            tensile stress of the pile.
+            **unit: Mpa**
+      additionalProperties: false
+      required:
+        - name
+        - elastic_modulus
+        - tensile_strength
+        - color
+    elasto_plastic_material:
+      type: object
+      description: >
+        Material with elasto-plastic behaviour with perfect plasticity. The
+        material is defined by the elastic modulus and the yield stress. Once
+        the yield stress is reached, the material will deform plastically and
+        the stress will remain constant (i.e. failure). No plastic deformation
+        occurs for compression stresses.
+      properties:
+        name:
+          type: string
+          description: Name of the material. Each material has a unique name.
+        elastic_modulus:
+          type: number
+          nullable: false
+          example: 20000
+          description: |
+            Modulus of elasticity (Young's modulus) of the pile.
+            **unit: Mpa**
+        color:
+          oneOf:
+            - $ref: '#/components/schemas/html_colour'
+            - $ref: '#/components/schemas/rgb_colour'
+        yield_stress:
+          type: number
+          nullable: false
+          minimum: 0
+          description: |
+            Yield stress of the pile.
+            **unit: MPa**
+      additionalProperties: false
+      required:
+        - name
+        - elastic_modulus
+        - yield_stress
+        - color
+    html_colour:
+      type: string
+      description: >-
+        HTML-hex color definition. Should start with an `#`. E.g. `#FF0000` for
+        red.
+    rgb_colour:
+      type: object
+      description: RGB color definition.
+      properties:
+        r:
+          type: number
+          minimum: 0
+          maximum: 255
+        g:
+          type: number
+          minimum: 0
+          maximum: 255
+        b:
+          type: number
+          minimum: 0
+          maximum: 255
+      required:
+        - r
+        - g
+        - b
+    pile_geometry_component_common_input:
+      type: object
+      properties:
+        material:
+          type: string
+          nullable: true
+          description: >
+            Name of the material that is used for the component. See the
+            `materials`
+
+            property of the `pile_properties` object.
+
+
+            If no material is provided, PileCore will use the default material
+            properties
+
+            in accordance with the `pile_type` property.
+        primary_dimension:
+          type: object
+          nullable: true
+          description: >
+            The primary dimension of the pile component, in the direction of the
+            pile's primary axis. 
+
+            When omitted, the primary dimension is assumed to be equal to the
+            pile's primary dimension: starting at the pile-head and ending at
+            the pile-tip. When a length is provided for the component, the
+            component is assumed to start at the pile-tip.
+
+            In future updates it will be possible to provide top and bottom
+            levels for each individual pile component, therefore making it
+            possible to define more complex pile shapes.
+          properties:
+            length:
+              type: number
+              minimum: 0
+              description: >
+                The length of the pile component. This is the distance between
+                the top and bottom level of the component.
+
+                The core of the pile (i.e. the first component in the list)
+                cannot have a length, as it is assumed to be defined by the
+                pile-head level and the pile-tip levels.
+
+                The length of any subsequent component cannot be greater than
+                that of the previous component.
+
+                **unit: `m`**
+          required:
+            - length
+    pile_geometry_component_common_output:
+      type: object
+      properties:
+        material:
+          type: string
+          nullable: false
+          description: >
+            Name of the material that is used for the component. See the
+            `materials`
+
+            property of the `pile_properties` object.
+        primary_dimension:
+          type: object
+          nullable: false
+          description: >
+            The primary dimension of the pile component, measured in the
+            direction of  the pile's primary axis.
+          properties:
+            length:
+              type: number
+              nullable: true
+              minimum: 0
+              description: >
+                The length of the pile component. This is the distance between
+                the top and bottom level of the component. Returns `null` if the
+                value follows from other geometric properties which might vary,
+                such as the head or tip level of the pile.
+
+                **unit: `m`**
+            top_level_nap:
+              oneOf:
+                - type: number
+                  nullable: true
+                - type: string
+                  enum:
+                    - pile-head
+                  nullable: true
+              description: >
+                The top level of the pile component. This is the level where the
+                component starts. Returns "pile-head" if the value is equal to
+                the pile-head level. Returns `null` if the value follows from
+                other geometric properties which might vary, such as the head or
+                tip level of the pile.
+
+                **unit: `m w.r.t. NAP`**
+            bottom_level_nap:
+              oneOf:
+                - type: number
+                  nullable: true
+                - type: string
+                  enum:
+                    - pile-tip
+                  nullable: true
+              description: >
+                The bottom level of the pile component. This is the level where
+                the component ends. Returns "pile-tip" if the value is equal to
+                the pile-tip level. Returns `null` if the value follows from
+                other geometric properties which might vary, such as the head or
+                tip level of the pile.
+
+                **unit: `m w.r.t. NAP`**
+          required:
+            - length
+            - top_level_nap
+            - bottom_level_nap
+      required:
+        - material
+        - primary_dimension
+    rectangular_pile_geometry_component_input:
+      allOf:
+        - $ref: '#/components/schemas/pile_geometry_component_common_input'
+        - type: object
+          description: Defines pile component with a rectangular outer-shape.
+          properties:
+            outer_shape:
+              type: string
+              enum:
+                - rectangle
+                - rect
+              description: |
+                The outer shape of the pile component.
+            secondary_dimension:
+              type: number
+              minimum: 0.05
+              maximum: 1.5
+              example: 0.35
+              description: >
+                The secondary dimension of a pile component with rectangular
+                shape. This is the largest outer dimension of the component's
+                cross-section.
+
+                **unit: `m`**
+            tertiary_dimension:
+              type: number
+              nullable: true
+              minimum: 0.05
+              maximum: 1.5
+              example: 0.35
+              description: >
+                The tertiary dimension of a pile component with rectangular
+                shape. This is the smallest outer dimension of the component's
+                cross-section. If not provided, a square cross-section is
+                assumed.
+
+                **unit: `m`**
+          required:
+            - outer_shape
+            - secondary_dimension
+    rectangular_pile_geometry_component_output:
+      allOf:
+        - $ref: '#/components/schemas/pile_geometry_component_common_output'
+        - type: object
+          description: Defines pile component with a rectangular outer-shape.
+          properties:
+            outer_shape:
+              type: string
+              enum:
+                - rectangle
+              description: |
+                The outer shape of the pile component.
+            secondary_dimension:
+              type: number
+              example: 0.35
+              description: >
+                The secondary dimension of a pile component with rectangular
+                shape. This is the largest outer dimension of the component's
+                cross-section.
+
+                **unit: `m`**
+            tertiary_dimension:
+              type: number
+              example: 0.35
+              description: >
+                The tertiary dimension of a pile component with rectangular
+                shape. This is the smallest outer dimension of the component's
+                cross-section.
+
+                **unit: `m`**
+          required:
+            - outer_shape
+            - secondary_dimension
+            - tertiary_dimension
+    round_pile_geometry_component_input:
+      allOf:
+        - $ref: '#/components/schemas/pile_geometry_component_common_input'
+        - type: object
+          description: Defines pile component with a round outer-shape.
+          properties:
+            outer_shape:
+              type: string
+              enum:
+                - round
+              description: |
+                The outer shape of the pile component.
+            diameter:
+              type: number
+              minimum: 0.05
+              maximum: 1.5
+              example: 0.56
+              description: |
+                The outer-diameter of a pile component with round shape.
+                **unit: `m`**
+          required:
+            - outer_shape
+            - diameter
+    round_pile_geometry_component_output:
+      allOf:
+        - $ref: '#/components/schemas/pile_geometry_component_common_output'
+        - type: object
+          description: Defines pile component with a round outer-shape.
+          properties:
+            outer_shape:
+              type: string
+              enum:
+                - round
+              description: |
+                The outer shape of the pile component.
+            diameter:
+              type: number
+              example: 0.56
+              description: |
+                The outer-diameter of a pile component with round shape.
+                **unit: `m`**
+          required:
+            - outer_shape
+            - diameter
+    pile_properties_output:
+      type: object
+      description: >
+        The definition of the pile used in the bearing calculations. Contains
+        two main
+
+        parts: the `geometry` defines the shape and materials of the pile, and
+        the
+
+        `pile_type` defines properties associated with the pile type and
+
+        installation method.
+      properties:
+        name:
+          type: string
+          nullable: true
+          example: Prefab 350x350
+          description: Name of the pile
+        geometry:
+          $ref: '#/components/schemas/pile_geometry_output'
+        pile_type:
+          type: object
+          description: >
+            The pile type specifications of the pile. Defines all properties and
+            calculation factors associated with the pile type and installation
+            method. The pile type specifications for compression piles and
+            tension piles according to the NEN9997-1 standard.
+          properties:
+            standard_pile:
+              oneOf:
+                - $ref: '#/components/schemas/pile_standard_input_nen'
+                - $ref: '#/components/schemas/pile_standard_input_cur'
+            properties:
+              $ref: '#/components/schemas/pile_type_properties_output'
+          required:
+            - properties
+      required:
+        - name
+        - geometry
+        - pile_type
+      example:
+        name: Prefab 350x350
+        geometry:
+          components:
+            - outer_shape: rectangle
+              primary_dimension:
+                length: null
+                top_level_nap: null
+                bottom_level_nap: null
+              secondary_dimension: 0.35
+              tertiary_dimension: 0.35
+              material: concrete
+          materials:
+            - name: concrete
+              elastic_modulus: 20000
+              color: '#525252'
+          properties:
+            pile_tip_factor_s: 1
+            beta_p: 1
+        pile_type:
+          standard_pile:
+            main_type: concrete
+            specification: '1'
+          properties:
+            alpha_s_sand: 0.01
+            alpha_s_clay: null
+            alpha_p: 0.7
+            alpha_t_sand: 0.007
+            settlement_curve: 1
+            negative_fr_delta_factor: 0.75
+            adhesion: null
+            is_low_vibrating: false
+            is_auger: false
+            is_anchor: false
+            chamfer_value: null
+            is_load_tested: null
+            is_extorted: null
+    input_pile_calculation_common:
+      type: object
+      properties:
+        pile_properties:
+          anyOf:
+            - $ref: '#/components/schemas/nen_pile_properties_input'
+            - $ref: '#/components/schemas/cur_pile_properties_input'
+        pile_load:
+          type: number
+          nullable: true
+          description: >
+            Force on pile in SLS. Used to determine settlement of pile w.r.t.
+            soil.
+
+            **unit: `kN`**
+          example: 1000
+        rel_pile_load:
+          type: number
+          nullable: true
+          default: 0.7
+          minimum: 0
+          maximum: 1
+          description: >
+            The fraction of the maximum bearing capacity that is used as pile
+            head force in the settlement calculations.
+
+            The input value can range between 0.0 and 1.0, where 1.0 translates
+            to a pile load of 100% of the maximum
+
+            bearing capacity. When the *pile_load* parameter is provided,
+            *rel_pile_load* will be ignored.
+
+
+            When multiple pile-tip levels are considered, the applied pile load
+            will vary with each pile-tip level,
+
+            depending on the bearing capacity.
+        pile_head_level_nap:
+          oneOf:
+            - type: string
+              nullable: true
+            - type: number
+              nullable: true
+          default: surface
+          example: surface
+          description: |
+            The level of the pile head. Can be:
+              - float. This is interpreted as an absolute level in [m w.r.t. NAP].
+              - the string "surface". In this case, the soil_properties.service_level property is used.
+        excavation_depth_nap:
+          type: number
+          nullable: true
+          description: |
+            Soil excavation depth after the CPT was taken.
+
+            **unit: `m NAP`**
+          default: null
+          example: 0
+        excavation_param_t:
+          type: number
+          nullable: true
+          enum:
+            - 1
+            - 0.5
+          description: >
+            Excavation parameter depending on pile installation method and/or
+            phasing.
+
+             - Use 1.0 for post-excavation installation with vibration (i.e. hammering). 
+             - Use 0.5 for reduced-vibration installation, or pile installation prior to excavation method. 
+
+            See for more info **NEN 9997-1+C2:2017 7.6.2.3.(10)(k)**
+          default: 1
+    input_pile_calculation_common_compression:
+      type: object
+      properties:
+        friction_range_strategy:
+          $ref: '#/components/schemas/friction_range_strategy'
+        fixed_negative_friction_range_nap:
+          $ref: '#/components/schemas/fixed_negative_friction_range_nap'
+        fixed_positive_friction_range_nap:
+          $ref: '#/components/schemas/fixed_positive_friction_range_nap'
+        f_nk:
+          $ref: '#/components/schemas/f_nk'
+        soil_load:
+          type: number
+          nullable: true
+          default: 0
+          description: >
+            (Fictive) load on soil used to calculate soil settlement. This is
+            required and used to determine settlement of pile w.r.t. soil.
+
+
+            **unit: `kPa`**
+          example: 25
+        gamma_f_nk:
+          type: number
+          default: 1
+          description: >
+            Safety factor for design-values of the negative sleeve friction
+            force.
+
+            **unit: `-`**
+        gamma_r_b:
+          type: number
+          default: 1.2
+          description: >
+            Safety factor, used to obtain design-values of the pile-tip
+            bearingcapacity.
+
+            **unit: `-`**
+        gamma_r_s:
+          type: number
+          default: 1.2
+          description: >
+            Safety factor, used to obtain design-values of the sleeve
+            bearingcapacity.
+
+            **unit: `-`**
+        use_almere_rules:
+          type: boolean
+          nullable: true
+          default: false
+          description: >
+            If set to True the contribution, produced by the positive shaft
+            friction, to the total bearing capacity is
+
+            limited to at most 75% the contribution provided by the pile tip.
+
+            ref:
+            https://www.almere.nl/fileadmin/user_upload/Richtlijnen_Constructie_Gem._Almere_vanaf_01-01-2017_versie_3.0a.pdf
+        apply_qc3_reduction:
+          type: boolean
+          nullable: true
+          default: null
+          description: >
+            Determines if the reduction on the qc;III trajectory for auger piles
+            should be applied
+
+            conform 7.6.2.3(e) of NEN 9997-1.
+
+            If omitted (or null: default), the value is inferred from the pile
+            type: only True for auger piles
+
+            (when pile_properties.is_auger == True). If a boolean is provided,
+            the qc3 reduction is/isn't applied,
+
+            regardless of the pile type.
+        pile_tip_levels_nap:
+          type: array
+          items:
+            type: number
+          uniqueItems: true
+          description: |
+            Range of values for which the pile resistance is calculated.
+
+            **unit: `m NAP`**
+          example:
+            - -5
+            - -5.5
+            - -6
+      required:
+        - pile_tip_levels_nap
+    compression_calculation_single_cpt_input:
+      allOf:
+        - $ref: '#/components/schemas/input_pile_calculation_common'
+        - $ref: '#/components/schemas/input_pile_calculation_common_compression'
+        - type: object
+          properties:
+            xi:
+              $ref: '#/components/schemas/xi'
+            soil_properties:
+              allOf:
+                - $ref: '#/components/schemas/soil_properties'
+                - type: object
+                  properties:
+                    groundwater_level_nap:
+                      type: number
+                      nullable: true
+                      description: |
+                        The ground water level, with respect to NAP.
+
+                        **unit: `m NAP`**
+                      default: null
+          required:
+            - pile_properties
+            - soil_properties
+    compression_calculation_multi_cpts_input:
+      allOf:
+        - $ref: '#/components/schemas/input_pile_calculation_common'
+        - $ref: '#/components/schemas/input_pile_calculation_common_compression'
+        - type: object
+          properties:
+            overrule_xi:
+              type: number
+              nullable: true
+              default: null
+              description: >
+                Set a fixed value for xi in all calculations. Use with caution.
+                This will  overrule the calculation of xi-values based on the
+                group-size, variation- coefficient and construction stiffness.
+
+                **unit: `-`**
+            list_soil_properties:
+              type: array
+              description: >
+                Each object in this array represents a single CPT. The optional
+                fields will overwrite the 'general' value **for that CPT only**.
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/soil_properties'
+                  - $ref: '#/components/schemas/soil_arguments_multi_cpt'
+            stiff_construction:
+              type: boolean
+              nullable: true
+              default: false
+              description: >
+                Set to True if it's a stiff costruction. This will have
+                influence on the xi factor.
+            cpts_group:
+              description: >-
+                CPT that are considered one group. Items must relate to the CPT
+                names in `list_soil_properties`
+              type: array
+              items:
+                type: string
+              uniqueItems: true
+              example:
+                - CPT101
+          required:
+            - pile_properties
+            - list_soil_properties
+            - pile_tip_levels_nap
+    input_friction_ranges_lower_bound:
+      type: object
+      properties:
+        soil_properties:
+          allOf:
+            - $ref: '#/components/schemas/soil_properties'
+            - type: object
+              properties:
+                groundwater_level_nap:
+                  type: number
+                  nullable: true
+                  description: |
+                    The ground water level, with respect to NAP.
+
+                    **unit: `m NAP`**
+                  default: null
+        pile_tip_level_nap:
+          type: number
+          description: |
+            Pile-tip level for which the friction range is determined.
+
+            **unit: `m NAP`**
+          example: -7
+        pile_head_level_nap:
+          oneOf:
+            - type: string
+              nullable: true
+            - type: number
+              nullable: true
+          default: surface
+          example: surface
+          description: |
+            The level of the pile head. Can be:
+              - float. This is interpreted as an absolute level in [m w.r.t. NAP].
+              - the string "surface". In this case, the soil_properties.service_level property is used.
+        excavation_depth_nap:
+          type: number
+          nullable: true
+          description: |
+            Soil excavation depth after the CPT was taken.
+
+            **unit: `m NAP`**
+          default: null
+          example: 0
+      example:
+        pile_tip_level_nap: -0.7
+        soil_properties:
+          coordinates:
+            x: 142892.19
+            'y': 470783.87
+          cpt_data:
+            depth:
+              - 0
+              - 0.1
+              - 0.2
+              - 0.3
+              - 0.4
+              - 0.5
+              - 0.6
+              - 0.7
+              - 0.8
+              - 0.9
+              - 1
+            qc:
+              - 1
+              - 1
+              - 1
+              - 1
+              - 1
+              - 1
+              - 1
+              - 1
+              - 1
+              - 1
+              - 1
+          layer_table_data:
+            depth_btm:
+              - 0.5
+              - 2
+            gamma:
+              - 15
+              - 19
+            gamma_sat:
+              - 15
+              - 21
+            index:
+              - 0
+              - 1
+            phi:
+              - 0.2
+              - 0.4799655443
+            soil_code:
+              - K
+              - Zs1
+            thickness:
+              - 0.5
+              - 1.5
+          ref_height: 0
+          test_id: cpt_001
+          water_pressure: 0.00981
+      required:
+        - soil_properties
+        - pile_tip_level_nap
+    output_friction_ranges_lower_bound:
+      type: object
+      description: |
+        Returns a JSON with a positive and a negative range.
+      properties:
+        positive_top:
+          type: number
+          description: |
+            Start of the positive friction range in m w.r.t. NAP.
+            **unit: `m`**
+        positive_bottom:
+          type: number
+          description: |
+            End of the positive friction range in m w.r.t. NAP.
+            **unit: `m`**
+        negative_top:
+          type: number
+          description: |
+            Start of the negative friction range in m w.r.t. NAP.
+            **unit: `m`**
+        negative_bottom:
+          type: number
+          description: |
+            End of the negative friction range in m w.r.t. NAP.
+            **unit: `m`**
+      required:
+        - positive_top
+        - positive_bottom
+        - negative_top
+        - negative_bottom
+    input_pile_plot:
+      type: object
+      properties:
+        figsize:
+          description: |
+            The size of the image.
+
+            ### Example
+            ```json
+            "figsize": {
+
+                "height": 255,
+                "width": 150
+
+            }
+            ```
+          type: object
+          nullable: true
+          properties:
+            width:
+              type: number
+              nullable: true
+              default: 150
+              description: |
+                width of the image in mm.
+                **unit: `mm`**
+            height:
+              type: number
+              nullable: true
+              default: 255
+              description: |
+                height of the image in mm.
+                **unit: `mm`**
+    input_single_cpt_report:
+      allOf:
+        - $ref: '#/components/schemas/compression_calculation_single_cpt_input'
+        - type: object
+          required:
+            - general
+          properties:
+            general:
+              $ref: '#/components/schemas/report_general'
+    output_task_state:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ef37b13e-3205-45b6-aa7c-84523b5a3d76
+        state:
+          type: string
+          enum:
+            - PENDING
+            - SUCCESS
+            - FAILURE
+          example: PENDING
+    output_task_id:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ef37b13e-3205-45b6-aa7c-84523b5a3d76
+    output_task_status:
+      type: string
+      example: >-
+        task with id d61cfc53-b1b4-4f40-8b09-23d439a0a635 is still
+        running/pending
+    output_task_report:
+      type: string
+      format: binary
+    output_single_cpt:
+      type: object
+      description: |
+        Object with all results from a single-cpt bearing calculation.
+      properties:
+        groundwater_level_nap:
+          type: number
+          description: |
+            The ground water level, with respect to NAP.
+
+            **unit: `m NAP`**
+        annotations:
+          $ref: '#/components/schemas/annotations'
+        cpt_chart:
+          $ref: '#/components/schemas/cpt_chart'
+        results_table:
+          $ref: '#/components/schemas/results_table'
+        layer_table:
+          $ref: '#/components/schemas/layer_table_data'
+        negative_friction:
+          $ref: '#/components/schemas/negative_friction'
+        calculation_params:
+          $ref: '#/components/schemas/calculation_params_single'
+        pile_properties:
+          $ref: '#/components/schemas/pile_properties_output'
+      required:
+        - groundwater_level_nap
+        - annotations
+        - cpt_chart
+        - results_table
+        - layer_table
+        - calculation_params
+        - pile_properties
+    output_multi_cpt:
+      type: object
+      description: |
+        An object with all Bearing calculation results for multiple CPTs.
+      required:
+        - calculation_params
+        - pile_properties
+        - group_results
+        - cpts
+      properties:
+        calculation_params:
+          $ref: '#/components/schemas/calculation_params_multi'
+        pile_properties:
+          $ref: '#/components/schemas/pile_properties_output'
+        group_results:
+          $ref: '#/components/schemas/group_results'
+        cpts:
+          minItems: 1
+          type: array
+          items:
+            type: object
+            required:
+              - test_id
+              - groundwater_level_nap
+              - annotations
+              - results_table
+              - layer_table
+            properties:
+              test_id:
+                type: string
+                description: The identifier of the CPT.
+                example: CPT101
+              unique_id:
+                type: string
+                nullable: true
+                description: Unique identifier for the CPT (only if provided in request).
+              groundwater_level_nap:
+                type: number
+                description: |
+                  The ground water level, with respect to NAP.
+
+                  **unit: `m NAP`**
+              annotations:
+                $ref: '#/components/schemas/annotations'
+              cpt_chart:
+                $ref: '#/components/schemas/cpt_chart'
+              results_table:
+                $ref: '#/components/schemas/results_table'
+              layer_table:
+                $ref: '#/components/schemas/layer_table_data'
+              negative_friction:
+                $ref: '#/components/schemas/negative_friction'
+    pile_shape_properties_output:
+      type: object
+      properties:
+        beta_p:
+          type: number
+          example: 1
+          description: >
+            Factor s used in pile tip resistance calculation as per NEN 9997-1
+            7.6.2.3 (h).
+
+            **unit: `-`**
+        pile_tip_factor_s:
+          type: number
+          nullable: true
+          default: null
+          description: >
+            Factor s used in pile tip resistance calculation as per NEN 9997-1
+            7.6.2.3 (h).
+
+            Only included in the payload if a fixed input value was provided. If
+            not, the value depends on the pile dimensions and soil properties at
+            pile-tip level and can be found in the bearing results table.
+
+            **unit: `-`**
+      required:
+        - beta_p
+    pile_type_properties_output:
+      type: object
+      properties:
+        alpha_p:
+          type: number
+          example: 0.01
+          description: |
+            Alpha p factor used in pile tip resistance calculation.
+            **unit: `-`**
+        alpha_s_sand:
+          type: number
+          example: 0.01
+          description: >
+            Alpha s factor for coarse layers used in the positive friction
+            calculation. 
+
+            **unit: `-`**
+        alpha_s_clay:
+          type: number
+          nullable: true
+          example: 0.01
+          description: >
+            Alpha s factor for soft layers used in the positive friction
+            calculation. If None, a soil-type dependent value has been applied,
+            as specified in table 7.d of NEN 9997-1.
+
+            **unit: `-`**
+        alpha_t_sand:
+          type: number
+          example: 0.01
+          description: |
+            Alpha t factor used in tension pile resistance calculation.
+            **unit: `-`**
+        is_auger:
+          type: boolean
+          example: false
+          description: |
+            Determines whether the pile the pile is an auger pile or not.
+        is_low_vibrating:
+          type: boolean
+          example: true
+          description: >
+            Determines whether the pile has an installation type with low
+            vibration.
+        negative_fr_delta_factor:
+          type: number
+          example: 1
+          description: >
+            factor * φ = δ. This parameter will be multiplied with phi to get
+            the delta parameter used in negative friction calculation according
+            to NEN-9997-1 7.3.2.2 (e). Typically values are 1.0 for piles cast
+            in place, and 0.75 for other pile types. 
+
+            **unit: `-`**
+        settlement_curve:
+          type: integer
+          example: 1
+          description: |
+            Settlement lines for figures 7.n and 7.o of NEN-9997-1
+            As defined in table 7.c of NEN-9997-1.
+
+            **unit: `-`**
+        adhesion:
+          type: number
+          nullable: true
+          example: 50
+          description: >
+            Optional adhesion value, use it if the pile shaft has undergone a
+            special treatment. See 7.3.2.2(d) of NEN 9997-1.
+
+            **unit: kPa**
+      required:
+        - alpha_p
+        - alpha_s_sand
+        - alpha_s_clay
+        - alpha_t_sand
+        - is_auger
+        - is_low_vibrating
+        - negative_fr_delta_factor
+        - settlement_curve
+        - adhesion
+      example:
+        alpha_p: 0.01
+        alpha_s_sand: 0.01
+        alpha_s_clay: 0.01
+        alpha_t_sand: 0.01
+        is_auger: false
+        is_low_vibrating: true
+        negative_fr_delta_factor: 1
+        settlement_curve: 1
+        adhesion: null
+    soil_arguments_multi_cpt:
+      type: object
+      properties:
+        friction_range_strategy:
+          $ref: '#/components/schemas/friction_range_strategy'
+        fixed_negative_friction_range_nap:
+          $ref: '#/components/schemas/fixed_negative_friction_range_nap'
+        fixed_positive_friction_range_nap:
+          $ref: '#/components/schemas/fixed_positive_friction_range_nap'
+        f_nk:
+          $ref: '#/components/schemas/f_nk'
+        groundwater_level_nap:
+          type: number
+          nullable: true
+          description: |
+            The ground water level, with respect to NAP.
+
+            **unit: `m NAP`**
+          default: null
+        unique_id:
+          type: string
+          nullable: true
+          description: Optional unique identifier for the CPT. Will be returned.
+    shared_input_groups_cpt_objects:
+      type: object
+      properties:
+        cpt_objects:
+          type: array
+          minItems: 2
+          example:
+            - name: CPT101
+              coordinates:
+                x: 142892.19
+                'y': 470783.87
+              shaft_bearing_capacity:
+                - 90
+                - 180
+                - 270
+              bottom_bearing_capacity:
+                - 10
+                - 20
+                - 30
+              negative_friction:
+                - 10
+                - 10
+                - 10
+            - name: CPT102
+              coordinates:
+                x: 142892.19
+                'y': 470783.87
+              shaft_bearing_capacity:
+                - 90
+                - 180
+                - 270
+              bottom_bearing_capacity:
+                - 10
+                - 20
+                - 30
+              negative_friction:
+                - 10
+                - 10
+                - 10
+          items:
+            type: object
+            description: >-
+              Each CPT object in the array contains the name, location, bearing
+              capacity and negative friction for every cpt. Note that the depth
+              values of the bearing capacity and negative friction must be given
+              in an other property. This to ensure that all cpt_object are at
+              the same depth and have valid values (not null).
+            properties:
+              name:
+                type: string
+                example: CPT101
+                description: Name of the CPT
+              coordinates:
+                $ref: '#/components/schemas/coordinates'
+              shaft_bearing_capacity:
+                type: array
+                items:
+                  type: number
+                  description: >-
+                    Calculated shaft bearing capacity values at the shaft of the
+                    pile [kN].
+                example:
+                  - 90
+                  - 180
+                  - 270
+                minimum: 0
+              bottom_bearing_capacity:
+                type: array
+                items:
+                  type: number
+                  description: >-
+                    Calculated Bearing capacity values at the bottom (tip) of
+                    the pile [kN].
+                example:
+                  - 10
+                  - 20
+                  - 30
+                minimum: 0
+              negative_friction:
+                type: array
+                items:
+                  type: number
+                  description: Design negative friction values of the pile [kN].
+                example:
+                  - 10
+                  - 10
+                  - 10
+                minimum: 0
+            required:
+              - name
+              - coordinates
+              - shaft_bearing_capacity
+              - bottom_bearing_capacity
+              - negative_friction
+        pile_tip_level:
+          type: array
+          items:
+            type: number
+            description: Depth of the bearing capacity values [m w.r.t. NAP]
+          example:
+            - 0
+            - -1
+            - -2
+        cluster_level:
+          type: number
+          description: >-
+            If a value is provided the clustering is done at that depth. [m
+            w.r.t. NAP]
+          example: -2
+      required:
+        - cpt_objects
+        - pile_tip_level
+        - pile_load_uls
+    shared_input_groups_meta_data:
+      type: object
+      properties:
+        pile_load_uls:
+          type: number
+          example: 100
+          minimum: 0
+          description: >-
+            ULS load in kN. Used to determine if a grouping configuration is
+            valid.
+        gamma_shaft:
+          type: number
+          minimum: 0
+          default: 1.2
+          description: Safety factor design shaft bearing capacity [-]
+        gamma_bottom:
+          type: number
+          minimum: 0
+          default: 1.2
+          description: Safety factor design bottom bearing capacity [-]
+        stiff_construction:
+          type: boolean
+          default: true
+          description: >-
+            Attribute used to get the xi3 and xi4 value. True if it is a stiff
+            construction
+        cpt_grid_rotation:
+          type: number
+          default: 0
+          description: >-
+            Rotation of the squares used in the centre to centre validation
+            [degrees].
+        building_polygon:
+          $ref: '#/components/schemas/Polygon'
+        include_centre_to_centre_check:
+          default: false
+          type: boolean
+          description: >-
+            Flag that indicates if the cluster algorithm performs a centre to
+            centre validation of the CPT’s of the generated subgroups or not
+            according to NEN9997-1 3.2.3. If the group doesn’t comply to the
+            check, the result of the group is deleted from the result.
+      required:
+        - pile_load_uls
+    input_groups_cpts_filter:
+      type: object
+      properties:
+        spatial_factor:
+          type: array
+          nullable: true
+          items:
+            type: number
+          uniqueItems: true
+          default:
+            - 0.5
+            - 0.7
+            - 0.9
+            - 1.1
+          minimum: 0
+          description: >-
+            The factor to changes the scaling of the spatial component of the
+            training-set (consists of coordinates).
+    share_input_group_cpts_filter:
+      type: object
+      properties:
+        resolution:
+          type: number
+          minimum: 0
+          maximum: 1
+          default: 1
+          exclusiveMinimum: true
+          description: >-
+            The resolution of clusters algorithm. If resolution is 1 the cluster
+            boundary conditions can be met (number clusters is number CPTs).
+            Depending on the number of CPTs this can take some time.
+        optimize_result_by:
+          type: array
+          nullable: true
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - minimum_pile_level
+              - number_of_cpts
+              - number_of_consecutive_pile_levels
+              - centre_to_centre_check
+          default:
+            - minimum_pile_level
+            - number_of_cpts
+            - number_of_consecutive_pile_levels
+          description: >-
+            Attribute that states how to sort the groups and find the optimal
+            result. When more than one In the case that not all CPT's are
+            assigned to a subgroup, a residual subgroup is appended. If null all
+            valid subgroups will be returned.
+    output_grouper:
+      type: object
+      properties:
+        sub_groups:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              names:
+                type: array
+                uniqueItems: true
+                items:
+                  type: string
+                example:
+                  - CPT101
+                  - CPT102
+                minItems: 1
+                description: List of CTP names in subgroup
+              variation_check:
+                type: boolean
+                example: true
+                description: >-
+                  Bool that validates if variation coefficients is equal or
+                  below 12 %
+              spatial_check:
+                type: boolean
+                example: true
+                description: Bool that validates if spatial distribution is correct
+              centre_to_centre_check:
+                type: boolean
+                example: true
+                description: Bool that validates if CTC is correct.
+              pile_load_check:
+                type: boolean
+                example: true
+                description: >-
+                  Bool that validates if depth variation coefficients is equal
+                  or below 12% and net bearing capacity larger than pile load
+                  uls
+              minimum_pile_level:
+                type: number
+                nullable: true
+                example: 0
+                description: The minimum pile level of the valid subgroup [m w.r.t NAP]
+              maximum_pile_level:
+                type: number
+                nullable: true
+                example: -2
+                description: The maximum pile level of the valid subgroup [m w.r.t NAP]
+              number_of_consecutive_pile_levels:
+                type: number
+                example: 3
+                description: The maximum number of valid consecutive pile levels
+              coordinates:
+                type: array
+                minItems: 1
+                items:
+                  type: array
+                  items:
+                    type: number
+                  minItems: 2
+                  maxItems: 2
+                example:
+                  - - 1
+                    - 0
+                  - - 2
+                    - 3
+                description: List of coordinates related to the cpt's
+              table:
+                type: object
+                properties:
+                  variation_coefficient:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                    example:
+                      - 0
+                      - 0
+                      - 0
+                    description: Variation coefficient of the subgroup [-]
+                  net_design_bearing_capacity:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                    example:
+                      - 60
+                      - 60
+                      - 60
+                    description: Netto Design Bearing Capacity of the subgroup [kN]
+                  xi_values:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                    example:
+                      - 1.2
+                      - 1.2
+                      - 1.2
+                    description: >-
+                      List of xi value used in the design bearing capacity
+                      calculation [-]
+                  pile_tip_level:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                      description: Depth of the bearing capacity values [m w.r.t. NAP]
+                    example:
+                      - 0
+                      - -1
+                      - -2
+                  mean_calculated_bearing_capacity:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                      description: Mean calculated  Bearing Capacity of the subgroup [kN]
+                    example:
+                      - 100
+                      - 100
+                      - 100
+                  min_calculated_bearing_capacity:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                      description: >-
+                        Minimum calculated  Bearing Capacity of the subgroup
+                        [kN]
+                    example:
+                      - 100
+                      - 100
+                      - 100
+                  xi_factor:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: string
+                      description: Indicator of the xi methode used.
+                      pattern: ^ξ\d$
+                    example:
+                      - ξ3
+                      - ξ3
+                      - ξ4
+                  nominal_cpt:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: string
+                      description: Name of the nominal CPT
+                    example:
+                      - CPT101
+                      - CPT101
+                      - CPT102
+                  characteristic_bearing_capacity:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                      description: Characteristic Bearing Capacity of the subgroup [kN]
+                    example:
+                      - 83
+                      - 83
+                      - 83
+                  design_negative_friction:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                      description: Design Negative Friction of the subgroup [kN]
+                    example:
+                      - 70
+                      - 70
+                      - 70
+                  design_bearing_capacity:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: number
+                      description: Design Bearing Capacity of the subgroup [kN]
+                    example:
+                      - 70
+                      - 70
+                      - 70
+                  group_centre_to_centre_validation_15:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: boolean
+                      description: >-
+                        A maximum CTC distance of 15 m, if no R;c;cal outliers
+                        greater than 30% off the average.
+                    example:
+                      - true
+                      - true
+                      - true
+                  group_centre_to_centre_validation_20:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: boolean
+                      description: >-
+                        A maximum CTC distance of 20 m, if no R;c;cal outliers
+                        greater than 30% off the average.
+                    example:
+                      - true
+                      - true
+                      - true
+                  group_centre_to_centre_validation_25:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: boolean
+                      description: >-
+                        A maximum CTC distance of 25 m, if no R;c;cal outliers
+                        greater than 30% off the average.
+                    example:
+                      - true
+                      - true
+                      - true
+                  group_centre_to_centre_validation:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: boolean
+                      description: Any valid CTC distance for pile-tip level.
+                    example:
+                      - true
+                      - true
+                      - true
+                required:
+                  - design_bearing_capacity
+                  - design_negative_friction
+                  - characteristic_bearing_capacity
+                  - nominal_cpt
+                  - xi_factor
+                  - min_calculated_bearing_capacity
+                  - mean_calculated_bearing_capacity
+                  - pile_tip_level
+                  - xi_values
+                  - net_design_bearing_capacity
+                  - variation_coefficient
+                  - group_centre_to_centre_validation_15
+                  - group_centre_to_centre_validation_20
+                  - group_centre_to_centre_validation_25
+                  - group_centre_to_centre_validation
+            required:
+              - names
+              - variation_check
+              - spatial_check
+              - pile_load_check
+              - minimum_pile_level
+              - maximum_pile_level
+              - number_of_consecutive_pile_levels
+              - coordinates
+              - table
+              - centre_to_centre_check
+    input_optimize_groups:
+      type: object
+      description: boolean
+      required:
+        - sub_groups
+      properties:
+        optimize_result_by:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - minimum_pile_level
+              - number_of_cpts
+              - number_of_consecutive_pile_levels
+              - centre_to_centre_check
+          default:
+            - minimum_pile_level
+            - number_of_cpts
+            - number_of_consecutive_pile_levels
+          description: >-
+            Attribute that states how to sort the groups and find the optimal
+            result.
+        sub_groups:
+          type: array
+          minItems: 2
+          example:
+            - names:
+                - CPT101
+              minimum_pile_level: -1
+              number_of_consecutive_pile_levels: 1
+            - names:
+                - CPT102
+              minimum_pile_level: -1
+              number_of_consecutive_pile_levels: 1
+          items:
+            type: object
+            properties:
+              names:
+                type: array
+                minItems: 1
+                uniqueItems: true
+                items:
+                  type: string
+                example:
+                  - CPT101
+                description: List of CTP names in subgroup
+              minimum_pile_level:
+                type: number
+                example: -1
+                description: The minimum pile level of the valid subgroup [m w.r.t NAP]
+              number_of_consecutive_pile_levels:
+                type: number
+                example: 1
+                description: The maximum number of valid consecutive pile levels
+              centre_to_centre_check:
+                type: boolean
+                nullable: true
+                example: true
+                default: null
+                description: Bool that validates if CTC is correct.
+            required:
+              - names
+              - minimum_pile_level
+              - number_of_consecutive_pile_levels
+    input_group_metrics:
+      allOf:
+        - $ref: '#/components/schemas/shared_input_groups_cpt_objects'
+        - $ref: '#/components/schemas/shared_input_groups_meta_data'
+        - type: object
+          properties:
+            sub_groups:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  names:
+                    type: array
+                    minItems: 1
+                    uniqueItems: true
+                    items:
+                      type: string
+                    example:
+                      - CPT101
+                    description: List of CTP names in subgroup
+          required:
+            - sub_groups
+    soil_properties:
+      type: object
+      required:
+        - cpt_data
+        - layer_table_data
+        - ref_height
+        - test_id
+      properties:
+        cpt_data:
+          $ref: '#/components/schemas/cpt_data'
+        layer_table_data:
+          $ref: '#/components/schemas/layer_table_data'
+        ref_height:
+          type: number
+          description: |
+            The surface height, with respect to the vertical reference.
+
+            **unit: `m`**
+        test_id:
+          type: string
+          description: |
+            The name of soil test
+          example: CPT101
+        water_pressure:
+          default: 0.00981
+          type: number
+          description: |
+            Water's unit weight.
+
+            **unit: `MPa`**
+        coordinates:
+          $ref: '#/components/schemas/coordinates'
+        ocr:
+          type: number
+          default: 1
+          description: >
+            Over-consolidation ratio.
+
+            If provided has effect on the calculation of the negative skin
+            friction via the parameter K_0.
+
+
+            **unit: `-`**
+    layer_table_data:
+      type: object
+      description: The classification of the cpt file.
+      required:
+        - index
+        - depth_btm
+        - soil_code
+        - phi
+        - gamma
+        - gamma_sat
+        - thickness
+      properties:
+        index:
+          description: Layer index
+          type: array
+          uniqueItems: true
+          items:
+            type: number
+            example: 0
+            minimum: 0
+          minItems: 1
+        thickness:
+          description: The layer thickness [m]
+          items:
+            example: 10
+            exclusiveMinimum: true
+            minimum: 0
+            type: number
+          minItems: 1
+          type: array
+        depth_btm:
+          description: |
+            The depth of the layer bottom (below service level). - **unit: `m`**
+          items:
+            example: 10
+            type: number
+            minimum: 0
+          minItems: 1
+          type: array
+          uniqueItems: true
+        C_s:
+          description: Koppejan parameters for secondary compression.
+          items:
+            example: 600
+            exclusiveMinimum: true
+            minimum: 0
+            type: number
+          minItems: 1
+          type: array
+        C_p:
+          description: Koppejan parameters for primary compression.
+          items:
+            example: 650
+            exclusiveMinimum: true
+            minimum: 0
+            type: number
+          minItems: 1
+          type: array
+        gamma:
+          description: The dry unit weights [MPa].
+          items:
+            example: 19
+            minimum: 0
+            type: number
+          minItems: 1
+          type: array
+        gamma_sat:
+          description: The saturated unit weights [MPa].
+          items:
+            example: 21
+            minimum: 0
+            type: number
+          minItems: 1
+          type: array
+        phi:
+          description: |
+            Internal friction angle.  - **unit: `radians`**
+          items:
+            example: 0.4799655443
+            minimum: 0
+            type: number
+          minItems: 1
+          type: array
+        soil_code:
+          description: >
+            *soil_code* is the code used to describe the soil layers of the
+            boreholes. Main components are specified
+
+            with capital letters and are the following:
+              - G: gravel (Grind)
+              - Z: sand (Zand)
+              - L: loam (Leem)
+              - K: clay (Klei)
+              - V: peat (Veen)
+          items:
+            pattern: ^[GZLKV]
+            example: Zs1
+            type: string
+          minItems: 1
+          type: array
+    cpt_data:
+      type: object
+      description: Object that holds the cpt information.
+      properties:
+        qc:
+          type: array
+          minItems: 1
+          example:
+            - 1
+            - 1
+            - 1
+            - 1
+            - 1
+            - 1
+            - 1
+            - 1
+            - 1
+            - 1
+          description: |
+            The cone resistance of the cpt. - **unit: `MPa`**
+          items:
+            type: number
+            minimum: 0
+        depth:
+          type: array
+          minItems: 1
+          example:
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+          description: >-
+            The depth of the recorded data (below service level). - **unit:
+            `m`**
+          items:
+            type: number
+            minimum: 0
+          uniqueItems: true
+        u:
+          type: array
+          minItems: 1
+          description: >
+            water pressure [MPa]. Can be used to calculate the groundwater
+            level.
+
+
+            PileCore does NOT use the in-situ measured water pressures directly
+
+            as pore-pressures for the calculation of effective grain pressures.
+
+            Hydrostatic pore pressures are inferred instead, taking the
+
+            groundwater level into account. The in-situ water pressures can be
+
+            used to estimate the groundwater level by detecting the point where
+
+            the water pressures are zero. 
+
+
+            When the user provides a value for the `groundwater_level_nap`
+            property, the
+
+            in-situ water pressures are always ignored.
+
+
+            - **unit: `MPa`**
+          items:
+            type: number
+          example:
+            - 0
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+      required:
+        - qc
+        - depth
+    coordinates:
+      type: object
+      properties:
+        x:
+          type: number
+          example: 142892.19
+          description: Set x coordinate for a cartesian metric coordinate system.
+        'y':
+          type: number
+          example: 470783.87
+          description: Set y coordinate for a cartesian metric coordinate system.
+      required:
+        - x
+        - 'y'
+    friction_range_strategy:
+      type: string
+      nullable: true
+      default: lower_bound
+      enum:
+        - manual
+        - lower_bound
+        - settlement_driven
+      description: >
+        Sets the method to determine the sleeve friction zones on the pile. The
+        soil
+
+        friction in the positive zone contributes to the bearing capacity, while
+        the
+
+        negative zone adds an extra load on the pile.
+
+
+        Accepted values: "manual", "lower_bound" or "settlement_driven".
+
+
+        ## *manual*
+
+        If "manual" is entered, the user is required to provide the friction
+        ranges 
+
+        manually through the *fixed_negative_friction_range_nap* and 
+
+        *fixed_positive_friction_range_nap* parameters. 
+
+
+        ## *lower_bound*
+
+        If "lower_bound" is entered (default), the depth ranges for which the
+
+        negative/positive sleeve friction has to be taken into account are
+        determined
+
+        automatically, with a robust method that considers the soil
+        stratigraphy.
+
+
+        It is assumed that the negative friction zone tops at surface-level, and
+        the
+
+        positive friction zone bottoms at pile-tip level, with a tipping-point
+        somewhere
+
+        along the pile where the two zones meet. The Lower-bound method sets
+        this
+
+        tipping-point to the bottom of the deepest soft-soil layer (e.g. peat,
+        clay,
+
+        silt) that is above the considered pile-tip level.
+
+
+        ## *settlement_driven*
+
+        If "settlement_driven" is entered, the depth ranges for which
+
+        the negative/positive sleeve friction has to be taken into account are
+
+        determined automatically, using an iterative calculation that considers
+        relative
+
+        settlements of the pile and the soil.
+
+
+        It is assumed that the negative friction zone tops at surface-level, and
+        the
+
+        positive friction zone bottoms at pile-tip level, with a tipping point
+        somewhere
+
+        along the pile where the two zones meet. The SettlementDriven method
+        defines the
+
+        tipping point as the lowest point on the pile where the pile-settlement
+        is
+
+        higher than the soil-settlement.
+    report_metadata:
+      type: object
+      properties:
+        project_name:
+          type: string
+          description: Name of the project
+          example: Project Amsterdam
+        project_number:
+          type: string
+          description: Number of the project
+          example: 123456AB
+        author:
+          type: string
+          description: Author of the project
+          example: N. Uclei
+      required:
+        - project_name
+        - project_number
+        - author
+    calculation_params_single:
+      type: object
+      properties:
+        gamma_r_s:
+          type: number
+          description: >
+            Safety factor γ_r_s. Used for determining design values of the
+            gamma_shaft:  bearing capacity.
+          example: 1.2
+        gamma_r_b:
+          type: number
+          description: >
+            Safety factor γ_r_b. Used for determining design values of the
+            bottom  bearing capacity.
+          example: 1.2
+        gamma_f_nk:
+          type: number
+          description: >
+            Safety factor γ_f_nk. Used for determining design values of the
+            negative  friction force.
+          example: 1
+        xi:
+          type: number
+          description: >
+            Correlation factor xi_3 or xi_4 from NEN 9997-1+C2_2017 Table A.10a
+            and A10b. Used to calculate The characteristic value of the
+
+            bearing capacity: R_c;k = R_c;cal / xi.
+
+            **unit: `-`**
+          example: 1.39
+        soil_load:
+          type: number
+          description: >
+            (Fictive) load on soil used to calculate soil settlement. This is
+            required and used to determine settlement of pile w.r.t. soil.
+
+
+            **unit: `kPa`**
+          example: 25
+        pile_load:
+          type: number
+          description: >
+            Force on pile in SLS. Used to determine settlement of pile w.r.t.
+            soil.
+
+            **unit: `kN`**
+          example: 1000
+        rel_pile_load:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.7
+          description: >
+            The fraction of the maximum bearing capacity that is used as pile
+            head force in the settlement calculations. The input value can range
+            between 0.0 and 1.0, where 1.0 translates to a pile load of 100% of
+            the maximum bearing capacity.
+      required:
+        - gamma_r_s
+        - gamma_r_b
+        - gamma_f_nk
+        - xi
+        - soil_load
+    calculation_params_multi:
+      type: object
+      properties:
+        gamma_r_s:
+          type: number
+          description: >
+            Safety factor γ_r_s. Used for determining design values of the
+            gamma_shaft:  bearing capacity.
+          example: 1.2
+        gamma_r_b:
+          type: number
+          description: >
+            Safety factor γ_r_b. Used for determining design values of the
+            bottom  bearing capacity.
+          example: 1.2
+        gamma_f_nk:
+          type: number
+          description: >
+            Safety factor γ_f_nk. Used for determining design values of the
+            negative  friction force.
+          example: 1
+        soil_load:
+          type: number
+          description: >
+            (Fictive) load on soil used to calculate soil settlement. This is
+            required and used to determine settlement of pile w.r.t. soil.
+
+
+            **unit: `kPa`**
+          example: 25
+        pile_load:
+          type: number
+          description: >
+            Force on pile in SLS. Used to determine settlement of pile w.r.t.
+            soil.
+
+            **unit: `kN`**
+          example: 1000
+        rel_pile_load:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.7
+          description: >
+            The fraction of the maximum bearing capacity that is used as pile
+            head force in the settlement calculations. The input value can range
+            between 0.0 and 1.0, where 1.0 translates to a pile load of 100% of
+            the maximum bearing capacity.
+      required:
+        - gamma_r_s
+        - gamma_r_b
+        - gamma_f_nk
+        - soil_load
+    annotations:
+      description: >
+        A dictionary with single-value annotations. Based on the Bearing 
+        calculation of the lowest pile-tip-level.
+      type: object
+      properties:
+        pile_tip_levels_nap:
+          type: array
+          description: An array of pile-tip-level depths [m] w.r.t. NAP.
+          items:
+            type: number
+        d4_index:
+          type: integer
+          description: >
+            The index in the cpt_chart[‘depth_nap’] column, of the depth-level 4
+            * pile-diameter below the pile-tip-level. This depth is used in the
+            Koppejan method as the lowest possible value for the qc1 and qc2
+            trajectories.
+        pile_head_level_nap:
+          description: Depth of the pile-head in [m] w.r.t. NAP.
+          type: number
+      required:
+        - pile_tip_levels_nap
+        - pile_head_level_nap
+    cpt_chart:
+      type: object
+      description: >
+        Object with original and derived CPT data from the Bearing calculation
+        of the lowest pile-tip-level.
+      properties:
+        depth_nap:
+          type: array
+          description: The depth [m] w.r.t. NAP
+          items:
+            type: number
+        qc:
+          type: array
+          description: >
+            The cone resistance signal from the CPT [MPa], possibly corrected
+            for excavation or OCR.
+          items:
+            type: number
+        qc_original:
+          type: array
+          description: The original cone resistance signal from the CPT [MPa].
+          items:
+            type: number
+        qc_chamfered:
+          type: array
+          description: |
+            The chamfered-qc signal, used for the positive friction range [MPa].
+          items:
+            type: number
+        fs:
+          type: array
+          description: The original fs signal from the CPT [MPa].
+          items:
+            type: number
+            nullable: true
+        qc1:
+          type: array
+          description: The Koppejan-qc1 trajectory [MPa].
+          items:
+            type: number
+            nullable: true
+        qc2:
+          type: array
+          description: The Koppejan-qc2 trajectory [MPa]
+          items:
+            type: number
+            nullable: true
+      required:
+        - depth_nap
+        - qc
+        - qc_original
+        - qc_chamfered
+        - qc1
+        - qc2
+    results_table:
+      description: |
+        Bearing calculation results for each pile-tip-level.
+      type: object
+      properties:
+        pile_tip_level_nap:
+          type: array
+          description: The pile-tip level in m w.r.t. NAP.
+          items:
+            type: number
+        F_nk_cal:
+          type: array
+          description: The calculated negative friction force [kN].
+          items:
+            type: number
+        F_nk_k:
+          type: array
+          description: The characteristic negative friction force [kN].
+          items:
+            type: number
+        F_nk_d:
+          type: array
+          description: The design negative friction force [kN].
+          items:
+            type: number
+        R_b_cal:
+          type: array
+          description: The calculated bottom bearingcapacity [kN].
+          items:
+            type: number
+        R_b_k:
+          type: array
+          description: The characteristic bottom bearingcapacity [kN].
+          items:
+            type: number
+        R_b_d:
+          type: array
+          description: The design bottom bearingcapacity [kN].
+          items:
+            type: number
+        R_s_cal:
+          type: array
+          description: The calculated shaft bearingcapacity [kN].
+          items:
+            type: number
+        R_s_k:
+          type: array
+          description: The characteristic shaft bearingcapacity [kN].
+          items:
+            type: number
+        R_s_d:
+          type: array
+          description: The design shaft bearingcapacity [kN].
+          items:
+            type: number
+        R_c_cal:
+          type: array
+          description: The total calculated bearingcapacity [kN].
+          items:
+            type: number
+        R_c_k:
+          type: array
+          description: The total characteristic bearingcapacity [kN].
+          items:
+            type: number
+        R_c_d:
+          type: array
+          description: The total design bearingcapacity [kN].
+          items:
+            type: number
+        R_c_d_net:
+          type: array
+          description: The total net design bearingcapacity [kN].
+          items:
+            type: number
+        F_c_k:
+          type: array
+          description: The exerted downward force on the pile-head [kN].
+          items:
+            type: number
+        F_c_k_tot:
+          type: array
+          description: The total exerted downward force on the pile [kN].
+          items:
+            type: number
+        negative_friction_range_nap_top:
+          type: array
+          description: The top of the negative friction zone, in [m] w.r.t. NAP.
+          items:
+            type: number
+            nullable: true
+        negative_friction_range_nap_btm:
+          type: array
+          description: |
+            The bottom of the negative friction zone, in [m] w.r.t. NAP.
+          items:
+            type: number
+            nullable: true
+        positive_friction_range_nap_top:
+          type: array
+          description: The top of the positive friction zone, in [m] w.r.t. NAP.
+          items:
+            type: number
+        positive_friction_range_nap_btm:
+          type: array
+          description: |
+            The bottom of the positive friction zone, in [m] w.r.t. NAP.
+          items:
+            type: number
+        pile_tip_factor_s:
+          type: array
+          description: >
+            Factor s [-] used in pile tip resistance calculation as per NEN
+            9997-1 7.6.2.3 (h).
+          items:
+            type: number
+        q_b_max:
+          type: array
+          description: The maximum bottom bearing resistance [MPa].
+          items:
+            type: number
+        q_s_max_mean:
+          type: array
+          description: The maximum shaft bearing resistance [MPa].
+          items:
+            type: number
+            nullable: true
+        qc1:
+          type: array
+          description: |
+            The average friction resistance in Koppejan trajectory I [MPa] .
+          items:
+            type: number
+        qc2:
+          type: array
+          description: |
+            The average friction resistance in Koppejan trajectory II [MPa] .
+          items:
+            type: number
+        qc3:
+          type: array
+          description: |
+            The average friction resistance in Koppejan trajectory III [MPa] .
+          items:
+            type: number
+        s_b:
+          type: array
+          description: The settlement of the pile bottom [mm].
+          items:
+            type: number
+        s_el:
+          type: array
+          description: |
+            The elastic shortening of the pile due to elastic strain [mm].
+          items:
+            type: number
+        k_v_b:
+          type: array
+          description: |
+            The 1-dimensional stiffness modulus at pile bottom [kN/m].
+          items:
+            type: number
+        k_v_1:
+          type: array
+          description: |
+            The 1-dimensional stiffness modulus at pile head [MN/mm].
+          items:
+            type: number
+      required:
+        - pile_tip_level_nap
+        - F_nk_cal
+        - F_nk_k
+        - F_nk_d
+        - R_b_cal
+        - R_b_k
+        - R_b_d
+        - R_s_cal
+        - R_s_k
+        - R_s_d
+        - R_c_cal
+        - R_c_k
+        - R_c_d
+        - R_c_d_net
+        - F_c_k
+        - F_c_k_tot
+        - negative_friction_range_nap_top
+        - negative_friction_range_nap_btm
+        - positive_friction_range_nap_top
+        - positive_friction_range_nap_btm
+        - pile_tip_factor_s
+        - q_b_max
+        - q_s_max_mean
+        - qc1
+        - qc2
+        - qc3
+        - s_b
+        - s_el
+        - k_v_b
+        - k_v_1
+    negative_friction:
+      type: object
+      description: >
+        Contains a table with negative friction results per soil-layer for a
+        certain pile-tip level.
+      properties:
+        friction_table:
+          type: object
+          description: >
+            The table with negative friction results per soil layer. The index 
+            corresponds to the 'layer_table' index.
+          properties:
+            index:
+              type: array
+              description: The layer index
+              example:
+                - 0
+                - 1
+              uniqueItems: true
+              items:
+                type: number
+                minimum: 0
+            circum:
+              type: array
+              description: The average pile circumference [m] per layer.
+              example:
+                - 1
+                - 1
+              items:
+                type: number
+                minimum: 0
+            grain_pressure_avg:
+              type: array
+              description: The average effective grain pressure [MPa] per layer.
+              example:
+                - 0.1
+                - 0.2
+              items:
+                type: number
+                minimum: 0
+            delta_k:
+              type: array
+              description: >-
+                The characteristic friction angle [rad] of the pile-soil
+                interface.
+              example:
+                - 0.1
+                - 0.2
+              items:
+                type: number
+                minimum: 0
+            k_0:
+              type: array
+              description: Characteristic horizontal soil stress factor K_0;k [-].
+              example:
+                - 0.5
+                - 0.5
+              items:
+                type: number
+                minimum: 0
+            F_nk_d:
+              type: array
+              description: Design value of the negative friction force [kN]
+              example:
+                - 1
+                - 2
+              items:
+                type: number
+                minimum: 0
+          required:
+            - index
+            - circum
+            - grain_pressure_avg
+            - delta_k
+            - k_0
+            - F_nk_d
+        pile_tip_level_nap:
+          type: number
+          nullable: true
+          description: >
+            The pile-tip level for which the friction table results were
+            calculated.
+      required:
+        - friction_table
+        - pile_tip_level_nap
+    input_multi_cpt_report:
+      allOf:
+        - $ref: '#/components/schemas/compression_calculation_multi_cpts_input'
+        - type: object
+          required:
+            - general
+            - pile_tip_levels_nap
+          properties:
+            pile_tip_levels_nap:
+              type: array
+              uniqueItems: true
+              items:
+                type: number
+              minItems: 2
+              description: |
+                Range of values for which the pile resistance is calculated.
+
+                **unit: `m NAP`**
+            content:
+              type: object
+              nullable: true
+              properties:
+                result_summary:
+                  type: boolean
+                  nullable: true
+                  default: true
+                individual_cpt_results:
+                  type: boolean
+                  nullable: true
+                  default: true
+                group_results:
+                  type: boolean
+                  nullable: true
+                  default: true
+            general:
+              $ref: '#/components/schemas/report_general'
+    report_general:
+      type: object
+      properties:
+        project_name:
+          type: string
+          description: Name of the project.
+          example: Test project
+        project_id:
+          type: string
+          description: Id of the project.
+          example: '123456'
+        author:
+          type: string
+          description: Author of the report.
+          example: J.A. Frusciante
+        date:
+          type: string
+          nullable: true
+          description: |
+            Report date. Defaults to current date in `"%d-%m-%y"` format.
+          example: 01-01-2001
+      required:
+        - project_name
+        - project_id
+        - author
+    group_results:
+      description: |
+        Results for the group of cpts as a whole.
+      type: object
+      required:
+        - pile_tip_level_nap
+        - R_s_k
+        - R_b_k
+        - R_c_k
+        - R_s_d
+        - R_b_d
+        - R_c_d
+        - F_nk_cal_mean
+        - F_nk_k
+        - F_nk_d
+        - R_c_d_net
+        - F_c_k
+        - F_c_k_tot
+        - s_b
+        - s_e
+        - s_e_mean
+        - R_b_mob_ratio
+        - R_s_mob_ratio
+        - k_v_b
+        - k_v_1
+        - R_c_min
+        - R_c_max
+        - R_c_mean
+        - R_c_std
+        - R_s_mean
+        - R_b_mean
+        - var_coef
+        - n_cpts
+        - use_group_average
+        - xi_normative
+        - xi_value
+        - cpt_Rc_min
+        - cpt_Rc_max
+        - cpt_normative
+      properties:
+        pile_tip_level_nap:
+          description: The pile-tip level [m] w.r.t. NAP.
+          type: array
+          uniqueItems: true
+          items:
+            type: number
+        R_s_k:
+          description: |
+            The characteristic value of the shaft bearingcapacity  [kN].
+          type: array
+          items:
+            type: number
+        R_b_k:
+          description: |
+            The characteristic value of the bottom bearingcapacity  [kN].
+          type: array
+          items:
+            type: number
+        R_c_k:
+          description: >
+            The characteristic value of the total compressive bearingcapacity 
+            [kN].
+          type: array
+          items:
+            type: number
+        R_s_d:
+          description: |
+            The design value of the shaft bearingcapacity  [kN].
+          type: array
+          items:
+            type: number
+        R_b_d:
+          description: |
+            The design value of the bottom bearingcapacity  [kN].
+          type: array
+          items:
+            type: number
+        R_c_d:
+          description: The design value of the total bearingcapacity [kN].
+          type: array
+          items:
+            type: number
+        F_nk_cal_mean:
+          description: >-
+            The mean value of the calculated single-CPT negative friction forces
+            [kN].
+          type: array
+          items:
+            type: number
+        F_nk_k:
+          description: The charactertistic value of the negative friction force [kN].
+          type: array
+          items:
+            type: number
+        F_nk_d:
+          description: The design value of the negative friction force [kN].
+          type: array
+          items:
+            type: number
+        R_c_d_net:
+          description: >
+            The net design value of the total bearingcapacity [kN] (netto =
+            excluding design negative friction force.).
+          type: array
+          items:
+            type: number
+        F_c_k:
+          description: >
+            The characteristic value of the load on the pile head (e.g. building
+            load) [kN]
+          type: array
+          items:
+            type: number
+        F_c_k_tot:
+          description: >
+            The characteristic value of the total compressive pile load [kN]
+            (building-load + neg. friction force).
+          type: array
+          items:
+            type: number
+        s_b:
+          description: The settlement of the pile bottom [mm].
+          type: array
+          items:
+            type: number
+        s_e:
+          description: The elastic shortening of the pile [mm].
+          type: array
+          items:
+            type: number
+        s_e_mean:
+          description: >-
+            The mean of single-CPT results for elastic shortening of the pile
+            [mm].
+          type: array
+          items:
+            type: number
+        R_b_mob_ratio:
+          description: The mobilisation ratio of the bottom bearing capacity [-].
+          type: array
+          items:
+            type: number
+        R_s_mob_ratio:
+          description: The mobilisation ratio of the shaft bearing capacity [-].
+          type: array
+          items:
+            type: number
+        k_v_b:
+          description: The 1-dimensional stiffness modulus at pile bottom [kN/m].
+          type: array
+          items:
+            type: number
+        k_v_1:
+          description: The 1-dimensional stiffness modulus at pile head [MN/mm].
+          type: array
+          items:
+            type: number
+        R_c_min:
+          description: >
+            The minimum of the single-CPT values for the calculated
+            bearingcapacity [kN].
+          type: array
+          items:
+            type: number
+        R_c_max:
+          description: >
+            The maximum of the single-CPT values for the calculated
+            bearingcapacity [kN].
+          type: array
+          items:
+            type: number
+        R_c_mean:
+          description: >
+            The mean of the single-CPT values for the calculated bearingcapacity
+            [kN].
+          type: array
+          items:
+            type: number
+        R_c_std:
+          description: >
+            The standard-deviation of the single-CPT values for the calculated
+            bearingcapacity [kN].
+          type: array
+          items:
+            type: number
+        R_s_mean:
+          description: >
+            The mean of the single-CPT values for the calculated shaft
+            bearingcapacity [kN].
+          type: array
+          items:
+            type: number
+        R_b_mean:
+          description: >
+            The mean of the single-CPT values for the calculated bottom
+            bearingcapacity [kN].
+          type: array
+          items:
+            type: number
+        var_coef:
+          description: >
+            The variation coefficient [%] of the calculated bearing capacities 
+            in the group.
+          type: array
+          items:
+            type: number
+        n_cpts:
+          description: >
+            The number of CPTs [-] that have been taken into account to 
+            establish the Xi value.
+          type: array
+          items:
+            type: number
+        use_group_average:
+          description: >-
+            If true, the group average is used for the calculation of
+            characteristic group results. If false, the values of the normative
+            CPT are used.
+          type: array
+          items:
+            type: boolean
+        xi_normative:
+          description: The normative Xi (either Xi_3 or Xi_4)
+          type: array
+          items:
+            type: string
+        xi_value:
+          description: >
+            The Xi value [-] that was applied to calculate the characteristic
+            value of the total bearing capacity.
+          type: array
+          items:
+            type: number
+        cpt_Rc_min:
+          description: |
+            The CPT with the lowest value for R_c_cal.
+          type: array
+          items:
+            type: string
+        cpt_Rc_max:
+          description: |
+            The CPT with the highest value for R_c_cal.
+          type: array
+          items:
+            type: string
+        cpt_normative:
+          description: >
+            The normative CPT. Can be "group average" if that was found to be 
+            the normative scenario.
+          type: array
+          items:
+            type: string
+    Point2D:
+      items:
+        description: X and Y coordinate for a cartesian metric coordinate system.
+        type: number
+      maxItems: 2
+      minItems: 2
+      type: array
+    Polygon:
+      description: GeoJSON geometry.
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#id4
+      properties:
+        coordinates:
+          items:
+            items:
+              $ref: '#/components/schemas/Point2D'
+            type: array
+            minItems: 3
+            uniqueItems: true
+          type: array
+          uniqueItems: true
+        type:
+          description: the geometry type
+          enum:
+            - Polygon
+          type: string
+      required:
+        - type
+        - coordinates
+tags:
+  - name: service
+  - name: pile_properties
+  - name: friction_ranges
+  - name: report
+  - name: result
+  - name: plot
+  - name: group
+  - name: get-task-result
