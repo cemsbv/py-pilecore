@@ -74,7 +74,8 @@ def create_grouper_payload(
     Parameters
     ----------
     cpt_results_dict:
-        Dictionary with key as CPT name and value a SingleCPTBearingResults class
+        Dictionary with key as CPT name and value a SingleCPTBearingResults class.
+        Should contain at least 2 entries.
     pile_load_uls
         ULS load in kN. Used to determine if a grouping configuration is valid.
     stiff_construction
@@ -131,11 +132,11 @@ def create_grouper_payload(
     ValueError:
         - if NaN values are present in negative friction, bottom or shaft bearing_capacity
 
-
         - if x or y coordinate is None
 
-
         - if pile tip levels don't macht for all SingleCPTBearingResults
+
+        - if less than 2 valid CPTs are provided
 
 
     Returns
@@ -212,6 +213,12 @@ def create_grouper_payload(
                 },
             }
         )
+
+    if not len(cpt_objects) >= 2:
+        raise ValueError(
+            "The PileCore grouper requires at least 2 CPTs with valid bearing capacity."
+        )
+
     payload["cpt_objects"] = cpt_objects
 
     # validate pile tip levels
