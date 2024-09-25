@@ -29,7 +29,7 @@ keywords = ["API", "PileCore", "CEMS", "CRUX"]
 repository = "https://github.com/cemsbv/py-pilecore"
 
 [project.optional-dependencies]
-test = ["coveralls", "pytest"]
+test = ["coveralls", "pytest", "openapi-core"]
 docs = [
     "Sphinx==6.1.3",
     "sphinx-autodoc-typehints==1.22",

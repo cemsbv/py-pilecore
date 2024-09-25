@@ -2,6 +2,7 @@ import json
 
 import pygef
 import pytest
+from openapi_core import Config, OpenAPI, V30RequestValidator
 from pygef.common import Location
 from pygef.cpt import CPTData
 
@@ -127,6 +128,11 @@ def cpt() -> CPTData:
 
 
 @pytest.fixture
+def cpt_no_coords() -> CPTData:
+    return pygef.read_cpt("tests/data/cpt_no_coordinates.GEF")
+
+
+@pytest.fixture
 def mock_cases_multi_cpt_bearing_results_valid_data(
     mock_multi_cpt_bearing_response: dict, mock_results_passover: dict
 ) -> dict:
@@ -216,4 +222,15 @@ def mock_cases_multi_cpt_bearing_results(
 ) -> CasesMultiCPTBearingResults:
     return CasesMultiCPTBearingResults(
         **mock_cases_multi_cpt_bearing_results_valid_data
+    )
+
+
+@pytest.fixture
+def pc_openapi() -> OpenAPI:
+    return OpenAPI.from_file_path(
+        "tests/openapi/openapi.yaml",
+        config=Config(
+            spec_validator_cls=None,
+            request_validator_cls=V30RequestValidator,
+        ),
     )
