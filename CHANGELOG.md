@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.1] - 2024-10-01
+
+### Bug Fixes
+
+- *(viewer_results)* Fix error of not finding color for NaN results for ViewerCptResultsPlanView
+
+### Miscellaneous Tasks
+
+- *(cleanup)* Remove unused file
+
 ## [0.7.0] - 2024-09-25
 
 ### Features
