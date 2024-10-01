@@ -408,7 +408,7 @@ typing-extensions==4.12.2
     #   pydantic
     #   pydantic-core
     #   sqlfluff
-tzdata==2024.1
+tzdata==2024.2
     # via pandas
 urllib3==1.26.20
     # via
