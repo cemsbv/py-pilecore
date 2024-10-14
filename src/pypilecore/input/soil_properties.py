@@ -30,6 +30,8 @@ def create_soil_properties_payload(
     ]
     | None = None,
     individual_ocr: Mapping[Any, float] | None = None,
+    master_top_of_tension_zone_nap: float | None = None,
+    individual_top_of_tension_zone_nap: Mapping[Any, float] | None = None,
     verbose: bool = False,
 ) -> Tuple[List[dict], Dict[str, dict]]:
     """
@@ -188,6 +190,19 @@ def create_soil_properties_payload(
                 "fixed_positive_friction_range_nap"
             ] = individual_positive_friction_range_nap[cpt.alias]
             soil_properties["friction_range_strategy"] = "manual"
+
+        # Optionally add top_of_tension_zone_nap parameter
+        if (
+            individual_top_of_tension_zone_nap is not None
+            and cpt.alias in individual_top_of_tension_zone_nap.keys()
+        ):
+            top_of_tension_zone_nap: float | None = individual_top_of_tension_zone_nap[
+                cpt.alias
+            ]
+        else:
+            top_of_tension_zone_nap = master_top_of_tension_zone_nap
+        if top_of_tension_zone_nap is not None:
+            soil_properties["top_of_tension_zone_nap"] = top_of_tension_zone_nap
 
         # Optionally add OCR parameter
         if individual_ocr is not None and cpt.alias in individual_ocr.keys():

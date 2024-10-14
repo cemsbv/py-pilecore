@@ -30,6 +30,11 @@ def mock_group_results_passover() -> dict:
         data = json.load(file)
     return data
 
+@pytest.fixture
+def mock_multi_cpt_tension_response() -> dict:
+    with open("tests/response/multi_cpt_tension_response.json", "r") as file:
+        data = json.load(file)
+    return data
 
 @pytest.fixture
 def mock_multi_cpt_bearing_response() -> dict:
@@ -76,6 +81,11 @@ def mock_results_passover() -> dict:
             "ref_height": 11.56,
             "surface_level_nap": 11.56,
             "location": {"x": 3, "y": 3},
+        },
+        "17A": {
+            "ref_height": 11.44,
+            "surface_level_nap": 11.44,
+            "location": {"x": 4, "y": 4},
         },
     }
 
