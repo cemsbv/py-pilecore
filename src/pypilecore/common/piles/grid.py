@@ -11,7 +11,6 @@ from shapely.plotting import plot_polygon
 
 
 class PileGridProperties:
-
     def __init__(
         self,
         points: List[Tuple[float, float]],

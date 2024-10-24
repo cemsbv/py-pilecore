@@ -8,7 +8,6 @@ from ipywidgets import widgets
 from natsort import natsorted
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTResultDefinitions
 from pypilecore.viewers.interactive_figures.figure_cpt_results_plan_view import (
     FigureCPTResultsPlanView,
 )
