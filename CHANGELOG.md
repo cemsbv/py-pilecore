@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2024-10-24
+
+### Features
+
+- *(begemann)* Add Begemann method to compute excavation stress after excavation
+
 ## [0.7.1] - 2024-10-01
 
 ### Bug Fixes
