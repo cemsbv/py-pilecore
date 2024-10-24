@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, List, Tuple
 
+import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
@@ -10,6 +11,7 @@ from shapely.plotting import plot_polygon
 
 
 class PileGridProperties:
+
     def __init__(
         self,
         points: List[Tuple[float, float]],
@@ -106,6 +108,7 @@ class PileGridProperties:
         self,
         figsize: Tuple[float, float] = (6.0, 6.0),
         axes: Axes | None = None,
+        includ_ticks: bool = True,
         **kwargs: Any,
     ) -> Axes:
         """
@@ -163,5 +166,8 @@ class PileGridProperties:
             axes.annotate(label, xy=(x, y), xytext=(3, 3), textcoords="offset points")
 
         axes.ticklabel_format(useOffset=False, style="plain")
-        axes.set_aspect("equal")
+        axes.set_aspect("equal", adjustable="box")
+        if includ_ticks:
+            axes.xaxis.set_major_locator(ticker.NullLocator())
+            axes.yaxis.set_major_locator(ticker.NullLocator())
         return axes
