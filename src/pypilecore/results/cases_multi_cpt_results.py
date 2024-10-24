@@ -6,10 +6,13 @@ import pandas as pd
 from natsort import natsorted
 from pygef.common import Location
 
-from pypilecore.results.multi_cpt_results import MultiCPTBearingResults
+from pypilecore.results.multi_cpt_results import MultiCPTBearingResults as compression
 from pypilecore.results.result_definitions import (
     CPTGroupResultDefinitions,
     CPTResultDefinitions,
+)
+from pypilecore.results.tension_multi_cpt_results import (
+    MultiCPTBearingResults as tension,
 )
 
 
@@ -21,7 +24,7 @@ class CasesMultiCPTBearingResults:
 
     def __init__(
         self,
-        results_per_case: Dict[Hashable, MultiCPTBearingResults],
+        results_per_case: Dict[Hashable, compression | tension],
         cpt_locations: Dict[str, Location],
     ) -> None:
         """
@@ -71,49 +74,54 @@ class CasesMultiCPTBearingResults:
         self._set_cpt_group_results_dataframe(results_per_case)
 
     def _set_cpt_results_dataframe(
-        self, results_per_case: Dict[Hashable, MultiCPTBearingResults]
+        self, results_per_case: Dict[Hashable, compression | tension]
     ) -> None:
         """Private method to create and set the property `cpt_results_dataframe`."""
         records = []
         for case_name, case_results in results_per_case.items():
             for result_definition in CPTResultDefinitions:
-                df = case_results.cpt_results.get_results_per_cpt(
-                    column_name=result_definition.name
-                )
-                for idx_row, row in df.iterrows():
-                    for test_id, result in row.items():
-                        records.append(
-                            dict(
-                                case_name=case_name,
-                                result_name=result_definition.name,
-                                test_id=test_id,
-                                x=self.cpt_locations[test_id].x,
-                                y=self.cpt_locations[test_id].y,
-                                pile_tip_level_nap=idx_row,
-                                result=result,
-                                result_unit=result_definition.value.unit,
+                if (
+                    result_definition.name
+                    in case_results.cpt_results.to_pandas().columns
+                ):
+                    df = case_results.cpt_results.get_results_per_cpt(
+                        column_name=result_definition.name
+                    )
+                    for idx_row, row in df.iterrows():
+                        for test_id, result in row.items():
+                            records.append(
+                                dict(
+                                    case_name=case_name,
+                                    result_name=result_definition.name,
+                                    test_id=test_id,
+                                    x=self.cpt_locations[test_id].x,
+                                    y=self.cpt_locations[test_id].y,
+                                    pile_tip_level_nap=idx_row,
+                                    result=result,
+                                    result_unit=result_definition.value.unit,
+                                )
                             )
-                        )
         self._cpt_results_dataframe = pd.DataFrame.from_records(records)
 
     def _set_cpt_group_results_dataframe(
-        self, result_cases: Dict[Hashable, MultiCPTBearingResults]
+        self, result_cases: Dict[Hashable, compression | tension]
     ) -> None:
         """Private method to create and set the property `cpt_group_results_dataframe`."""
         records = []
         for case_name, case_results in result_cases.items():
             df = case_results.group_results_table.to_pandas()
             for result_definition in CPTGroupResultDefinitions:
-                for _, row in df.iterrows():
-                    records.append(
-                        dict(
-                            case_name=case_name,
-                            result_name=result_definition.name,
-                            pile_tip_level_nap=row["pile_tip_level_nap"],
-                            result=row[result_definition.value.name],
-                            result_unit=result_definition.value.unit,
+                if result_definition.name in df.columns:
+                    for _, row in df.iterrows():
+                        records.append(
+                            dict(
+                                case_name=case_name,
+                                result_name=result_definition.name,
+                                pile_tip_level_nap=row["pile_tip_level_nap"],
+                                result=row[result_definition.value.name],
+                                result_unit=result_definition.value.unit,
+                            )
                         )
-                    )
         self._cpt_group_results_dataframe = pd.DataFrame.from_records(records)
 
     def _set_cpt_locations(self, value: Dict[str, Location]) -> None:
@@ -152,7 +160,7 @@ class CasesMultiCPTBearingResults:
         return self._cases
 
     @property
-    def multicpt_bearing_results(self) -> List[MultiCPTBearingResults]:
+    def multicpt_bearing_results(self) -> List[compression | tension]:
         """The MultiCPTBearingResults objects."""
         return self._multicpt_bearing_results
 
@@ -189,7 +197,7 @@ class CasesMultiCPTBearingResults:
 
 
 def _validate_results_per_case(
-    results_per_case: Dict[Hashable, MultiCPTBearingResults]
+    results_per_case: Dict[Hashable, compression | tension]
 ) -> None:
     """
     Private method to validate the results_per_case dictionary.
@@ -218,7 +226,7 @@ def _validate_results_per_case(
         raise ValueError("Empty dictionary 'results_per_case' is not allowed.")
 
     for val in results_per_case.values():
-        if not isinstance(val, MultiCPTBearingResults):
+        if not isinstance(val, (compression, tension)):
             raise TypeError(
                 f"Expected type 'MultiCPTBearingResults' for items in 'results_per_case', but got {type(val)}"
             )
