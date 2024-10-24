@@ -30,18 +30,7 @@ class CPTResultsTable:
     A: NDArray[np.float64]
     """The area of influence of the pile, that is, the area over which
             the stress spreads around a pile within a pile group [m2]."""
-    f1: NDArray[np.float64]
-    """The factor for the effect of compaction in the pile group (7.6.3.3 (e)
-            NEN 9997-1+C2:2017) [-]."""
-    f2_d: NDArray[np.float64]
-    """The design factor for the decrease in grain stress in sand layers from which
-            the pile derives its tensile resistance (7.6.3.3 (f) NEN
-            9997-1+C2:2017) [-]."""
-    f2_k: NDArray[np.float64]
-    """The characteristic factor for the decrease in grain stress in sand layers from which
-            the pile derives its tensile resistance (7.6.3.3 (f) NEN
-            9997-1+C2:2017) [-]."""
-    R_t_clod_d: NDArray[np.float64]
+    R_t_d_plug: NDArray[np.float64]
     """The root ball weight, excluding the weight of the pile (7.6.3.3 (h) NEN
             9997-1+C2:2017) [kN]."""
     R_t_d: NDArray[np.float64]
@@ -50,18 +39,20 @@ class CPTResultsTable:
     R_t_k: NDArray[np.float64]
     """The characteristic value of the tensile resistance of a pile or pile
             group (7.6.3.3 NEN 9997-1+C2:2017) [kN]."""
-    R_s_mob_ratio: NDArray[np.float64]
+    R_t_mob_ratio: NDArray[np.float64]
     """The mobilisation ratio of the shaft bearing capacity [-]."""
-    R_s_mob: NDArray[np.float64]
+    R_t_mob: NDArray[np.float64]
     """The mobilisation of the shaft bearing capacity [kN]."""
     k_v_b: NDArray[np.float64]
     """The 1-dimensional stiffness modulus at pile bottom [kN/m]."""
     k_v_1: NDArray[np.float64]
     """The 1-dimensional stiffness modulus at pile head [MN/mm]."""
-    qs_d: NDArray[np.float64]
+    q_s_max_mean: NDArray[np.float64]
     """The computational value of shaft friction [kPa]."""
-    qs_k: NDArray[np.float64]
-    """The computational value of shaft friction [kPa]."""
+    s_e: NDArray[np.float64]
+    """The elastic shortening of the pile [mm]."""
+    s_b: NDArray[np.float64]
+    """The settlement of the pile bottom [mm]."""
 
     def __post_init__(self) -> None:
         dict_lengths = {}
@@ -78,34 +69,30 @@ class CPTResultsTable:
         cls,
         pile_tip_level_nap: Sequence[Number],
         A: Sequence[Number],
-        f1: Sequence[Number],
-        f2_d: Sequence[Number],
-        f2_k: Sequence[Number],
-        R_t_clod_d: Sequence[Number],
+        R_t_d_plug: Sequence[Number],
         R_t_d: Sequence[Number],
         R_t_k: Sequence[Number],
-        R_s_mob_ratio: Sequence[Number],
-        R_s_mob: Sequence[Number],
+        R_t_mob_ratio: Sequence[Number],
+        R_t_mob: Sequence[Number],
         k_v_b: Sequence[Number],
         k_v_1: Sequence[Number],
-        qs_d: Sequence[Number],
-        qs_k: Sequence[Number],
+        q_s_max_mean: Sequence[Number],
+        s_e: Sequence[Number],
+        s_b: Sequence[Number],
     ) -> CPTResultsTable:
         return cls(
             pile_tip_level_nap=np.array(pile_tip_level_nap).astype(np.float64),
             A=np.array(A).astype(np.float64),
-            f1=np.array(f1).astype(np.float64),
-            f2_d=np.array(f2_d).astype(np.float64),
-            f2_k=np.array(f2_k).astype(np.float64),
-            R_t_clod_d=np.array(R_t_clod_d).astype(np.float64),
+            R_t_d_plug=np.array(R_t_d_plug).astype(np.float64),
             R_t_d=np.array(R_t_d).astype(np.float64),
             R_t_k=np.array(R_t_k).astype(np.float64),
-            R_s_mob_ratio=np.array(R_s_mob_ratio).astype(np.float64),
-            R_s_mob=np.array(R_s_mob).astype(np.float64),
+            R_t_mob_ratio=np.array(R_t_mob_ratio).astype(np.float64),
+            R_t_mob=np.array(R_t_mob).astype(np.float64),
             k_v_b=np.array(k_v_b).astype(np.float64),
             k_v_1=np.array(k_v_1).astype(np.float64),
-            qs_d=np.array(qs_d).astype(np.float64),
-            qs_k=np.array(qs_k).astype(np.float64),
+            q_s_max_mean=np.array(q_s_max_mean).astype(np.float64),
+            s_e=np.array(s_e).astype(np.float64),
+            s_b=np.array(s_b).astype(np.float64),
         )
 
     def to_pandas(self) -> pd.DataFrame:
@@ -173,16 +160,14 @@ class SingleCPTBearingResults:
                 k_v_b=results_table["k_v_b"],
                 k_v_1=results_table["k_v_1"],
                 A=results_table["A"],
-                f1=results_table["f1"],
-                f2_d=results_table["f2_d"],
-                f2_k=results_table["f2_k"],
-                R_t_clod_d=results_table["R_t_clod_d"],
+                R_t_d_plug=results_table["R_t_d_plug"],
                 R_t_d=results_table["R_t_d"],
                 R_t_k=results_table["R_t_k"],
-                R_s_mob_ratio=results_table["R_s_mob_ratio"],
-                R_s_mob=results_table["R_s_mob"],
-                qs_d=results_table["qs_d"],
-                qs_k=results_table["qs_k"],
+                R_t_mob_ratio=results_table["R_s_mob_ratio"],
+                R_t_mob=results_table["R_s_mob"],
+                q_s_max_mean=results_table["q_s_max_mean"],
+                s_e=results_table["s_e"],
+                s_b=results_table["s_b"],
             ),
             pile_grid_properties=PileGridProperties.from_api_response(
                 cpt_results_dict["pile_grid"]
@@ -287,7 +272,7 @@ class SingleCPTBearingResults:
             label=r"$R_{t;d}$",
         )
         axes.plot(
-            np.array(self.table.R_t_clod_d),
+            np.array(self.table.R_t_d_plug),
             self.table.pile_tip_level_nap,
             label=r"$R_{t;d;kluit}$",
             lw=3,

@@ -32,7 +32,6 @@ class CPTGroupResultsTable:
         R_t_d: Sequence[float],
         R_t_d_plug: Sequence[float],
         R_t_k: Sequence[float],
-        F_c_k_tot: Sequence[float],
         R_t_mob: Sequence[float],
         s_e: Sequence[float],
         s_b: Sequence[float],
@@ -44,8 +43,6 @@ class CPTGroupResultsTable:
         ----------
         pile_tip_level_nap:
             The pile-tip level [m] w.r.t. NAP.
-        F_c_k_tot:
-            The characteristic value of the total compressive pile load [kN] (building-load + neg. friction force).
         s_b:
             The settlement of the pile bottom [mm].
         s_e:
@@ -85,8 +82,6 @@ class CPTGroupResultsTable:
             np.array(pile_tip_level_nap).astype(np.float64).round(decimals=2)
         )
         """The pile-tip level [m] w.r.t. NAP."""
-        self.F_c_k_tot = np.array(F_c_k_tot).astype(np.float64)
-        """The characteristic value of the total compressive pile load [kN] (building-load + neg. friction force)."""
         self.s_b = np.array(s_b).astype(np.float64)
         """The settlement of the pile bottom [mm]."""
         self.s_e = np.array(s_e).astype(np.float64)
@@ -341,7 +336,7 @@ class MultiCPTBearingResults:
         pile_properties: PileProperties,
         gamma_s_t: float,
         gamma_m_var_qc: float,
-        phi_clod: float | str,
+        phi_plug: float | str,
         soil_load: float,
     ) -> None:
         """
@@ -357,7 +352,7 @@ class MultiCPTBearingResults:
             Safety factor γ_s_t. Used to determine the tensile resistance of a pile. [-]
         gamma_m_var_qc:
             partial factor for the influence of load switching; NEN 9997-1+C2:2017 7.6.3.3 (d). [-]
-        phi_clod:
+        phi_plug:
             The effective angle of internal friction of the soil layer based on pile type [degrees].
         soil_load:
             (Fictive) load on soil used to calculate soil settlement [kPa]. This is
@@ -366,7 +361,7 @@ class MultiCPTBearingResults:
         self._pp = pile_properties
         self._gamma_s_t = gamma_s_t
         self._gamma_m_var_qc = gamma_m_var_qc
-        self._phi_clod = phi_clod
+        self._phi_plug = phi_plug
         self._soil_load = soil_load
 
         self._cpt_results = cpt_results
@@ -402,7 +397,6 @@ class MultiCPTBearingResults:
                 R_t_d=group_results["R_t_d"],
                 R_t_d_plug=group_results["R_t_d_plug"],
                 R_t_k=group_results["R_t_k"],
-                F_c_k_tot=group_results["F_c_k_tot"],
                 R_t_mob=group_results["R_t_mob"],
                 s_e=group_results["s_e"],
                 s_b=group_results["s_b"],
@@ -411,7 +405,7 @@ class MultiCPTBearingResults:
             ),
             gamma_s_t=response_dict["calculation_params"]["gamma_s_t"],
             soil_load=response_dict["calculation_params"]["soil_load"],
-            phi_clod=response_dict["calculation_params"]["phi_clod"],
+            phi_plug=response_dict["calculation_params"]["phi_plug"],
             gamma_m_var_qc=response_dict["calculation_params"]["gamma_m_var_qc"],
         )
 
