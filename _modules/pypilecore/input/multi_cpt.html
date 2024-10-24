@@ -105,6 +105,9 @@
     <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;surface&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;surface&quot;</span><span class="p">,</span>
     <span class="n">excavation_depth_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">excavation_param_t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">excavation_stress_reduction_method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;begemann&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span>
+    <span class="n">excavation_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">excavation_edge_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">individual_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
     <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">individual_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span>
@@ -232,6 +235,27 @@
 <span class="sd">              excavation method.</span>
 
 <span class="sd">        See for more info NEN 9997-1+C2:2017 7.6.2.3.(10)(k)</span>
+<span class="sd">    excavation_stress_reduction_method:</span>
+<span class="sd">        Method used to calculate the stress reduction due to the excavation applied to the effective and total stresses.</span>
+<span class="sd">        Only used when `excavation_depth_nap` is different than `None`. It can be:</span>
+<span class="sd">            - &quot;constant&quot; (default): The stress reduction below the excavation is constant with depth. The stress reduction</span>
+<span class="sd">            is equal to the original effective stress (i.e. before the excavation) at the excavation depth.</span>
+<span class="sd">            - &quot;begemann&quot;: The stress reduction below the excavation decreases with depth according to the Begemann method.</span>
+<span class="sd">            This method uses the elastic solution of a strip load acting on a semi-infinite homogeneous soil mass.</span>
+<span class="sd">            The load has a width equal to the excavation width and a magnitude equal to the original effective stress at</span>
+<span class="sd">            the excavation depth.</span>
+<span class="sd">        Regardless the method, the stress reduction applied above the excavation is equal to the original effective stress</span>
+<span class="sd">        at each corresponding depth.</span>
+<span class="sd">    excavation_width:</span>
+<span class="sd">        Width of the excavation [m]. Used to calculate the stress reduction due to the excavation if the Begemann method is selected.</span>
+<span class="sd">        In this case, it must be provided and it must be &gt; 0.</span>
+<span class="sd">    excavation_edge_distance:</span>
+<span class="sd">        Distance from the pile centerline to the excavation edge [m]. Used to calculate the stress reduction due to the excavation if</span>
+<span class="sd">        the Begemann method is selected. In this case, it must be provided and it must be between 0.0 and 0.5 * excavation_width.</span>
+
+<span class="sd">        Note that:</span>
+<span class="sd">            - 0.0 means that the pile is located at the edge of the excavation.</span>
+<span class="sd">            - 0.5 * excavation_width means that the pile is at the center of the excavation.</span>
 <span class="sd">    individual_negative_friction_range_nap:</span>
 <span class="sd">        A dictionary, mapping ``CPTData.alias`` values to fixed negative-friction ranges.</span>
 <span class="sd">        For a specification of the values, see ``fixed_negative_friction_range_nap``</span>
@@ -273,12 +297,30 @@
 <span class="sd">    ------</span>
 <span class="sd">    ValueError:</span>
 <span class="sd">        - If `excavation_depth_nap` is not None and `excavation_param_t` is None.</span>
+<span class="sd">        - If `excavation_stress_reduction_method` is not either &#39;constant&#39; or &#39;begemann&#39;.</span>
+<span class="sd">        - If `excavation_stress_reduction_method` is &#39;begemann&#39; and `excavation_width` is None.</span>
+<span class="sd">        - If `excavation_stress_reduction_method` is &#39;begemann&#39; and `excavation_edge_distance` is None.</span>
 <span class="sd">        - If both `relative_pile_load` and `pile_load_sls` are None.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="n">excavation_depth_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">excavation_param_t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;`excavation_param_t` cannot be None when `excavation_depth_nap` is not None.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;begemann&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;`excavation_stress_reduction_method` must be either &#39;constant&#39; or &#39;begemann&#39;.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">&quot;begemann&quot;</span> <span class="ow">and</span> <span class="n">excavation_width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;`excavation_width` must be provided when `excavation_stress_reduction_method` is &#39;begemann&#39;.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">&quot;begemann&quot;</span>
+        <span class="ow">and</span> <span class="n">excavation_edge_distance</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;`excavation_edge_distance` must be provided when `excavation_stress_reduction_method` is &#39;begemann&#39;&quot;</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">relative_pile_load</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pile_load_sls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -315,6 +357,18 @@
     <span class="c1"># Add optional properties</span>
     <span class="k">if</span> <span class="n">excavation_depth_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_depth_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_depth_nap</span>
+
+    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">stress_reduction_method</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">stress_reductin_method</span><span class="o">=</span><span class="s2">&quot;begemann&quot;</span><span class="p">,</span>
+            <span class="n">excavation_width</span><span class="o">=</span><span class="n">excavation_width</span><span class="p">,</span>
+            <span class="n">excavation_edge_distance</span><span class="o">=</span><span class="n">excavation_edge_distance</span><span class="p">,</span>
+        <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">pile_load_sls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;pile_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_load_sls</span>
     <span class="k">if</span> <span class="n">apply_qc3_reduction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
