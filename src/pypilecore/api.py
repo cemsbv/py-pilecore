@@ -1,5 +1,6 @@
 import logging
 from time import sleep
+from typing import Literal
 
 from nuclei.client import NucleiClient
 from requests import Response
@@ -230,6 +231,94 @@ def get_groups_api_report(
         return_response=True,
     )
 
+    wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
+
+    return client.call_endpoint(
+        "PileCore", "/get-task-result", version="v3", schema=ticket.json()
+    )
+
+
+def get_multi_cpt_api_result_tension(
+    client: NucleiClient,
+    payload: dict,
+    verbose: bool = False,
+    standard: Literal["NEN9997-1", "CUR236"] = "NEN9997-1",
+) -> dict:
+    """
+    Wrapper around the PileCore endpoint "/tension/[nen or cur]/multiple-cpts/results".
+
+    Parameters
+    ----------
+    client: NucleiClient
+        client object created by [nuclei](https://github.com/cemsbv/nuclei)
+    payload: dict
+        the payload of the request, can be created by calling `create_grouper_payload()`
+    verbose: bool
+        if True, print additional information to the console
+    standard: str
+        Norm used to calculate bearing capacities
+    """
+    logging.info(
+        "Calculating bearing capacities... \n"
+        "Depending on the amount of pile tip levels and CPT's this can take a while."
+    )
+    if standard == "NEN9997-1":
+        endpoint = "/tension/nen/multiple-cpt/results"
+    else:
+        endpoint = "/tension/cur/multiple-cpt/results"
+
+    ticket = client.call_endpoint(
+        "PileCore",
+        endpoint=endpoint,
+        version="v3",
+        schema=payload,
+        return_response=True,
+    )
+
+    wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
+
+    return client.call_endpoint(
+        "PileCore", "/get-task-result", version="v3", schema=ticket.json()
+    )
+
+
+def get_multi_cpt_api_report_tension(
+    client: NucleiClient,
+    payload: dict,
+    verbose: bool = False,
+    standard: Literal["NEN9997-1", "CUR236"] = "NEN9997-1",
+) -> bytes:
+    """
+    Wrapper around the PileCore endpoint "/tension/[nen or cur]/multiple-cpts/report".
+
+    Parameters
+    ----------
+    client: NucleiClient
+        client object created by [nuclei](https://github.com/cemsbv/nuclei)
+    payload: dict
+        the payload of the request, can be created by calling `create_grouper_payload()`
+    verbose: bool
+        if True, print additional information to the console
+    standard: str
+        Norm used to calculate bearing capacities
+    """
+    logging.info(
+        "Generate report... \n"
+        "Depending on the amount of pile tip levels and CPT's this can take a while."
+    )
+
+    if standard == "NEN9997-1":
+        endpoint = "/tension/nen/multiple-cpt/report"
+    else:
+        endpoint = "/tension/cur/multiple-cpt/report"
+
+    ticket = client.call_endpoint(
+        "PileCore",
+        endpoint=endpoint,
+        version="v3",
+        schema=payload,
+        return_response=True,
+    )
     wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
 
     return client.call_endpoint(
