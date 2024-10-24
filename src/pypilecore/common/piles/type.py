@@ -13,6 +13,7 @@ class PileType:
         alpha_s_clay: float | None = None,
         alpha_p: float | None = None,
         alpha_t_sand: float | None = None,
+        alpha_t_clay: float | None = None,
         settlement_curve: int | None = None,
         negative_fr_delta_factor: float | None = None,
         adhesion: float | None = None,
@@ -34,6 +35,8 @@ class PileType:
             The alpha_p value of the pile type, by default None.
         alpha_t_sand : float, optional
             The alpha_t_sand value of the pile type, by default None.
+        alpha_t_clay : float, optional
+            The alpha_t_clay value of the pile type, by default None.
         settlement_curve : int, optional
             The settlement curve of the pile type, by default None.
         negative_fr_delta_factor : float, optional
@@ -50,6 +53,7 @@ class PileType:
         self._alpha_s_clay = alpha_s_clay
         self._alpha_p = alpha_p
         self._alpha_t_sand = alpha_t_sand
+        self._alpha_t_clay = alpha_t_clay
         self._settlement_curve = settlement_curve
         self._negative_fr_delta_factor = negative_fr_delta_factor
         self._adhesion = adhesion
@@ -77,6 +81,7 @@ class PileType:
             alpha_s_clay=pile_type["properties"]["alpha_s_clay"],
             alpha_p=pile_type["properties"]["alpha_p"],
             alpha_t_sand=pile_type["properties"]["alpha_t_sand"],
+            alpha_t_clay=pile_type["properties"]["alpha_t_clay"],
             settlement_curve=pile_type["properties"]["settlement_curve"],
             negative_fr_delta_factor=pile_type["properties"][
                 "negative_fr_delta_factor"
@@ -110,6 +115,11 @@ class PileType:
     def alpha_t_sand(self) -> float | None:
         """The alpha_t_sand value of the pile type"""
         return self._alpha_t_sand
+
+    @property
+    def alpha_t_clay(self) -> float | None:
+        """The alpha_t_clay value of the pile type"""
+        return self._alpha_t_clay
 
     @property
     def settlement_curve(self) -> int | None:
@@ -173,13 +183,16 @@ class PileType:
         if self.alpha_t_sand is not None:
             custom_type_properties["alpha_t_sand"] = self.alpha_t_sand
 
+        if self.alpha_t_clay is not None:
+            custom_type_properties["alpha_t_clay"] = self.alpha_t_clay
+
         if self.settlement_curve is not None:
             custom_type_properties["settlement_curve"] = self.settlement_curve
 
         if self.negative_fr_delta_factor is not None:
-            custom_type_properties[
-                "negative_fr_delta_factor"
-            ] = self.negative_fr_delta_factor
+            custom_type_properties["negative_fr_delta_factor"] = (
+                self.negative_fr_delta_factor
+            )
 
         if self.adhesion is not None:
             custom_type_properties["adhesion"] = self.adhesion
