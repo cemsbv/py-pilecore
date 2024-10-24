@@ -30,11 +30,13 @@ def mock_group_results_passover() -> dict:
         data = json.load(file)
     return data
 
+
 @pytest.fixture
 def mock_multi_cpt_tension_response() -> dict:
     with open("tests/response/multi_cpt_tension_response.json", "r") as file:
         data = json.load(file)
     return data
+
 
 @pytest.fixture
 def mock_multi_cpt_bearing_response() -> dict:
