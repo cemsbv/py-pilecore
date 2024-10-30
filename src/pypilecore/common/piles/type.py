@@ -81,7 +81,7 @@ class PileType:
             alpha_s_clay=pile_type["properties"]["alpha_s_clay"],
             alpha_p=pile_type["properties"]["alpha_p"],
             alpha_t_sand=pile_type["properties"]["alpha_t_sand"],
-            alpha_t_clay=pile_type["properties"]["alpha_t_clay"],
+            alpha_t_clay=pile_type["properties"].get("alpha_t_clay", None),
             settlement_curve=pile_type["properties"]["settlement_curve"],
             negative_fr_delta_factor=pile_type["properties"][
                 "negative_fr_delta_factor"
