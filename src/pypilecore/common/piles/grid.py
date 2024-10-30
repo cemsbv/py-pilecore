@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from typing import Any, List, Tuple
 
+import matplotlib.patches as patches
 import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
+from matplotlib.lines import Line2D
 from shapely.geometry import Polygon, shape
 from shapely.plotting import plot_polygon
 
@@ -16,6 +18,7 @@ class PileGridProperties:
         points: List[Tuple[float, float]],
         index_location: int,
         geometry: Polygon | None = None,
+        _validate: bool = True,
     ):
         """
         Class that holds the information of the pile placement.
@@ -26,9 +29,15 @@ class PileGridProperties:
         ----------
         points: List of tuple
             List of tuple with xy coordinates.
+        index_location: int
+            selected index of the points list as pile location
+        geometry: Polygon, optional
+            A;eff as polygon
+        _validate: bool, optional
+            flag that overrules validation of the parameters
 
         """
-        if len(points) < 2:
+        if len(points) < 2 and _validate:
             raise ValueError("Provide at least two points to the pile grid.")
 
         if len(points) != len(set(points)):
@@ -95,6 +104,7 @@ class PileGridProperties:
             points=points,
             index_location=payload["index_location"],
             geometry=shape(payload["geometry"]),
+            _validate=False,
         )
 
     def serialize_payload(self) -> dict:
@@ -107,7 +117,8 @@ class PileGridProperties:
         self,
         figsize: Tuple[float, float] = (6.0, 6.0),
         axes: Axes | None = None,
-        includ_ticks: bool = True,
+        add_ticks: bool = False,
+        add_legend: bool = True,
         **kwargs: Any,
     ) -> Axes:
         """
@@ -120,6 +131,10 @@ class PileGridProperties:
             The figure size (width, height) in inches, by default (6.0, 6.0).
         axes : Axes
             The axes object to plot the cross-section on.
+        add_ticks : bool
+            Add ticks to figure, by default False
+        add_legend : bool
+            Add legend to figure, by default True
         **kwargs
             Additional keyword arguments to pass to the `plt
         """
@@ -144,20 +159,47 @@ class PileGridProperties:
                 raise ValueError(
                     "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
                 )
+        handles = [
+            Line2D(
+                [0],
+                [0],
+                label="Selected pile",
+                marker=".",
+                color="None",
+                markerfacecolor="tab:orange",
+                markeredgecolor="None",
+                ls="",
+            ),
+        ]
 
+        if len(self._points) >= 2:
+            handles.append(
+                Line2D(
+                    [0],
+                    [0],
+                    color="None",
+                    label="Other piles",
+                    marker=".",
+                    markerfacecolor="gray",
+                    markeredgecolor="None",
+                    ls="",
+                )
+            )
         # add the effective area of the pile with the pile grid
         if self._geometry is not None:
-            plot_polygon(self._geometry, ax=axes, add_points=False)
-            axes.annotate(
-                rf"{self._geometry.area:.1f} $m^2$",
-                xy=self._geometry.bounds[2:],
-                xytext=(3, 3),
-                textcoords="offset points",
+            plot_polygon(self._geometry, ax=axes, add_points=False, color="tab:blue")
+            handles.append(
+                patches.Patch(
+                    facecolor="tab:blue",
+                    alpha=0.3,
+                    label=r"$A_{eff}$" + rf" {self._geometry.area:.1f} $m^2$",
+                    edgecolor="tab:blue",
+                )
             )
 
         # plot points
         colors = ["gray"] * len(self._points)
-        colors[self._index_location] = "black"
+        colors[self._index_location] = "tab:orange"
         axes.scatter(*zip(*self._points), color=colors, marker=".")
 
         # add labels to points
@@ -166,7 +208,15 @@ class PileGridProperties:
 
         axes.ticklabel_format(useOffset=False, style="plain")
         axes.set_aspect("equal", adjustable="box")
-        if includ_ticks:
+        if add_ticks:
             axes.xaxis.set_major_locator(ticker.NullLocator())
             axes.yaxis.set_major_locator(ticker.NullLocator())
+
+        if add_legend:
+            axes.legend(
+                title="Pile grid configuration",
+                bbox_to_anchor=(1.04, 1),
+                loc="upper left",
+                handles=handles,
+            )
         return axes
