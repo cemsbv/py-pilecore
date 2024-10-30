@@ -17,18 +17,16 @@ from pypilecore.results.tension_single_cpt_results import CPTResultsTable
 
 single_cpt_result_columns = [
     "A",
-    "f1",
-    "f2_d",
-    "f2_k",
-    "R_t_clod_d",
+    "R_t_d_plug",
     "R_t_d",
     "R_t_k",
-    "R_s_mob_ratio",
-    "R_s_mob",
+    "R_t_mob_ratio",
+    "R_t_mob",
+    "q_s_max_mean",
     "k_v_b",
     "k_v_1",
-    "qs_d",
-    "qs_k",
+    "s_e",
+    "s_b",
 ]
 
 
@@ -57,7 +55,7 @@ def test_multi_cpt_bearing_results(
 
     assert isinstance(group_table, CPTGroupResultsTable)
     assert isinstance(group_table.pile_tip_level_nap, np.ndarray)
-    assert isinstance(group_table.F_c_k_tot, np.ndarray)
+    assert isinstance(group_table.R_t_d, np.ndarray)
     assert isinstance(group_table.s_b, np.ndarray)
     assert isinstance(group_table.s_e, np.ndarray)
     assert isinstance(group_table.k_v_b, np.ndarray)
