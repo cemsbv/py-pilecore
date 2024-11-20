@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.1] - 2024-11-20
+
+### Features
+
+- *(depth)* Use penetrationLength cpt trace if depth is not present
+
+### Miscellaneous Tasks
+
+- Update README.md & format
+
+### Testing
+
+- Add get_cpt_depth test
+
+### Deps
+
+- Run pip-compile
+
 ## [0.8.0] - 2024-10-24
 
 ### Features
