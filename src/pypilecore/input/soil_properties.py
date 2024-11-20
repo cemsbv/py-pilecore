@@ -17,6 +17,7 @@ transform = {
     "peat": "V",
 }
 
+
 def get_cpt_depth(cpt: CPTData) -> NDArray:
     """
     Returns the array of depth data from the CPT. Uses the (corrected) depth data if
@@ -26,7 +27,7 @@ def get_cpt_depth(cpt: CPTData) -> NDArray:
         depth = cpt.data["depth"]
     elif "penetrationLength" in cpt.data.columns:
         warnings.warn(
-            f'CPT {cpt.alias} has no Corrected Depth trace. py-pilecore uses the Penetration Length instead, which might not be accurate.'
+            f"CPT {cpt.alias} has no Corrected Depth trace. py-pilecore uses the Penetration Length instead, which might not be accurate."
         )
         depth = cpt.data["penetrationLength"]
     else:
