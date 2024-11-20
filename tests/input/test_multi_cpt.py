@@ -1,3 +1,5 @@
+import numpy as np
+import pygef
 import pytest
 from nuclei.client.utils import serialize_jsonifyable_object
 from openapi_core.contrib.requests import RequestsOpenAPIRequest
@@ -11,6 +13,7 @@ from pypilecore.common.piles.geometry.components.common import (
 )
 from pypilecore.common.piles.type import PileType
 from pypilecore.input.multi_cpt import create_multi_cpt_payload
+from pypilecore.input.soil_properties import get_cpt_depth
 
 
 @pytest.fixture()
@@ -215,3 +218,13 @@ def test_create_multi_cpt_payload_excavation_settings_invalid(
             groundwater_level_nap=-10.0,
             pile=round_pile,
         )
+
+
+def test_get_cpt_depth(cpt: pygef.cpt.CPTData):
+    depth = np.array(cpt.data["depth"])
+    penetration_length = np.array(cpt.data["penetrationLength"])
+
+    assert np.array_equal(get_cpt_depth(cpt), depth)
+
+    cpt.data.drop_in_place("depth")
+    assert np.array_equal(get_cpt_depth(cpt), penetration_length)
