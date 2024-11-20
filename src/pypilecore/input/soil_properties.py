@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import warnings
 from typing import Any, Dict, List, Literal, Mapping, Tuple
 
 import numpy as np
+from numpy.typing import NDArray
 from pygef.cpt import CPTData
 from tqdm import tqdm
 
@@ -14,6 +16,25 @@ transform = {
     "clay": "K",
     "peat": "V",
 }
+
+def get_cpt_depth(cpt: CPTData) -> NDArray:
+    """
+    Returns the array of depth data from the CPT. Uses the (corrected) depth data if
+    present, otherwise the `penetrationLength` data along with a warning.
+    """
+    if "depth" in cpt.data.columns:
+        depth = cpt.data["depth"]
+    elif "penetrationLength" in cpt.data.columns:
+        warnings.warn(
+            f'CPT {cpt.alias} has no Corrected Depth trace. py-pilecore uses the Penetration Length instead, which might not be accurate.'
+        )
+        depth = cpt.data["penetrationLength"]
+    else:
+        raise ValueError(
+            f"Cannot process CPT {cpt.alias}: required Corrected Depth or Penetration Length data is missing."
+        )
+
+    return np.array(depth, dtype=float)
 
 
 def create_soil_properties_payload(
@@ -117,7 +138,7 @@ def create_soil_properties_payload(
 
         # Construct the cpt_data payload
         cpt_data = dict(
-            depth=np.array(cpt.data["depth"], dtype=float),
+            depth=get_cpt_depth(cpt),
             qc=np.array(cpt.data["coneResistance"], dtype=float).clip(0),
         )
 
