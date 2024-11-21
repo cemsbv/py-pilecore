@@ -451,7 +451,7 @@ wcmatch==9.0
     # via ansible-lint
 wcwidth==0.2.13
     # via prompt-toolkit
-werkzeug==3.0.4
+werkzeug==3.1.3
     # via
     #   dash
     #   flask
