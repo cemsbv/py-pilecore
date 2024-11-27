@@ -180,7 +180,7 @@ class FigureCPTResultsPlanView:
         traces = []
         for test_id in self.test_ids:
             df = selected_data.loc[selected_data["test_id"] == test_id]
-            result = round(df["result"].values[0], 1)
+            result = 0 if df.empty else round(df["result"].values[0], 1)
             color = get_continuous_color(
                 colorscale=colorscale,
                 intermed=(result - result_min) / (result_max - result_min),
