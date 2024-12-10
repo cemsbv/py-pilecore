@@ -18,7 +18,7 @@ _dft_optimize_result_by = [
 
 def create_grouper_payload(
     cpt_results_dict: Dict[str, SingleCPTBearingResults],
-    pile_load_uls: float,
+    pile_load_uls: float | None = None,
     building_polygon: Polygon | None = None,
     cpt_grid_rotation: float = 0.0,
     gamma_bottom: float = 1.2,
@@ -73,11 +73,15 @@ def create_grouper_payload(
 
     Parameters
     ----------
-    cpt_results_dict:
+    cpt_results_dict
         Dictionary with key as CPT name and value a SingleCPTBearingResults class.
         Should contain at least 2 entries.
     pile_load_uls
-        ULS load in kN. Used to determine if a grouping configuration is valid.
+        Target ULS load [kN] for subgroups. When provided, the grouper will return
+        subgroups that have a Net Design Bearing Capacity of at least the
+        `pile_load_uls` value. When omitted or null is provided the grouper will aim
+        return subgroups that have the highest possible value of the Net Design Bearing
+        Capacity.
     stiff_construction
         Default is False
         Attribute use to get the xi3 and xi4 value. True if it is a stiff construction
@@ -96,6 +100,7 @@ def create_grouper_payload(
             - Centre_to_centre_check; the grouper adds filters to favour groups that are valid according to the
               centre to centre rules of the NEN9997-1 3.2.3.
 
+        Note that `optimize_result_by` will be ignored if `pile_load_uls` is None.
     gamma_shaft
         Default is 1.2
         Safety factor shaft design bearing capacity
