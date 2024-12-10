@@ -207,7 +207,10 @@ class SingleClusterData:
         axes.set_xlabel("Variation coefficient [-]")
 
     def plot_bearing_capacity(
-        self, axes: Axes | None = None, pile_load_uls: float = 0.0, **kwargs: Any
+        self,
+        axes: Axes | None = None,
+        pile_load_uls: float | None = None,
+        **kwargs: Any,
     ) -> None:
         """
         Plot the bearing capacity and variation coefficient in a subplot
@@ -223,7 +226,7 @@ class SingleClusterData:
         axes:
             `plt.Axes` object where the data can be plotted on.
         pile_load_uls:
-            Default is 0.0
+            Default is None
             ULS load in kN.
         **kwargs:
             All additional keyword arguments are passed to the `pyplot.subplots()` call.
@@ -242,7 +245,8 @@ class SingleClusterData:
                 )
             ),
         )
-        axes.axvline(x=pile_load_uls, color="black", linestyle="--")
+        if pile_load_uls is not None:
+            axes.axvline(x=pile_load_uls, color="black", linestyle="--")
         axes.grid()
         axes.set_xlabel("Net bearing capacity [kN]")
 
@@ -374,7 +378,7 @@ class SingleClusterResult:
 
     cpt_names: List[str]
     coordinates: List[Tuple[float, float]]
-    pile_load_uls: float
+    pile_load_uls: float | None
     maximum_pile_level: float
     minimum_pile_level: float
     number_of_consecutive_pile_levels: int
@@ -386,7 +390,7 @@ class SingleClusterResult:
 
     @classmethod
     def from_api_response(
-        cls, response_dict: dict, pile_load_uls: float
+        cls, response_dict: dict, pile_load_uls: float | None
     ) -> "SingleClusterResult":
         try:
             table = response_dict["table"]
@@ -605,7 +609,7 @@ class GrouperResults:
     def from_api_response(
         cls,
         response_dict: dict,
-        pile_load_uls: float,
+        pile_load_uls: float | None,
         multi_cpt_bearing_results: MultiCPTBearingResults,
     ) -> "GrouperResults":
         """
@@ -827,6 +831,12 @@ class GrouperResults:
         group_id_list = []
 
         for group_id, cluster in enumerate(self.clusters):
+            # Assure that pile_load_uls is always a float.
+            # Effectively making all levels valid if cluster.pile_load_uls is None
+            pile_load_uls = (
+                cluster.pile_load_uls if cluster.pile_load_uls is not None else 0.0
+            )
+
             group_id_list_sort.extend([group_id] * len(cluster.cpt_names))
             cpt_names_list.extend(cluster.cpt_names)
             color_list.extend(
@@ -840,8 +850,7 @@ class GrouperResults:
                 * len(cluster.cpt_names)
             )
             valid_pile_level = np.array(cluster.data.pile_tip_level)[
-                np.array(cluster.data.net_design_bearing_capacity)
-                >= cluster.pile_load_uls
+                np.array(cluster.data.net_design_bearing_capacity) >= pile_load_uls
             ]
             axes[1].scatter([group_id] * len(valid_pile_level), valid_pile_level)
             group_id_list.append(group_id)

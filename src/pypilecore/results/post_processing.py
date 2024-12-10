@@ -430,7 +430,7 @@ class MaxBearingResults:
         self,
         projection: Optional[Literal["3d"]] = "3d",
         hue: Literal["colormap", "category"] = "colormap",
-        pile_load_uls: float = 100,
+        pile_load_uls: float | None = None,
         figsize: Tuple[int, int] | None = None,
         **kwargs: Any,
     ) -> plt.Figure:
@@ -448,7 +448,6 @@ class MaxBearingResults:
             The category option sets the colors to valid ULS loads. Please use the pile_load_uls attribute to set
             the required bearing capacity.
         pile_load_uls
-            default is 100 kN
             ULS load in kN. Used to determine if a pile tip level configuration is valid.
         figsize:
             Size of the activate figure, as the `plt.figure()` argument.
@@ -470,7 +469,7 @@ class MaxBearingResults:
         axes = fig.add_subplot(projection=projection)
         df = self.to_pandas().dropna()
         # create color list based on hue option
-        if hue == "category":
+        if hue == "category" and pile_load_uls is not None:
             colors = [
                 "red" if var < pile_load_uls else "green" for var in df["R_c_d_net"]
             ]
@@ -507,7 +506,7 @@ class MaxBearingResults:
             axes.tick_params(axis="x", labelrotation=90)
             axes.grid()
 
-        if hue == "category":
+        if hue == "category" and pile_load_uls is not None:
             fig.legend(
                 title="$R_{c;d;net}$ [kN]",
                 title_fontsize=18,
