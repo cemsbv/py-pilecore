@@ -123,7 +123,7 @@ importlib-metadata==8.5.0
     # via dash
 iniconfig==2.0.0
     # via pytest
-ipython==8.11.0
+ipython==8.31.0
     # via
     #   cems-nuclei
     #   ipywidgets
