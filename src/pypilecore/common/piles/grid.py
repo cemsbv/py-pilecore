@@ -8,7 +8,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
-from shapely.geometry import Polygon, shape
+from shapely.geometry import MultiPolygon, shape
 from shapely.plotting import plot_polygon
 
 
@@ -17,7 +17,7 @@ class PileGridProperties:
         self,
         points: List[Tuple[float, float]],
         index_location: int,
-        geometry: Polygon | None = None,
+        geometry: MultiPolygon | None = None,
         _validate: bool = True,
     ):
         """
@@ -31,7 +31,7 @@ class PileGridProperties:
             List of tuple with xy coordinates.
         index_location: int
             selected index of the points list as pile location
-        geometry: Polygon, optional
+        geometry: MultiPolygon, optional
             A;eff as polygon
         _validate: bool, optional
             flag that overrules validation of the parameters

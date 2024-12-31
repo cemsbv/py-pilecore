@@ -19,6 +19,7 @@ class PileType:
         adhesion: float | None = None,
         is_low_vibrating: bool | None = None,
         is_auger: bool | None = None,
+        chamfered: float | None = None,
     ):
         """
         Represents the type of a pile.
@@ -47,6 +48,8 @@ class PileType:
             The is_low_vibrating value of the pile type, by default None.
         is_auger : bool, optional
             The is_auger value of the pile type, by default None.
+        chamfered : float, optional
+            The chamfered value of the pile type, by default None.
         """
         self._standard_pile = standard_pile
         self._alpha_s_sand = alpha_s_sand
@@ -59,6 +62,7 @@ class PileType:
         self._adhesion = adhesion
         self._is_low_vibrating = is_low_vibrating
         self._is_auger = is_auger
+        self._chamfered = chamfered
 
     @classmethod
     def from_api_response(cls, pile_type: dict) -> PileType:
@@ -146,6 +150,11 @@ class PileType:
         """The is_auger value of the pile type"""
         return self._is_auger
 
+    @property
+    def chamfered(self) -> float | None:
+        """The chamfered value of the pile type"""
+        return self._chamfered
+
     def serialize_payload(self) -> Dict[str, str | dict]:
         """
         Serialize the pile type to a dictionary payload for the API.
@@ -202,6 +211,9 @@ class PileType:
 
         if self.is_auger is not None:
             custom_type_properties["is_auger"] = self.is_auger
+
+        if self.chamfered is not None:
+            custom_type_properties["chamfered"] = self.chamfered
 
         if len(custom_type_properties.keys()) > 0:
             payload["custom_properties"] = custom_type_properties

@@ -21,7 +21,7 @@ Number = Union[float, int]
 
 
 @dataclass(frozen=True)
-class CPTResultsTable:
+class CPTCompressionResultsTable:
     """Object containing the results of a single CPT."""
 
     pile_tip_level_nap: NDArray[np.float64]
@@ -127,7 +127,7 @@ class CPTResultsTable:
         s_el: Sequence[Number],
         k_v_b: Sequence[Number],
         k_v_1: Sequence[Number],
-    ) -> CPTResultsTable:
+    ) -> CPTCompressionResultsTable:
         return cls(
             pile_tip_level_nap=np.array(pile_tip_level_nap).astype(np.float64),
             F_nk_cal=np.array(F_nk_cal).astype(np.float64),
@@ -173,7 +173,7 @@ class CPTResultsTable:
         return pd.DataFrame(self.__dict__).dropna(axis=0, how="all")
 
 
-class SingleCPTBearingResults:
+class SingleCPTCompressionBearingResults:
     """
     Object that contains the results of a PileCore single-cpt calculation.
 
@@ -184,7 +184,7 @@ class SingleCPTBearingResults:
         self,
         soil_properties: SoilProperties,
         pile_head_level_nap: float,
-        results_table: CPTResultsTable,
+        results_table: CPTCompressionResultsTable,
     ) -> None:
         """
         Parameters
@@ -208,7 +208,7 @@ class SingleCPTBearingResults:
         surface_level_ref: float,
         x: float | None = None,
         y: float | None = None,
-    ) -> "SingleCPTBearingResults":
+    ) -> "SingleCPTCompressionBearingResults":
         results_table = cpt_results_dict["results_table"]
         return cls(
             soil_properties=SoilProperties(
@@ -226,7 +226,7 @@ class SingleCPTBearingResults:
                 y=y,
             ),
             pile_head_level_nap=cpt_results_dict["annotations"]["pile_head_level_nap"],
-            results_table=CPTResultsTable.from_sequences(
+            results_table=CPTCompressionResultsTable.from_sequences(
                 pile_tip_level_nap=results_table["pile_tip_level_nap"],
                 F_nk_cal=results_table["F_nk_cal"],
                 F_nk_k=results_table["F_nk_k"],
@@ -282,7 +282,7 @@ class SingleCPTBearingResults:
         return self._pile_head_level_nap
 
     @property
-    def table(self) -> CPTResultsTable:
+    def table(self) -> CPTCompressionResultsTable:
         """The object with single-CPT results table traces."""
         return self._results_table
 

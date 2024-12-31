@@ -9,12 +9,12 @@ import pandas as pd
 from matplotlib.axes import Axes
 
 from pypilecore.common.piles import PileProperties
-from pypilecore.results.tension_single_cpt_results import SingleCPTBearingResults
+from pypilecore.results.tension.single_cpt_results import SingleCPTTensionBearingResults
 
 Number = Union[float, int]
 
 
-class CPTGroupResultsTable:
+class CPTTensionGroupResultsTable:
     """
     Dataclass that contains the bearing results of a group of CPTs.
     """
@@ -31,26 +31,12 @@ class CPTGroupResultsTable:
         R_t_d_mean: Sequence[float],
         R_t_d: Sequence[float],
         R_t_d_plug: Sequence[float],
-        R_t_k: Sequence[float],
-        R_t_mob: Sequence[float],
-        s_e: Sequence[float],
-        s_b: Sequence[float],
-        k_v_b: Sequence[float],
-        k_v_1: Sequence[float],
     ):
         """
         Parameters
         ----------
         pile_tip_level_nap:
             The pile-tip level [m] w.r.t. NAP.
-        s_b:
-            The settlement of the pile bottom [mm].
-        s_e:
-            The elastic shortening of the pile [mm].
-        k_v_b:
-            The 1-dimensional stiffness modulus at pile bottom [kN/m].
-        k_v_1:
-            The 1-dimensional stiffness modulus at pile head [kN/m].
         var_coef:
             The variation coefficient [%] of the calculated bearing capacities in the group.
         n_cpts:
@@ -72,24 +58,11 @@ class CPTGroupResultsTable:
             (7.6.3.3 (a) NEN 9997-1+C2:2017) [kN]
         R_t_d_plug:
             The design value of the total plug weight bearingcapacity [kN].
-        R_t_k:
-            characteristic value of the tensile resistance of a pile or pile
-            group (7.6.3.3 NEN 9997-1+C2:2017) [kN]
-        R_t_mob:
-            The mobilisation ratio of the tension bearing capacity [-].
         """
         self.pile_tip_level_nap = (
             np.array(pile_tip_level_nap).astype(np.float64).round(decimals=2)
         )
         """The pile-tip level [m] w.r.t. NAP."""
-        self.s_b = np.array(s_b).astype(np.float64)
-        """The settlement of the pile bottom [mm]."""
-        self.s_e = np.array(s_e).astype(np.float64)
-        """The elastic shortening of the pile [mm]."""
-        self.k_v_b = np.array(k_v_b).astype(np.float64)
-        """The 1-dimensional stiffness modulus at pile bottom [kN/m]."""
-        self.k_v_1 = np.array(k_v_1).astype(np.float64)
-        """The 1-dimensional stiffness modulus at pile head [kN/m]."""
         self.var_coef = np.array(var_coef).astype(np.float64)
         """The variation coefficient [%] of the calculated bearing capacities in the group."""
         self.n_cpts = np.array(n_cpts).astype(np.int32)
@@ -111,11 +84,6 @@ class CPTGroupResultsTable:
             (7.6.3.3 (a) NEN 9997-1+C2:2017) [kN]"""
         self.R_t_d_plug = np.array(R_t_d_plug).astype(np.float64)
         """The design value of the total plug weight bearingcapacity [kN]."""
-        self.R_t_k = np.array(R_t_k).astype(np.float64)
-        """characteristic value of the tensile resistance of a pile or pile
-            group (7.6.3.3 NEN 9997-1+C2:2017) [kN]"""
-        self.R_t_mob = np.array(R_t_mob).astype(np.float64)
-        """The mobilisation ratio of the tension bearing capacity [-]."""
 
         for value in self.__dict__.values():
             if not len(value) == len(self.pile_tip_level_nap):
@@ -210,10 +178,10 @@ class CPTGroupResultsTable:
         return axes
 
 
-class SingleCPTBearingResultsContainer:
+class SingleCPTTensionBearingResultsContainer:
     """A container that holds multiple SingleCPTBearingResults objects"""
 
-    def __init__(self, cpt_results_dict: Dict[str, SingleCPTBearingResults]):
+    def __init__(self, cpt_results_dict: Dict[str, SingleCPTTensionBearingResults]):
         """
         Parameters
         ----------
@@ -225,14 +193,16 @@ class SingleCPTBearingResultsContainer:
     @classmethod
     def from_api_response(
         cls, cpt_results_list: list, cpt_input: dict
-    ) -> "SingleCPTBearingResultsContainer":
+    ) -> "SingleCPTTensionBearingResultsContainer":
         """
         Instantiates the SingleCPTBearingResultsContainer object from the "cpts" array,
         which is returned in the response of a "compression/multiple-cpts/results" endpoint call.
         """
         return cls(
             cpt_results_dict={
-                cpt_results["test_id"]: SingleCPTBearingResults.from_api_response(
+                cpt_results[
+                    "test_id"
+                ]: SingleCPTTensionBearingResults.from_api_response(
                     cpt_results_dict=cpt_results,
                     ref_height=cpt_input[cpt_results["test_id"]]["ref_height"],
                     surface_level_ref=cpt_input[cpt_results["test_id"]][
@@ -245,14 +215,14 @@ class SingleCPTBearingResultsContainer:
             }
         )
 
-    def __getitem__(self, test_id: str) -> SingleCPTBearingResults:
+    def __getitem__(self, test_id: str) -> SingleCPTTensionBearingResults:
         if not isinstance(test_id, str):
             raise TypeError(f"Expected a test-id as a string, but got: {type(test_id)}")
 
         return self.get_cpt_results(test_id)
 
     @property
-    def cpt_results_dict(self) -> Dict[str, SingleCPTBearingResults]:
+    def cpt_results_dict(self) -> Dict[str, SingleCPTTensionBearingResults]:
         """The dictionary that maps the cpt-names to SingleCPTBearingResults objects."""
         return self._cpt_results_dict
 
@@ -262,11 +232,11 @@ class SingleCPTBearingResultsContainer:
         return list(self.cpt_results_dict.keys())
 
     @property
-    def results(self) -> List[SingleCPTBearingResults]:
+    def results(self) -> List[SingleCPTTensionBearingResults]:
         """The computed results, as a list of SingleCPTBearingResults objects."""
         return list(self.cpt_results_dict.values())
 
-    def get_cpt_results(self, test_id: str) -> SingleCPTBearingResults:
+    def get_cpt_results(self, test_id: str) -> SingleCPTTensionBearingResults:
         """
         Returns the `SingleCPTBearingResults` object for the provided test_id.
         """
@@ -322,7 +292,7 @@ class SingleCPTBearingResultsContainer:
         return cpt_results_df
 
 
-class MultiCPTBearingResults:
+class MultiCPTTensionBearingResults:
     """
     Object that contains the results of a PileCore multi-cpt calculation.
 
@@ -331,12 +301,11 @@ class MultiCPTBearingResults:
 
     def __init__(
         self,
-        cpt_results: SingleCPTBearingResultsContainer,
-        group_results_table: CPTGroupResultsTable,
+        cpt_results: SingleCPTTensionBearingResultsContainer,
+        group_results_table: CPTTensionGroupResultsTable,
         pile_properties: PileProperties,
         gamma_s_t: float,
         gamma_m_var_qc: float,
-        phi_plug: float | str,
         soil_load: float,
     ) -> None:
         """
@@ -361,7 +330,6 @@ class MultiCPTBearingResults:
         self._pp = pile_properties
         self._gamma_s_t = gamma_s_t
         self._gamma_m_var_qc = gamma_m_var_qc
-        self._phi_plug = phi_plug
         self._soil_load = soil_load
 
         self._cpt_results = cpt_results
@@ -371,12 +339,12 @@ class MultiCPTBearingResults:
     @classmethod
     def from_api_response(
         cls, response_dict: dict, cpt_input: dict
-    ) -> "MultiCPTBearingResults":
+    ) -> "MultiCPTTensionBearingResults":
         """
         Build the object from the response payload of the PileCore endpoint
         "/compression/multi-cpt/results".
         """
-        cpt_results_dict = SingleCPTBearingResultsContainer.from_api_response(
+        cpt_results_dict = SingleCPTTensionBearingResultsContainer.from_api_response(
             cpt_results_list=response_dict["cpts"], cpt_input=cpt_input
         )
         group_results = response_dict["group_results"]
@@ -385,7 +353,7 @@ class MultiCPTBearingResults:
             pile_properties=PileProperties.from_api_response(
                 response_dict["pile_properties"]
             ),
-            group_results_table=CPTGroupResultsTable(
+            group_results_table=CPTTensionGroupResultsTable(
                 pile_tip_level_nap=group_results["pile_tip_level_nap"],
                 var_coef=group_results["var_coef"],
                 n_cpts=group_results["n_cpts"],
@@ -396,16 +364,9 @@ class MultiCPTBearingResults:
                 R_t_d_mean=group_results["R_t_d_mean"],
                 R_t_d=group_results["R_t_d"],
                 R_t_d_plug=group_results["R_t_d_plug"],
-                R_t_k=group_results["R_t_k"],
-                R_t_mob=group_results["R_t_mob"],
-                s_e=group_results["s_e"],
-                s_b=group_results["s_b"],
-                k_v_b=group_results["k_v_b"],
-                k_v_1=group_results["k_v_1"],
             ),
             gamma_s_t=response_dict["calculation_params"]["gamma_s_t"],
             soil_load=response_dict["calculation_params"]["soil_load"],
-            phi_plug=response_dict["calculation_params"]["phi_plug"],
             gamma_m_var_qc=response_dict["calculation_params"]["gamma_m_var_qc"],
         )
 
@@ -417,7 +378,7 @@ class MultiCPTBearingResults:
         return self._pp
 
     @property
-    def cpt_results(self) -> SingleCPTBearingResultsContainer:
+    def cpt_results(self) -> SingleCPTTensionBearingResultsContainer:
         """The SingleCPTBearingResultsContainer object."""
         return self._cpt_results
 
@@ -427,6 +388,6 @@ class MultiCPTBearingResults:
         return self.cpt_results.test_ids
 
     @property
-    def group_results_table(self) -> CPTGroupResultsTable:
+    def group_results_table(self) -> CPTTensionGroupResultsTable:
         """The CPTGroupResultsTable dataclass, containing the group results."""
         return self._group_results_table

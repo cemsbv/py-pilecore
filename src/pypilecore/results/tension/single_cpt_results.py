@@ -22,7 +22,7 @@ Number = Union[float, int]
 
 
 @dataclass(frozen=True)
-class CPTResultsTable:
+class CPTTensionResultsTable:
     """Object containing the results of a single CPT."""
 
     pile_tip_level_nap: NDArray[np.float64]
@@ -44,15 +44,19 @@ class CPTResultsTable:
     R_t_mob: NDArray[np.float64]
     """The mobilisation of the shaft bearing capacity [kN]."""
     k_v_b: NDArray[np.float64]
-    """The 1-dimensional stiffness modulus at pile bottom [kN/m]."""
+    """The 1-dimensional stiffness modulus at pile bottom [kN/mm]."""
     k_v_1: NDArray[np.float64]
     """The 1-dimensional stiffness modulus at pile head [MN/mm]."""
     q_s_max_mean: NDArray[np.float64]
-    """The computational value of shaft friction [kPa]."""
+    """The computational value of shaft friction [MPa]."""
     s_e: NDArray[np.float64]
     """The elastic shortening of the pile [mm]."""
     s_b: NDArray[np.float64]
     """The settlement of the pile bottom [mm]."""
+    s_1: NDArray[np.float64]
+    """The settlement of the pile [mm]."""
+    sand_clay_ratio: NDArray[np.float64]
+    """Contributions to the bearing capacity from sandy layers [-]."""
 
     def __post_init__(self) -> None:
         dict_lengths = {}
@@ -79,7 +83,9 @@ class CPTResultsTable:
         q_s_max_mean: Sequence[Number],
         s_e: Sequence[Number],
         s_b: Sequence[Number],
-    ) -> CPTResultsTable:
+        s_1: Sequence[Number],
+        sand_clay_ratio: Sequence[Number],
+    ) -> CPTTensionResultsTable:
         return cls(
             pile_tip_level_nap=np.array(pile_tip_level_nap).astype(np.float64),
             A=np.array(A).astype(np.float64),
@@ -93,6 +99,8 @@ class CPTResultsTable:
             q_s_max_mean=np.array(q_s_max_mean).astype(np.float64),
             s_e=np.array(s_e).astype(np.float64),
             s_b=np.array(s_b).astype(np.float64),
+            s_1=np.array(s_1).astype(np.float64),
+            sand_clay_ratio=np.array(sand_clay_ratio).astype(np.float64),
         )
 
     def to_pandas(self) -> pd.DataFrame:
@@ -100,7 +108,7 @@ class CPTResultsTable:
         return pd.DataFrame(self.__dict__).dropna(axis=0, how="all")
 
 
-class SingleCPTBearingResults:
+class SingleCPTTensionBearingResults:
     """
     Object that contains the results of a PileCore single-cpt calculation.
 
@@ -111,7 +119,7 @@ class SingleCPTBearingResults:
         self,
         soil_properties: SoilProperties,
         pile_head_level_nap: float,
-        results_table: CPTResultsTable,
+        results_table: CPTTensionResultsTable,
         pile_grid_properties: PileGridProperties,
     ) -> None:
         """
@@ -137,7 +145,7 @@ class SingleCPTBearingResults:
         surface_level_ref: float,
         x: float | None = None,
         y: float | None = None,
-    ) -> "SingleCPTBearingResults":
+    ) -> "SingleCPTTensionBearingResults":
         results_table = cpt_results_dict["results_table"]
         return cls(
             soil_properties=SoilProperties(
@@ -155,7 +163,7 @@ class SingleCPTBearingResults:
                 y=y,
             ),
             pile_head_level_nap=cpt_results_dict["pile_head_level_nap"],
-            results_table=CPTResultsTable.from_sequences(
+            results_table=CPTTensionResultsTable.from_sequences(
                 pile_tip_level_nap=results_table["pile_tip_level_nap"],
                 k_v_b=results_table["k_v_b"],
                 k_v_1=results_table["k_v_1"],
@@ -168,6 +176,8 @@ class SingleCPTBearingResults:
                 q_s_max_mean=results_table["q_s_max_mean"],
                 s_e=results_table["s_e"],
                 s_b=results_table["s_b"],
+                s_1=results_table["s_1"],
+                sand_clay_ratio=results_table["sand_clay_ratio"],
             ),
             pile_grid_properties=PileGridProperties.from_api_response(
                 cpt_results_dict["pile_grid"]
@@ -196,7 +206,7 @@ class SingleCPTBearingResults:
         return self._pile_head_level_nap
 
     @property
-    def table(self) -> CPTResultsTable:
+    def table(self) -> CPTTensionResultsTable:
         """The object with single-CPT results table traces."""
         return self._results_table
 

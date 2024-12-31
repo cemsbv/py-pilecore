@@ -115,6 +115,7 @@ def create_basic_pile(
     is_auger: bool | None = None,
     is_low_vibrating: bool | None = None,
     negative_fr_delta_factor: float | None = None,
+    chamfered: float | None = None,
 ) -> PileProperties:
     """
     Create a basic pile with the provided parameters.
@@ -191,6 +192,9 @@ def create_basic_pile(
         Required if no standard pile type was specified.
     negative_fr_delta_factor : float, optional
         The negative friction delta factor of the pile, by default None.
+        Required if no standard pile type was specified.
+    chamfered : float, optional
+        The chamfered value of the pile type, by default None.
         Required if no standard pile type was specified.
 
     Returns
@@ -294,6 +298,7 @@ def create_basic_pile(
         adhesion=adhesion,
         is_low_vibrating=is_low_vibrating,
         is_auger=is_auger,
+        chamfered=chamfered,
     )
 
     return PileProperties(geometry=geometry, pile_type=pile_type, name=pile_name)
