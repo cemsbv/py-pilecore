@@ -7,7 +7,9 @@ from pygef.common import Location
 from pygef.cpt import CPTData
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.multi_cpt_results import MultiCPTBearingResults
+from pypilecore.results.compression.multi_cpt_results import (
+    MultiCPTCompressionBearingResults,
+)
 
 
 @pytest.fixture
@@ -148,7 +150,7 @@ def cpt_no_coords() -> CPTData:
 def mock_cases_multi_cpt_bearing_results_valid_data(
     mock_multi_cpt_bearing_response: dict, mock_results_passover: dict
 ) -> dict:
-    cptgroupresults = MultiCPTBearingResults.from_api_response(
+    cptgroupresults = MultiCPTCompressionBearingResults.from_api_response(
         mock_multi_cpt_bearing_response, mock_results_passover
     )
 
@@ -174,11 +176,11 @@ def mock_cases_multi_cpt_bearing_results_different_cpts(
     mock_multi_cpt_bearing_response_less_cpts: dict,
     mock_results_passover: dict,
 ) -> dict:
-    cptgroupresults = MultiCPTBearingResults.from_api_response(
+    cptgroupresults = MultiCPTCompressionBearingResults.from_api_response(
         mock_multi_cpt_bearing_response, mock_results_passover
     )
 
-    cptgroupresults_less_cpts = MultiCPTBearingResults.from_api_response(
+    cptgroupresults_less_cpts = MultiCPTCompressionBearingResults.from_api_response(
         mock_multi_cpt_bearing_response_less_cpts, mock_results_passover
     )
 
@@ -204,12 +206,14 @@ def mock_cases_multi_cpt_bearing_results_different_pile_tip_levels(
     mock_multi_cpt_bearing_response_less_pile_tip_levels: dict,
     mock_results_passover: dict,
 ) -> dict:
-    cptgroupresults = MultiCPTBearingResults.from_api_response(
+    cptgroupresults = MultiCPTCompressionBearingResults.from_api_response(
         mock_multi_cpt_bearing_response, mock_results_passover
     )
 
-    cptgroupresults_less_pile_tip_levels = MultiCPTBearingResults.from_api_response(
-        mock_multi_cpt_bearing_response_less_pile_tip_levels, mock_results_passover
+    cptgroupresults_less_pile_tip_levels = (
+        MultiCPTCompressionBearingResults.from_api_response(
+            mock_multi_cpt_bearing_response_less_pile_tip_levels, mock_results_passover
+        )
     )
 
     cpt_locations = {

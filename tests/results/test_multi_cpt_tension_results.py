@@ -7,13 +7,13 @@ from pandas import DataFrame
 
 from pypilecore.common.piles import PileProperties
 from pypilecore.results.soil_properties import SoilProperties
-from pypilecore.results.tension_multi_cpt_results import (
-    CPTGroupResultsTable,
-    MultiCPTBearingResults,
-    SingleCPTBearingResults,
-    SingleCPTBearingResultsContainer,
+from pypilecore.results.tension.multi_cpt_results import (
+    CPTTensionGroupResultsTable,
+    MultiCPTTensionBearingResults,
+    SingleCPTTensionBearingResults,
+    SingleCPTTensionBearingResultsContainer,
 )
-from pypilecore.results.tension_single_cpt_results import CPTResultsTable
+from pypilecore.results.tension.single_cpt_results import CPTTensionResultsTable
 
 single_cpt_result_columns = [
     "A",
@@ -41,7 +41,7 @@ def test_multi_cpt_bearing_results(
 ) -> None:
     api_response = request.getfixturevalue(api_response_name)
     results_passover = request.getfixturevalue(results_passover_name)
-    cptgroupresults = MultiCPTBearingResults.from_api_response(
+    cptgroupresults = MultiCPTTensionBearingResults.from_api_response(
         api_response, results_passover
     )
 
@@ -53,12 +53,9 @@ def test_multi_cpt_bearing_results(
     # Check CPTGroupResultsTable object
     group_table = cptgroupresults.group_results_table
 
-    assert isinstance(group_table, CPTGroupResultsTable)
+    assert isinstance(group_table, CPTTensionGroupResultsTable)
     assert isinstance(group_table.pile_tip_level_nap, np.ndarray)
     assert isinstance(group_table.R_t_d, np.ndarray)
-    assert isinstance(group_table.s_b, np.ndarray)
-    assert isinstance(group_table.s_e, np.ndarray)
-    assert isinstance(group_table.k_v_b, np.ndarray)
     assert isinstance(group_table.var_coef, np.ndarray)
     assert isinstance(group_table.n_cpts, np.ndarray)
     assert isinstance(group_table.xi_normative, np.ndarray)
@@ -73,16 +70,16 @@ def test_multi_cpt_bearing_results(
     # Check SingleCPTBearingResultsContainer object
 
     singlecptcontainer = cptgroupresults.cpt_results
-    assert isinstance(singlecptcontainer, SingleCPTBearingResultsContainer)
+    assert isinstance(singlecptcontainer, SingleCPTTensionBearingResultsContainer)
     assert isinstance(singlecptcontainer.test_ids, list)
     assert isinstance(singlecptcontainer.results, list)
     assert isinstance(singlecptcontainer.to_pandas(), DataFrame)
 
     # Check SingleCPTBearingResults objects
     for test_id in singlecptcontainer.test_ids:
-        assert isinstance(singlecptcontainer[test_id], SingleCPTBearingResults)
+        assert isinstance(singlecptcontainer[test_id], SingleCPTTensionBearingResults)
         assert isinstance(
-            singlecptcontainer.get_cpt_results(test_id), SingleCPTBearingResults
+            singlecptcontainer.get_cpt_results(test_id), SingleCPTTensionBearingResults
         )
         assert singlecptcontainer[test_id] in singlecptcontainer.results
 
@@ -95,7 +92,7 @@ def test_multi_cpt_bearing_results(
 
             assert isinstance(single_cpt_results.soil_properties, SoilProperties)
             assert isinstance(single_cpt_results.pile_head_level_nap, float)
-            assert isinstance(single_cpt_results.table, CPTResultsTable)
+            assert isinstance(single_cpt_results.table, CPTTensionResultsTable)
             assert isinstance(single_cpt_results.plot_bearing_capacities(), Axes)
             plt.close("all")
             assert isinstance(single_cpt_results.plot_bearing_overview(), Figure)

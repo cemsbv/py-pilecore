@@ -35,6 +35,7 @@ def create_multi_cpt_payload(
     pile_load_sls_max: float = 1,
     pile_load_sls_min: float = 0,
     gamma_s_t: float = 1.35,
+    gamma_gamma: float = 1.1,
 ) -> Tuple[dict, Dict[str, dict]]:
     """
     Creates a dictionary with the payload content for the PileCore endpoint
@@ -146,6 +147,9 @@ def create_multi_cpt_payload(
         Pile resistance factor gamma_s;t used to compute the design cone resistance values
         qc;z;d as prescribed in NEN 9997-1+C2_2017 7.6.3.3(d).
         Default = 1.35
+    gamma_gamma:
+        Partial factor for volumetric weight NEN 9997-1+C2:2017 A.3.2
+        Default = 1.1
     Returns
     -------
     multi_cpt_payload:
@@ -196,6 +200,7 @@ def create_multi_cpt_payload(
         pile_load_sls_max=pile_load_sls_max,
         pile_load_sls_min=pile_load_sls_min,
         gamma_s_t=gamma_s_t,
+        gamma_gamma=gamma_gamma,
     )
 
     # Add optional properties

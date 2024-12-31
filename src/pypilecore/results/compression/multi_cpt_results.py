@@ -11,13 +11,15 @@ from matplotlib.patches import Patch
 
 from pypilecore.common.piles import PileProperties
 from pypilecore.exceptions import UserError
+from pypilecore.results.compression.single_cpt_results import (
+    SingleCPTCompressionBearingResults,
+)
 from pypilecore.results.load_settlement import get_load_settlement_plot
-from pypilecore.results.single_cpt_results import SingleCPTBearingResults
 
 Number = Union[float, int]
 
 
-class CPTGroupResultsTable:
+class CPTCompressionGroupResultsTable:
     """
     Dataclass that contains the bearing results of a group of CPTs.
     """
@@ -299,10 +301,10 @@ class CPTGroupResultsTable:
         return axes
 
 
-class SingleCPTBearingResultsContainer:
+class SingleCPTCompressionBearingResultsContainer:
     """A container that holds multiple SingleCPTBearingResults objects"""
 
-    def __init__(self, cpt_results_dict: Dict[str, SingleCPTBearingResults]):
+    def __init__(self, cpt_results_dict: Dict[str, SingleCPTCompressionBearingResults]):
         """
         Parameters
         ----------
@@ -314,14 +316,16 @@ class SingleCPTBearingResultsContainer:
     @classmethod
     def from_api_response(
         cls, cpt_results_list: list, cpt_input: dict
-    ) -> "SingleCPTBearingResultsContainer":
+    ) -> "SingleCPTCompressionBearingResultsContainer":
         """
         Instantiates the SingleCPTBearingResultsContainer object from the "cpts" array,
         which is returned in the response of a "compression/multiple-cpts/results" endpoint call.
         """
         return cls(
             cpt_results_dict={
-                cpt_results["test_id"]: SingleCPTBearingResults.from_api_response(
+                cpt_results[
+                    "test_id"
+                ]: SingleCPTCompressionBearingResults.from_api_response(
                     cpt_results_dict=cpt_results,
                     ref_height=cpt_input[cpt_results["test_id"]]["ref_height"],
                     surface_level_ref=cpt_input[cpt_results["test_id"]][
@@ -334,14 +338,14 @@ class SingleCPTBearingResultsContainer:
             }
         )
 
-    def __getitem__(self, test_id: str) -> SingleCPTBearingResults:
+    def __getitem__(self, test_id: str) -> SingleCPTCompressionBearingResults:
         if not isinstance(test_id, str):
             raise TypeError(f"Expected a test-id as a string, but got: {type(test_id)}")
 
         return self.get_cpt_results(test_id)
 
     @property
-    def cpt_results_dict(self) -> Dict[str, SingleCPTBearingResults]:
+    def cpt_results_dict(self) -> Dict[str, SingleCPTCompressionBearingResults]:
         """The dictionary that maps the cpt-names to SingleCPTBearingResults objects."""
         return self._cpt_results_dict
 
@@ -351,11 +355,11 @@ class SingleCPTBearingResultsContainer:
         return list(self.cpt_results_dict.keys())
 
     @property
-    def results(self) -> List[SingleCPTBearingResults]:
+    def results(self) -> List[SingleCPTCompressionBearingResults]:
         """The computed results, as a list of SingleCPTBearingResults objects."""
         return list(self.cpt_results_dict.values())
 
-    def get_cpt_results(self, test_id: str) -> SingleCPTBearingResults:
+    def get_cpt_results(self, test_id: str) -> SingleCPTCompressionBearingResults:
         """
         Returns the `SingleCPTBearingResults` object for the provided test_id.
         """
@@ -411,7 +415,7 @@ class SingleCPTBearingResultsContainer:
         return cpt_results_df
 
 
-class MultiCPTBearingResults:
+class MultiCPTCompressionBearingResults:
     """
     Object that contains the results of a PileCore multi-cpt calculation.
 
@@ -420,8 +424,8 @@ class MultiCPTBearingResults:
 
     def __init__(
         self,
-        cpt_results: SingleCPTBearingResultsContainer,
-        group_results_table: CPTGroupResultsTable,
+        cpt_results: SingleCPTCompressionBearingResultsContainer,
+        group_results_table: CPTCompressionGroupResultsTable,
         pile_properties: PileProperties,
         gamma_f_nk: float,
         gamma_r_b: float,
@@ -460,13 +464,15 @@ class MultiCPTBearingResults:
     @classmethod
     def from_api_response(
         cls, response_dict: dict, cpt_input: dict
-    ) -> "MultiCPTBearingResults":
+    ) -> "MultiCPTCompressionBearingResults":
         """
         Build the object from the response payload of the PileCore endpoint
         "/compression/multi-cpt/results".
         """
-        cpt_results_dict = SingleCPTBearingResultsContainer.from_api_response(
-            cpt_results_list=response_dict["cpts"], cpt_input=cpt_input
+        cpt_results_dict = (
+            SingleCPTCompressionBearingResultsContainer.from_api_response(
+                cpt_results_list=response_dict["cpts"], cpt_input=cpt_input
+            )
         )
         group_results = response_dict["group_results"]
         return cls(
@@ -474,7 +480,7 @@ class MultiCPTBearingResults:
             pile_properties=PileProperties.from_api_response(
                 response_dict["pile_properties"]
             ),
-            group_results_table=CPTGroupResultsTable(
+            group_results_table=CPTCompressionGroupResultsTable(
                 pile_tip_level_nap=group_results["pile_tip_level_nap"],
                 R_s_k=group_results["R_s_k"],
                 R_b_k=group_results["R_b_k"],
@@ -532,7 +538,7 @@ class MultiCPTBearingResults:
         return self._pp
 
     @property
-    def cpt_results(self) -> SingleCPTBearingResultsContainer:
+    def cpt_results(self) -> SingleCPTCompressionBearingResultsContainer:
         """The SingleCPTBearingResultsContainer object."""
         return self._cpt_results
 
@@ -542,7 +548,7 @@ class MultiCPTBearingResults:
         return self.cpt_results.test_ids
 
     @property
-    def group_results_table(self) -> CPTGroupResultsTable:
+    def group_results_table(self) -> CPTCompressionGroupResultsTable:
         """The CPTGroupResultsTable dataclass, containing the group results."""
         return self._group_results_table
 

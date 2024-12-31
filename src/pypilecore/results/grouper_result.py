@@ -13,7 +13,9 @@ from matplotlib.axes import Axes
 from numpy.typing import NDArray
 from shapely import MultiPoint
 
-from pypilecore.results.multi_cpt_results import MultiCPTBearingResults
+from pypilecore.results.compression.multi_cpt_results import (
+    MultiCPTCompressionBearingResults,
+)
 from pypilecore.results.post_processing import (
     MaxBearingResult,
     MaxBearingResults,
@@ -568,7 +570,7 @@ class GrouperResults:
     """
 
     clusters: List[SingleClusterResult]
-    multi_cpt_bearing_results: MultiCPTBearingResults
+    multi_cpt_bearing_results: MultiCPTCompressionBearingResults
 
     def __post_init__(self) -> None:
         for cluster in self.clusters:
@@ -606,7 +608,7 @@ class GrouperResults:
         cls,
         response_dict: dict,
         pile_load_uls: float,
-        multi_cpt_bearing_results: MultiCPTBearingResults,
+        multi_cpt_bearing_results: MultiCPTCompressionBearingResults,
     ) -> "GrouperResults":
         """
         Stores the response of the PileCore endpoint

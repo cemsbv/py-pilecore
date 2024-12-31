@@ -114,6 +114,10 @@ def create_soil_properties_payload(
         A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]
         values of the foundation layer. This will overrule the general `ocr` setting for
         these specific CPTs only.
+    master_top_of_tension_zone_nap:
+        Set a fixed top of the tension zone for all CPT's
+    individual_top_of_tension_zone_nap:
+        A dictionary, mapping `CPTData.alias` values to fixed top of the tension zone.
     verbose:
         If True, show progress bars and status messages in stdout.
 
