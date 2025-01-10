@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.3] - 2025-01-10
+
+### Miscellaneous Tasks
+
+- *(notebook)* Reduce the amount of requested pile tip levels in order for notebook to be usable with free account
+
 ## [0.8.2] - 2024-11-27
 
 ### Bug Fixes
