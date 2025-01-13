@@ -13,11 +13,13 @@ class PileType:
         alpha_s_clay: float | None = None,
         alpha_p: float | None = None,
         alpha_t_sand: float | None = None,
+        alpha_t_clay: float | None = None,
         settlement_curve: int | None = None,
         negative_fr_delta_factor: float | None = None,
         adhesion: float | None = None,
         is_low_vibrating: bool | None = None,
         is_auger: bool | None = None,
+        chamfered: float | None = None,
     ):
         """
         Represents the type of a pile.
@@ -34,6 +36,8 @@ class PileType:
             The alpha_p value of the pile type, by default None.
         alpha_t_sand : float, optional
             The alpha_t_sand value of the pile type, by default None.
+        alpha_t_clay : float, optional
+            The alpha_t_clay value of the pile type, by default None.
         settlement_curve : int, optional
             The settlement curve of the pile type, by default None.
         negative_fr_delta_factor : float, optional
@@ -44,17 +48,21 @@ class PileType:
             The is_low_vibrating value of the pile type, by default None.
         is_auger : bool, optional
             The is_auger value of the pile type, by default None.
+        chamfered : float, optional
+            The chamfered value of the pile type, by default None.
         """
         self._standard_pile = standard_pile
         self._alpha_s_sand = alpha_s_sand
         self._alpha_s_clay = alpha_s_clay
         self._alpha_p = alpha_p
         self._alpha_t_sand = alpha_t_sand
+        self._alpha_t_clay = alpha_t_clay
         self._settlement_curve = settlement_curve
         self._negative_fr_delta_factor = negative_fr_delta_factor
         self._adhesion = adhesion
         self._is_low_vibrating = is_low_vibrating
         self._is_auger = is_auger
+        self._chamfered = chamfered
 
     @classmethod
     def from_api_response(cls, pile_type: dict) -> PileType:
@@ -77,6 +85,7 @@ class PileType:
             alpha_s_clay=pile_type["properties"]["alpha_s_clay"],
             alpha_p=pile_type["properties"]["alpha_p"],
             alpha_t_sand=pile_type["properties"]["alpha_t_sand"],
+            alpha_t_clay=pile_type["properties"].get("alpha_t_clay", None),
             settlement_curve=pile_type["properties"]["settlement_curve"],
             negative_fr_delta_factor=pile_type["properties"][
                 "negative_fr_delta_factor"
@@ -112,6 +121,11 @@ class PileType:
         return self._alpha_t_sand
 
     @property
+    def alpha_t_clay(self) -> float | None:
+        """The alpha_t_clay value of the pile type"""
+        return self._alpha_t_clay
+
+    @property
     def settlement_curve(self) -> int | None:
         """The settlement curve of the pile type"""
         return self._settlement_curve
@@ -135,6 +149,11 @@ class PileType:
     def is_auger(self) -> bool | None:
         """The is_auger value of the pile type"""
         return self._is_auger
+
+    @property
+    def chamfered(self) -> float | None:
+        """The chamfered value of the pile type"""
+        return self._chamfered
 
     def serialize_payload(self) -> Dict[str, str | dict]:
         """
@@ -173,6 +192,9 @@ class PileType:
         if self.alpha_t_sand is not None:
             custom_type_properties["alpha_t_sand"] = self.alpha_t_sand
 
+        if self.alpha_t_clay is not None:
+            custom_type_properties["alpha_t_clay"] = self.alpha_t_clay
+
         if self.settlement_curve is not None:
             custom_type_properties["settlement_curve"] = self.settlement_curve
 
@@ -189,6 +211,9 @@ class PileType:
 
         if self.is_auger is not None:
             custom_type_properties["is_auger"] = self.is_auger
+
+        if self.chamfered is not None:
+            custom_type_properties["chamfered"] = self.chamfered
 
         if len(custom_type_properties.keys()) > 0:
             payload["custom_properties"] = custom_type_properties

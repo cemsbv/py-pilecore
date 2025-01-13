@@ -10,6 +10,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from numpy.typing import NDArray
 
+from pypilecore.common.piles import PileGridProperties
 from pypilecore.results.soil_properties import (
     CPTTable,
     LayerTable,
@@ -21,69 +22,41 @@ Number = Union[float, int]
 
 
 @dataclass(frozen=True)
-class CPTResultsTable:
+class CPTTensionResultsTable:
     """Object containing the results of a single CPT."""
 
     pile_tip_level_nap: NDArray[np.float64]
     """The pile-tip level in [m] w.r.t. the reference."""
-    F_nk_cal: NDArray[np.float64]
-    """The calculated value of the negative shaft friction force [kN]."""
-    F_nk_k: NDArray[np.float64]
-    """The characteristic value of the negative shaft friction force [kN]."""
-    F_nk_d: NDArray[np.float64]
-    """The design value of the negative shaft friction force [kN]."""
-    R_b_cal: NDArray[np.float64]
-    """The calculated value of the bottom bearingcapacity [kN]."""
-    R_b_k: NDArray[np.float64]
-    """The characteristic value of the bottom bearingcapacity [kN]."""
-    R_b_d: NDArray[np.float64]
-    """The design value of the bottom bearingcapacity [kN]."""
-    R_s_cal: NDArray[np.float64]
-    """The calculated value of the shaft bearingcapacity [kN]."""
-    R_s_k: NDArray[np.float64]
-    """The characteristic value of the shaft bearingcapacity [kN]."""
-    R_s_d: NDArray[np.float64]
-    """The design value of the shaft bearingcapacity [kN]."""
-    R_c_cal: NDArray[np.float64]
-    """The calculated value of the total compressive bearingcapacity [kN]."""
-    R_c_k: NDArray[np.float64]
-    """The characteristic value of the total compressive bearingcapacity [kN]."""
-    R_c_d: NDArray[np.float64]
-    """The design value of the total compressive bearingcapacity [kN]."""
-    R_c_d_net: NDArray[np.float64]
-    """The net design value of the total bearingcapacity [kN] (netto =excluding design negative friction force.)."""
-    F_c_k: NDArray[np.float64]
-    """The compressive force on the pile-head [kN]."""
-    F_c_k_tot: NDArray[np.float64]
-    """The characteristic value of the total compressive pile load [kN](building-load + neg. friction force)."""
-    negative_friction_range_nap_top: NDArray[np.float64]
-    """The top boundary of the negative friction interval [m] w.r.t. NAP.
-    Can be None when the friction force was provided directly."""
-    negative_friction_range_nap_btm: NDArray[np.float64]
-    """The bottom boundary of the negative friction interval [m] w.r.t. NAP.
-    Can be None when the friction force was provided directly."""
-    positive_friction_range_nap_top: NDArray[np.float64]
-    """The top boundary of the positive friction interval [m] w.r.t. NAP."""
-    positive_friction_range_nap_btm: NDArray[np.float64]
-    """The bottom boundary of the positive friction interval [m] w.r.t. NAP."""
-    q_b_max: NDArray[np.float64]
-    """The maximum bottom bearing resistance [MPa]."""
-    q_s_max_mean: NDArray[np.float64]
-    """The maximum shaft bearing resistance [MPa]."""
-    qc1: NDArray[np.float64]
-    """The average friction resistance in Koppejan trajectory I, :math:`q_{c;I;gem}` [MPa] ."""
-    qc2: NDArray[np.float64]
-    """The average friction resistance in Koppejan trajectory II, :math:`q_{c;II;gem}` [MPa] ."""
-    qc3: NDArray[np.float64]
-    """The average friction resistance in Koppejan trajectory III, :math:`q_{c;III;gem}` [MPa] ."""
-    s_b: NDArray[np.float64]
-    """The settlement of the pile bottom [mm]."""
-    s_el: NDArray[np.float64]
-    """The elastic shortening of the pile due to elastic strain [mm]."""
+    A: NDArray[np.float64]
+    """The area of influence of the pile, that is, the area over which
+            the stress spreads around a pile within a pile group [m2]."""
+    R_t_d_plug: NDArray[np.float64]
+    """The root ball weight, excluding the weight of the pile (7.6.3.3 (h) NEN
+            9997-1+C2:2017) [kN]."""
+    R_t_d: NDArray[np.float64]
+    """The design value of the tensile resistance of a pile or pile group
+            (7.6.3.3 (a) NEN 9997-1+C2:2017) [kN]."""
+    R_t_k: NDArray[np.float64]
+    """The characteristic value of the tensile resistance of a pile or pile
+            group (7.6.3.3 NEN 9997-1+C2:2017) [kN]."""
+    R_t_mob_ratio: NDArray[np.float64]
+    """The mobilisation ratio of the shaft bearing capacity [-]."""
+    R_t_mob: NDArray[np.float64]
+    """The mobilisation of the shaft bearing capacity [kN]."""
     k_v_b: NDArray[np.float64]
-    """The 1-dimensional stiffness modulus at pile bottom [kN/m]."""
+    """The 1-dimensional stiffness modulus at pile bottom [kN/mm]."""
     k_v_1: NDArray[np.float64]
     """The 1-dimensional stiffness modulus at pile head [MN/mm]."""
+    q_s_max_mean: NDArray[np.float64]
+    """The computational value of shaft friction [MPa]."""
+    s_e: NDArray[np.float64]
+    """The elastic shortening of the pile [mm]."""
+    s_b: NDArray[np.float64]
+    """The settlement of the pile bottom [mm]."""
+    s_1: NDArray[np.float64]
+    """The settlement of the pile [mm]."""
+    sand_clay_ratio: NDArray[np.float64]
+    """Contributions to the bearing capacity from sandy layers [-]."""
 
     def __post_init__(self) -> None:
         dict_lengths = {}
@@ -99,73 +72,35 @@ class CPTResultsTable:
     def from_sequences(
         cls,
         pile_tip_level_nap: Sequence[Number],
-        F_nk_cal: Sequence[Number],
-        F_nk_k: Sequence[Number],
-        F_nk_d: Sequence[Number],
-        R_b_cal: Sequence[Number],
-        R_b_k: Sequence[Number],
-        R_b_d: Sequence[Number],
-        R_s_cal: Sequence[Number],
-        R_s_k: Sequence[Number],
-        R_s_d: Sequence[Number],
-        R_c_cal: Sequence[Number],
-        R_c_k: Sequence[Number],
-        R_c_d: Sequence[Number],
-        R_c_d_net: Sequence[Number],
-        F_c_k: Sequence[Number],
-        F_c_k_tot: Sequence[Number],
-        negative_friction_range_nap_top: Sequence[Number],
-        negative_friction_range_nap_btm: Sequence[Number],
-        positive_friction_range_nap_top: Sequence[Number],
-        positive_friction_range_nap_btm: Sequence[Number],
-        q_b_max: Sequence[Number],
-        q_s_max_mean: Sequence[Number],
-        qc1: Sequence[Number],
-        qc2: Sequence[Number],
-        qc3: Sequence[Number],
-        s_b: Sequence[Number],
-        s_el: Sequence[Number],
+        A: Sequence[Number],
+        R_t_d_plug: Sequence[Number],
+        R_t_d: Sequence[Number],
+        R_t_k: Sequence[Number],
+        R_t_mob_ratio: Sequence[Number],
+        R_t_mob: Sequence[Number],
         k_v_b: Sequence[Number],
         k_v_1: Sequence[Number],
-    ) -> CPTResultsTable:
+        q_s_max_mean: Sequence[Number],
+        s_e: Sequence[Number],
+        s_b: Sequence[Number],
+        s_1: Sequence[Number],
+        sand_clay_ratio: Sequence[Number],
+    ) -> CPTTensionResultsTable:
         return cls(
             pile_tip_level_nap=np.array(pile_tip_level_nap).astype(np.float64),
-            F_nk_cal=np.array(F_nk_cal).astype(np.float64),
-            F_nk_k=np.array(F_nk_k).astype(np.float64),
-            F_nk_d=np.array(F_nk_d).astype(np.float64),
-            R_b_cal=np.array(R_b_cal).astype(np.float64),
-            R_b_k=np.array(R_b_k).astype(np.float64),
-            R_b_d=np.array(R_b_d).astype(np.float64),
-            R_s_cal=np.array(R_s_cal).astype(np.float64),
-            R_s_k=np.array(R_s_k).astype(np.float64),
-            R_s_d=np.array(R_s_d).astype(np.float64),
-            R_c_cal=np.array(R_c_cal).astype(np.float64),
-            R_c_k=np.array(R_c_k).astype(np.float64),
-            R_c_d=np.array(R_c_d).astype(np.float64),
-            R_c_d_net=np.array(R_c_d_net).astype(np.float64),
-            F_c_k=np.array(F_c_k).astype(np.float64),
-            F_c_k_tot=np.array(F_c_k_tot).astype(np.float64),
-            negative_friction_range_nap_top=np.array(
-                negative_friction_range_nap_top
-            ).astype(np.float64),
-            negative_friction_range_nap_btm=np.array(
-                negative_friction_range_nap_btm
-            ).astype(np.float64),
-            positive_friction_range_nap_top=np.array(
-                positive_friction_range_nap_top
-            ).astype(np.float64),
-            positive_friction_range_nap_btm=np.array(
-                positive_friction_range_nap_btm
-            ).astype(np.float64),
-            q_b_max=np.array(q_b_max).astype(np.float64),
-            q_s_max_mean=np.array(q_s_max_mean).astype(np.float64),
-            qc1=np.array(qc1).astype(np.float64),
-            qc2=np.array(qc2).astype(np.float64),
-            qc3=np.array(qc3).astype(np.float64),
-            s_b=np.array(s_b).astype(np.float64),
-            s_el=np.array(s_el).astype(np.float64),
+            A=np.array(A).astype(np.float64),
+            R_t_d_plug=np.array(R_t_d_plug).astype(np.float64),
+            R_t_d=np.array(R_t_d).astype(np.float64),
+            R_t_k=np.array(R_t_k).astype(np.float64),
+            R_t_mob_ratio=np.array(R_t_mob_ratio).astype(np.float64),
+            R_t_mob=np.array(R_t_mob).astype(np.float64),
             k_v_b=np.array(k_v_b).astype(np.float64),
             k_v_1=np.array(k_v_1).astype(np.float64),
+            q_s_max_mean=np.array(q_s_max_mean).astype(np.float64),
+            s_e=np.array(s_e).astype(np.float64),
+            s_b=np.array(s_b).astype(np.float64),
+            s_1=np.array(s_1).astype(np.float64),
+            sand_clay_ratio=np.array(sand_clay_ratio).astype(np.float64),
         )
 
     def to_pandas(self) -> pd.DataFrame:
@@ -173,7 +108,7 @@ class CPTResultsTable:
         return pd.DataFrame(self.__dict__).dropna(axis=0, how="all")
 
 
-class SingleCPTBearingResults:
+class SingleCPTTensionBearingResults:
     """
     Object that contains the results of a PileCore single-cpt calculation.
 
@@ -184,7 +119,8 @@ class SingleCPTBearingResults:
         self,
         soil_properties: SoilProperties,
         pile_head_level_nap: float,
-        results_table: CPTResultsTable,
+        results_table: CPTTensionResultsTable,
+        pile_grid_properties: PileGridProperties,
     ) -> None:
         """
         Parameters
@@ -199,6 +135,7 @@ class SingleCPTBearingResults:
         self._sp = soil_properties
         self._pile_head_level_nap = pile_head_level_nap
         self._results_table = results_table
+        self._pile_grid_properties = pile_grid_properties
 
     @classmethod
     def from_api_response(
@@ -208,7 +145,7 @@ class SingleCPTBearingResults:
         surface_level_ref: float,
         x: float | None = None,
         y: float | None = None,
-    ) -> "SingleCPTBearingResults":
+    ) -> "SingleCPTTensionBearingResults":
         results_table = cpt_results_dict["results_table"]
         return cls(
             soil_properties=SoilProperties(
@@ -225,45 +162,25 @@ class SingleCPTBearingResults:
                 x=x,
                 y=y,
             ),
-            pile_head_level_nap=cpt_results_dict["annotations"]["pile_head_level_nap"],
-            results_table=CPTResultsTable.from_sequences(
+            pile_head_level_nap=cpt_results_dict["pile_head_level_nap"],
+            results_table=CPTTensionResultsTable.from_sequences(
                 pile_tip_level_nap=results_table["pile_tip_level_nap"],
-                F_nk_cal=results_table["F_nk_cal"],
-                F_nk_k=results_table["F_nk_k"],
-                F_nk_d=results_table["F_nk_d"],
-                R_b_cal=results_table["R_b_cal"],
-                R_b_k=results_table["R_b_k"],
-                R_b_d=results_table["R_b_d"],
-                R_s_cal=results_table["R_s_cal"],
-                R_s_k=results_table["R_s_k"],
-                R_s_d=results_table["R_s_d"],
-                R_c_cal=results_table["R_c_cal"],
-                R_c_k=results_table["R_c_k"],
-                R_c_d=results_table["R_c_d"],
-                R_c_d_net=results_table["R_c_d_net"],
-                F_c_k=results_table["F_c_k"],
-                F_c_k_tot=results_table["F_c_k_tot"],
-                negative_friction_range_nap_top=results_table[
-                    "negative_friction_range_nap_top"
-                ],
-                negative_friction_range_nap_btm=results_table[
-                    "negative_friction_range_nap_btm"
-                ],
-                positive_friction_range_nap_top=results_table[
-                    "positive_friction_range_nap_top"
-                ],
-                positive_friction_range_nap_btm=results_table[
-                    "positive_friction_range_nap_btm"
-                ],
-                q_b_max=results_table["q_b_max"],
-                q_s_max_mean=results_table["q_s_max_mean"],
-                qc1=results_table["qc1"],
-                qc2=results_table["qc2"],
-                qc3=results_table["qc3"],
-                s_b=results_table["s_b"],
-                s_el=results_table["s_el"],
                 k_v_b=results_table["k_v_b"],
                 k_v_1=results_table["k_v_1"],
+                A=results_table["A"],
+                R_t_d_plug=results_table["R_t_d_plug"],
+                R_t_d=results_table["R_t_d"],
+                R_t_k=results_table["R_t_k"],
+                R_t_mob_ratio=results_table["R_s_mob_ratio"],
+                R_t_mob=results_table["R_s_mob"],
+                q_s_max_mean=results_table["q_s_max_mean"],
+                s_e=results_table["s_e"],
+                s_b=results_table["s_b"],
+                s_1=results_table["s_1"],
+                sand_clay_ratio=results_table["sand_clay_ratio"],
+            ),
+            pile_grid_properties=PileGridProperties.from_api_response(
+                cpt_results_dict["pile_grid"]
             ),
         )
 
@@ -275,6 +192,13 @@ class SingleCPTBearingResults:
         return self._sp
 
     @property
+    def pile_grid_properties(self) -> PileGridProperties:
+        """
+        The PileGridProperties object.
+        """
+        return self._pile_grid_properties
+
+    @property
     def pile_head_level_nap(self) -> float:
         """
         The elevation of the pile-head in [m] w.r.t. NAP.
@@ -282,7 +206,7 @@ class SingleCPTBearingResults:
         return self._pile_head_level_nap
 
     @property
-    def table(self) -> CPTResultsTable:
+    def table(self) -> CPTTensionResultsTable:
         """The object with single-CPT results table traces."""
         return self._results_table
 
@@ -352,31 +276,23 @@ class SingleCPTBearingResults:
 
         # add bearing result subplot
         axes.plot(
-            np.array(self.table.F_nk_d),
+            np.array(self.table.R_t_d),
             self.table.pile_tip_level_nap,
             color="tab:orange",
-            label="Fnk;d",
+            label=r"$R_{t;d}$",
         )
         axes.plot(
-            np.array(self.table.R_s_cal),
+            np.array(self.table.R_t_d_plug),
             self.table.pile_tip_level_nap,
-            color="lightgreen",
-            label="Rs;cal;max",
-        )
-        axes.plot(
-            np.array(self.table.R_b_cal),
-            self.table.pile_tip_level_nap,
-            color="darkgreen",
-            label="Rb;cal;max",
-        )
-        axes.plot(
-            np.array(self.table.R_c_d_net),
-            self.table.pile_tip_level_nap,
-            label=r"Rc;net;d",
+            label=r"$R_{t;d;kluit}$",
             lw=3,
             color="tab:blue",
         )
         axes.set_xlabel("Force [kN]")
+        axes.set_xlim(
+            np.floor(np.nanmin(np.array(self.table.R_t_d) / 10.0)) * 10,
+            np.ceil(np.nanmax(np.array(self.table.R_t_d) / 10.0)) * 10,
+        )
 
         # add legend
         if add_legend:
@@ -438,8 +354,11 @@ class SingleCPTBearingResults:
 
         # Plot bearing capacities
         self.soil_properties.cpt_table.plot_qc(ax_qc, add_legend=False)
+        bounds = ax_qc.get_ylim()
         self.soil_properties.cpt_table.plot_friction_ratio(ax_rf, add_legend=False)
         self.soil_properties.plot_layers(ax_layers, add_legend=False)
+        ax_layers.set_ylim(bounds)
+
         self.plot_bearing_capacities(axes=ax_bearing, add_legend=False)
 
         if add_legend:
@@ -464,9 +383,11 @@ class SingleCPTBearingResults:
                 handles=handles_list,
                 loc="upper left",
                 bbox_to_anchor=(1, 1),
-                title="name: " + self.soil_properties.test_id
-                if self.soil_properties.test_id is not None
-                else "name: unknown",
+                title=(
+                    "name: " + self.soil_properties.test_id
+                    if self.soil_properties.test_id is not None
+                    else "name: unknown"
+                ),
             )
 
         return fig

@@ -2,11 +2,12 @@ from __future__ import annotations  # noqa: F404
 
 from typing import Any
 
+import pandas as pd
 from IPython.display import DisplayHandle, display
 from ipywidgets import widgets
+from natsort import natsorted
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTGroupResultDefinitions
 from pypilecore.viewers.interactive_figures import FigureCPTGroupResultsVersusPtls
 
 
@@ -42,10 +43,13 @@ class ViewerCptGroupResults:
         )
 
         # Set up control widgets
+        _options = natsorted(
+            pd.unique(cases_multi_results.cpt_group_results_dataframe.result_name)
+        )
         self._result_dropdown = widgets.Dropdown(
             description="Result:",
-            value=CPTGroupResultDefinitions.R_c_d_net.name,
-            options=CPTGroupResultDefinitions.natsorted_names(),
+            value=_options[0],
+            options=_options,
         )
 
         # Update plot for initial selection of control widgets

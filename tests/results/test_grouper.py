@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from pypilecore.results import GrouperResults, MultiCPTBearingResults
+from pypilecore.results import GrouperResults, MultiCPTCompressionBearingResults
 from pypilecore.results.soil_properties import SoilProperties
 
 
@@ -16,7 +16,7 @@ def test_grouper_results(
     Test parsing and plotting in GrouperResults object
     """
 
-    multi_cpt_bearing_results = MultiCPTBearingResults.from_api_response(
+    multi_cpt_bearing_results = MultiCPTCompressionBearingResults.from_api_response(
         response_dict=mock_group_multi_cpt_bearing_response,
         cpt_input=mock_group_results_passover,
     )
@@ -58,7 +58,7 @@ def test_grouper_results_max_bearing(
     mock_multi_cpt_bearing_response_3,
     mock_results_passover_3,
 ) -> None:
-    mcb = MultiCPTBearingResults.from_api_response(
+    mcb = MultiCPTCompressionBearingResults.from_api_response(
         response_dict=mock_multi_cpt_bearing_response_3,
         cpt_input=mock_results_passover_3,
     )
@@ -122,7 +122,7 @@ def test_grouper_triangulation(
     mock_multi_cpt_bearing_response_3,
     mock_results_passover_3,
 ) -> None:
-    mcb = MultiCPTBearingResults.from_api_response(
+    mcb = MultiCPTCompressionBearingResults.from_api_response(
         response_dict=mock_multi_cpt_bearing_response_3,
         cpt_input=mock_results_passover_3,
     )

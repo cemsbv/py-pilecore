@@ -2,9 +2,6 @@ from __future__ import annotations  # noqa: F404
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List
-
-from natsort import natsorted
 
 
 @dataclass
@@ -105,6 +102,16 @@ class CPTResultDefinitions(Enum):
     s_el = ResultDefinition(name="s_el", unit="mm", html="s<sub>el</sub>")
     k_v_b = ResultDefinition(name="k_v_b", unit="MN/m", html="k<sub>v;b</sub>")
     k_v_1 = ResultDefinition(name="k_v_1", unit="MN/m", html="k<sub>v;1</sub>")
+    R_t_d = ResultDefinition(name="R_t_d", unit="kN", html="R<sub>t;d</sub>")
+    R_t_k = ResultDefinition(name="R_t_k", unit="kN", html="R<sub>t;k</sub>")
+    R_t_d_plug = ResultDefinition(
+        name="R_t_d_plug", unit="kN", html="R<sub>t;d;kluit</sub>"
+    )
+    R_s_mob = ResultDefinition(name="R_s_mob", unit="kN", html="R<sub>s;mob</sub>")
+    R_s_mob_ratio = ResultDefinition(
+        name="R_s_mob_ratio", unit="-", html="R<sub>s;mob;ratio</sub>"
+    )
+    s_e = ResultDefinition(name="s_e", unit="mm", html="s<sub>e</sub>")
 
     @classmethod
     def get(cls, name: str) -> CPTResultDefinitions:
@@ -115,11 +122,6 @@ class CPTResultDefinitions(Enum):
             raise ValueError(
                 f"Result with name '{name}' not found in 'CPTResultDefinitions'."
             )
-
-    @classmethod
-    def natsorted_names(cls) -> List[str]:
-        """Returns the names of the enum in natsorted order."""
-        return natsorted([r.name for r in cls])
 
 
 class CPTGroupResultDefinitions(Enum):
@@ -178,6 +180,16 @@ class CPTGroupResultDefinitions(Enum):
     cpt_normative = ResultDefinition(
         name="cpt_normative", unit="-", html="Normative CPT"
     )
+    R_t_d = ResultDefinition(name="R_t_d", unit="kN", html="R<sub>t;d</sub>")
+    R_t_d_mean = ResultDefinition(
+        name="R_t_d_mean", unit="kN", html="R<sub>t;d;mean</sub>"
+    )
+    R_t_d_min = ResultDefinition(
+        name="R_t_d_min", unit="kN", html="R<sub>t;d;min</sub>"
+    )
+    R_t_d_plug = ResultDefinition(
+        name="R_t_d_plug", unit="kN", html="R<sub>t;d;kluit</sub>"
+    )
 
     @classmethod
     def get(cls, name: str) -> CPTGroupResultDefinitions:
@@ -188,8 +200,3 @@ class CPTGroupResultDefinitions(Enum):
             raise ValueError(
                 f"Result with name '{name}' not found in 'CPTGroupResultDefinitions'."
             )
-
-    @classmethod
-    def natsorted_names(cls) -> List[str]:
-        """Returns the names of the enum in natsorted order."""
-        return natsorted([r.name for r in cls])
