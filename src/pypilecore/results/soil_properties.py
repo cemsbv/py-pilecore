@@ -180,7 +180,7 @@ class CPTTable:
         the pile derives its tensile resistance (7.6.3.3 (f) NEN
         9997-1+C2:2017) [-]."""
         self.f3 = np.array(f3).astype(np.float64)
-        """factor for the decrease in bearing capacity from the length—effect, 
+        """factor for the decrease in bearing capacity from the length—effect,
         according to figure 6.1a en 6.1b (CROW-CUR Rapport 236   Richtlijn
         Ankerpalen [2023]) [-]."""
         self.R_t_d = np.array(R_t_d).astype(np.float64)
