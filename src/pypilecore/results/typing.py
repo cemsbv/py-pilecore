@@ -1,4 +1,4 @@
-from typing import Dict, List, Protocol, TypeVar, runtime_checkable
+from typing import List, Protocol, TypeVar, runtime_checkable
 
 from pypilecore.common.piles import PileProperties
 from pypilecore.results.compression.multi_cpt_results import (
