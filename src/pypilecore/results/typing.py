@@ -1,4 +1,4 @@
-from typing import List, Protocol, TypeVar, runtime_checkable
+from typing import Dict, List, Protocol, TypeVar, runtime_checkable
 
 from pypilecore.common.piles import PileProperties
 from pypilecore.results.compression.multi_cpt_results import (
@@ -20,6 +20,10 @@ S = TypeVar("S", CPTCompressionGroupResultsTable, CPTTensionGroupResultsTable)
 
 @runtime_checkable
 class MultiCPTBearingResults(Protocol):
+    """
+    protocol classes for MultiCPTBearingResults from compression or tension endpoint response
+    """
+
     def __init__(self) -> None:
         ...
 
