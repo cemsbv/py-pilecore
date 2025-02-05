@@ -132,6 +132,8 @@ ipywidgets==8.1.5
     # via
     #   py-pilecore (pyproject.toml)
     #   tqdm
+isodate==0.7.2
+    # via openapi-core
 isort==5.12.0
     # via py-pilecore (pyproject.toml)
 itsdangerous==2.2.0
@@ -163,14 +165,25 @@ jsonschema==4.23.0
     #   ansible-lint
     #   aws-sam-translator
     #   cfn-lint
+    #   openapi-core
+    #   openapi-schema-validator
+    #   openapi-spec-validator
+jsonschema-path==0.3.3
+    # via
+    #   openapi-core
+    #   openapi-spec-validator
 jsonschema-specifications==2023.12.1
-    # via jsonschema
+    # via
+    #   jsonschema
+    #   openapi-schema-validator
 junit-xml==1.9
     # via cfn-lint
 jupyterlab-widgets==3.0.13
     # via ipywidgets
 kiwisolver==1.4.7
     # via matplotlib
+lazy-object-proxy==1.10.0
+    # via openapi-spec-validator
 lxml==5.3.0
     # via pygef
 markdown-it-py==3.0.0
@@ -189,6 +202,8 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
+more-itertools==10.5.0
+    # via openapi-core
 mpmath==1.3.0
     # via sympy
 mypy==1.7.1
@@ -212,6 +227,14 @@ numpy==1.26.4
     #   py-pilecore (pyproject.toml)
     #   scipy
     #   shapely
+openapi-core==0.19.4
+    # via py-pilecore (pyproject.toml)
+openapi-schema-validator==0.6.2
+    # via
+    #   openapi-core
+    #   openapi-spec-validator
+openapi-spec-validator==0.7.1
+    # via openapi-core
 orjson==3.10.7
     # via cems-nuclei
 packaging==24.1
@@ -226,8 +249,12 @@ packaging==24.1
     #   sphinx
 pandas==2.2.3
     # via py-pilecore (pyproject.toml)
+parse==1.20.2
+    # via openapi-core
 parso==0.8.4
     # via jedi
+pathable==0.4.3
+    # via jsonschema-path
 pathspec==0.12.1
     # via
     #   ansible-lint
@@ -301,12 +328,14 @@ pyyaml==6.0.2
     #   ansible-core
     #   ansible-lint
     #   cfn-lint
+    #   jsonschema-path
     #   sqlfluff
     #   yamllint
     #   yq
 referencing==0.35.1
     # via
     #   jsonschema
+    #   jsonschema-path
     #   jsonschema-specifications
 regex==2024.9.11
     # via
@@ -318,11 +347,14 @@ requests==2.32.3
     #   cems-nuclei
     #   coveralls
     #   dash
+    #   jsonschema-path
     #   sphinx
 resolvelib==1.0.1
     # via ansible-core
 retrying==1.3.4
     # via dash
+rfc3339-validator==0.1.4
+    # via openapi-schema-validator
 rich==13.8.1
     # via ansible-lint
 rpds-py==0.20.0
@@ -347,6 +379,7 @@ six==1.16.0
     #   junit-xml
     #   python-dateutil
     #   retrying
+    #   rfc3339-validator
 snowballstemmer==2.2.0
     # via sphinx
 sphinx==6.1.3
@@ -422,6 +455,7 @@ werkzeug==3.0.4
     # via
     #   dash
     #   flask
+    #   openapi-core
 widgetsnbextension==4.0.13
     # via ipywidgets
 xmltodict==0.13.0

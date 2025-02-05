@@ -68,7 +68,9 @@ class PileProperties:
     @property
     def name(self) -> str | None:
         """The name of the pile."""
-        return self._name
+        if self._name is not None:
+            return str(self._name)
+        return None
 
     def serialize_payload(self) -> Dict[str, dict | str]:
         """

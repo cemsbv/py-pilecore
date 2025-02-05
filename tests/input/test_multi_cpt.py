@@ -1,3 +1,5 @@
+import numpy as np
+import pygef
 import pytest
 from nuclei.client.utils import serialize_jsonifyable_object
 from openapi_core.contrib.requests import RequestsOpenAPIRequest
@@ -11,6 +13,7 @@ from pypilecore.common.piles.geometry.components.common import (
 )
 from pypilecore.common.piles.type import PileType
 from pypilecore.input.multi_cpt import create_multi_cpt_payload
+from pypilecore.input.soil_properties import get_cpt_depth
 
 
 @pytest.fixture()
@@ -113,3 +116,115 @@ def test_create_multi_cpt_payload_no_coords(
     openapi_request = RequestsOpenAPIRequest(request)
 
     pc_openapi.request_validator.validate(openapi_request)
+
+
+@pytest.mark.parametrize(
+    ("stress_reduction_method", "excavation_width", "excavation_edge_distance"),
+    [
+        ("constant", None, None),
+        ("begemann", 10.0, 0.0),
+        ("begemann", 10.0, 5.0),
+    ],
+)
+def test_create_multi_cpt_payload_excavation_settings_valid(
+    pc_openapi,
+    cpt,
+    round_pile,
+    headers,
+    stress_reduction_method,
+    excavation_width,
+    excavation_edge_distance,
+):
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[-10.0, -20.0],
+        cptdata_objects=[cpt],
+        classify_tables={
+            cpt.alias: {
+                "geotechnicalSoilName": ["Sand"],
+                "lowerBoundary": [1.0],
+                "upperBoundary": [0.0],
+                "color": ["#000000"],
+                "mainComponent": ["sand"],
+                "cohesion": [0.0],
+                "gamma_sat": [20],
+                "gamma_unsat": [18],
+                "phi": [30],
+                "undrainedShearStrength": [0.0],
+            }
+        },
+        excavation_stress_reduction_method=stress_reduction_method,
+        excavation_width=excavation_width,
+        excavation_edge_distance=excavation_edge_distance,
+        groundwater_level_nap=-10.0,
+        pile=round_pile,
+    )
+
+    request = Request(
+        method="POST",
+        headers=headers,
+        url="http://compression/multiple-cpts/results",
+        json=serialize_jsonifyable_object(payload),
+    )
+
+    openapi_request = RequestsOpenAPIRequest(request)
+
+    pc_openapi.request_validator.validate(openapi_request)
+
+
+@pytest.mark.parametrize(
+    (
+        "stress_reduction_method",
+        "excavation_width",
+        "excavation_edge_distance",
+        "expected_error",
+        "message_matching",
+    ),
+    [
+        (None, None, None, ValueError, "excavation_stress_reduction_method"),
+        ("begemann", None, 0.0, ValueError, "excavation_width"),
+        ("begemann", 10.0, None, ValueError, "excavation_edge_distance"),
+    ],
+)
+def test_create_multi_cpt_payload_excavation_settings_invalid(
+    cpt,
+    round_pile,
+    stress_reduction_method,
+    excavation_width,
+    excavation_edge_distance,
+    expected_error,
+    message_matching,
+):
+    with pytest.raises(expected_error, match=message_matching):
+        create_multi_cpt_payload(
+            pile_tip_levels_nap=[-10.0, -20.0],
+            cptdata_objects=[cpt],
+            classify_tables={
+                cpt.alias: {
+                    "geotechnicalSoilName": ["Sand"],
+                    "lowerBoundary": [1.0],
+                    "upperBoundary": [0.0],
+                    "color": ["#000000"],
+                    "mainComponent": ["sand"],
+                    "cohesion": [0.0],
+                    "gamma_sat": [20],
+                    "gamma_unsat": [18],
+                    "phi": [30],
+                    "undrainedShearStrength": [0.0],
+                }
+            },
+            excavation_stress_reduction_method=stress_reduction_method,
+            excavation_width=excavation_width,
+            excavation_edge_distance=excavation_edge_distance,
+            groundwater_level_nap=-10.0,
+            pile=round_pile,
+        )
+
+
+def test_get_cpt_depth(cpt: pygef.cpt.CPTData):
+    depth = np.array(cpt.data["depth"])
+    penetration_length = np.array(cpt.data["penetrationLength"])
+
+    assert np.array_equal(get_cpt_depth(cpt), depth)
+
+    cpt.data.drop_in_place("depth")
+    assert np.array_equal(get_cpt_depth(cpt), penetration_length)

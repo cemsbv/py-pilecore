@@ -103,3 +103,9 @@ Update the requirements within the defined ranges with:
 ```bash
 pip-compile --upgrade --extra=test --extra=lint --extra=docs --output-file=requirements.txt pyproject.toml
 ```
+
+Note that `pip-compile` might run from your global path. You can also invoke the compile
+command from the `piptools` module on a specific python installation (e.g. within a virtualenv):
+
+```bash
+python -m piptools compile

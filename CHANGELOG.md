@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.3] - 2025-01-10
+
+### Miscellaneous Tasks
+
+- *(notebook)* Reduce the amount of requested pile tip levels in order for notebook to be usable with free account
+
+## [0.8.2] - 2024-11-27
+
+### Bug Fixes
+
+- *(pile_name)* Guarantee that PileProperties.name returns a string or None
+
+## [0.8.1] - 2024-11-20
+
+### Features
+
+- *(depth)* Use penetrationLength cpt trace if depth is not present
+
+### Miscellaneous Tasks
+
+- Update README.md & format
+
+### Testing
+
+- Add get_cpt_depth test
+
+### Deps
+
+- Run pip-compile
+
+## [0.8.0] - 2024-10-24
+
+### Features
+
+- *(begemann)* Add Begemann method to compute excavation stress after excavation
+
 ## [0.7.1] - 2024-10-01
 
 ### Bug Fixes
