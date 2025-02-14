@@ -6,11 +6,11 @@ import pandas as pd
 from natsort import natsorted
 from pygef.common import Location
 
-from pypilecore.results.multi_cpt_results import MultiCPTBearingResults
 from pypilecore.results.result_definitions import (
     CPTGroupResultDefinitions,
     CPTResultDefinitions,
 )
+from pypilecore.results.typing import MultiCPTBearingResults
 
 
 class CasesMultiCPTBearingResults:
@@ -77,23 +77,27 @@ class CasesMultiCPTBearingResults:
         records = []
         for case_name, case_results in results_per_case.items():
             for result_definition in CPTResultDefinitions:
-                df = case_results.cpt_results.get_results_per_cpt(
-                    column_name=result_definition.name
-                )
-                for idx_row, row in df.iterrows():
-                    for test_id, result in row.items():
-                        records.append(
-                            dict(
-                                case_name=case_name,
-                                result_name=result_definition.name,
-                                test_id=test_id,
-                                x=self.cpt_locations[test_id].x,
-                                y=self.cpt_locations[test_id].y,
-                                pile_tip_level_nap=idx_row,
-                                result=result,
-                                result_unit=result_definition.value.unit,
+                if (
+                    result_definition.name
+                    in case_results.cpt_results.to_pandas().columns
+                ):
+                    df = case_results.cpt_results.get_results_per_cpt(
+                        column_name=result_definition.name
+                    )
+                    for idx_row, row in df.iterrows():
+                        for test_id, result in row.items():
+                            records.append(
+                                dict(
+                                    case_name=case_name,
+                                    result_name=result_definition.name,
+                                    test_id=test_id,
+                                    x=self.cpt_locations[test_id].x,
+                                    y=self.cpt_locations[test_id].y,
+                                    pile_tip_level_nap=idx_row,
+                                    result=result,
+                                    result_unit=result_definition.value.unit,
+                                )
                             )
-                        )
         self._cpt_results_dataframe = pd.DataFrame.from_records(records)
 
     def _set_cpt_group_results_dataframe(
@@ -104,16 +108,17 @@ class CasesMultiCPTBearingResults:
         for case_name, case_results in result_cases.items():
             df = case_results.group_results_table.to_pandas()
             for result_definition in CPTGroupResultDefinitions:
-                for _, row in df.iterrows():
-                    records.append(
-                        dict(
-                            case_name=case_name,
-                            result_name=result_definition.name,
-                            pile_tip_level_nap=row["pile_tip_level_nap"],
-                            result=row[result_definition.value.name],
-                            result_unit=result_definition.value.unit,
+                if result_definition.name in df.columns:
+                    for _, row in df.iterrows():
+                        records.append(
+                            dict(
+                                case_name=case_name,
+                                result_name=result_definition.name,
+                                pile_tip_level_nap=row["pile_tip_level_nap"],
+                                result=row[result_definition.value.name],
+                                result_unit=result_definition.value.unit,
+                            )
                         )
-                    )
         self._cpt_group_results_dataframe = pd.DataFrame.from_records(records)
 
     def _set_cpt_locations(self, value: Dict[str, Location]) -> None:
