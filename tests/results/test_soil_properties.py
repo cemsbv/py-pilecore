@@ -47,6 +47,16 @@ def test_cpt_table():
             qc1=None,
             qc2=None,
             fs=None,
+            qs_d=[None, None],
+            f1=[None, None],
+            f2_d_mean=[None, None],
+            f3=[None, None],
+            R_t_d=[None, None],
+            phi_plug=[None, None],
+            R_t_d_plug=[None, None],
+            alpha_t=[None, None],
+            alpha_t_1=[None, None],
+            alpha_t_2=[None, None],
         )
 
     cpt_table = CPTTable(
@@ -57,6 +67,16 @@ def test_cpt_table():
         qc1=[15, 15],
         qc2=[15, 15],
         fs=[0.15, 0.15],
+        qs_d=[None, None],
+        f1=[None, None],
+        f2_d_mean=[None, None],
+        f3=[None, None],
+        R_t_d=[None, None],
+        phi_plug=[None, None],
+        R_t_d_plug=[None, None],
+        alpha_t=[None, None],
+        alpha_t_1=[None, None],
+        alpha_t_2=[None, None],
     )
 
     assert isinstance(cpt_table.depth_nap, np.ndarray)
@@ -114,6 +134,16 @@ def test_cpt_table_missing_fs():
         qc1=[None, None],
         qc2=[None, None],
         fs=None,
+        qs_d=[None, None],
+        f1=[None, None],
+        f2_d_mean=[None, None],
+        f3=[None, None],
+        R_t_d=[None, None],
+        phi_plug=[None, None],
+        R_t_d_plug=[None, None],
+        alpha_t=[None, None],
+        alpha_t_1=[None, None],
+        alpha_t_2=[None, None],
     )
 
     assert isinstance(cpt_table.depth_nap, np.ndarray)
@@ -156,6 +186,16 @@ def test_soil_properties():
         qc1=[15, 15],
         qc2=[15, 15],
         fs=[0.15, 0.15],
+        qs_d=[None, None],
+        f1=[None, None],
+        f2_d_mean=[None, None],
+        f3=[None, None],
+        R_t_d=[None, None],
+        phi_plug=[None, None],
+        R_t_d_plug=[None, None],
+        alpha_t=[None, None],
+        alpha_t_1=[None, None],
+        alpha_t_2=[None, None],
     )
 
     soil_properties = SoilProperties(

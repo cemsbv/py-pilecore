@@ -140,6 +140,16 @@ class CPTTable:
         qc1: Sequence[float] | None,
         qc2: Sequence[float] | None,
         fs: Sequence[float] | None,
+        qs_d: Sequence[float] | None,
+        f1: Sequence[float] | None,
+        f2_d_mean: Sequence[float] | None,
+        f3: Sequence[float] | None,
+        R_t_d: Sequence[float] | None,
+        phi_plug: Sequence[float] | None,
+        R_t_d_plug: Sequence[float] | None,
+        alpha_t: Sequence[float] | None,
+        alpha_t_1: Sequence[float] | None,
+        alpha_t_2: Sequence[float] | None,
     ):
         if depth_nap is None:
             self.depth_nap = np.array([depth_nap]).astype(np.float64)
@@ -160,6 +170,36 @@ class CPTTable:
         """The Koppejan-qc2 trajectory [MPa]."""
         self.fs = np.array(fs).astype(np.float64)
         """The original fs signal from the CPT [MPa]."""
+        self.qs_d = np.array(qs_d).astype(np.float64)
+        """The computational value of shaft friction [kPa]."""
+        self.f1 = np.array(f1).astype(np.float64)
+        """factor for the effect of compaction in the pile group (7.6.3.3 (e)
+            NEN 9997-1+C2:2017) [-]."""
+        self.f2_d_mean = np.array(f2_d_mean).astype(np.float64)
+        """factor for the decrease in grain stress in sand layers from which
+        the pile derives its tensile resistance (7.6.3.3 (f) NEN
+        9997-1+C2:2017) [-]."""
+        self.f3 = np.array(f3).astype(np.float64)
+        """factor for the decrease in bearing capacity from the length—effect,
+        according to figure 6.1a en 6.1b (CROW-CUR Rapport 236   Richtlijn
+        Ankerpalen [2023]) [-]."""
+        self.R_t_d = np.array(R_t_d).astype(np.float64)
+        """calculation value of the tensile resistance of a pile or pile group
+        (7.6.3.3 (a) NEN 9997-1+C2:2017 or CROW-CUR Rapport 236 Richtlijn Ankerpalen [2023]) [kN]."""
+        self.phi_plug = np.array(phi_plug).astype(np.float64)
+        """Half top angle of the ground cone (7.6.3.3 Table 7.e NEN 9997-1+C2:2017) [degrees]."""
+        self.R_t_d_plug = np.array(R_t_d_plug).astype(np.float64)
+        """root ball weight, excluding the weight of the pile (7.6.3.3 (h) NEN
+        9997-1+C2:2017) [kN]."""
+        self.alpha_t = np.array(alpha_t).astype(np.float64)
+        """Alpha t factor used in tension resistance calculation [-]. based on
+        table 7.d NEN 9997-1+C2:2017."""
+        self.alpha_t_1 = np.array(alpha_t_1).astype(np.float64)
+        """Alpha t factor used in tension resistance calculation [-]. tabel 6.2
+        CROW-CUR Rapport 236 Richtlijn Ankerpalen [2023]."""
+        self.alpha_t_2 = np.array(alpha_t_2).astype(np.float64)
+        """Alpha t factor used in tension resistance calculation [-]. tabel 6.2
+        CROW-CUR Rapport 236 Richtlijn Ankerpalen [2023]."""
 
         dict_lengths = {}
         for key, value in self.__dict__.items():
@@ -186,6 +226,16 @@ class CPTTable:
             qc1=cpt_chart_dict.get("qc1"),
             qc2=cpt_chart_dict.get("qc2"),
             fs=cpt_chart_dict.get("fs"),
+            qs_d=cpt_chart_dict.get("qs_d"),
+            f1=cpt_chart_dict.get("f1"),
+            f2_d_mean=cpt_chart_dict.get("f2_d_mean"),
+            f3=cpt_chart_dict.get("f3"),
+            R_t_d=cpt_chart_dict.get("R_t_d"),
+            phi_plug=cpt_chart_dict.get("phi_plug"),
+            R_t_d_plug=cpt_chart_dict.get("R_t_d_plug"),
+            alpha_t=cpt_chart_dict.get("alpha_t"),
+            alpha_t_1=cpt_chart_dict.get("alpha_t_1"),
+            alpha_t_2=cpt_chart_dict.get("alpha_t_2"),
         )
 
     @property

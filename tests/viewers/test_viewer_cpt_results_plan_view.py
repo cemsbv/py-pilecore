@@ -57,7 +57,7 @@ def test_update_case_result_and_ptl(
     viewer._case_dropdown.value = "case_2"
     assert "case_2" in viewer._figure_plan_view.figure.layout.title.text
     assert (
-        CPTResultDefinitions.R_c_d_net.value.html
+        CPTResultDefinitions.F_c_k.value.html
         in viewer._figure_plan_view.figure.layout.title.text
     )
     assert "-0.5" in viewer._figure_plan_view.figure.layout.title.text

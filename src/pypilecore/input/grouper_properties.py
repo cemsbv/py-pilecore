@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Literal
 import numpy as np
 from shapely.geometry import Polygon, mapping
 
-from pypilecore.results import SingleCPTBearingResults
+from pypilecore.results import SingleCPTCompressionBearingResults
 
 _dft_optimize_result_by = [
     "minimum_pile_level",
@@ -17,7 +17,7 @@ _dft_optimize_result_by = [
 
 
 def create_grouper_payload(
-    cpt_results_dict: Dict[str, SingleCPTBearingResults],
+    cpt_results_dict: Dict[str, SingleCPTCompressionBearingResults],
     pile_load_uls: float,
     building_polygon: Polygon | None = None,
     cpt_grid_rotation: float = 0.0,

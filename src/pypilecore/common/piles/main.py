@@ -111,10 +111,13 @@ def create_basic_pile(
     alpha_s_clay: float | None = None,
     alpha_s_sand: float | None = None,
     beta_p: float | None = None,
+    alpha_t_clay: float | None = None,
+    alpha_t_sand: float | None = None,
     pile_tip_factor_s: float | None = None,
     is_auger: bool | None = None,
     is_low_vibrating: bool | None = None,
     negative_fr_delta_factor: float | None = None,
+    chamfered: float | None = None,
 ) -> PileProperties:
     """
     Create a basic pile with the provided parameters.
@@ -171,6 +174,12 @@ def create_basic_pile(
     alpha_s_sand : float, optional
         The alpha_s_sand of the pile, by default None.
         Required if no standard pile type was specified.
+    alpha_t_clay : float, optional
+        The alpha_t_clay of the pile, by default None.
+        Required if no standard pile type was specified.
+    alpha_t_sand : float, optional
+        The alpha_t_sand of the pile, by default None.
+        Required if no standard pile type was specified.
     beta_p : float, optional
         The beta_p of the pile, by default None.
         Required if no standard pile type was specified.
@@ -185,6 +194,9 @@ def create_basic_pile(
         Required if no standard pile type was specified.
     negative_fr_delta_factor : float, optional
         The negative friction delta factor of the pile, by default None.
+        Required if no standard pile type was specified.
+    chamfered : float, optional
+        The chamfered value of the pile type, by default None.
         Required if no standard pile type was specified.
 
     Returns
@@ -281,12 +293,14 @@ def create_basic_pile(
         alpha_s_sand=alpha_s_sand,
         alpha_s_clay=alpha_s_clay,
         alpha_p=alpha_p,
-        alpha_t_sand=None,
+        alpha_t_sand=alpha_t_sand,
+        alpha_t_clay=alpha_t_clay,
         settlement_curve=settlement_curve,
         negative_fr_delta_factor=negative_fr_delta_factor,
         adhesion=adhesion,
         is_low_vibrating=is_low_vibrating,
         is_auger=is_auger,
+        chamfered=chamfered,
     )
 
     return PileProperties(geometry=geometry, pile_type=pile_type, name=pile_name)

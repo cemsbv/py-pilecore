@@ -10,12 +10,14 @@ MATERIALS = {
         "name": "grout",
         "elastic_modulus": 15000,
         "yield_stress": 1.5,
+        "tensile_strength": 1500,
         "color": "#8A8A8A",
     },
     "grout_extorted": {
         "name": "grout_extorted",
         "elastic_modulus": 20000,
         "yield_stress": 2,
+        "tensile_strength": 2000,
         "color": "#8A8A8A",
     },
 }
@@ -82,6 +84,7 @@ class PileMaterial:
         name: str,
         elastic_modulus: float,
         yield_stress: float | None = None,
+        tensile_strength: float | None = None,
         color: Color | str | Dict[str, int] | None = None,
     ):
         """
@@ -95,12 +98,15 @@ class PileMaterial:
             The elastic modulus [MPa] of the material.
         yield_stress : float, optional
             The yield stress [MPa] of the material, by default None.
+        tensile_strength : float, optional
+            The tensile strengths [MPa] of the material, by default None.
         color : Color or str or dict, optional
             The color of the material, by default None.
         """
         self._name = name
         self._elastic_modulus = elastic_modulus
         self._yield_stress = yield_stress
+        self._tensile_strength = tensile_strength
         if isinstance(color, str):
             color = Color.from_hex(hex=color)
         elif isinstance(color, dict):
@@ -132,6 +138,7 @@ class PileMaterial:
             name=material["name"],
             elastic_modulus=material["elastic_modulus"],
             yield_stress=material.get("yield_stress"),
+            tensile_strength=material.get("tensile_strength"),
             color=color,
         )
 
@@ -149,6 +156,11 @@ class PileMaterial:
     def yield_stress(self) -> float | None:
         """The yield stress [MPa] of the material"""
         return self._yield_stress
+
+    @property
+    def tensile_strength(self) -> float | None:
+        """The tensile strength [MPa] of the material"""
+        return self._tensile_strength
 
     @property
     def color(self) -> Color | Color | None:
@@ -169,5 +181,8 @@ class PileMaterial:
 
         if self.color is not None:
             payload["color"] = self.color.serialize_payload()
+
+        if self.tensile_strength is not None:
+            payload["tensile_strength"] = self.tensile_strength
 
         return payload
