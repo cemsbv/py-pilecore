@@ -82,12 +82,14 @@
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;grout&quot;</span><span class="p">,</span>
         <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="mi">15000</span><span class="p">,</span>
         <span class="s2">&quot;yield_stress&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+        <span class="s2">&quot;tensile_strength&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
         <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#8A8A8A&quot;</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="s2">&quot;grout_extorted&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;grout_extorted&quot;</span><span class="p">,</span>
         <span class="s2">&quot;elastic_modulus&quot;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">,</span>
         <span class="s2">&quot;yield_stress&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;tensile_strength&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span>
         <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#8A8A8A&quot;</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">}</span>
@@ -154,6 +156,7 @@
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">elastic_modulus</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">yield_stress</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tensile_strength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">color</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -167,12 +170,15 @@
 <span class="sd">            The elastic modulus [MPa] of the material.</span>
 <span class="sd">        yield_stress : float, optional</span>
 <span class="sd">            The yield stress [MPa] of the material, by default None.</span>
+<span class="sd">        tensile_strength : float, optional</span>
+<span class="sd">            The tensile strengths [MPa] of the material, by default None.</span>
 <span class="sd">        color : Color or str or dict, optional</span>
 <span class="sd">            The color of the material, by default None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_elastic_modulus</span> <span class="o">=</span> <span class="n">elastic_modulus</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_yield_stress</span> <span class="o">=</span> <span class="n">yield_stress</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tensile_strength</span> <span class="o">=</span> <span class="n">tensile_strength</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">from_hex</span><span class="p">(</span><span class="nb">hex</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -204,6 +210,7 @@
             <span class="n">name</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
             <span class="n">elastic_modulus</span><span class="o">=</span><span class="n">material</span><span class="p">[</span><span class="s2">&quot;elastic_modulus&quot;</span><span class="p">],</span>
             <span class="n">yield_stress</span><span class="o">=</span><span class="n">material</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;yield_stress&quot;</span><span class="p">),</span>
+            <span class="n">tensile_strength</span><span class="o">=</span><span class="n">material</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tensile_strength&quot;</span><span class="p">),</span>
             <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
         <span class="p">)</span></div>
 
@@ -221,6 +228,11 @@
     <span class="k">def</span> <span class="nf">yield_stress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The yield stress [MPa] of the material&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yield_stress</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tensile_strength</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The tensile strength [MPa] of the material&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensile_strength</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span> <span class="o">|</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -241,6 +253,9 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensile_strength</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;tensile_strength&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensile_strength</span>
 
         <span class="k">return</span> <span class="n">payload</span></div></div>
 </pre></div>

@@ -74,11 +74,12 @@
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">DisplayHandle</span><span class="p">,</span> <span class="n">display</span>
 <span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">widgets</span>
+<span class="kn">from</span> <span class="nn">natsort</span> <span class="kn">import</span> <span class="n">natsorted</span>
 
 <span class="kn">from</span> <span class="nn">pypilecore.results.cases_multi_cpt_results</span> <span class="kn">import</span> <span class="n">CasesMultiCPTBearingResults</span>
-<span class="kn">from</span> <span class="nn">pypilecore.results.result_definitions</span> <span class="kn">import</span> <span class="n">CPTResultDefinitions</span>
 <span class="kn">from</span> <span class="nn">pypilecore.viewers.interactive_figures</span> <span class="kn">import</span> <span class="n">FigureCPTResultsVersusPtls</span>
 
 
@@ -121,10 +122,14 @@
             <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plts</span><span class="o">.</span><span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plts</span><span class="o">.</span><span class="n">cases</span><span class="p">,</span>
         <span class="p">)</span>
+
+        <span class="n">_options</span> <span class="o">=</span> <span class="n">natsorted</span><span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">cases_multi_results</span><span class="o">.</span><span class="n">cpt_results_dataframe</span><span class="o">.</span><span class="n">result_name</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_result_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Result:&quot;</span><span class="p">,</span>
-            <span class="n">value</span><span class="o">=</span><span class="n">CPTResultDefinitions</span><span class="o">.</span><span class="n">R_c_d_net</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">options</span><span class="o">=</span><span class="n">CPTResultDefinitions</span><span class="o">.</span><span class="n">natsorted_names</span><span class="p">(),</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">_options</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">options</span><span class="o">=</span><span class="n">_options</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Update plot for initial selection of control widgets</span>

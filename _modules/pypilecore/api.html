@@ -72,6 +72,7 @@
   <h1>Source code for pypilecore.api</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">nuclei.client</span> <span class="kn">import</span> <span class="n">NucleiClient</span>
 <span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">Response</span>
@@ -307,6 +308,94 @@
     <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
         <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
     <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_multi_cpt_api_result_tension</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/tension/[nen or cur]/multiple-cpts/results&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    standard: str</span>
+<span class="sd">        Norm used to calculate bearing capacities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">standard</span> <span class="o">==</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">:</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/nen/multiple-cpt/results&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/cur/multiple-cpt/results&quot;</span>
+
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_multi_cpt_api_report_tension</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/tension/[nen or cur]/multiple-cpts/report&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    standard: str</span>
+<span class="sd">        Norm used to calculate bearing capacities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">standard</span> <span class="o">==</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">:</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/nen/multiple-cpt/report&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/cur/multiple-cpt/report&quot;</span>
+
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="p">)</span>
 </pre></div>
 
            </div>

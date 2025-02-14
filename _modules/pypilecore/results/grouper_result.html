@@ -85,7 +85,9 @@
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
 <span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">MultiPoint</span>
 
-<span class="kn">from</span> <span class="nn">pypilecore.results.multi_cpt_results</span> <span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
+<span class="kn">from</span> <span class="nn">pypilecore.results.compression.multi_cpt_results</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MultiCPTCompressionBearingResults</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pypilecore.results.post_processing</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">MaxBearingResult</span><span class="p">,</span>
     <span class="n">MaxBearingResults</span><span class="p">,</span>
@@ -640,7 +642,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">clusters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SingleClusterResult</span><span class="p">]</span>
-    <span class="n">multi_cpt_bearing_results</span><span class="p">:</span> <span class="n">MultiCPTBearingResults</span>
+    <span class="n">multi_cpt_bearing_results</span><span class="p">:</span> <span class="n">MultiCPTCompressionBearingResults</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">:</span>
@@ -678,7 +680,7 @@
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">response_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">multi_cpt_bearing_results</span><span class="p">:</span> <span class="n">MultiCPTBearingResults</span><span class="p">,</span>
+        <span class="n">multi_cpt_bearing_results</span><span class="p">:</span> <span class="n">MultiCPTCompressionBearingResults</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GrouperResults&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stores the response of the PileCore endpoint</span>

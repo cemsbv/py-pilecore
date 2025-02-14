@@ -78,11 +78,11 @@
 <span class="kn">from</span> <span class="nn">natsort</span> <span class="kn">import</span> <span class="n">natsorted</span>
 <span class="kn">from</span> <span class="nn">pygef.common</span> <span class="kn">import</span> <span class="n">Location</span>
 
-<span class="kn">from</span> <span class="nn">pypilecore.results.multi_cpt_results</span> <span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
 <span class="kn">from</span> <span class="nn">pypilecore.results.result_definitions</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">CPTGroupResultDefinitions</span><span class="p">,</span>
     <span class="n">CPTResultDefinitions</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pypilecore.results.typing</span> <span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
 
 
 <div class="viewcode-block" id="CasesMultiCPTBearingResults"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults">[docs]</a><span class="k">class</span> <span class="nc">CasesMultiCPTBearingResults</span><span class="p">:</span>
@@ -149,23 +149,27 @@
         <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">case_name</span><span class="p">,</span> <span class="n">case_results</span> <span class="ow">in</span> <span class="n">results_per_case</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTResultDefinitions</span><span class="p">:</span>
-                <span class="n">df</span> <span class="o">=</span> <span class="n">case_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">get_results_per_cpt</span><span class="p">(</span>
-                    <span class="n">column_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span>
-                <span class="p">)</span>
-                <span class="k">for</span> <span class="n">idx_row</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-                    <span class="k">for</span> <span class="n">test_id</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="nb">dict</span><span class="p">(</span>
-                                <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
-                                <span class="n">result_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                                <span class="n">test_id</span><span class="o">=</span><span class="n">test_id</span><span class="p">,</span>
-                                <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
-                                <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
-                                <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">idx_row</span><span class="p">,</span>
-                                <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
-                                <span class="n">result_unit</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">result_definition</span><span class="o">.</span><span class="n">name</span>
+                    <span class="ow">in</span> <span class="n">case_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span>
+                <span class="p">):</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">case_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">get_results_per_cpt</span><span class="p">(</span>
+                        <span class="n">column_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">idx_row</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                        <span class="k">for</span> <span class="n">test_id</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="nb">dict</span><span class="p">(</span>
+                                    <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
+                                    <span class="n">result_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">test_id</span><span class="o">=</span><span class="n">test_id</span><span class="p">,</span>
+                                    <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                                    <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                                    <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">idx_row</span><span class="p">,</span>
+                                    <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+                                    <span class="n">result_unit</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span>
+                                <span class="p">)</span>
                             <span class="p">)</span>
-                        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_cpt_group_results_dataframe</span><span class="p">(</span>
@@ -176,16 +180,17 @@
         <span class="k">for</span> <span class="n">case_name</span><span class="p">,</span> <span class="n">case_results</span> <span class="ow">in</span> <span class="n">result_cases</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">case_results</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTGroupResultDefinitions</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-                    <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="nb">dict</span><span class="p">(</span>
-                            <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
-                            <span class="n">result_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                            <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">],</span>
-                            <span class="n">result</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
-                            <span class="n">result_unit</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span>
+                <span class="k">if</span> <span class="n">result_definition</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="nb">dict</span><span class="p">(</span>
+                                <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
+                                <span class="n">result_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">],</span>
+                                <span class="n">result</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
+                                <span class="n">result_unit</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span>
+                            <span class="p">)</span>
                         <span class="p">)</span>
-                    <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_group_results_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_cpt_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Location</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

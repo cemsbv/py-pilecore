@@ -183,10 +183,13 @@
     <span class="n">alpha_s_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">alpha_s_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">beta_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_t_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_t_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">pile_tip_factor_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">is_auger</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">chamfered</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileProperties</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a basic pile with the provided parameters.</span>
@@ -243,6 +246,12 @@
 <span class="sd">    alpha_s_sand : float, optional</span>
 <span class="sd">        The alpha_s_sand of the pile, by default None.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    alpha_t_clay : float, optional</span>
+<span class="sd">        The alpha_t_clay of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    alpha_t_sand : float, optional</span>
+<span class="sd">        The alpha_t_sand of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
 <span class="sd">    beta_p : float, optional</span>
 <span class="sd">        The beta_p of the pile, by default None.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
@@ -257,6 +266,9 @@
 <span class="sd">        Required if no standard pile type was specified.</span>
 <span class="sd">    negative_fr_delta_factor : float, optional</span>
 <span class="sd">        The negative friction delta factor of the pile, by default None.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    chamfered : float, optional</span>
+<span class="sd">        The chamfered value of the pile type, by default None.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
 
 <span class="sd">    Returns</span>
@@ -353,12 +365,14 @@
         <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">alpha_s_sand</span><span class="p">,</span>
         <span class="n">alpha_s_clay</span><span class="o">=</span><span class="n">alpha_s_clay</span><span class="p">,</span>
         <span class="n">alpha_p</span><span class="o">=</span><span class="n">alpha_p</span><span class="p">,</span>
-        <span class="n">alpha_t_sand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">alpha_t_sand</span><span class="o">=</span><span class="n">alpha_t_sand</span><span class="p">,</span>
+        <span class="n">alpha_t_clay</span><span class="o">=</span><span class="n">alpha_t_clay</span><span class="p">,</span>
         <span class="n">settlement_curve</span><span class="o">=</span><span class="n">settlement_curve</span><span class="p">,</span>
         <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">negative_fr_delta_factor</span><span class="p">,</span>
         <span class="n">adhesion</span><span class="o">=</span><span class="n">adhesion</span><span class="p">,</span>
         <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">is_low_vibrating</span><span class="p">,</span>
         <span class="n">is_auger</span><span class="o">=</span><span class="n">is_auger</span><span class="p">,</span>
+        <span class="n">chamfered</span><span class="o">=</span><span class="n">chamfered</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">PileProperties</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span> <span class="n">pile_type</span><span class="o">=</span><span class="n">pile_type</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pile_name</span><span class="p">)</span></div>
