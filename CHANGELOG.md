@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0] - 2025-02-14
+
+### Bug Fixes
+
+- *(deps)* Downgrade plotly to v5
+
+### Features
+
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+- Add tension module in pypilecore (#103)
+
+### Miscellaneous Tasks
+
+- Add tension module in pypilecore (#103)
+
 ## [0.8.3] - 2025-01-10
 
 ### Miscellaneous Tasks
