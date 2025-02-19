@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.1] - 2025-02-19
+
+### Bug Fixes
+
+- *(rounding)* Fix rounding of pile tip levels to be 2 decimals
+
 ## [0.9.0] - 2025-02-14
 
 ### Bug Fixes
