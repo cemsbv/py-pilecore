@@ -223,7 +223,7 @@ def create_grouper_payload(
 
     # validate pile tip levels
     raw_lengths = [
-        frozenset(np.round(values, 1)) for values in pile_tip_level_object.values()
+        frozenset(np.round(values, 2)) for values in pile_tip_level_object.values()
     ]
     if len(list(set(raw_lengths))) > 1:
         msg = "The PileCore grouper requires all CPTs to have a valid bearing capacity for all pile tip levels. \n"

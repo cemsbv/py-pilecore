@@ -286,7 +286,7 @@ class SingleCPTTensionBearingResultsContainer:
 
         cpt_results_df = pd.concat(df_list)
         cpt_results_df = cpt_results_df.assign(
-            pile_tip_level_nap=cpt_results_df.pile_tip_level_nap.round(1)
+            pile_tip_level_nap=cpt_results_df.pile_tip_level_nap.round(2)
         )
 
         return cpt_results_df
