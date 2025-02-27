@@ -117,6 +117,9 @@ def create_basic_pile(
     is_auger: bool | None = None,
     is_low_vibrating: bool | None = None,
     negative_fr_delta_factor: float | None = None,
+    qc_z_a_lesser_1m: float | None = None,
+    qc_z_a_greater_1m: float | None = None,
+    qb_max_limit: float | None = None,
     chamfered: float | None = None,
 ) -> PileProperties:
     """
@@ -195,6 +198,21 @@ def create_basic_pile(
     negative_fr_delta_factor : float, optional
         The negative friction delta factor of the pile, by default None.
         Required if no standard pile type was specified.
+    qc_z_a_lesser_1m : float, optional
+        Maximum cone resistance qc value allowed for layers with thickness < 1m in the calculation of positive skin friction resistance.
+        It must be less or equal to `qc_z_a_greater_1m`.
+        If None, then 12 MPa is used.
+        Default: None.
+    qc_z_a_greater_1m : float, optional
+        Maximum cone resistance qc value allowed for layers with thickness >= 1m in the calculation of positive skin friction resistance.
+        It must be greater or equal to `qc_z_a_lesser_1m`.
+        If None, then 15 MPa is used.
+        Default: None.
+    qb_max_limit : float, optional
+        Maximum value allowed for the pile tip resistance qb_max.
+        Note that is value will be used as a limit for qb_max unless use_almere_rules is true and a higher value than 12 MPa is specified.
+        If None, then 15 MPa is used.
+        Default: None.
     chamfered : float, optional
         The chamfered value of the pile type, by default None.
         Required if no standard pile type was specified.
@@ -300,6 +318,9 @@ def create_basic_pile(
         adhesion=adhesion,
         is_low_vibrating=is_low_vibrating,
         is_auger=is_auger,
+        qc_z_a_lesser_1m=qc_z_a_lesser_1m,
+        qc_z_a_greater_1m=qc_z_a_greater_1m,
+        qb_max_limit=qb_max_limit,
         chamfered=chamfered,
     )
 
