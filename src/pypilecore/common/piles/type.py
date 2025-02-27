@@ -19,6 +19,9 @@ class PileType:
         adhesion: float | None = None,
         is_low_vibrating: bool | None = None,
         is_auger: bool | None = None,
+        qc_z_a_lesser_1m: float | None = None,
+        qc_z_a_greater_1m: float | None = None,
+        qb_max_limit: float | None = None,
         chamfered: float | None = None,
     ):
         """
@@ -48,6 +51,21 @@ class PileType:
             The is_low_vibrating value of the pile type, by default None.
         is_auger : bool, optional
             The is_auger value of the pile type, by default None.
+        qc_z_a_lesser_1m : float, optional
+            Maximum cone resistance qc value allowed for layers with thickness < 1m in the calculation of positive skin friction resistance.
+            It must be less or equal to `qc_z_a_greater_1m`.
+            If None, then 12 MPa is used.
+            Default: None.
+        qc_z_a_greater_1m : float, optional
+            Maximum cone resistance qc value allowed for layers with thickness >= 1m in the calculation of positive skin friction resistance.
+            It must be greater or equal to `qc_z_a_lesser_1m`.
+            If None, then 15 MPa is used.
+            Default: None.
+        qb_max_limit : float, optional
+            Maximum value allowed for the pile tip resistance qb_max.
+            Note that is value will be used as a limit for qb_max unless use_almere_rules is true and a higher value than 12 MPa is specified.
+            If None, then 15 MPa is used.
+            Default: None.
         chamfered : float, optional
             The chamfered value of the pile type, by default None.
         """
@@ -62,6 +80,9 @@ class PileType:
         self._adhesion = adhesion
         self._is_low_vibrating = is_low_vibrating
         self._is_auger = is_auger
+        self._qc_z_a_lesser_1m = qc_z_a_lesser_1m
+        self._qc_z_a_greater_1m = qc_z_a_greater_1m
+        self._qb_max_limit = qb_max_limit
         self._chamfered = chamfered
 
     @classmethod
@@ -93,6 +114,9 @@ class PileType:
             adhesion=pile_type["properties"]["adhesion"],
             is_low_vibrating=pile_type["properties"]["is_low_vibrating"],
             is_auger=pile_type["properties"]["is_auger"],
+            qc_z_a_lesser_1m=pile_type["properties"].get("qc_z_a_lesser_1m", None),
+            qc_z_a_greater_1m=pile_type["properties"].get("qc_z_a_greater_1m", None),
+            qb_max_limit=pile_type["properties"].get("qb_max_limit", None),
         )
 
     @property
@@ -149,6 +173,21 @@ class PileType:
     def is_auger(self) -> bool | None:
         """The is_auger value of the pile type"""
         return self._is_auger
+
+    @property
+    def qc_z_a_lesser_1m(self) -> float | None:
+        """Maximum cone resistance qc value allowed for layers with thickness < 1m in the calculation of positive skin friction resistance."""
+        return self._qc_z_a_lesser_1m
+
+    @property
+    def qc_z_a_greater_1m(self) -> float | None:
+        """Maximum cone resistance qc value allowed for layers with thickness >= 1m in the calculation of positive skin friction resistance."""
+        return self._qc_z_a_greater_1m
+
+    @property
+    def qb_max_limit(self) -> float | None:
+        """Maximum value allowed for the pile tip resistance qb_max."""
+        return self._qb_max_limit
 
     @property
     def chamfered(self) -> float | None:
@@ -211,6 +250,15 @@ class PileType:
 
         if self.is_auger is not None:
             custom_type_properties["is_auger"] = self.is_auger
+
+        if self.qc_z_a_lesser_1m is not None:
+            custom_type_properties["qc_z_a_lesser_1m"] = self.qc_z_a_lesser_1m
+
+        if self.qc_z_a_greater_1m is not None:
+            custom_type_properties["qc_z_a_greater_1m"] = self.qc_z_a_greater_1m
+
+        if self.qb_max_limit is not None:
+            custom_type_properties["qb_max_limit"] = self.qb_max_limit
 
         if self.chamfered is not None:
             custom_type_properties["chamfered"] = self.chamfered
