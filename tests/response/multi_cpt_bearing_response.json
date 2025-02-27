@@ -33411,7 +33411,10 @@
                 "is_auger": false,
                 "is_low_vibrating": true,
                 "negative_fr_delta_factor": 1.0,
-                "settlement_curve": 1
+                "settlement_curve": 1,
+                "qc_z_a_lesser_1m": 12.0,
+                "qc_z_a_greater_1m": 15.0,
+                "qb_max_limit": 15.0
             }
         }
     }
