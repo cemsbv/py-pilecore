@@ -36,10 +36,11 @@ def create_multi_cpt_payload(
     pile_load_sls_min: float = 0,
     gamma_s_t: float = 1.35,
     gamma_gamma: float = 1.1,
+    construction_sequence: Literal["cpt-pile", "pile-cpt"] = "cpt-pile",
 ) -> Tuple[dict, Dict[str, dict]]:
     """
-    Creates a dictionary with the payload content for the PileCore endpoint
-    "/compression/multi-cpt/results"
+    Creates a dictionary with the payload content for the PileCore endpoints
+    "/tension/nen/multi-cpt/results" or "/tension/cur/multi-cpt/results"
 
     This dictionary can be passed directly to `nuclei.client.call_endpoint()`.
 
@@ -150,13 +151,24 @@ def create_multi_cpt_payload(
     gamma_gamma:
         Partial factor for volumetric weight NEN 9997-1+C2:2017 A.3.2
         Default = 1.1
+    construction_sequence:
+        Value that indicates if CPT are performed before or after pile
+        installation according to 7.3.1 CUR 2001-4.
+        Default = "cpt-pile"
+
+        Notes:
+            - If standard "NEN9997-1" is used the following applies:
+                - `cpt-pile`, then the `f1` factor is computed according to NEN 9997-1+C2:2017 7.6.3.3(e).
+                - `pile-cpt`, then the `f1` factor is 1.0 at all depths.
+            - If standard "CUR236" is used `f1` is always 1.0 regardless of the construction sequence.
+
     Returns
     -------
     multi_cpt_payload:
         Dictionary with the payload content for the PileCore endpoint
-        "/compression/multi-cpt/results"
+        "/tension/nen/multi-cpt/results" or "/tension/cur/multi-cpt/results" # TODO: check if valid for both
     results_kwargs:
-        Dictionary with keyword arguments for the `pilecore.MultiCPTBearingResults`
+        Dictionary with keyword arguments for the `pilecore.MultiCPTTensionBearingResults`
         object.
 
     Raises
@@ -201,6 +213,7 @@ def create_multi_cpt_payload(
         pile_load_sls_min=pile_load_sls_min,
         gamma_s_t=gamma_s_t,
         gamma_gamma=gamma_gamma,
+        construction_sequence=construction_sequence,
     )
 
     # Add optional properties
