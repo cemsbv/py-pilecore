@@ -189,6 +189,9 @@
     <span class="n">is_auger</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">qc_z_a_lesser_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">qc_z_a_greater_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">qb_max_limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">chamfered</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileProperties</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -267,6 +270,21 @@
 <span class="sd">    negative_fr_delta_factor : float, optional</span>
 <span class="sd">        The negative friction delta factor of the pile, by default None.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    qc_z_a_lesser_1m : float, optional</span>
+<span class="sd">        Maximum cone resistance qc value allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.</span>
+<span class="sd">        It must be less or equal to `qc_z_a_greater_1m`.</span>
+<span class="sd">        If None, then 12 MPa is used.</span>
+<span class="sd">        Default: None.</span>
+<span class="sd">    qc_z_a_greater_1m : float, optional</span>
+<span class="sd">        Maximum cone resistance qc value allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.</span>
+<span class="sd">        It must be greater or equal to `qc_z_a_lesser_1m`.</span>
+<span class="sd">        If None, then 15 MPa is used.</span>
+<span class="sd">        Default: None.</span>
+<span class="sd">    qb_max_limit : float, optional</span>
+<span class="sd">        Maximum value allowed for the pile tip resistance qb_max.</span>
+<span class="sd">        Note that is value will be used as a limit for qb_max unless use_almere_rules is true and a higher value than 12 MPa is specified.</span>
+<span class="sd">        If None, then 15 MPa is used.</span>
+<span class="sd">        Default: None.</span>
 <span class="sd">    chamfered : float, optional</span>
 <span class="sd">        The chamfered value of the pile type, by default None.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
@@ -372,6 +390,9 @@
         <span class="n">adhesion</span><span class="o">=</span><span class="n">adhesion</span><span class="p">,</span>
         <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">is_low_vibrating</span><span class="p">,</span>
         <span class="n">is_auger</span><span class="o">=</span><span class="n">is_auger</span><span class="p">,</span>
+        <span class="n">qc_z_a_lesser_1m</span><span class="o">=</span><span class="n">qc_z_a_lesser_1m</span><span class="p">,</span>
+        <span class="n">qc_z_a_greater_1m</span><span class="o">=</span><span class="n">qc_z_a_greater_1m</span><span class="p">,</span>
+        <span class="n">qb_max_limit</span><span class="o">=</span><span class="n">qb_max_limit</span><span class="p">,</span>
         <span class="n">chamfered</span><span class="o">=</span><span class="n">chamfered</span><span class="p">,</span>
     <span class="p">)</span>
 

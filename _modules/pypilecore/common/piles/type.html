@@ -91,6 +91,9 @@
         <span class="n">adhesion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">is_auger</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">qc_z_a_lesser_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">qc_z_a_greater_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">qb_max_limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">chamfered</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -120,6 +123,21 @@
 <span class="sd">            The is_low_vibrating value of the pile type, by default None.</span>
 <span class="sd">        is_auger : bool, optional</span>
 <span class="sd">            The is_auger value of the pile type, by default None.</span>
+<span class="sd">        qc_z_a_lesser_1m : float, optional</span>
+<span class="sd">            Maximum cone resistance qc value allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.</span>
+<span class="sd">            It must be less or equal to `qc_z_a_greater_1m`.</span>
+<span class="sd">            If None, then 12 MPa is used.</span>
+<span class="sd">            Default: None.</span>
+<span class="sd">        qc_z_a_greater_1m : float, optional</span>
+<span class="sd">            Maximum cone resistance qc value allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.</span>
+<span class="sd">            It must be greater or equal to `qc_z_a_lesser_1m`.</span>
+<span class="sd">            If None, then 15 MPa is used.</span>
+<span class="sd">            Default: None.</span>
+<span class="sd">        qb_max_limit : float, optional</span>
+<span class="sd">            Maximum value allowed for the pile tip resistance qb_max.</span>
+<span class="sd">            Note that is value will be used as a limit for qb_max unless use_almere_rules is true and a higher value than 12 MPa is specified.</span>
+<span class="sd">            If None, then 15 MPa is used.</span>
+<span class="sd">            Default: None.</span>
 <span class="sd">        chamfered : float, optional</span>
 <span class="sd">            The chamfered value of the pile type, by default None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -134,6 +152,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_adhesion</span> <span class="o">=</span> <span class="n">adhesion</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_low_vibrating</span> <span class="o">=</span> <span class="n">is_low_vibrating</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_auger</span> <span class="o">=</span> <span class="n">is_auger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qc_z_a_lesser_1m</span> <span class="o">=</span> <span class="n">qc_z_a_lesser_1m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qc_z_a_greater_1m</span> <span class="o">=</span> <span class="n">qc_z_a_greater_1m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qb_max_limit</span> <span class="o">=</span> <span class="n">qb_max_limit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_chamfered</span> <span class="o">=</span> <span class="n">chamfered</span>
 
 <div class="viewcode-block" id="PileType.from_api_response"><a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.type.PileType.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
@@ -165,6 +186,9 @@
             <span class="n">adhesion</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;adhesion&quot;</span><span class="p">],</span>
             <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;is_low_vibrating&quot;</span><span class="p">],</span>
             <span class="n">is_auger</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;is_auger&quot;</span><span class="p">],</span>
+            <span class="n">qc_z_a_lesser_1m</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_lesser_1m&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">qc_z_a_greater_1m</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_greater_1m&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">qb_max_limit</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qb_max_limit&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
         <span class="p">)</span></div>
 
     <span class="nd">@property</span>
@@ -221,6 +245,21 @@
     <span class="k">def</span> <span class="nf">is_auger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The is_auger value of the pile type&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_auger</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">qc_z_a_lesser_1m</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maximum cone resistance qc value allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qc_z_a_lesser_1m</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">qc_z_a_greater_1m</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maximum cone resistance qc value allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qc_z_a_greater_1m</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">qb_max_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maximum value allowed for the pile tip resistance qb_max.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qb_max_limit</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">chamfered</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -283,6 +322,15 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_auger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_auger&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_auger</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_lesser_1m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;qc_z_a_lesser_1m&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_lesser_1m</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_greater_1m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;qc_z_a_greater_1m&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_greater_1m</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qb_max_limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;qb_max_limit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qb_max_limit</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chamfered</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;chamfered&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chamfered</span>
