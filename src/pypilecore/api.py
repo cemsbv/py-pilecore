@@ -266,6 +266,7 @@ def get_multi_cpt_api_result_tension(
         endpoint = "/tension/nen/multiple-cpt/results"
     else:
         endpoint = "/tension/cur/multiple-cpt/results"
+        payload.pop("construction_sequence", None)
 
     ticket = client.call_endpoint(
         "PileCore",
@@ -311,6 +312,7 @@ def get_multi_cpt_api_report_tension(
         endpoint = "/tension/nen/multiple-cpt/report"
     else:
         endpoint = "/tension/cur/multiple-cpt/report"
+        payload.pop("construction_sequence", None)
 
     ticket = client.call_endpoint(
         "PileCore",
