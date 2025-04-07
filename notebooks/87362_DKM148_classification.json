@@ -1,0 +1,62 @@
+{
+    "upperBoundary": [
+        0.02,
+        1.02,
+        7.2795
+    ],
+    "lowerBoundary": [
+        1.02,
+        7.2795,
+        29.9888
+    ],
+    "geotechnicalSoilName": [
+        "zand",
+        "klei",
+        "zand"
+    ],
+    "color": [
+        "#eaf205",
+        "#578E57",
+        "#eaf205"
+    ],
+    "gamma_sat": [
+        20,
+        14,
+        20
+    ],
+    "gamma_unsat": [
+        18,
+        14,
+        18
+    ],
+    "phi": [
+        32.5,
+        17.5,
+        32.5
+    ],
+    "undrainedShearStrength": [
+        0,
+        25,
+        0
+    ],
+    "cohesion": [
+        0,
+        0,
+        0
+    ],
+    "mainComponent": [
+        "sand",
+        "clay",
+        "sand"
+    ],
+    "primaryCompressionCoefficient": [
+        600,
+        7,
+        600
+    ],
+    "secularCompressionCoefficient": [
+        1000000000.0,
+        80,
+        1000000000.0
+    ]
+}
