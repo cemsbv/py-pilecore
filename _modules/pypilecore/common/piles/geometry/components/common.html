@@ -1,20 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypilecore.common.piles.geometry.components.common &mdash; py-pilecore 0.9.1 documentation</title>
-      <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../../_static/plot_directive.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../../_static/css/index.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>pypilecore.common.piles.geometry.components.common &mdash; py-pilecore 0.9.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/index.css?v=6c0e5716" />
+
   
-        <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
-        <script src="../../../../../../_static/doctools.js"></script>
-        <script src="../../../../../../_static/sphinx_highlight.js"></script>
+      <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../../_static/documentation_options.js?v=aa3b121e"></script>
+      <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../../search.html" /> 
@@ -70,18 +72,18 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pypilecore.common.piles.geometry.components.common</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
-<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.axes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
 
 
-<span class="k">def</span> <span class="nf">get_component_bounds_nap</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_component_bounds_nap</span><span class="p">(</span>
     <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">component_primary_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -115,7 +117,7 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">component_head_level_nap</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">component_tip_level_nap</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">get_circum_vs_depth</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_circum_vs_depth</span><span class="p">(</span>
     <span class="n">depth_nap</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">],</span>
     <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
@@ -162,7 +164,7 @@
     <span class="k">return</span> <span class="n">circum_vs_depth</span>
 
 
-<span class="k">def</span> <span class="nf">get_area_vs_depth</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_area_vs_depth</span><span class="p">(</span>
     <span class="n">depth_nap</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">],</span>
     <span class="n">area_full</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">component_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
@@ -207,7 +209,7 @@
     <span class="k">return</span> <span class="n">area_vs_depth</span>
 
 
-<span class="k">def</span> <span class="nf">instantiate_axes</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">instantiate_axes</span><span class="p">(</span>
     <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">),</span>
     <span class="n">axes</span><span class="p">:</span> <span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
@@ -258,14 +260,18 @@
     <span class="k">return</span> <span class="n">axes</span>
 
 
-<div class="viewcode-block" id="_BasePileGeometryComponent"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent">[docs]</a><span class="k">class</span> <span class="nc">_BasePileGeometryComponent</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="_BasePileGeometryComponent">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">_BasePileGeometryComponent</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The _BasePileGeometryComponent class is an abstract base class for pile-geometry components.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.from_api_response"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="_BasePileGeometryComponent.from_api_response">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.from_api_response">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_api_response</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">component</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">inner_component</span><span class="p">:</span> <span class="n">_BasePileGeometryComponent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -287,9 +293,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="o">...</span></div>
 
+
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">inner_component</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inner_component</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_BasePileGeometryComponent</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The component on the inside of the pile-geometry component&quot;&quot;&quot;</span>
@@ -297,19 +304,19 @@
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">outer_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">outer_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The outer shape of the pile-geometry component&quot;&quot;&quot;</span>
         <span class="o">...</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">material</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">material</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The material name of the pile-geometry component&quot;&quot;&quot;</span>
         <span class="o">...</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">primary_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PrimaryPileComponentDimension</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">primary_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PrimaryPileComponentDimension</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The primary dimension [m] of the pile-geometry component, which is measured along the primary axis of the pile.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -317,13 +324,13 @@
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">circumference</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">circumference</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The outer-circumference [m] of the pile-geometry component&quot;&quot;&quot;</span>
         <span class="o">...</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">equiv_tip_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">equiv_tip_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Equivalent outer-diameter [m] of the component at the tip-level.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -331,12 +338,14 @@
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">area_full</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">area_full</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The full outer-area [m²] of the pile-geometry component, including any potential inner-components&quot;&quot;&quot;</span>
         <span class="o">...</span>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.serialize_payload"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.serialize_payload">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="_BasePileGeometryComponent.serialize_payload">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.serialize_payload">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Serialize the pile-geometry component to a dictionary payload for the API.</span>
 
@@ -344,8 +353,11 @@
 <span class="sd">            A dictionary payload containing the geometry properties.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.get_component_bounds_nap"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_component_bounds_nap">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_component_bounds_nap</span><span class="p">(</span>
+
+<div class="viewcode-block" id="_BasePileGeometryComponent.get_component_bounds_nap">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_component_bounds_nap">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_component_bounds_nap</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
@@ -367,8 +379,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="o">...</span></div>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.get_circum_vs_depth"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_circum_vs_depth">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_circum_vs_depth</span><span class="p">(</span>
+
+<div class="viewcode-block" id="_BasePileGeometryComponent.get_circum_vs_depth">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_circum_vs_depth">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_circum_vs_depth</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">depth_nap</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">],</span>
         <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
@@ -393,8 +408,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="o">...</span></div>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.get_inner_area_vs_depth"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_inner_area_vs_depth">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_inner_area_vs_depth</span><span class="p">(</span>
+
+<div class="viewcode-block" id="_BasePileGeometryComponent.get_inner_area_vs_depth">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_inner_area_vs_depth">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_inner_area_vs_depth</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">depth_nap</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">],</span>
         <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
@@ -419,8 +437,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="o">...</span></div>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.get_area_vs_depth"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_area_vs_depth">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_area_vs_depth</span><span class="p">(</span>
+
+<div class="viewcode-block" id="_BasePileGeometryComponent.get_area_vs_depth">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.get_area_vs_depth">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_area_vs_depth</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">depth_nap</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">],</span>
         <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
@@ -445,8 +466,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="o">...</span></div>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.plot_cross_section_exterior"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.plot_cross_section_exterior">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">plot_cross_section_exterior</span><span class="p">(</span>
+
+<div class="viewcode-block" id="_BasePileGeometryComponent.plot_cross_section_exterior">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.plot_cross_section_exterior">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_cross_section_exterior</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">),</span>
         <span class="n">facecolor</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -478,8 +502,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="o">...</span></div>
 
-<div class="viewcode-block" id="_BasePileGeometryComponent.plot_side_view"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.plot_side_view">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">plot_side_view</span><span class="p">(</span>
+
+<div class="viewcode-block" id="_BasePileGeometryComponent.plot_side_view">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry._BasePileGeometryComponent.plot_side_view">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_side_view</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">bottom_boundary_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;pile_tip&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pile_tip&quot;</span><span class="p">,</span>
         <span class="n">top_boundary_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;pile_head&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pile_head&quot;</span><span class="p">,</span>
@@ -510,17 +537,21 @@
 <span class="sd">        **kwargs</span>
 <span class="sd">            Additional keyword arguments to pass to the `plt</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="o">...</span></div></div>
+        <span class="o">...</span></div>
+</div>
 
 
-<div class="viewcode-block" id="PrimaryPileComponentDimension"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry.PrimaryPileComponentDimension">[docs]</a><span class="k">class</span> <span class="nc">PrimaryPileComponentDimension</span><span class="p">:</span>
+
+<div class="viewcode-block" id="PrimaryPileComponentDimension">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry.PrimaryPileComponentDimension">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PrimaryPileComponentDimension</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The PrimaryPileComponentDimension class represents the primary dimension of a pile-geometry component,</span>
 <span class="sd">    which is measured along the primary axis of the pile. It contains the length, top level, and bottom level</span>
 <span class="sd">    of the pile-geometry component.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -533,8 +564,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_length</span> <span class="o">=</span> <span class="n">length</span>
 
-<div class="viewcode-block" id="PrimaryPileComponentDimension.from_api_response"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry.PrimaryPileComponentDimension.from_api_response">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_api_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">primary_dim</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PrimaryPileComponentDimension</span><span class="p">:</span>
+<div class="viewcode-block" id="PrimaryPileComponentDimension.from_api_response">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry.PrimaryPileComponentDimension.from_api_response">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_api_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">primary_dim</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PrimaryPileComponentDimension</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Instantiates a PrimaryPileComponentDimension from a primary dimension object in the API response payload.</span>
 
@@ -545,12 +578,15 @@
             <span class="n">length</span><span class="o">=</span><span class="n">primary_dim</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;length&quot;</span><span class="p">),</span>
         <span class="p">)</span></div>
 
+
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The length [m] of the pile-geometry component&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span>
 
-<div class="viewcode-block" id="PrimaryPileComponentDimension.serialize_payload"><a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry.PrimaryPileComponentDimension.serialize_payload">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PrimaryPileComponentDimension.serialize_payload">
+<a class="viewcode-back" href="../../../../../../tree/reference.html#pypilecore.common.piles.geometry.PrimaryPileComponentDimension.serialize_payload">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Serialize the primary dimension to a dictionary payload for the API.</span>
 
@@ -562,7 +598,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">}</span>
-        <span class="k">return</span> <span class="kc">None</span></div></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
 </pre></div>
 
            </div>

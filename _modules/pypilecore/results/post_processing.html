@@ -1,20 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypilecore.results.post_processing &mdash; py-pilecore 0.9.1 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/index.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>pypilecore.results.post_processing &mdash; py-pilecore 0.9.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/index.css?v=6c0e5716" />
+
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=aa3b121e"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -70,33 +72,35 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pypilecore.results.post_processing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">patches</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
-<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">PatchCollection</span>
-<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
-<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
-<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">Delaunay</span><span class="p">,</span> <span class="n">Voronoi</span><span class="p">,</span> <span class="n">voronoi_plot_2d</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">patches</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.axes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">PatchCollection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.figure</span><span class="w"> </span><span class="kn">import</span> <span class="n">Figure</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">Delaunay</span><span class="p">,</span> <span class="n">Voronoi</span><span class="p">,</span> <span class="n">voronoi_plot_2d</span>
 
-<span class="kn">from</span> <span class="nn">pypilecore.results.soil_properties</span> <span class="kn">import</span> <span class="n">SoilProperties</span><span class="p">,</span> <span class="n">get_soil_layer_handles</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.soil_properties</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoilProperties</span><span class="p">,</span> <span class="n">get_soil_layer_handles</span>
 
 
-<div class="viewcode-block" id="MaxBearingTable"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingTable">[docs]</a><span class="k">class</span> <span class="nc">MaxBearingTable</span><span class="p">:</span>
+<div class="viewcode-block" id="MaxBearingTable">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingTable">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MaxBearingTable</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Object that contains the results belonging to the maximum net design bearing capacity (R_c_d_net) for a single CPT.</span>
 
 <span class="sd">    *Not meant to be instantiated by the user.*</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
         <span class="n">R_c_d_net</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
@@ -123,27 +127,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span> <span class="o">=</span> <span class="n">origin</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pile_tip_level_nap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pile_tip_level_nap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The elevation of the pile-tip, in [m] w.r.t. NAP.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_level_nap</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">R_c_d_net</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">R_c_d_net</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The maximum net design bearing capacity, in [kN].&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_R_c_d_net</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">F_nk_d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">F_nk_d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The net design bearing capacity, in [kN].&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_F_nk_d</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The origin of the CPT data.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_origin</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MaxBearingTable.to_pandas"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingTable.to_pandas">[docs]</a>    <span class="nd">@lru_cache</span>
-    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="MaxBearingTable.to_pandas">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingTable.to_pandas">[docs]</a>
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the pandas.DataFrame representation&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="nb">dict</span><span class="p">(</span>
@@ -152,11 +158,15 @@
                 <span class="n">F_nk_d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">,</span>
                 <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MaxBearingResult"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">MaxBearingResult</span><span class="p">:</span>
+
+<div class="viewcode-block" id="MaxBearingResult">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MaxBearingResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Object that contains the results of a PileCore single-cpt calculation.</span>
 
@@ -176,11 +186,16 @@
     <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">table</span><span class="p">:</span> <span class="n">MaxBearingTable</span>
 
-<div class="viewcode-block" id="MaxBearingResult.to_pandas"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult.to_pandas">[docs]</a>    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="MaxBearingResult.to_pandas">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult.to_pandas">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the pandas.DataFrame representation&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MaxBearingResult.plot_bearing_capacities"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult.plot_bearing_capacities">[docs]</a>    <span class="k">def</span> <span class="nf">plot_bearing_capacities</span><span class="p">(</span>
+
+<div class="viewcode-block" id="MaxBearingResult.plot_bearing_capacities">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult.plot_bearing_capacities">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_bearing_capacities</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
@@ -272,7 +287,10 @@
 
         <span class="k">return</span> <span class="n">axes</span></div>
 
-<div class="viewcode-block" id="MaxBearingResult.plot_bearing_overview"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult.plot_bearing_overview">[docs]</a>    <span class="k">def</span> <span class="nf">plot_bearing_overview</span><span class="p">(</span>
+
+<div class="viewcode-block" id="MaxBearingResult.plot_bearing_overview">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResult.plot_bearing_overview">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_bearing_overview</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">),</span>
         <span class="n">width_ratios</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
@@ -351,13 +369,17 @@
                 <span class="k">else</span> <span class="s2">&quot;name: unknown&quot;</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span></div></div>
+        <span class="k">return</span> <span class="n">fig</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MaxBearingResults"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults">[docs]</a><span class="k">class</span> <span class="nc">MaxBearingResults</span><span class="p">:</span>
+
+<div class="viewcode-block" id="MaxBearingResults">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MaxBearingResults</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Object containing the results for the maximum net design bearing capacity (R_c_d_net) for every CPT.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpt_results_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MaxBearingResult</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpt_results_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MaxBearingResult</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Object containing the results for the maximum net design bearing capacity (R_c_d_net) for every CPT.</span>
 
@@ -368,28 +390,30 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dict</span> <span class="o">=</span> <span class="n">cpt_results_dict</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaxBearingResult</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaxBearingResult</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">test_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a test-id as a string, but got: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">test_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpt_results</span><span class="p">(</span><span class="n">test_id</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cpt_results_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MaxBearingResult</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cpt_results_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MaxBearingResult</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The dictionary with the MaxBearingResult for each CPT.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dict</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">test_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The test-ids of the CPTs.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MaxBearingResult</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MaxBearingResult</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The computed results, as a list of MaxBearingResult objects.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-<div class="viewcode-block" id="MaxBearingResults.get_cpt_results"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.get_cpt_results">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpt_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaxBearingResult</span><span class="p">:</span>
+<div class="viewcode-block" id="MaxBearingResults.get_cpt_results">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.get_cpt_results">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cpt_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaxBearingResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the `MaxBearingResult` object for the provided test_id.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -402,7 +426,10 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="MaxBearingResults.get_results_per_cpt"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.get_results_per_cpt">[docs]</a>    <span class="k">def</span> <span class="nf">get_results_per_cpt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+
+<div class="viewcode-block" id="MaxBearingResults.get_results_per_cpt">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.get_results_per_cpt">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_results_per_cpt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a pandas dataframe with a single result-item, organized per CPT</span>
 <span class="sd">        (test-id) and pile-tip-level-nap.</span>
@@ -426,8 +453,11 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MaxBearingResults.to_pandas"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.to_pandas">[docs]</a>    <span class="nd">@lru_cache</span>
-    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+
+<div class="viewcode-block" id="MaxBearingResults.to_pandas">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.to_pandas">[docs]</a>
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a total overview of all single-cpt results in a pandas.DataFrame representation.&quot;&quot;&quot;</span>
         <span class="n">df_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -445,8 +475,11 @@
 
         <span class="k">return</span> <span class="n">cpt_results_df</span></div>
 
-<div class="viewcode-block" id="MaxBearingResults.triangulation"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.triangulation">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">triangulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]]:</span>
+
+<div class="viewcode-block" id="MaxBearingResults.triangulation">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.triangulation">[docs]</a>
+    <span class="nd">@lru_cache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">triangulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Delaunay tessellation based on the CPT location</span>
 
@@ -498,7 +531,10 @@
             <span class="k">for</span> <span class="n">geometry</span> <span class="ow">in</span> <span class="n">geometries</span>
         <span class="p">]</span></div>
 
-<div class="viewcode-block" id="MaxBearingResults.plot"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+
+<div class="viewcode-block" id="MaxBearingResults.plot">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.plot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">projection</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;3d&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;3d&quot;</span><span class="p">,</span>
         <span class="n">hue</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;colormap&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;colormap&quot;</span><span class="p">,</span>
@@ -604,7 +640,10 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="MaxBearingResults.map"><a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.map">[docs]</a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span>
+
+<div class="viewcode-block" id="MaxBearingResults.map">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.post_processing.MaxBearingResults.map">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">map</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pile_tip_level_nap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
@@ -748,7 +787,9 @@
         <span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pile tip level at: </span><span class="si">{</span><span class="n">pile_tip_level_nap</span><span class="si">}</span><span class="s2"> [m w.r.t NAP]&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span></div></div>
+        <span class="k">return</span> <span class="n">fig</span></div>
+</div>
+
 </pre></div>
 
            </div>

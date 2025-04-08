@@ -1,21 +1,23 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting started &mdash; py-pilecore 0.9.1 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/index.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Getting started &mdash; py-pilecore 0.9.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/index.css?v=6c0e5716" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=aa3b121e"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -82,9 +84,9 @@
            <div itemprop="articleBody">
              
   <section id="getting-started">
-<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
 <p>To install <cite>py-PileCore</cite>, we strongly recommend using Python Package Index (PyPI).
 You can install <cite>py-PileCore</cite> with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>py-pilecore
@@ -92,14 +94,14 @@ You can install <cite>py-PileCore</cite> with:</p>
 </div>
 </section>
 <section id="guided-usage">
-<h2>Guided usage<a class="headerlink" href="#guided-usage" title="Permalink to this heading"></a></h2>
+<h2>Guided usage<a class="headerlink" href="#guided-usage" title="Link to this heading"></a></h2>
 <p>Getting started with <code class="code docutils literal notranslate"><span class="pre">pypilecore</span></code> is easy done by importing the <code class="code docutils literal notranslate"><span class="pre">pypilecore</span></code> library:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pypilecore</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">pypilecore</span>
 </pre></div>
 </div>
 <p>or any equivalent <code class="code docutils literal notranslate"><span class="pre">import</span></code> statement.</p>
 <section id="create-payload">
-<h3>Create payload<a class="headerlink" href="#create-payload" title="Permalink to this heading"></a></h3>
+<h3>Create payload<a class="headerlink" href="#create-payload" title="Link to this heading"></a></h3>
 <p>If you’re not so comfortable with creating your own schema’s the SDK
 provides usefully functions to creates a dictionary with the payload
 content for the PileCore endpoints. You can find the function at
@@ -108,7 +110,7 @@ content for the PileCore endpoints. You can find the function at
 <li><p><a class="reference internal" href="reference.html#bearingcalculationinput"><span class="std std-ref">Bearing calculation: Input</span></a></p></li>
 <li><p><a class="reference internal" href="reference.html#cptgrouperinput"><span class="std std-ref">CPT grouper: Input</span></a></p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypilecore.input</span> <span class="kn">import</span> <span class="n">create_multi_cpt_payload</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.input</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_multi_cpt_payload</span>
 
 <span class="n">multi_cpt_payload</span><span class="p">,</span> <span class="n">passover</span> <span class="o">=</span> <span class="n">create_multi_cpt_payload</span><span class="p">(</span>
     <span class="n">pile_tip_levels_nap</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">],</span>
@@ -125,16 +127,16 @@ content for the PileCore endpoints. You can find the function at
 </div>
 </section>
 <section id="call-endpoint">
-<h3>Call endpoint<a class="headerlink" href="#call-endpoint" title="Permalink to this heading"></a></h3>
+<h3>Call endpoint<a class="headerlink" href="#call-endpoint" title="Link to this heading"></a></h3>
 <p>With the created payload and <a class="reference external" href="https://cemsbv.github.io/nuclei/tree/what_is.html">nuclei.client</a>
 it is possible to create a request. SDK provides functions to assist
 with this process:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="reference.html#api"><span class="std std-ref">Application programming interface (API)</span></a></p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nuclei.client</span> <span class="kn">import</span> <span class="n">NucleiClient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nuclei.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">NucleiClient</span>
 
-<span class="kn">from</span> <span class="nn">pypilecore.api</span> <span class="kn">import</span> <span class="n">get_multi_cpt_api_result</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_multi_cpt_api_result</span>
 
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">NucleiClient</span><span class="p">()</span>
@@ -143,7 +145,7 @@ with this process:</p>
 </div>
 </section>
 <section id="create-results">
-<h3>Create results<a class="headerlink" href="#create-results" title="Permalink to this heading"></a></h3>
+<h3>Create results<a class="headerlink" href="#create-results" title="Link to this heading"></a></h3>
 <p>To help the user with generating tables and plots based on the response
 of the API call the SDK provides classes that store the data in a structured
 way.</p>
@@ -151,7 +153,7 @@ way.</p>
 <li><p><a class="reference internal" href="reference.html#bearingcalculationresults"><span class="std std-ref">Bearing calculation: Results</span></a></p></li>
 <li><p><a class="reference internal" href="reference.html#cptgrouperresults"><span class="std std-ref">CPT grouper: Results</span></a></p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypilecore.results</span> <span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">MultiCPTBearingResults</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">passover</span><span class="p">)</span>
 </pre></div>
