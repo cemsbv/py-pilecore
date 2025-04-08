@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2025-04-08
+
+### Bug Fixes
+
+#### Deps
+
+- Use correct dependencies for documentation
+- Use version 2 of cems-nuclei
+- Update and pin all dependencies to latest version
+
+
+### Refactor
+
+#### Python
+
+- [**breaking**] Bump minimum supported Python version to 3.11
+
+
 ## [0.9.2] - 2025-04-08
 
 ### Features
