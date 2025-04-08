@@ -364,6 +364,10 @@ sarif-om==1.0.4
     # via cfn-lint
 scipy==1.15.2
     # via py-pilecore (pyproject.toml)
+setuptools==78.1.0
+    # via
+    #   dash
+    #   pbr
 shapely==2.1.0
     # via py-pilecore (pyproject.toml)
 six==1.17.0
