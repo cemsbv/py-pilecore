@@ -34,15 +34,15 @@ black==25.1.0
     #   ansible-lint
 blinker==1.9.0
     # via flask
-boto3==1.37.29
+boto3==1.37.31
     # via aws-sam-translator
-botocore==1.37.29
+botocore==1.37.31
     # via
     #   boto3
     #   s3transfer
 bracex==2.5.post1
     # via wcmatch
-cems-nuclei==2.0.0
+cems-nuclei==2.0.1
     # via py-pilecore (pyproject.toml)
 certifi==2025.1.31
     # via requests
@@ -67,9 +67,9 @@ comm==0.2.2
     # via ipywidgets
 contourpy==1.3.1
     # via matplotlib
-coverage==6.5.0
+coverage==7.8.0
     # via coveralls
-coveralls==3.3.1
+coveralls==4.0.1
     # via py-pilecore (pyproject.toml)
 cpplint==2.0.0
     # via py-pilecore (pyproject.toml)
@@ -114,6 +114,7 @@ iniconfig==2.1.0
 ipython==9.1.0
     # via
     #   py-pilecore (pyproject.toml)
+    #   cems-nuclei
     #   ipywidgets
 ipython-pygments-lexers==1.1.1
     # via ipython
@@ -191,7 +192,7 @@ mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
-narwhals==1.34.0
+narwhals==1.34.1
     # via plotly
 natsort==8.4.0
     # via py-pilecore (pyproject.toml)
@@ -259,7 +260,7 @@ pluggy==1.5.0
     # via
     #   diff-cover
     #   pytest
-polars==1.26.0
+polars==1.27.0
     # via pygef
 prompt-toolkit==3.0.50
     # via ipython
@@ -273,7 +274,7 @@ pycodestyle==2.12.1
     # via flake8
 pycparser==2.22
     # via cffi
-pydantic==2.11.2
+pydantic==2.11.3
     # via aws-sam-translator
 pydantic-core==2.33.1
     # via pydantic
@@ -397,6 +398,8 @@ sympy==1.13.3
     # via cfn-lint
 tblib==3.1.0
     # via sqlfluff
+tomli==2.2.1
+    # via coverage
 tomlkit==0.13.2
     # via yq
 tqdm==4.67.1
