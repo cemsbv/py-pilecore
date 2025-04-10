@@ -24,7 +24,7 @@ attrs==25.3.0
     # via
     #   jsonschema
     #   referencing
-aws-sam-translator==1.96.0
+aws-sam-translator==1.97.0
     # via cfn-lint
 babel==2.17.0
     # via sphinx
@@ -34,15 +34,15 @@ black==25.1.0
     #   ansible-lint
 blinker==1.9.0
     # via flask
-boto3==1.37.31
+boto3==1.37.34
     # via aws-sam-translator
-botocore==1.37.31
+botocore==1.37.34
     # via
     #   boto3
     #   s3transfer
 bracex==2.5.post1
     # via wcmatch
-cems-nuclei==2.0.1
+cems-nuclei==3.0.0
     # via py-pilecore (pyproject.toml)
 certifi==2025.1.31
     # via requests
@@ -77,7 +77,7 @@ cryptography==44.0.2
     # via ansible-core
 cycler==0.12.1
     # via matplotlib
-dash==3.0.2
+dash==3.0.3
     # via py-pilecore (pyproject.toml)
 decorator==5.2.1
     # via ipython
@@ -114,11 +114,10 @@ iniconfig==2.1.0
 ipython==9.1.0
     # via
     #   py-pilecore (pyproject.toml)
-    #   cems-nuclei
     #   ipywidgets
 ipython-pygments-lexers==1.1.1
     # via ipython
-ipywidgets==8.1.5
+ipywidgets==8.1.6
     # via
     #   py-pilecore (pyproject.toml)
     #   anywidget
@@ -162,7 +161,7 @@ jsonschema-specifications==2024.10.1
     # via
     #   jsonschema
     #   openapi-schema-validator
-jupyterlab-widgets==3.0.13
+jupyterlab-widgets==3.0.14
     # via ipywidgets
 kiwisolver==1.4.8
     # via matplotlib
@@ -192,7 +191,7 @@ mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
-narwhals==1.34.1
+narwhals==1.35.0
     # via plotly
 natsort==8.4.0
     # via py-pilecore (pyproject.toml)
@@ -244,7 +243,7 @@ pathspec==0.12.1
     #   yamllint
 pexpect==4.9.0
     # via ipython
-pillow==11.1.0
+pillow==11.2.1
     # via matplotlib
 platformdirs==4.3.7
     # via
@@ -260,9 +259,9 @@ pluggy==1.5.0
     # via
     #   diff-cover
     #   pytest
-polars==1.27.0
+polars==1.27.1
     # via pygef
-prompt-toolkit==3.0.50
+prompt-toolkit==3.0.51
     # via ipython
 psygnal==0.12.0
     # via anywidget
@@ -412,7 +411,7 @@ traitlets==5.14.3
     #   ipython
     #   ipywidgets
     #   matplotlib-inline
-typing-extensions==4.13.1
+typing-extensions==4.13.2
     # via
     #   anywidget
     #   aws-sam-translator
@@ -429,7 +428,7 @@ typing-inspection==0.4.0
     # via pydantic
 tzdata==2025.2
     # via pandas
-urllib3==2.3.0
+urllib3==2.4.0
     # via
     #   botocore
     #   requests
@@ -442,7 +441,7 @@ werkzeug==3.0.6
     #   dash
     #   flask
     #   openapi-core
-widgetsnbextension==4.0.13
+widgetsnbextension==4.0.14
     # via ipywidgets
 xmltodict==0.14.2
     # via yq
