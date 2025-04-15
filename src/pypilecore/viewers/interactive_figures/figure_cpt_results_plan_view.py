@@ -43,24 +43,7 @@ class FigureCPTResultsPlanView:
         self._set_results(cases_multi_results)
 
         # Initialize the figure
-        self._figure = go.FigureWidget(
-            layout=go.Layout(
-                height=800,
-                width=1200,
-                title="CPT Results in Plan View<br>Case: , Pile tip level [m NAP]: <br>Result: ",
-                legend_title="CPT",
-                colorway=px.colors.qualitative.Plotly,
-                xaxis=go.layout.XAxis(
-                    title="X [m]",
-                    title_font_size=18,
-                ),
-                yaxis=go.layout.YAxis(
-                    title="Y [m]",
-                    title_font_size=18,
-                ),
-                autosize=False,
-            )
-        )
+        self._figure = go.FigureWidget()
 
     def _set_results(self, value: CasesMultiCPTBearingResults) -> None:
         """Private setter for the results."""
@@ -242,7 +225,23 @@ class FigureCPTResultsPlanView:
             self.figure.update_layout(
                 title=f"CPT Results in Plan View<br>Case: {case_name}, "
                 + f"Pile tip level [m NAP]: {pile_tip_level_nap}<br>"
-                + f"Result: {result_definition.value.html} [{result_definition.value.unit}]"
+                + f"Result: {result_definition.value.html} [{result_definition.value.unit}]",
+                # The following parameters shouldn't be necessary to update
+                # (and therefore could be assigned on initialization of self.figure),
+                # but they are needed to avoid a bug in plotly since dash > 3.0.
+                height=800,
+                width=1200,
+                legend_title="CPT",
+                colorway=px.colors.qualitative.Plotly,
+                xaxis=go.layout.XAxis(
+                    title="X [m]",
+                    title_font_size=18,
+                ),
+                yaxis=go.layout.YAxis(
+                    title="Y [m]",
+                    title_font_size=18,
+                ),
+                autosize=False,
             )
 
             self.figure.update_traces(

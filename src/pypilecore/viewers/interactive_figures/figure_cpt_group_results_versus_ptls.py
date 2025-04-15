@@ -42,21 +42,7 @@ class FigureCPTGroupResultsVersusPtls:
         self._set_results(cases_multi_results)
 
         # Initialize the figure
-        self._figure = go.FigureWidget(
-            layout=go.Layout(
-                height=800,
-                width=800,
-                title="CPT Group Results vs. Pile tip level for all cases<br>Result: ",
-                legend_title="Case",
-                colorway=px.colors.qualitative.Plotly,
-                xaxis_title="",
-                yaxis=go.layout.YAxis(
-                    title="Pile tip level [m NAP]",
-                    title_font_size=18,
-                ),
-                autosize=False,
-            )
-        )
+        self._figure = go.FigureWidget()
 
     def _set_results(self, value: CasesMultiCPTBearingResults) -> None:
         """Private setter for the results."""
@@ -176,6 +162,18 @@ class FigureCPTGroupResultsVersusPtls:
                     title_font_size=18,
                 ),
                 showlegend=True,
+                # The following parameters shouldn't be necessary to update
+                # (and therefore could be assigned on initialization of self.figure),
+                # but they are needed to avoid a bug in plotly since dash > 3.0.
+                height=800,
+                width=800,
+                legend_title="Case",
+                colorway=px.colors.qualitative.Plotly,
+                yaxis=go.layout.YAxis(
+                    title="Pile tip level [m NAP]",
+                    title_font_size=18,
+                ),
+                autosize=False,
             )
 
             self.figure.update_traces(
