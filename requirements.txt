@@ -124,7 +124,7 @@ ipywidgets==8.1.6
     #   tqdm
 isodate==0.7.2
     # via openapi-core
-isort==6.0.0
+isort==6.0.1
     # via py-pilecore (pyproject.toml)
 itsdangerous==2.2.0
     # via flask
