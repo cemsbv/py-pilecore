@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2] - 2025-04-16
+
+### Bug Fixes
+
+#### Ci
+
+- Use ubuntu-latest for docs CI
+
+#### Viewers
+
+- Fix rendering of result viewers in jupyter notebooks
+
+
+### Miscellaneous Tasks
+
+#### Deps
+
+- Bump cfn-lint from 1.25.1 to 1.33.2
+
+
 ## [1.0.1] - 2025-04-15
 
 ### Bug Fixes
