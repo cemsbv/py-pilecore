@@ -508,7 +508,8 @@ of a call to CPTCore <cite>classify/*</cite> information, containing the followi
 </ul>
 </div></blockquote>
 </p></li>
-<li><p><strong>groundwater_level_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – The groundwater level. Unit: [m] w.r.t. NAP.</p></li>
+<li><p><strong>groundwater_level_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The groundwater level. Unit: [m] w.r.t. NAP.
+If None, a value of 1 meter below the ground surface level is used.</p></li>
 <li><p><strong>pile</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pypilecore.common.piles.PileProperties" title="pypilecore.common.piles.main.PileProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">PileProperties</span></code></a></span>) – A PileProperties object.</p></li>
 <li><p><strong>friction_range_strategy</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'manual'</span></code>, <code class="docutils literal notranslate"><span class="pre">'lower_bound'</span></code>, <code class="docutils literal notranslate"><span class="pre">'settlement_driven'</span></code>]</span>) – Sets the method to determine the sleeve friction zones on the pile. The soil
 friction in the positive zone contributes to the bearing capacity, while the
@@ -571,7 +572,9 @@ Default = 0.0</p></li>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>excavation_depth_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.</p></li>
+<li><p><strong>excavation_depth_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
+If None, a value equal to the ground surface level is used.
+Default = None</p></li>
 <li><p><strong>excavation_param_t</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – <dl class="simple">
 <dt>Excavation parameter depending on pile installation method and/or phasing.</dt><dd><ul>
 <li><p>Use 1.0 (default) for post-excavation installation with vibration (i.e. hammering).</p></li>

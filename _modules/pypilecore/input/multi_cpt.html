@@ -90,7 +90,7 @@
     <span class="n">pile_tip_levels_nap</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">cptdata_objects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CPTData</span><span class="p">],</span>
     <span class="n">classify_tables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
-    <span class="n">groundwater_level_nap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">groundwater_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">pile</span><span class="p">:</span> <span class="n">PileProperties</span><span class="p">,</span>
     <span class="n">friction_range_strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
         <span class="s2">&quot;manual&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span> <span class="s2">&quot;settlement_driven&quot;</span>
@@ -170,6 +170,7 @@
 
 <span class="sd">    groundwater_level_nap:</span>
 <span class="sd">        The groundwater level. Unit: [m] w.r.t. NAP.</span>
+<span class="sd">        If None, a value of 1 meter below the ground surface level is used.</span>
 <span class="sd">    pile:</span>
 <span class="sd">        A PileProperties object.</span>
 <span class="sd">    friction_range_strategy:</span>
@@ -237,6 +238,8 @@
 <span class="sd">                In this case, the soil_properties.service_level property is used.</span>
 <span class="sd">    excavation_depth_nap:</span>
 <span class="sd">        Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.</span>
+<span class="sd">        If None, a value equal to the ground surface level is used.</span>
+<span class="sd">        Default = None</span>
 <span class="sd">    excavation_param_t:</span>
 <span class="sd">        Excavation parameter depending on pile installation method and/or phasing.</span>
 <span class="sd">            - Use 1.0 (default) for post-excavation installation with vibration (i.e. hammering).</span>
