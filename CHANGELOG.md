@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3] - 2025-04-30
+
+### Documentation
+
+#### Args_docstring
+
+- Improving the docstring of the arguments of several methods
+
+#### Create_basic_pile
+
+- Remove types from docstrings to that they are generated from the type hints
+
+
+### Miscellaneous Tasks
+
+#### Ci
+
+- Move from dependabot to renovate
+
+
 ## [1.0.2] - 2025-04-16
 
 ### Bug Fixes
