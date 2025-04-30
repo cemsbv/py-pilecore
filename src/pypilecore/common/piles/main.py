@@ -129,91 +129,91 @@ def create_basic_pile(
 
     Parameters
     ----------
-    pile_shape : str
+    pile_shape :
         The shape of the pile. Either "round" or "rect".
-    pile_name : str, optional
+    pile_name :
         The name of the pile, by default None.
-    main_type : str, optional
+    main_type :
         The main type of the standard pile type definition, by default None.
-    specification : str | int | float, optional
+    specification :
         The specification of the standard pile type definition, by default None.
         Required if `main_type` is provided.
-    installation : str, optional
+    installation :
         The installation of the standard pile type definition, by default None.
-    height_base : float, optional
+    height_base :
         The height [m] of the base component, by default None.
         Required if base dimensions are provided.
-    core_secondary_dimension : float, optional
+    core_secondary_dimension :
         The largest dimension [m] of the core component's cross-section, by default None.
         Required for rectangular piles.
-    core_tertiary_dimension : float, optional
+    core_tertiary_dimension :
         The smallest dimension [m] of the core component's cross-section, by default None.
-    base_secondary_dimension : float, optional
+    base_secondary_dimension :
         The largest dimension [m] of the base/shell component's cross-section, by default None.
-    base_tertiary_dimension : float, optional
+    base_tertiary_dimension :
         The smallest dimension [m] of the base/shell component's cross-section, by default None.
-    core_diameter : float, optional
+    core_diameter :
         The diameter [m] of the core component's cross-section, by default None.
         Required for round piles.
-    base_diameter : float, optional
+    base_diameter :
         The diameter [m] of the base/shell component's cross-section, by default None.
-    pile_material : str, optional
+    pile_material :
         The material of the pile, by default None.
         Required if no standard pile type was specified.
-    custom_material : dict, optional
+    custom_material :
         A custom material for the pile, by default None.
-    settlement_curve : int, optional
+    settlement_curve :
         The settlement curve of the pile, by default None.
         Required if no standard pile type was specified.
-    adhesion : float, optional
+    adhesion :
         The adhesion of the pile, by default None.
         Required if no standard pile type was specified.
-    alpha_p : float, optional
+    alpha_p :
         The alpha_p of the pile, by default None.
         Required if no standard pile type was specified.
-    alpha_s_clay : float, optional
+    alpha_s_clay :
         The alpha_s_clay of the pile, by default None.
         Required if no standard pile type was specified.
-    alpha_s_sand : float, optional
+    alpha_s_sand :
         The alpha_s_sand of the pile, by default None.
         Required if no standard pile type was specified.
-    alpha_t_clay : float, optional
+    alpha_t_clay :
         The alpha_t_clay of the pile, by default None.
         Required if no standard pile type was specified.
-    alpha_t_sand : float, optional
+    alpha_t_sand :
         The alpha_t_sand of the pile, by default None.
         Required if no standard pile type was specified.
-    beta_p : float, optional
+    beta_p :
         The beta_p of the pile, by default None.
         Required if no standard pile type was specified.
-    pile_tip_factor_s : float, optional
+    pile_tip_factor_s :
         The pile tip factor s of the pile, by default None.
         Required if no standard pile type was specified.
-    is_auger : bool, optional
+    is_auger :
         Whether the pile is an auger pile, by default None.
         Required if no standard pile type was specified.
-    is_low_vibrating : bool, optional
+    is_low_vibrating :
         Whether the pile is low vibrating, by default None.
         Required if no standard pile type was specified.
-    negative_fr_delta_factor : float, optional
+    negative_fr_delta_factor :
         The negative friction delta factor of the pile, by default None.
         Required if no standard pile type was specified.
-    qc_z_a_lesser_1m : float, optional
+    qc_z_a_lesser_1m :
         Maximum cone resistance qc value allowed for layers with thickness < 1m in the calculation of positive skin friction resistance.
         It must be less or equal to `qc_z_a_greater_1m`.
         If None, then 12 MPa is used.
         Default: None.
-    qc_z_a_greater_1m : float, optional
+    qc_z_a_greater_1m :
         Maximum cone resistance qc value allowed for layers with thickness >= 1m in the calculation of positive skin friction resistance.
         It must be greater or equal to `qc_z_a_lesser_1m`.
         If None, then 15 MPa is used.
         Default: None.
-    qb_max_limit : float, optional
+    qb_max_limit :
         Maximum value allowed for the pile tip resistance qb_max.
         Note that is value will be used as a limit for qb_max unless use_almere_rules is true and a higher value than 12 MPa is specified.
         If None, then 15 MPa is used.
         Default: None.
-    chamfered : float, optional
+    chamfered :
         The chamfered value of the pile type, by default None.
         Required if no standard pile type was specified.
 
