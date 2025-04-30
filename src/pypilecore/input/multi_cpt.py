@@ -109,16 +109,21 @@ def create_multi_cpt_payload(
         objects in `cptdata_objects`.
     ocr:
         The Over-Consolidation-Ratio [-] of the foundation layer.
+        It applies to all CPTs, unless overruled for specific CPTs in `individual_ocr`.
+        If None, an OCR of 1.0 is assumed.
+        Default = None
     fixed_negative_friction_range_nap:
         Optionally sets the fixed depth range between which the negative sleeve friction
-        is calculated. If an array of format [top, bottom], the range is set between top
-        and bottom where top and bottom are floating values.
+        is calculated. It applies to all CPTs, unless overruled for specific CPTs in
+        `individual_negative_friction_range_nap`. If an array of format [top, bottom],
+        the range is set between top and bottom where top and bottom are floating values.
         Unit: [m] w.r.t. NAP
     fixed_positive_friction_range_nap:
         Optionally sets the fixed depth range between which the positive sleeve friction
-        is calculated. If an array of format (top, bottom), the range is set between top
-        and bottom where top and bottom are floating point values. If bottom == "ptl",
-        the pile tip level of the calculation is used as value for bottom.
+        is calculated. It applies to all CPTs, unless overruled for specific CPTs in
+        `individual_positive_friction_range_nap`. If an array of format (top, bottom),
+        the range is set between top and bottom where top and bottom are floating point values.
+        If bottom == "ptl", the pile tip level of the calculation is used as value for bottom.
         Unit: [m] w.r.t. NAP
     negative_shaft_friction:
         Sets a fixed value for the negative friction force. If provided, the
@@ -142,18 +147,18 @@ def create_multi_cpt_payload(
         Default = 0.7
     pile_load_sls:
         Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.
+        if None, the fraction of the bearing capacity provided in `relative_pile_load` is used.
+        Default = None
     soil_load_sls:
         Load on soil surface [kPa], used to calculate soil settlement. This is only required
         with the settlement-driven friction-range strategy.
         Default = 0.0
     pile_head_level_nap:
         The level of the pile head. Can be:
-
-            - float;
-                This is interpreted as an absolute level in [m w.r.t. NAP];
+            - float:
+                This is interpreted as an absolute level in [m w.r.t. NAP].
             - Literal["surface"] (default).
-                In this case, the soil_properties.service_level
-                property is used.
+                In this case, the soil_properties.service_level property is used.
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
     excavation_param_t:
@@ -185,15 +190,20 @@ def create_multi_cpt_payload(
             - 0.0 means that the pile is located at the edge of the excavation.
             - 0.5 * excavation_width means that the pile is at the center of the excavation.
     individual_negative_friction_range_nap:
-        A dictionary, mapping ``CPTData.alias`` values to fixed negative-friction ranges.
-        For a specification of the values, see ``fixed_negative_friction_range_nap``
+        A dictionary, mapping specific CPTs (using the ``CPTData.alias`` as keys) to fixed negative-friction ranges (as values).
+        For a specification of the values, see ``fixed_negative_friction_range_nap``.
+        This will overrule the general `fixed_negative_friction_range_nap` setting for the given CPTs only.
+        Example: {"S03": (-5.5, -17.5)}
     individual_positive_friction_range_nap:
-        A dictionary, mapping ``CPTData.alias`` values to fixed positive-friction ranges.
-        For a specification of the values, see ``fixed_positive_friction_range_nap``
+        A dictionary, mapping specific CPTs (using the ``CPTData.alias`` as keys) to fixed positive-friction ranges (as values).
+        For a specification of the values, see ``fixed_positive_friction_range_nap``.
+        This will overrule the general `fixed_positive_friction_range_nap` setting for the given CPTs only.
+        Example: {"S03": (-17.5, 'ptl')}
     individual_ocr:
-        A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]
-        values of the foundation layer. This will overrule the general `ocr` setting for
+        A dictionary, mapping specific CPTs (using the `CPTData.alias`` as keys) to Over-Consolidation-Ratio [-]
+        of the foundation layer (as values). This will overrule the general `ocr` setting for
         these specific CPTs only.
+        Example: {"S03": 1.5}
     use_almere_rules:
         If set to True the contribution, produced by the positive shaft friction, to the
         total bearing capacity is limited to at most 75% the contribution provided by
