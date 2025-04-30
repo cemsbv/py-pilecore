@@ -41,7 +41,7 @@ def get_cpt_depth(cpt: CPTData) -> NDArray:
 def create_soil_properties_payload(
     cptdata_objects: List[CPTData],
     classify_tables: Dict[str, dict],
-    groundwater_level_nap: float,
+    groundwater_level_nap: float | None,
     friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     excavation_depth_nap: float | None = None,
     master_ocr: float | None = None,
@@ -95,6 +95,7 @@ def create_soil_properties_payload(
                 undrained shear strength [kPa]
     groundwater_level_nap:
         The groundwater level. Unit: [m] w.r.t. NAP.
+        If None, a value of 1 meter below the ground surface level is used.
     friction_range_strategy:
         Sets the method to determine the sleeve friction zones on the pile. The soil
         friction in the positive zone contributes to the bearing capacity, while the
@@ -102,6 +103,8 @@ def create_soil_properties_payload(
         "lower_bound" or "settlement_driven".
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
+        If None, a value equal to the ground surface level is used.
+        Default = None
     ocr:
         The Over-Consolidation-Ratio [-] of the foundation layer.
     individual_negative_friction_range_nap:

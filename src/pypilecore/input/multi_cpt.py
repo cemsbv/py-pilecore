@@ -14,7 +14,7 @@ def create_multi_cpt_payload(
     pile_tip_levels_nap: Sequence[float],
     cptdata_objects: List[CPTData],
     classify_tables: Dict[str, dict],
-    groundwater_level_nap: float,
+    groundwater_level_nap: float | None,
     pile: PileProperties,
     friction_range_strategy: Literal[
         "manual", "lower_bound", "settlement_driven"
@@ -94,6 +94,7 @@ def create_multi_cpt_payload(
 
     groundwater_level_nap:
         The groundwater level. Unit: [m] w.r.t. NAP.
+        If None, a value of 1 meter below the ground surface level is used.
     pile:
         A PileProperties object.
     friction_range_strategy:
@@ -161,6 +162,8 @@ def create_multi_cpt_payload(
                 In this case, the soil_properties.service_level property is used.
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
+        If None, a value equal to the ground surface level is used.
+        Default = None
     excavation_param_t:
         Excavation parameter depending on pile installation method and/or phasing.
             - Use 1.0 (default) for post-excavation installation with vibration (i.e. hammering).
