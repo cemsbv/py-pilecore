@@ -74,7 +74,7 @@
   <h1>Source code for pypilecore.common.piles.main</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.piles.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">PileGeometry</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.piles.geometry.components</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -176,9 +176,9 @@
 <div class="viewcode-block" id="create_basic_pile">
 <a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.create_basic_pile">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_basic_pile</span><span class="p">(</span>
-    <span class="n">pile_shape</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">pile_shape</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="s2">&quot;rect&quot;</span><span class="p">,</span> <span class="s2">&quot;rectangle&quot;</span><span class="p">],</span>
     <span class="n">pile_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">main_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">main_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;concrete&quot;</span><span class="p">,</span> <span class="s2">&quot;steel&quot;</span><span class="p">,</span> <span class="s2">&quot;wood&quot;</span><span class="p">,</span> <span class="s2">&quot;anchor&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">specification</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">installation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">height_base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -188,7 +188,8 @@
     <span class="n">base_tertiary_dimension</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">core_diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">base_diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">pile_material</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pile_material</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;concrete&quot;</span><span class="p">,</span> <span class="s2">&quot;steel&quot;</span><span class="p">,</span> <span class="s2">&quot;wood&quot;</span><span class="p">,</span> <span class="s2">&quot;grout&quot;</span><span class="p">,</span> <span class="s2">&quot;grout_extorted&quot;</span><span class="p">]</span>
+    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">custom_material</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">settlement_curve</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">adhesion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -214,91 +215,141 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    pile_shape : str</span>
-<span class="sd">        The shape of the pile. Either &quot;round&quot; or &quot;rect&quot;.</span>
-<span class="sd">    pile_name : str, optional</span>
+<span class="sd">    pile_shape :</span>
+<span class="sd">        The shape of the pile.</span>
+<span class="sd">        Both &quot;rect&quot; and &quot;rectangle&quot; are accepted for rectangular piles.</span>
+<span class="sd">    pile_name :</span>
 <span class="sd">        The name of the pile, by default None.</span>
-<span class="sd">    main_type : str, optional</span>
+<span class="sd">    main_type :</span>
 <span class="sd">        The main type of the standard pile type definition, by default None.</span>
-<span class="sd">    specification : str | int | float, optional</span>
+<span class="sd">    specification :</span>
 <span class="sd">        The specification of the standard pile type definition, by default None.</span>
 <span class="sd">        Required if `main_type` is provided.</span>
-<span class="sd">    installation : str, optional</span>
+<span class="sd">    installation :</span>
 <span class="sd">        The installation of the standard pile type definition, by default None.</span>
-<span class="sd">    height_base : float, optional</span>
+<span class="sd">    height_base :</span>
 <span class="sd">        The height [m] of the base component, by default None.</span>
 <span class="sd">        Required if base dimensions are provided.</span>
-<span class="sd">    core_secondary_dimension : float, optional</span>
-<span class="sd">        The largest dimension [m] of the core component&#39;s cross-section, by default None.</span>
+<span class="sd">    core_secondary_dimension :</span>
+<span class="sd">        The largest dimension [m] of the rectangular core component&#39;s cross-section, by default None.</span>
 <span class="sd">        Required for rectangular piles.</span>
-<span class="sd">    core_tertiary_dimension : float, optional</span>
-<span class="sd">        The smallest dimension [m] of the core component&#39;s cross-section, by default None.</span>
-<span class="sd">    base_secondary_dimension : float, optional</span>
-<span class="sd">        The largest dimension [m] of the base/shell component&#39;s cross-section, by default None.</span>
-<span class="sd">    base_tertiary_dimension : float, optional</span>
-<span class="sd">        The smallest dimension [m] of the base/shell component&#39;s cross-section, by default None.</span>
-<span class="sd">    core_diameter : float, optional</span>
-<span class="sd">        The diameter [m] of the core component&#39;s cross-section, by default None.</span>
+<span class="sd">    core_tertiary_dimension :</span>
+<span class="sd">        The smallest dimension [m] of the rectangular core component&#39;s cross-section, by default None.</span>
+<span class="sd">        If None and pile shape is rectangular, `core_tertiary_dimension` is used resulting in a square core.</span>
+<span class="sd">    base_secondary_dimension :</span>
+<span class="sd">        The largest dimension [m] of the rectangular base/shell component&#39;s cross-section, by default None.</span>
+<span class="sd">        If None and pile shape is rectangular, then the base has the same dimensions as the core.</span>
+<span class="sd">        Requires `height_base` to be provided.</span>
+<span class="sd">    base_tertiary_dimension :</span>
+<span class="sd">        The smallest dimension [m] of the rectangular base/shell component&#39;s cross-section, by default None.</span>
+<span class="sd">        If None and pile shape is rectangular, then:</span>
+<span class="sd">            - If `base_secondary_dimension` is None, then the base has the same dimensions as the core.</span>
+<span class="sd">            - If `base_secondary_dimension` is provided, then `base_tertiary_dimension` is used resulting</span>
+<span class="sd">            in a square base.</span>
+<span class="sd">        Requires `height_base` to be provided.</span>
+<span class="sd">    core_diameter :</span>
+<span class="sd">        The diameter [m] of the round core component&#39;s cross-section, by default None.</span>
 <span class="sd">        Required for round piles.</span>
-<span class="sd">    base_diameter : float, optional</span>
-<span class="sd">        The diameter [m] of the base/shell component&#39;s cross-section, by default None.</span>
-<span class="sd">    pile_material : str, optional</span>
+<span class="sd">    base_diameter :</span>
+<span class="sd">        The diameter [m] of the round base/shell component&#39;s cross-section, by default None.</span>
+<span class="sd">        If None and pile shape is round, then the base has the same diameter as the core.</span>
+<span class="sd">        Requires `height_base` to be provided.</span>
+<span class="sd">    pile_material :</span>
 <span class="sd">        The material of the pile, by default None.</span>
-<span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    custom_material : dict, optional</span>
+<span class="sd">        It is ignored if `custom_material` is provided.</span>
+<span class="sd">        Otherwise:</span>
+<span class="sd">            - If None, it is inferred from the standard pile.</span>
+<span class="sd">            - Overwrites the value of the standard pile if provided together with a standard pile.</span>
+<span class="sd">        Required if no standard pile type and no custom material were specified.</span>
+<span class="sd">    custom_material :</span>
 <span class="sd">        A custom material for the pile, by default None.</span>
-<span class="sd">    settlement_curve : int, optional</span>
+<span class="sd">        If provided, it is used even if a standard pile was selected.</span>
+<span class="sd">        Required keys and value types:</span>
+<span class="sd">            - &quot;name&quot;: str</span>
+<span class="sd">            - &quot;elastic_modulus: float</span>
+<span class="sd">                Unit: [MPa]</span>
+<span class="sd">            - &quot;color&quot;: str</span>
+<span class="sd">                Hexadecimal color</span>
+<span class="sd">        Example: {</span>
+<span class="sd">            &quot;name&quot;: &quot;custom_material&quot;,</span>
+<span class="sd">            &quot;elastic_modulus&quot;: 15e3,</span>
+<span class="sd">            &quot;color&quot;: &quot;#ff0000&quot;,</span>
+<span class="sd">        }</span>
+<span class="sd">    settlement_curve :</span>
 <span class="sd">        The settlement curve of the pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    adhesion : float, optional</span>
-<span class="sd">        The adhesion of the pile, by default None.</span>
-<span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    alpha_p : float, optional</span>
+<span class="sd">    adhesion :</span>
+<span class="sd">        The adhesion value [kPa] of the pile, by default None.</span>
+<span class="sd">        Use it if the pile shaft has undergone a special treatment.</span>
+<span class="sd">        If None, then adhesion is disregarded.</span>
+<span class="sd">        Examples:</span>
+<span class="sd">            - adhesion = 50 kPa for synthetic coating</span>
+<span class="sd">            - adhesion = 20 kPa for bentonite</span>
+<span class="sd">            - adhesion = 10 kPa for bitumen coating</span>
+<span class="sd">    alpha_p :</span>
 <span class="sd">        The alpha_p of the pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    alpha_s_clay : float, optional</span>
+<span class="sd">    alpha_s_clay :</span>
 <span class="sd">        The alpha_s_clay of the pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    alpha_s_sand : float, optional</span>
+<span class="sd">    alpha_s_sand :</span>
 <span class="sd">        The alpha_s_sand of the pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    alpha_t_clay : float, optional</span>
+<span class="sd">    alpha_t_clay :</span>
 <span class="sd">        The alpha_t_clay of the pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    alpha_t_sand : float, optional</span>
+<span class="sd">    alpha_t_sand :</span>
 <span class="sd">        The alpha_t_sand of the pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    beta_p : float, optional</span>
+<span class="sd">    beta_p :</span>
 <span class="sd">        The beta_p of the pile, by default None.</span>
-<span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    pile_tip_factor_s : float, optional</span>
+<span class="sd">        If None, the value is computed from the pile dimensions.</span>
+<span class="sd">    pile_tip_factor_s :</span>
 <span class="sd">        The pile tip factor s of the pile, by default None.</span>
-<span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    is_auger : bool, optional</span>
+<span class="sd">        If None, the value is computed from the pile dimensions and soil properties.</span>
+<span class="sd">    is_auger :</span>
 <span class="sd">        Whether the pile is an auger pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    is_low_vibrating : bool, optional</span>
+<span class="sd">    is_low_vibrating :</span>
 <span class="sd">        Whether the pile is low vibrating, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    negative_fr_delta_factor : float, optional</span>
+<span class="sd">    negative_fr_delta_factor :</span>
 <span class="sd">        The negative friction delta factor of the pile, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
-<span class="sd">    qc_z_a_lesser_1m : float, optional</span>
-<span class="sd">        Maximum cone resistance qc value allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.</span>
+<span class="sd">    qc_z_a_lesser_1m :</span>
+<span class="sd">        Maximum cone resistance qc value [MPa] allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.</span>
 <span class="sd">        It must be less or equal to `qc_z_a_greater_1m`.</span>
 <span class="sd">        If None, then 12 MPa is used.</span>
 <span class="sd">        Default: None.</span>
-<span class="sd">    qc_z_a_greater_1m : float, optional</span>
-<span class="sd">        Maximum cone resistance qc value allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.</span>
+<span class="sd">    qc_z_a_greater_1m :</span>
+<span class="sd">        Maximum cone resistance qc value [MPa] allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.</span>
 <span class="sd">        It must be greater or equal to `qc_z_a_lesser_1m`.</span>
 <span class="sd">        If None, then 15 MPa is used.</span>
 <span class="sd">        Default: None.</span>
-<span class="sd">    qb_max_limit : float, optional</span>
-<span class="sd">        Maximum value allowed for the pile tip resistance qb_max.</span>
+<span class="sd">    qb_max_limit :</span>
+<span class="sd">        Maximum value allowed for the pile tip resistance qb_max [MPa].</span>
 <span class="sd">        Note that is value will be used as a limit for qb_max unless use_almere_rules is true and a higher value than 12 MPa is specified.</span>
 <span class="sd">        If None, then 15 MPa is used.</span>
 <span class="sd">        Default: None.</span>
-<span class="sd">    chamfered : float, optional</span>
+<span class="sd">    chamfered :</span>
 <span class="sd">        The chamfered value of the pile type, by default None.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
 

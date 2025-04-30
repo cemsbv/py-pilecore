@@ -185,16 +185,21 @@
 <span class="sd">        objects in `cptdata_objects`.</span>
 <span class="sd">    ocr:</span>
 <span class="sd">        The Over-Consolidation-Ratio [-] of the foundation layer.</span>
+<span class="sd">        It applies to all CPTs, unless overruled for specific CPTs in `individual_ocr`.</span>
+<span class="sd">        If None, an OCR of 1.0 is assumed.</span>
+<span class="sd">        Default = None</span>
 <span class="sd">    fixed_negative_friction_range_nap:</span>
 <span class="sd">        Optionally sets the fixed depth range between which the negative sleeve friction</span>
-<span class="sd">        is calculated. If an array of format [top, bottom], the range is set between top</span>
-<span class="sd">        and bottom where top and bottom are floating values.</span>
+<span class="sd">        is calculated. It applies to all CPTs, unless overruled for specific CPTs in</span>
+<span class="sd">        `individual_negative_friction_range_nap`. If an array of format [top, bottom],</span>
+<span class="sd">        the range is set between top and bottom where top and bottom are floating values.</span>
 <span class="sd">        Unit: [m] w.r.t. NAP</span>
 <span class="sd">    fixed_positive_friction_range_nap:</span>
 <span class="sd">        Optionally sets the fixed depth range between which the positive sleeve friction</span>
-<span class="sd">        is calculated. If an array of format (top, bottom), the range is set between top</span>
-<span class="sd">        and bottom where top and bottom are floating point values. If bottom == &quot;ptl&quot;,</span>
-<span class="sd">        the pile tip level of the calculation is used as value for bottom.</span>
+<span class="sd">        is calculated. It applies to all CPTs, unless overruled for specific CPTs in</span>
+<span class="sd">        `individual_positive_friction_range_nap`. If an array of format (top, bottom),</span>
+<span class="sd">        the range is set between top and bottom where top and bottom are floating point values.</span>
+<span class="sd">        If bottom == &quot;ptl&quot;, the pile tip level of the calculation is used as value for bottom.</span>
 <span class="sd">        Unit: [m] w.r.t. NAP</span>
 <span class="sd">    negative_shaft_friction:</span>
 <span class="sd">        Sets a fixed value for the negative friction force. If provided, the</span>
@@ -218,18 +223,18 @@
 <span class="sd">        Default = 0.7</span>
 <span class="sd">    pile_load_sls:</span>
 <span class="sd">        Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.</span>
+<span class="sd">        if None, the fraction of the bearing capacity provided in `relative_pile_load` is used.</span>
+<span class="sd">        Default = None</span>
 <span class="sd">    soil_load_sls:</span>
 <span class="sd">        Load on soil surface [kPa], used to calculate soil settlement. This is only required</span>
 <span class="sd">        with the settlement-driven friction-range strategy.</span>
 <span class="sd">        Default = 0.0</span>
 <span class="sd">    pile_head_level_nap:</span>
 <span class="sd">        The level of the pile head. Can be:</span>
-
-<span class="sd">            - float;</span>
-<span class="sd">                This is interpreted as an absolute level in [m w.r.t. NAP];</span>
+<span class="sd">            - float:</span>
+<span class="sd">                This is interpreted as an absolute level in [m w.r.t. NAP].</span>
 <span class="sd">            - Literal[&quot;surface&quot;] (default).</span>
-<span class="sd">                In this case, the soil_properties.service_level</span>
-<span class="sd">                property is used.</span>
+<span class="sd">                In this case, the soil_properties.service_level property is used.</span>
 <span class="sd">    excavation_depth_nap:</span>
 <span class="sd">        Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.</span>
 <span class="sd">    excavation_param_t:</span>
@@ -261,15 +266,20 @@
 <span class="sd">            - 0.0 means that the pile is located at the edge of the excavation.</span>
 <span class="sd">            - 0.5 * excavation_width means that the pile is at the center of the excavation.</span>
 <span class="sd">    individual_negative_friction_range_nap:</span>
-<span class="sd">        A dictionary, mapping ``CPTData.alias`` values to fixed negative-friction ranges.</span>
-<span class="sd">        For a specification of the values, see ``fixed_negative_friction_range_nap``</span>
+<span class="sd">        A dictionary, mapping specific CPTs (using the ``CPTData.alias`` as keys) to fixed negative-friction ranges (as values).</span>
+<span class="sd">        For a specification of the values, see ``fixed_negative_friction_range_nap``.</span>
+<span class="sd">        This will overrule the general `fixed_negative_friction_range_nap` setting for the given CPTs only.</span>
+<span class="sd">        Example: {&quot;S03&quot;: (-5.5, -17.5)}</span>
 <span class="sd">    individual_positive_friction_range_nap:</span>
-<span class="sd">        A dictionary, mapping ``CPTData.alias`` values to fixed positive-friction ranges.</span>
-<span class="sd">        For a specification of the values, see ``fixed_positive_friction_range_nap``</span>
+<span class="sd">        A dictionary, mapping specific CPTs (using the ``CPTData.alias`` as keys) to fixed positive-friction ranges (as values).</span>
+<span class="sd">        For a specification of the values, see ``fixed_positive_friction_range_nap``.</span>
+<span class="sd">        This will overrule the general `fixed_positive_friction_range_nap` setting for the given CPTs only.</span>
+<span class="sd">        Example: {&quot;S03&quot;: (-17.5, &#39;ptl&#39;)}</span>
 <span class="sd">    individual_ocr:</span>
-<span class="sd">        A dictionary, mapping ``CPTData.alias`` values to Over-Consolidation-Ratio [-]</span>
-<span class="sd">        values of the foundation layer. This will overrule the general `ocr` setting for</span>
+<span class="sd">        A dictionary, mapping specific CPTs (using the `CPTData.alias`` as keys) to Over-Consolidation-Ratio [-]</span>
+<span class="sd">        of the foundation layer (as values). This will overrule the general `ocr` setting for</span>
 <span class="sd">        these specific CPTs only.</span>
+<span class="sd">        Example: {&quot;S03&quot;: 1.5}</span>
 <span class="sd">    use_almere_rules:</span>
 <span class="sd">        If set to True the contribution, produced by the positive shaft friction, to the</span>
 <span class="sd">        total bearing capacity is limited to at most 75% the contribution provided by</span>

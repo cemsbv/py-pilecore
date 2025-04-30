@@ -518,15 +518,20 @@ negative zone adds an extra load on the pile. Accepted values: “manual”,
 if you don’t overrule it. Default = False.</p></li>
 <li><p><strong>cpts_group</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – CPTs that are considered one group. Items must relate to the alias of the CPTData
 objects in <cite>cptdata_objects</cite>.</p></li>
-<li><p><strong>ocr</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The Over-Consolidation-Ratio [-] of the foundation layer.</p></li>
+<li><p><strong>ocr</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The Over-Consolidation-Ratio [-] of the foundation layer.
+It applies to all CPTs, unless overruled for specific CPTs in <cite>individual_ocr</cite>.
+If None, an OCR of 1.0 is assumed.
+Default = None</p></li>
 <li><p><strong>fixed_negative_friction_range_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – Optionally sets the fixed depth range between which the negative sleeve friction
-is calculated. If an array of format [top, bottom], the range is set between top
-and bottom where top and bottom are floating values.
+is calculated. It applies to all CPTs, unless overruled for specific CPTs in
+<cite>individual_negative_friction_range_nap</cite>. If an array of format [top, bottom],
+the range is set between top and bottom where top and bottom are floating values.
 Unit: [m] w.r.t. NAP</p></li>
 <li><p><strong>fixed_positive_friction_range_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'ptl'</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</span>) – Optionally sets the fixed depth range between which the positive sleeve friction
-is calculated. If an array of format (top, bottom), the range is set between top
-and bottom where top and bottom are floating point values. If bottom == “ptl”,
-the pile tip level of the calculation is used as value for bottom.
+is calculated. It applies to all CPTs, unless overruled for specific CPTs in
+<cite>individual_positive_friction_range_nap</cite>. If an array of format (top, bottom),
+the range is set between top and bottom where top and bottom are floating point values.
+If bottom == “ptl”, the pile tip level of the calculation is used as value for bottom.
 Unit: [m] w.r.t. NAP</p></li>
 <li><p><strong>negative_shaft_friction</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Sets a fixed value for the negative friction force. If provided, the
 fixed_negative_friction_range_nap parameter will be ignored.
@@ -544,26 +549,27 @@ When the pile_load_sls parameter is provided, rel_pile_load will be ignored.</p>
 with each pile-tip level, depending on the bearing capacity.</p>
 <p>Default = 0.7</p>
 </p></li>
-<li><p><strong>pile_load_sls</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.</p></li>
+<li><p><strong>pile_load_sls</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Force on pile in SLS [kN]. Used to determine settlement of pile w.r.t. soil.
+if None, the fraction of the bearing capacity provided in <cite>relative_pile_load</cite> is used.
+Default = None</p></li>
 <li><p><strong>soil_load_sls</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Load on soil surface [kPa], used to calculate soil settlement. This is only required
 with the settlement-driven friction-range strategy.
 Default = 0.0</p></li>
-<li><p><strong>pile_head_level_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'surface'</span></code>]]</span>) – <p>The level of the pile head. Can be:</p>
-<blockquote>
-<div><ul>
+<li><p><strong>pile_head_level_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'surface'</span></code>]]</span>) – <dl class="simple">
+<dt>The level of the pile head. Can be:</dt><dd><ul>
 <li><dl class="simple">
-<dt>float;</dt><dd><p>This is interpreted as an absolute level in [m w.r.t. NAP];</p>
+<dt>float:</dt><dd><p>This is interpreted as an absolute level in [m w.r.t. NAP].</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Literal[“surface”] (default).</dt><dd><p>In this case, the soil_properties.service_level
-property is used.</p>
+<dt>Literal[“surface”] (default).</dt><dd><p>In this case, the soil_properties.service_level property is used.</p>
 </dd>
 </dl>
 </li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </p></li>
 <li><p><strong>excavation_depth_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.</p></li>
 <li><p><strong>excavation_param_t</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – <dl class="simple">
@@ -603,13 +609,18 @@ the Begemann method is selected. In this case, it must be provided and it must b
 </dd>
 </dl>
 </p></li>
-<li><p><strong>individual_negative_friction_range_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</span>) – A dictionary, mapping <code class="docutils literal notranslate"><span class="pre">CPTData.alias</span></code> values to fixed negative-friction ranges.
-For a specification of the values, see <code class="docutils literal notranslate"><span class="pre">fixed_negative_friction_range_nap</span></code></p></li>
-<li><p><strong>individual_positive_friction_range_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'ptl'</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]]</span>) – A dictionary, mapping <code class="docutils literal notranslate"><span class="pre">CPTData.alias</span></code> values to fixed positive-friction ranges.
-For a specification of the values, see <code class="docutils literal notranslate"><span class="pre">fixed_positive_friction_range_nap</span></code></p></li>
-<li><p><strong>individual_ocr</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A dictionary, mapping <code class="docutils literal notranslate"><span class="pre">CPTData.alias</span></code> values to Over-Consolidation-Ratio [-]
-values of the foundation layer. This will overrule the general <cite>ocr</cite> setting for
-these specific CPTs only.</p></li>
+<li><p><strong>individual_negative_friction_range_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</span>) – A dictionary, mapping specific CPTs (using the <code class="docutils literal notranslate"><span class="pre">CPTData.alias</span></code> as keys) to fixed negative-friction ranges (as values).
+For a specification of the values, see <code class="docutils literal notranslate"><span class="pre">fixed_negative_friction_range_nap</span></code>.
+This will overrule the general <cite>fixed_negative_friction_range_nap</cite> setting for the given CPTs only.
+Example: {“S03”: (-5.5, -17.5)}</p></li>
+<li><p><strong>individual_positive_friction_range_nap</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'ptl'</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]]</span>) – A dictionary, mapping specific CPTs (using the <code class="docutils literal notranslate"><span class="pre">CPTData.alias</span></code> as keys) to fixed positive-friction ranges (as values).
+For a specification of the values, see <code class="docutils literal notranslate"><span class="pre">fixed_positive_friction_range_nap</span></code>.
+This will overrule the general <cite>fixed_positive_friction_range_nap</cite> setting for the given CPTs only.
+Example: {“S03”: (-17.5, ‘ptl’)}</p></li>
+<li><p><strong>individual_ocr</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A dictionary, mapping specific CPTs (using the <cite>CPTData.alias`</cite> as keys) to Over-Consolidation-Ratio [-]
+of the foundation layer (as values). This will overrule the general <cite>ocr</cite> setting for
+these specific CPTs only.
+Example: {“S03”: 1.5}</p></li>
 <li><p><strong>use_almere_rules</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If set to True the contribution, produced by the positive shaft friction, to the
 total bearing capacity is limited to at most 75% the contribution provided by
 the pile tip. ref: <a class="reference external" href="https://www.almere.nl/fileadmin/user_upload/Richtlijnen_Constructie_Gem._Almere_vanaf_01-01-2017_versie_3.0a.pdf">https://www.almere.nl/fileadmin/user_upload/Richtlijnen_Constructie_Gem._Almere_vanaf_01-01-2017_versie_3.0a.pdf</a></p></li>
@@ -937,62 +948,140 @@ namely a core component and an optional shell/widened-base component.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pile_shape</strong> (<em>str</em>) – The shape of the pile. Either “round” or “rect”.</p></li>
-<li><p><strong>pile_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of the pile, by default None.</p></li>
-<li><p><strong>main_type</strong> (<em>str</em><em>, </em><em>optional</em>) – The main type of the standard pile type definition, by default None.</p></li>
-<li><p><strong>specification</strong> (<em>str</em><em> | </em><em>int</em><em> | </em><em>float</em><em>, </em><em>optional</em>) – The specification of the standard pile type definition, by default None.
+<li><p><strong>pile_shape</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'round'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rect'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rectangle'</span></code>]</span>) – The shape of the pile.
+Both “rect” and “rectangle” are accepted for rectangular piles.</p></li>
+<li><p><strong>pile_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The name of the pile, by default None.</p></li>
+<li><p><strong>main_type</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'concrete'</span></code>, <code class="docutils literal notranslate"><span class="pre">'steel'</span></code>, <code class="docutils literal notranslate"><span class="pre">'wood'</span></code>, <code class="docutils literal notranslate"><span class="pre">'anchor'</span></code>]]</span>) – The main type of the standard pile type definition, by default None.</p></li>
+<li><p><strong>specification</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The specification of the standard pile type definition, by default None.
 Required if <cite>main_type</cite> is provided.</p></li>
-<li><p><strong>installation</strong> (<em>str</em><em>, </em><em>optional</em>) – The installation of the standard pile type definition, by default None.</p></li>
-<li><p><strong>height_base</strong> (<em>float</em><em>, </em><em>optional</em>) – The height [m] of the base component, by default None.
+<li><p><strong>installation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The installation of the standard pile type definition, by default None.</p></li>
+<li><p><strong>height_base</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The height [m] of the base component, by default None.
 Required if base dimensions are provided.</p></li>
-<li><p><strong>core_secondary_dimension</strong> (<em>float</em><em>, </em><em>optional</em>) – The largest dimension [m] of the core component’s cross-section, by default None.
+<li><p><strong>core_secondary_dimension</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The largest dimension [m] of the rectangular core component’s cross-section, by default None.
 Required for rectangular piles.</p></li>
-<li><p><strong>core_tertiary_dimension</strong> (<em>float</em><em>, </em><em>optional</em>) – The smallest dimension [m] of the core component’s cross-section, by default None.</p></li>
-<li><p><strong>base_secondary_dimension</strong> (<em>float</em><em>, </em><em>optional</em>) – The largest dimension [m] of the base/shell component’s cross-section, by default None.</p></li>
-<li><p><strong>base_tertiary_dimension</strong> (<em>float</em><em>, </em><em>optional</em>) – The smallest dimension [m] of the base/shell component’s cross-section, by default None.</p></li>
-<li><p><strong>core_diameter</strong> (<em>float</em><em>, </em><em>optional</em>) – The diameter [m] of the core component’s cross-section, by default None.
+<li><p><strong>core_tertiary_dimension</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The smallest dimension [m] of the rectangular core component’s cross-section, by default None.
+If None and pile shape is rectangular, <cite>core_tertiary_dimension</cite> is used resulting in a square core.</p></li>
+<li><p><strong>base_secondary_dimension</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The largest dimension [m] of the rectangular base/shell component’s cross-section, by default None.
+If None and pile shape is rectangular, then the base has the same dimensions as the core.
+Requires <cite>height_base</cite> to be provided.</p></li>
+<li><p><strong>base_tertiary_dimension</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – <p>The smallest dimension [m] of the rectangular base/shell component’s cross-section, by default None.
+If None and pile shape is rectangular, then:</p>
+<blockquote>
+<div><ul>
+<li><p>If <cite>base_secondary_dimension</cite> is None, then the base has the same dimensions as the core.</p></li>
+<li><p>If <cite>base_secondary_dimension</cite> is provided, then <cite>base_tertiary_dimension</cite> is used resulting</p></li>
+</ul>
+<p>in a square base.</p>
+</div></blockquote>
+<p>Requires <cite>height_base</cite> to be provided.</p>
+</p></li>
+<li><p><strong>core_diameter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The diameter [m] of the round core component’s cross-section, by default None.
 Required for round piles.</p></li>
-<li><p><strong>base_diameter</strong> (<em>float</em><em>, </em><em>optional</em>) – The diameter [m] of the base/shell component’s cross-section, by default None.</p></li>
-<li><p><strong>pile_material</strong> (<em>str</em><em>, </em><em>optional</em>) – The material of the pile, by default None.
+<li><p><strong>base_diameter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The diameter [m] of the round base/shell component’s cross-section, by default None.
+If None and pile shape is round, then the base has the same diameter as the core.
+Requires <cite>height_base</cite> to be provided.</p></li>
+<li><p><strong>pile_material</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'concrete'</span></code>, <code class="docutils literal notranslate"><span class="pre">'steel'</span></code>, <code class="docutils literal notranslate"><span class="pre">'wood'</span></code>, <code class="docutils literal notranslate"><span class="pre">'grout'</span></code>, <code class="docutils literal notranslate"><span class="pre">'grout_extorted'</span></code>]]</span>) – <p>The material of the pile, by default None.
+It is ignored if <cite>custom_material</cite> is provided.
+Otherwise:</p>
+<blockquote>
+<div><ul>
+<li><p>If None, it is inferred from the standard pile.</p></li>
+<li><p>Overwrites the value of the standard pile if provided together with a standard pile.</p></li>
+</ul>
+</div></blockquote>
+<p>Required if no standard pile type and no custom material were specified.</p>
+</p></li>
+<li><p><strong>custom_material</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – <p>A custom material for the pile, by default None.
+If provided, it is used even if a standard pile was selected.
+Required keys and value types:</p>
+<blockquote>
+<div><ul>
+<li><p>”name”: str</p></li>
+<li><dl class="simple">
+<dt>”elastic_modulus: float</dt><dd><p>Unit: [MPa]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>”color”: str</dt><dd><p>Hexadecimal color</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>Example: {</dt><dd><p>“name”: “custom_material”,
+“elastic_modulus”: 15e3,
+“color”: “#ff0000”,</p>
+</dd>
+</dl>
+<p>}</p>
+</p></li>
+<li><p><strong>settlement_curve</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The settlement curve of the pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>custom_material</strong> (<em>dict</em><em>, </em><em>optional</em>) – A custom material for the pile, by default None.</p></li>
-<li><p><strong>settlement_curve</strong> (<em>int</em><em>, </em><em>optional</em>) – The settlement curve of the pile, by default None.
+<li><p><strong>adhesion</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – <p>The adhesion value [kPa] of the pile, by default None.
+Use it if the pile shaft has undergone a special treatment.
+If None, then adhesion is disregarded.
+Examples:</p>
+<blockquote>
+<div><ul>
+<li><p>adhesion = 50 kPa for synthetic coating</p></li>
+<li><p>adhesion = 20 kPa for bentonite</p></li>
+<li><p>adhesion = 10 kPa for bitumen coating</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>alpha_p</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The alpha_p of the pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>adhesion</strong> (<em>float</em><em>, </em><em>optional</em>) – The adhesion of the pile, by default None.
+<li><p><strong>alpha_s_clay</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The alpha_s_clay of the pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>alpha_p</strong> (<em>float</em><em>, </em><em>optional</em>) – The alpha_p of the pile, by default None.
+<li><p><strong>alpha_s_sand</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The alpha_s_sand of the pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>alpha_s_clay</strong> (<em>float</em><em>, </em><em>optional</em>) – The alpha_s_clay of the pile, by default None.
+<li><p><strong>alpha_t_clay</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The alpha_t_clay of the pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>alpha_s_sand</strong> (<em>float</em><em>, </em><em>optional</em>) – The alpha_s_sand of the pile, by default None.
+<li><p><strong>alpha_t_sand</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The alpha_t_sand of the pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>alpha_t_clay</strong> (<em>float</em><em>, </em><em>optional</em>) – The alpha_t_clay of the pile, by default None.
+<li><p><strong>beta_p</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The beta_p of the pile, by default None.
+If None, the value is computed from the pile dimensions.</p></li>
+<li><p><strong>pile_tip_factor_s</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The pile tip factor s of the pile, by default None.
+If None, the value is computed from the pile dimensions and soil properties.</p></li>
+<li><p><strong>is_auger</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Whether the pile is an auger pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>alpha_t_sand</strong> (<em>float</em><em>, </em><em>optional</em>) – The alpha_t_sand of the pile, by default None.
+<li><p><strong>is_low_vibrating</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Whether the pile is low vibrating, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>beta_p</strong> (<em>float</em><em>, </em><em>optional</em>) – The beta_p of the pile, by default None.
+<li><p><strong>negative_fr_delta_factor</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The negative friction delta factor of the pile, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
-<li><p><strong>pile_tip_factor_s</strong> (<em>float</em><em>, </em><em>optional</em>) – The pile tip factor s of the pile, by default None.
-Required if no standard pile type was specified.</p></li>
-<li><p><strong>is_auger</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the pile is an auger pile, by default None.
-Required if no standard pile type was specified.</p></li>
-<li><p><strong>is_low_vibrating</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the pile is low vibrating, by default None.
-Required if no standard pile type was specified.</p></li>
-<li><p><strong>negative_fr_delta_factor</strong> (<em>float</em><em>, </em><em>optional</em>) – The negative friction delta factor of the pile, by default None.
-Required if no standard pile type was specified.</p></li>
-<li><p><strong>qc_z_a_lesser_1m</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum cone resistance qc value allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.
+<li><p><strong>qc_z_a_lesser_1m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Maximum cone resistance qc value [MPa] allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.
 It must be less or equal to <cite>qc_z_a_greater_1m</cite>.
 If None, then 12 MPa is used.
 Default: None.</p></li>
-<li><p><strong>qc_z_a_greater_1m</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum cone resistance qc value allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.
+<li><p><strong>qc_z_a_greater_1m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Maximum cone resistance qc value [MPa] allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.
 It must be greater or equal to <cite>qc_z_a_lesser_1m</cite>.
 If None, then 15 MPa is used.
 Default: None.</p></li>
-<li><p><strong>qb_max_limit</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum value allowed for the pile tip resistance qb_max.
+<li><p><strong>qb_max_limit</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Maximum value allowed for the pile tip resistance qb_max [MPa].
 Note that is value will be used as a limit for qb_max unless use_almere_rules is true and a higher value than 12 MPa is specified.
 If None, then 15 MPa is used.
 Default: None.</p></li>
-<li><p><strong>chamfered</strong> (<em>float</em><em>, </em><em>optional</em>) – The chamfered value of the pile type, by default None.
+<li><p><strong>chamfered</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The chamfered value of the pile type, by default None.
 Required if no standard pile type was specified.</p></li>
 </ul>
 </dd>
