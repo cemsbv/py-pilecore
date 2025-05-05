@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2025-05-05
+
+### Documentation
+
+#### Pilecore_tension
+
+- Adding docstrings for top_of_tension_zone_nap and ocr
+
+
 ## [1.1.0] - 2025-05-05
 
 ### Features
