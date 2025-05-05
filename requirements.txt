@@ -217,7 +217,7 @@ openapi-spec-validator==0.7.1
     # via openapi-core
 orjson==3.10.16
     # via cems-nuclei
-packaging==24.2
+packaging==25.0
     # via
     #   ansible-compat
     #   ansible-core
