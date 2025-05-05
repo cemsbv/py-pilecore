@@ -25,6 +25,9 @@ def create_multi_cpt_payload(
     top_of_tension_zone_nap: float | None = None,
     individual_top_of_tension_zone_nap: Mapping[Any, float] | None = None,
     excavation_param_t: float = 1.0,
+    excavation_stress_reduction_method: Literal["constant", "begemann"] = "constant",
+    excavation_width: float | None = None,
+    excavation_edge_distance: float | None = None,
     individual_ocr: Mapping[str, float] | None = None,
     overrule_xi: float | None = None,
     gamma_f_nk: float = 1.0,
@@ -111,6 +114,27 @@ def create_multi_cpt_payload(
               excavation method.
 
         See for more info NEN 9997-1+C2:2017 7.6.2.3.(10)(k)
+    excavation_stress_reduction_method:
+        Method used to calculate the stress reduction due to the excavation applied to the effective and total stresses.
+        Only used when `excavation_depth_nap` is different than `None`. It can be:
+            - "constant" (default): The stress reduction below the excavation is constant with depth. The stress reduction
+            is equal to the original effective stress (i.e. before the excavation) at the excavation depth.
+            - "begemann": The stress reduction below the excavation decreases with depth according to the Begemann method.
+            This method uses the elastic solution of a strip load acting on a semi-infinite homogeneous soil mass.
+            The load has a width equal to the excavation width and a magnitude equal to the original effective stress at
+            the excavation depth.
+        Regardless the method, the stress reduction applied above the excavation is equal to the original effective stress
+        at each corresponding depth.
+    excavation_width:
+        Width of the excavation [m]. Used to calculate the stress reduction due to the excavation if the Begemann method is selected.
+        In this case, it must be provided and it must be > 0.
+    excavation_edge_distance:
+        Distance from the pile centerline to the excavation edge [m]. Used to calculate the stress reduction due to the excavation if
+        the Begemann method is selected. In this case, it must be provided and it must be between 0.0 and 0.5 * excavation_width.
+
+        Note that:
+            - 0.0 means that the pile is located at the edge of the excavation.
+            - 0.5 * excavation_width means that the pile is at the center of the excavation.
     overrule_xi:
         Set a fixed value for xi in all calculations. Use with caution. This will
         overrule the calculation of xi-values based on the group-size, variation-
@@ -219,6 +243,16 @@ def create_multi_cpt_payload(
     # Add optional properties
     if excavation_depth_nap is not None:
         multi_cpt_payload["excavation_depth_nap"] = excavation_depth_nap
+    if excavation_stress_reduction_method == "constant":
+        multi_cpt_payload["excavation_settings"] = dict(
+            stress_reduction_method="constant"
+        )
+    else:
+        multi_cpt_payload["excavation_settings"] = dict(
+            stress_reductin_method="begemann",
+            excavation_width=excavation_width,
+            excavation_edge_distance=excavation_edge_distance,
+        )
     if overrule_xi is not None:
         multi_cpt_payload["overrule_xi"] = overrule_xi
     if pile_grid is not None:
