@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2025-05-05
+
+### Features
+
+#### Pilecore_tension
+
+- Add begemann excavation stress reducion in tension create_multi_cpt_payload
+
+
 ## [1.0.4] - 2025-04-30
 
 ### Documentation
