@@ -145,6 +145,8 @@ def create_basic_pile(
     height_base :
         The height [m] of the base component, by default None.
         Required if base dimensions are provided.
+        Note: When standard is CUR236, `height_base` should be None, making the
+        shaft dimensions equal to the base dimensions.
     core_secondary_dimension :
         The largest dimension [m] of the rectangular core component's cross-section, by default None.
         Required for rectangular piles.

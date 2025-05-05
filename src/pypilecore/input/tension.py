@@ -105,6 +105,21 @@ def create_multi_cpt_payload(
             - Literal["surface"] (default).
                 In this case, the soil_properties.service_level
                 property is used.
+    top_of_tension_zone_nap:
+        The level [w.r.t. NAP] of the top of the tension zone from which the uplift capacity
+        (tension) is calculated. If None, the top of the tension zone is set to the `pile_head_level_nap`.
+        Note that PileCore will automatically apply the remarks regarding L;a in CUR236 6.1.1. if
+        this standard is selected.
+    individual_top_of_tension_zone_nap:
+        A dictionary, mapping specific CPTs (using the `CPTData.alias`` as keys) to `top_of_tension_zone_nap`
+        (as values). This will overrule the general `top_of_tension_zone_nap` setting for these specific
+        CPTs only.
+        Example: {"S03": 1.5}
+    individual_ocr:
+        A dictionary, mapping specific CPTs (using the `CPTData.alias`` as keys) to Over-Consolidation-Ratio [-]
+        of the foundation layer (as values). This will overrule the general `ocr` setting for
+        these specific CPTs only.
+        Example: {"S03": 1.5}
     excavation_depth_nap:
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
     excavation_param_t:
