@@ -959,7 +959,9 @@ Both “rect” and “rectangle” are accepted for rectangular piles.</p></li>
 Required if <cite>main_type</cite> is provided.</p></li>
 <li><p><strong>installation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The installation of the standard pile type definition, by default None.</p></li>
 <li><p><strong>height_base</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The height [m] of the base component, by default None.
-Required if base dimensions are provided.</p></li>
+Required if base dimensions are provided.
+Note: When standard is CUR236, <cite>height_base</cite> should be None, making the
+shaft dimensions equal to the base dimensions.</p></li>
 <li><p><strong>core_secondary_dimension</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The largest dimension [m] of the rectangular core component’s cross-section, by default None.
 Required for rectangular piles.</p></li>
 <li><p><strong>core_tertiary_dimension</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The smallest dimension [m] of the rectangular core component’s cross-section, by default None.
