@@ -358,7 +358,7 @@ six==1.17.0
     #   python-dateutil
     #   retrying
     #   rfc3339-validator
-snowballstemmer==2.2.0
+snowballstemmer==3.0.1
     # via sphinx
 sphinx==8.2.3
     # via
