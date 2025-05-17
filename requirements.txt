@@ -349,7 +349,7 @@ s3transfer==0.11.4
     # via boto3
 scipy==1.15.2
     # via py-pilecore (pyproject.toml)
-setuptools==78.1.0
+setuptools==80.7.1
     # via dash
 shapely==2.1.0
     # via py-pilecore (pyproject.toml)
