@@ -157,7 +157,7 @@ jsonschema-path==0.3.4
     # via
     #   openapi-core
     #   openapi-spec-validator
-jsonschema-specifications==2024.10.1
+jsonschema-specifications==2025.4.1
     # via
     #   jsonschema
     #   openapi-schema-validator
