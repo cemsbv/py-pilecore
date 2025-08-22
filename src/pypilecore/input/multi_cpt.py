@@ -305,7 +305,7 @@ def create_multi_cpt_payload(
         )
     else:
         multi_cpt_payload["excavation_settings"] = dict(
-            stress_reductin_method="begemann",
+            stress_reduction_method="begemann",
             excavation_width=excavation_width,
             excavation_edge_distance=excavation_edge_distance,
         )
