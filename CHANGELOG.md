@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.2] - 2025-08-22
+ 
+### Bug Fixes
+
+#### Begemman
+
+ - Fix generation of excavation settings when Begemann is selected
+
+
 ## [1.1.1] - 2025-05-05
 
 ### Documentation
