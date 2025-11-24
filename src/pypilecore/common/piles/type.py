@@ -238,9 +238,9 @@ class PileType:
             custom_type_properties["settlement_curve"] = self.settlement_curve
 
         if self.negative_fr_delta_factor is not None:
-            custom_type_properties[
-                "negative_fr_delta_factor"
-            ] = self.negative_fr_delta_factor
+            custom_type_properties["negative_fr_delta_factor"] = (
+                self.negative_fr_delta_factor
+            )
 
         if self.adhesion is not None:
             custom_type_properties["adhesion"] = self.adhesion

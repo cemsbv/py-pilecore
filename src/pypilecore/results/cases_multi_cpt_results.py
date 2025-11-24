@@ -194,7 +194,7 @@ class CasesMultiCPTBearingResults:
 
 
 def _validate_results_per_case(
-    results_per_case: Dict[Hashable, MultiCPTBearingResults]
+    results_per_case: Dict[Hashable, MultiCPTBearingResults],
 ) -> None:
     """
     Private method to validate the results_per_case dictionary.

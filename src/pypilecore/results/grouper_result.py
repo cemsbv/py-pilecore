@@ -332,7 +332,7 @@ class SingleClusterData:
             self.pile_tip_level,
             color=list(
                 map(
-                    lambda i: "tab:cyan" if i == "\u03BE4" else "tab:olive",
+                    lambda i: "tab:cyan" if i == "\u03be4" else "tab:olive",
                     self.xi_factor,
                 )
             ),
@@ -833,11 +833,15 @@ class GrouperResults:
             cpt_names_list.extend(cluster.cpt_names)
             color_list.extend(
                 [
-                    "tab:green"
-                    if cluster.spatial_check and cluster.centre_to_centre_check
-                    else "tab:orange"
-                    if cluster.spatial_check and ~cluster.centre_to_centre_check
-                    else "tab:red"
+                    (
+                        "tab:green"
+                        if cluster.spatial_check and cluster.centre_to_centre_check
+                        else (
+                            "tab:orange"
+                            if cluster.spatial_check and ~cluster.centre_to_centre_check
+                            else "tab:red"
+                        )
+                    )
                 ]
                 * len(cluster.cpt_names)
             )

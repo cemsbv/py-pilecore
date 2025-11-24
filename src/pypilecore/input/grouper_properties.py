@@ -25,15 +25,17 @@ def create_grouper_payload(
     gamma_shaft: float = 1.2,
     include_centre_to_centre_check: bool = False,
     stiff_construction: bool = False,
-    optimize_result_by: List[
-        Literal[
-            "minimum_pile_level",
-            "number_of_cpts",
-            "number_of_consecutive_pile_levels",
-            "centre_to_centre_check",
+    optimize_result_by: (
+        List[
+            Literal[
+                "minimum_pile_level",
+                "number_of_cpts",
+                "number_of_consecutive_pile_levels",
+                "centre_to_centre_check",
+            ]
         ]
-    ]
-    | None = _dft_optimize_result_by,  # type: ignore
+        | None
+    ) = _dft_optimize_result_by,  # type: ignore
     resolution: float = 0.5,
     overrule_nan: float = 0.0,
     skip_nan: bool = False,

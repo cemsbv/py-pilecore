@@ -606,9 +606,11 @@ class SoilProperties:
                 handles=get_soil_layer_handles(),
                 loc="upper left",
                 bbox_to_anchor=(1, 1),
-                title="name: " + self.test_id
-                if self.test_id is not None
-                else "name: unknown",
+                title=(
+                    "name: " + self.test_id
+                    if self.test_id is not None
+                    else "name: unknown"
+                ),
             )
 
         return axes
@@ -693,9 +695,11 @@ class SoilProperties:
                 handles=handles_list,
                 loc="upper left",
                 bbox_to_anchor=(1, 1),
-                title="name: " + self.test_id
-                if self.test_id is not None
-                else "name: unknown",
+                title=(
+                    "name: " + self.test_id
+                    if self.test_id is not None
+                    else "name: unknown"
+                ),
             )
 
         # Add a legend if required
@@ -716,9 +720,11 @@ class SoilProperties:
                 handles=handles_list,
                 loc="upper left",
                 bbox_to_anchor=(1, 1),
-                title="name: " + self.test_id
-                if self.test_id is not None
-                else "name: unknown",
+                title=(
+                    "name: " + self.test_id
+                    if self.test_id is not None
+                    else "name: unknown"
+                ),
             )
 
         return fig

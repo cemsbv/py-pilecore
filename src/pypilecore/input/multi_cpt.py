@@ -23,8 +23,9 @@ def create_multi_cpt_payload(
     cpts_group: List[str] | None = None,
     ocr: float | None = None,
     fixed_negative_friction_range_nap: Tuple[float, float] | None = None,
-    fixed_positive_friction_range_nap: Tuple[float, Literal["ptl"] | float]
-    | None = None,
+    fixed_positive_friction_range_nap: (
+        Tuple[float, Literal["ptl"] | float] | None
+    ) = None,
     negative_shaft_friction: float | None = None,
     apply_qc3_reduction: bool | None = None,
     relative_pile_load: float | None = 0.7,
@@ -36,12 +37,12 @@ def create_multi_cpt_payload(
     excavation_stress_reduction_method: Literal["constant", "begemann"] = "constant",
     excavation_width: float | None = None,
     excavation_edge_distance: float | None = None,
-    individual_negative_friction_range_nap: Mapping[str, Tuple[float, float]]
-    | None = None,
-    individual_positive_friction_range_nap: Mapping[
-        str, Tuple[float, Literal["ptl"] | float]
-    ]
-    | None = None,
+    individual_negative_friction_range_nap: (
+        Mapping[str, Tuple[float, float]] | None
+    ) = None,
+    individual_positive_friction_range_nap: (
+        Mapping[str, Tuple[float, Literal["ptl"] | float]] | None
+    ) = None,
     individual_ocr: Mapping[str, float] | None = None,
     use_almere_rules: bool = False,
     overrule_xi: float | None = None,
@@ -317,13 +318,13 @@ def create_multi_cpt_payload(
     if negative_shaft_friction is not None:
         multi_cpt_payload["f_nk"] = negative_shaft_friction
     if fixed_negative_friction_range_nap is not None:
-        multi_cpt_payload[
-            "fixed_negative_friction_range_nap"
-        ] = fixed_negative_friction_range_nap
+        multi_cpt_payload["fixed_negative_friction_range_nap"] = (
+            fixed_negative_friction_range_nap
+        )
     if fixed_positive_friction_range_nap is not None:
-        multi_cpt_payload[
-            "fixed_positive_friction_range_nap"
-        ] = fixed_positive_friction_range_nap
+        multi_cpt_payload["fixed_positive_friction_range_nap"] = (
+            fixed_positive_friction_range_nap
+        )
     if overrule_xi is not None:
         multi_cpt_payload["overrule_xi"] = overrule_xi
     if cpts_group is not None:
@@ -389,9 +390,9 @@ def create_multi_cpt_report_payload(
                 author=author,
                 project_id=project_id,
                 project_name=project_name,
-                date=date
-                if date is None
-                else datetime.date.today().strftime("%d-%m-%y"),
+                date=(
+                    date if date is None else datetime.date.today().strftime("%d-%m-%y")
+                ),
             ),
         )
     )
