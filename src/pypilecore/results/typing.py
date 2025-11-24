@@ -1,4 +1,4 @@
-from typing import List, Protocol, TypeVar, runtime_checkable
+from typing import List, Protocol, Union, runtime_checkable
 
 from pypilecore.common.piles import PileProperties
 from pypilecore.results.compression.multi_cpt_results import (
@@ -10,13 +10,6 @@ from pypilecore.results.tension.multi_cpt_results import (
     SingleCPTTensionBearingResultsContainer,
 )
 
-T = TypeVar(
-    "T",
-    SingleCPTCompressionBearingResultsContainer,
-    SingleCPTTensionBearingResultsContainer,
-)
-S = TypeVar("S", CPTCompressionGroupResultsTable, CPTTensionGroupResultsTable)
-
 
 @runtime_checkable
 class MultiCPTBearingResults(Protocol):
@@ -24,21 +17,23 @@ class MultiCPTBearingResults(Protocol):
     protocol classes for MultiCPTBearingResults from compression or tension endpoint response
     """
 
-    def __init__(self) -> None:
-        ...
+    def __init__(self) -> None: ...
 
     @property
-    def pile_properties(self) -> PileProperties:
-        ...
+    def pile_properties(self) -> PileProperties: ...
 
     @property
-    def cpt_results(self) -> T:
-        ...
+    def cpt_results(
+        self,
+    ) -> Union[
+        SingleCPTCompressionBearingResultsContainer,
+        SingleCPTTensionBearingResultsContainer,
+    ]: ...
 
     @property
-    def cpt_names(self) -> List[str]:
-        ...
+    def cpt_names(self) -> List[str]: ...
 
     @property
-    def group_results_table(self) -> S:
-        ...
+    def group_results_table(
+        self,
+    ) -> Union[CPTCompressionGroupResultsTable, CPTTensionGroupResultsTable]: ...

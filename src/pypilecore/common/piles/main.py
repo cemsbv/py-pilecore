@@ -103,8 +103,9 @@ def create_basic_pile(
     base_tertiary_dimension: float | None = None,
     core_diameter: float | None = None,
     base_diameter: float | None = None,
-    pile_material: Literal["concrete", "steel", "wood", "grout", "grout_extorted"]
-    | None = None,
+    pile_material: (
+        Literal["concrete", "steel", "wood", "grout", "grout_extorted"] | None
+    ) = None,
     custom_material: dict | None = None,
     settlement_curve: int | None = None,
     adhesion: float | None = None,
