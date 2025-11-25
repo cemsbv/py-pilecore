@@ -1,7 +1,8 @@
 {
   "files": {
     "includes": [
-      "!tests/*/*.json"
+        "**",
+        "!tests/*/*.json"
     ]
   }
 }

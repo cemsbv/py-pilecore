@@ -564,6 +564,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/output_grouper'
 components:
+  securitySchemes:
+    {}
   schemas:
     xi:
       type: number
