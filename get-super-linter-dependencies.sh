@@ -3,7 +3,7 @@
 # Bash-script to quickly get the pinned dependencies for a specific super-linter tag
 
 # Define the TAG variable
-TAG="v5" # Replace with the desired tag
+TAG="v8" # Replace with the desired tag
 
 # Create a temporary directory
 TEMP_DIR=$(mktemp -d -p "$(pwd)")
