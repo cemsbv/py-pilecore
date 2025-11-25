@@ -22,7 +22,7 @@ jobs:
           - "3.12"
           - "3.13"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Install python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -64,7 +64,7 @@ jobs:
           fetch-depth: 0
 
       - name: Lint
-        uses: github/super-linter@v8.2.1
+        uses: github/super-linter@v8
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
@@ -90,7 +90,7 @@ jobs:
     name: Test docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Install python 3.11
         uses: actions/setup-python@v5
