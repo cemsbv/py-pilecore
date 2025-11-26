@@ -318,7 +318,7 @@ referencing==0.36.2
     #   jsonschema
     #   jsonschema-path
     #   jsonschema-specifications
-regex==2024.11.6
+regex==2025.11.3
     # via
     #   cfn-lint
     #   sqlfluff
