@@ -1,25 +1,45 @@
 #!/bin/bash
 
 docker run \
---env VALIDATE_ALL_CODEBASE=false \
 --env RUN_LOCAL=true \
+--env VALIDATE_ALL_CODEBASE=false \
 --env FIX_PYTHON_ISORT=true \
 --env FIX_PYTHON_BLACK=true \
 --env FIX_YAML_PRETTIER=true \
 --env DEFAULT_BRANCH=main \
---env VALIDATE_JSCPD=false \
---env VALIDATE_CSS=false \
 --env VALIDATE_BASH=false \
---env VALIDATE_YAML=false \
---env VALIDATE_PYTHON_PYLINT=false \
---env VALIDATE_NATURAL_LANGUAGE=false \
+--env VALIDATE_BIOME_FORMAT=false \
+--env VALIDATE_BIOME_LINT=false \
+--env VALIDATE_CHECKOV=false \
+--env VALIDATE_CSS=false \
+--env VALIDATE_GITHUB_ACTIONS=false \
+--env VALIDATE_GITHUB_ACTIONS_ZIZMOR=false \
+--env VALIDATE_JSCPD=false \
+--env VALIDATE_JSON=false \
+--env VALIDATE_JSON_PRETTIER=false \
+--env VALIDATE_JUPYTER_NBQA_BLACK=false \
+--env VALIDATE_JUPYTER_NBQA_ISORT=false \
+--env VALIDATE_JUPYTER_NBQA_FLAKE8=false \
+--env VALIDATE_JUPYTER_NBQA_MYPY=false \
+--env VALIDATE_JUPYTER_NBQA_PYLINT=false \
+--env VALIDATE_JUPYTER_NBQA_RUFF=false \
 --env VALIDATE_MARKDOWN=false \
---env FILTER_REGEX_EXCLUDE=.*tests/.* \
+--env VALIDATE_MARKDOWN_PRETTIER=false \
+--env VALIDATE_NATURAL_LANGUAGE=false \
+--env VALIDATE_PRE_COMMIT=false \
+--env VALIDATE_PYTHON_PYLINT=false \
+--env VALIDATE_PYTHON_RUFF_FORMAT=false \
+--env VALIDATE_SHELL_SHFMT=false \
+--env VALIDATE_TRIVY=false \
+--env VALIDATE_YAML=false \
+--env FILTER_REGEX_EXCLUDE=tests/ \
 --env LINTER_RULES_PATH=/ \
 --env PYTHON_BLACK_CONFIG_FILE=pyproject.toml \
 --env PYTHON_ISORT_CONFIG_FILE=pyproject.toml \
 --env PYTHON_MYPY_CONFIG_FILE=pyproject.toml \
 --env PYTHON_FLAKE8_CONFIG_FILE=.flake8 \
+--env SAVE_SUPER_LINTER_OUTPUT=true \
+--env SAVE_SUPER_LINTER_SUMMARY=true \
 -v $(pwd):/tmp/lint \
 --rm \
-ghcr.io/super-linter/super-linter:v8
+ghcr.io/super-linter/super-linter:latest

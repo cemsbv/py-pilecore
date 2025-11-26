@@ -5,6 +5,9 @@
 # Define the TAG variable
 TAG="v8" # Replace with the desired tag
 
+# Store the current directory
+BASE_DIR=$(pwd)
+
 # Create a temporary directory
 TEMP_DIR=$(mktemp -d -p "$(pwd)")
 
@@ -24,7 +27,7 @@ cd $TEMP_DIR/dependencies/python/
 cat *.txt > superlinter_dependencies.txt
 
 # Copy the superlinter_dependencies.txt to the original repository
-cp superlinter_dependencies.txt /home/thijs/dev/cemsbv/github/py-pilecore/
+cp superlinter_dependencies.txt "$BASE_DIR"
 
 # Navigate back to the original repository
 cd -

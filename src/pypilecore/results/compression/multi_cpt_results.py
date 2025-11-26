@@ -608,7 +608,7 @@ class MultiCPTCompressionBearingResults:
                 Please select on of the following attributes:
                 {
                     set(self.cpt_results.results[0].table.__dict__.keys())
-                     & set(self.group_results_table.__dict__.keys())
+                    & set(self.group_results_table.__dict__.keys())
                 }
                 """
             )
