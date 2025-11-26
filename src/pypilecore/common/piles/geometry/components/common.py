@@ -122,7 +122,7 @@ def get_area_vs_depth(
     np.array
         Array with component areas at the depths in the depth parameter.
     """
-    area_vs_depth = np.zeros_like(depth_nap)
+    area_vs_depth = np.zeros_like(depth_nap, dtype=np.float64)
 
     # Mask the depths between the component tip and head level
     mask_depths = (depth_nap <= component_head_level_nap) & (
