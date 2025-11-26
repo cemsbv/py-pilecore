@@ -443,7 +443,7 @@ werkzeug==3.0.6
     #   openapi-core
 widgetsnbextension==4.0.14
     # via ipywidgets
-xmltodict==0.14.2
+xmltodict==1.0.2
     # via yq
 yamllint==1.35.1
     # via
