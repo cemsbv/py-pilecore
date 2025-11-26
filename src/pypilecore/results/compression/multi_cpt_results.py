@@ -485,15 +485,19 @@ class MultiCPTCompressionBearingResults:
                 R_s_k=group_results["R_s_k"],
                 R_b_k=group_results["R_b_k"],
                 R_c_k=group_results["R_c_k"],
-                R_s_d=group_results["R_s_d"]
-                if "R_s_d" in group_results
-                else np.full_like(
-                    group_results["pile_tip_level_nap"], fill_value=np.nan
+                R_s_d=(
+                    group_results["R_s_d"]
+                    if "R_s_d" in group_results
+                    else np.full_like(
+                        group_results["pile_tip_level_nap"], fill_value=np.nan
+                    )
                 ),  # For backwards compatibility with PileCore-API < 2.9.0
-                R_b_d=group_results["R_b_d"]
-                if "R_b_d" in group_results
-                else np.full_like(
-                    group_results["pile_tip_level_nap"], fill_value=np.nan
+                R_b_d=(
+                    group_results["R_b_d"]
+                    if "R_b_d" in group_results
+                    else np.full_like(
+                        group_results["pile_tip_level_nap"], fill_value=np.nan
+                    )
                 ),  # For backwards compatibility with PileCore-API < 2.9.0,
                 R_c_d=group_results["R_c_d"],
                 F_nk_cal_mean=group_results["F_nk_cal_mean"],

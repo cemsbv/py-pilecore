@@ -45,12 +45,12 @@ def create_soil_properties_payload(
     friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     excavation_depth_nap: float | None = None,
     master_ocr: float | None = None,
-    individual_negative_friction_range_nap: Mapping[Any, Tuple[float, float]]
-    | None = None,
-    individual_positive_friction_range_nap: Mapping[
-        Any, Tuple[float, Literal["ptl"] | float]
-    ]
-    | None = None,
+    individual_negative_friction_range_nap: (
+        Mapping[Any, Tuple[float, float]] | None
+    ) = None,
+    individual_positive_friction_range_nap: (
+        Mapping[Any, Tuple[float, Literal["ptl"] | float]] | None
+    ) = None,
     individual_ocr: Mapping[Any, float] | None = None,
     master_top_of_tension_zone_nap: float | None = None,
     individual_top_of_tension_zone_nap: Mapping[Any, float] | None = None,
@@ -186,9 +186,11 @@ def create_soil_properties_payload(
             layer_table_data=layer_table_data,
             ref_height=cpt.delivered_vertical_position_offset,
             test_id=cpt.alias,
-            groundwater_level_nap=groundwater_level_nap
-            if groundwater_level_nap is not None
-            else cpt.delivered_vertical_position_offset - 1,
+            groundwater_level_nap=(
+                groundwater_level_nap
+                if groundwater_level_nap is not None
+                else cpt.delivered_vertical_position_offset - 1
+            ),
         )
 
         # Optionally add coordinates
@@ -207,17 +209,17 @@ def create_soil_properties_payload(
             individual_negative_friction_range_nap is not None
             and cpt.alias in individual_negative_friction_range_nap.keys()
         ):
-            soil_properties[
-                "fixed_negative_friction_range_nap"
-            ] = individual_negative_friction_range_nap[cpt.alias]
+            soil_properties["fixed_negative_friction_range_nap"] = (
+                individual_negative_friction_range_nap[cpt.alias]
+            )
             soil_properties["friction_range_strategy"] = "manual"
         if (
             individual_positive_friction_range_nap is not None
             and cpt.alias in individual_positive_friction_range_nap.keys()
         ):
-            soil_properties[
-                "fixed_positive_friction_range_nap"
-            ] = individual_positive_friction_range_nap[cpt.alias]
+            soil_properties["fixed_positive_friction_range_nap"] = (
+                individual_positive_friction_range_nap[cpt.alias]
+            )
             soil_properties["friction_range_strategy"] = "manual"
 
         # Optionally add top_of_tension_zone_nap parameter
@@ -244,9 +246,11 @@ def create_soil_properties_payload(
         soil_properties_list.append(soil_properties)
         results_passover[cpt.alias] = {
             "ref_height": cpt.delivered_vertical_position_offset,
-            "surface_level_nap": excavation_depth_nap
-            if excavation_depth_nap is not None
-            else cpt.delivered_vertical_position_offset,
+            "surface_level_nap": (
+                excavation_depth_nap
+                if excavation_depth_nap is not None
+                else cpt.delivered_vertical_position_offset
+            ),
             "location": {"x": cpt.delivered_location.x, "y": cpt.delivered_location.y},
         }
 

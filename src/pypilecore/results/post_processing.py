@@ -274,9 +274,11 @@ class MaxBearingResult:
                 handles=handles_list,
                 loc="upper left",
                 bbox_to_anchor=(1, 1),
-                title="name: " + self.soil_properties.test_id
-                if self.soil_properties.test_id is not None
-                else "name: unknown",
+                title=(
+                    "name: " + self.soil_properties.test_id
+                    if self.soil_properties.test_id is not None
+                    else "name: unknown"
+                ),
             )
 
         return fig
