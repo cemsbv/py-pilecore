@@ -49,7 +49,7 @@ lint = [
   "cfn-lint==1.40.0",
   "cpplint==2.0.2",
   "flake8==7.3.0",
-  "isort==6.1.0",
+  "isort==7.0.0",
   "mypy==1.18.2",
   "nbqa==1.9.1",
   "pre-commit==4.3.0",
