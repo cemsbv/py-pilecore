@@ -11,10 +11,15 @@ on:
       - "**.md"
   workflow_call:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Unit test
     runs-on: ubuntu-latest
+    if: github.actor != 'renovate[bot]'
     strategy:
       matrix:
         python-version:
@@ -46,7 +51,7 @@ jobs:
 
   finish:
     needs: test
-    if: ${{ always() }}
+    if: ${{ always() && github.actor != 'renovate[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
@@ -57,6 +62,7 @@ jobs:
   lint:
     name: Formatting check
     runs-on: ubuntu-latest
+    if: github.actor != 'renovate[bot]'
     steps:
       - uses: actions/checkout@v6
         with:
@@ -77,6 +83,7 @@ jobs:
   test_docs:
     name: Test docs
     runs-on: ubuntu-latest
+    if: github.actor != 'renovate[bot]'
     steps:
       - uses: actions/checkout@v6
 
