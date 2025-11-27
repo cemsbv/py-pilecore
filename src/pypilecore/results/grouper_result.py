@@ -668,13 +668,17 @@ class GrouperResults:
                         - ptl
                     ).argmin()
 
-                    # check bearing capacity
-                    if cluster.data.net_design_bearing_capacity[
-                        cluster_ptl_idx
-                    ] > np.nan_to_num(
-                        max_bearing[cpt_name]["results_table"]["R_c_d_net"][
-                            max_bearing_ptl_idx
-                        ]
+                    # Replace the data if the net design bearing capacity is higher and the variation coefficient is at most 12%
+                    if (
+                        # New value has a higher net design bearing capacity
+                        cluster.data.net_design_bearing_capacity[cluster_ptl_idx]
+                        > np.nan_to_num(
+                            max_bearing[cpt_name]["results_table"]["R_c_d_net"][
+                                max_bearing_ptl_idx
+                            ]
+                        )
+                        # Maximum variation coefficient of 12%
+                        and cluster.data.variation_coefficient[cluster_ptl_idx] <= 12.0
                     ):
                         # replace data
                         max_bearing[cpt_name]["results_table"]["R_c_d_net"][
