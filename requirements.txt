@@ -117,7 +117,7 @@ flask==3.1.2
     # via dash
 fonttools==4.60.1
     # via matplotlib
-gef-file-to-map==0.2.1
+gef-file-to-map==1.0.0
     # via pygef
 identify==2.6.15
     # via pre-commit
