@@ -80,6 +80,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Install xmllint
+        run: sudo apt-get install -y build-dep python3-lxml
+
       - name: Install python 3.11
         uses: actions/setup-python@v6
         with:

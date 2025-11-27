@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "py-pilecore"
 version = "1.1.3"
 description = "Public python SDK for the CEMS PileCore web-API."
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
   "anywidget>=0.9.18,<0.10",
   "cems-nuclei[client]>=3.0.0,<4",
@@ -35,8 +35,8 @@ test = ["coveralls", "pytest", "openapi-core"]
 docs = [
   "Sphinx==8.2.3",
   "asteroid-sphinx-theme==0.0.3",
-  "ipython==9.1.0",
-  "sphinx-autodoc-typehints==3.1.0",
+  "ipython==9.7.0",
+  "sphinx-autodoc-typehints==3.5.2",
   "sphinx_rtd_theme==3.0.2",
 ]
 # lint dependencies from github super-linter
@@ -44,19 +44,19 @@ docs = [
 # Get a file with the latest requirements by running bash: `./get-super-linter-requirements.sh`
 # ignoring because redundant: snakemake, snakefmt, pylint
 lint = [
-  "ansible-lint==25.9.1",
-  "black==25.9.0",
-  "cfn-lint==1.40.0",
+  "ansible-lint==25.11.1",
+  "black==25.11.0",
+  "cfn-lint==1.41.0",
   "cpplint==2.0.2",
   "flake8==7.3.0",
-  "isort==6.1.0",
+  "isort==7.0.0",
   "mypy==1.18.2",
   "nbqa==1.9.1",
-  "pre-commit==4.3.0",
+  "pre-commit==4.5.0",
   "sqlfluff==3.4.2",
   "yamllint==1.37.1",
   "yq==3.4.3",
-  "zizmor==1.14.2"
+  "zizmor==1.17.0"
 ]
 
 [tool.isort]
