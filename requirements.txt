@@ -184,7 +184,7 @@ kiwisolver==1.4.9
     # via matplotlib
 lazy-object-proxy==1.12.0
     # via openapi-spec-validator
-lxml==5.4.0
+lxml==6.0.2
     # via pygef
 markupsafe==3.0.3
     # via
