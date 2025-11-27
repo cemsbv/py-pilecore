@@ -771,13 +771,17 @@
                         <span class="o">-</span> <span class="n">ptl</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
 
-                    <span class="c1"># check bearing capacity</span>
-                    <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">net_design_bearing_capacity</span><span class="p">[</span>
-                        <span class="n">cluster_ptl_idx</span>
-                    <span class="p">]</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
-                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;R_c_d_net&quot;</span><span class="p">][</span>
-                            <span class="n">max_bearing_ptl_idx</span>
-                        <span class="p">]</span>
+                    <span class="c1"># Replace the data if the net design bearing capacity is higher and the variation coefficient is at most 12%</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="c1"># New value has a higher net design bearing capacity</span>
+                        <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">net_design_bearing_capacity</span><span class="p">[</span><span class="n">cluster_ptl_idx</span><span class="p">]</span>
+                        <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+                            <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;R_c_d_net&quot;</span><span class="p">][</span>
+                                <span class="n">max_bearing_ptl_idx</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+                        <span class="c1"># Maximum variation coefficient of 12%</span>
+                        <span class="ow">and</span> <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">variation_coefficient</span><span class="p">[</span><span class="n">cluster_ptl_idx</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">12.0</span>
                     <span class="p">):</span>
                         <span class="c1"># replace data</span>
                         <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;R_c_d_net&quot;</span><span class="p">][</span>
