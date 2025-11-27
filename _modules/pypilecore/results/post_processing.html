@@ -364,9 +364,11 @@
                 <span class="n">handles</span><span class="o">=</span><span class="n">handles_list</span><span class="p">,</span>
                 <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span>
                 <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;name: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">test_id</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">test_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                <span class="k">else</span> <span class="s2">&quot;name: unknown&quot;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="p">(</span>
+                    <span class="s2">&quot;name: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">test_id</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">test_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="k">else</span> <span class="s2">&quot;name: unknown&quot;</span>
+                <span class="p">),</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fig</span></div>

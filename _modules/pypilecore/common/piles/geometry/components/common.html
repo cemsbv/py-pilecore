@@ -196,7 +196,7 @@
 <span class="sd">    np.array</span>
 <span class="sd">        Array with component areas at the depths in the depth parameter.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">area_vs_depth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">depth_nap</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">)</span>
+    <span class="n">area_vs_depth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">depth_nap</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="c1"># Mask the depths between the component tip and head level</span>
     <span class="n">mask_depths</span> <span class="o">=</span> <span class="p">(</span><span class="n">depth_nap</span> <span class="o">&lt;=</span> <span class="n">component_head_level_nap</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>

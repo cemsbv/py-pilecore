@@ -419,7 +419,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
                 <span class="nb">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="s2">&quot;tab:cyan&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\u03BE</span><span class="s2">4&quot;</span> <span class="k">else</span> <span class="s2">&quot;tab:olive&quot;</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="s2">&quot;tab:cyan&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\u03be</span><span class="s2">4&quot;</span> <span class="k">else</span> <span class="s2">&quot;tab:olive&quot;</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">xi_factor</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">),</span>
@@ -941,11 +941,15 @@
             <span class="n">cpt_names_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">)</span>
             <span class="n">color_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="s2">&quot;tab:green&quot;</span>
-                    <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
-                    <span class="k">else</span> <span class="s2">&quot;tab:orange&quot;</span>
-                    <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="o">~</span><span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
-                    <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;tab:green&quot;</span>
+                        <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
+                        <span class="k">else</span> <span class="p">(</span>
+                            <span class="s2">&quot;tab:orange&quot;</span>
+                            <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="o">~</span><span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
+                            <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
                 <span class="p">]</span>
                 <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">)</span>
             <span class="p">)</span>

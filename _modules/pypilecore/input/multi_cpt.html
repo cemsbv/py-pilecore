@@ -99,8 +99,9 @@
     <span class="n">cpts_group</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">ocr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fixed_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">fixed_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span>
-    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fixed_positive_friction_range_nap</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">negative_shaft_friction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">apply_qc3_reduction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">relative_pile_load</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
@@ -112,12 +113,12 @@
     <span class="n">excavation_stress_reduction_method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;begemann&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span>
     <span class="n">excavation_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">excavation_edge_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">individual_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
-    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">individual_positive_friction_range_nap</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span>
-        <span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span>
-    <span class="p">]</span>
-    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">individual_negative_friction_range_nap</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">individual_positive_friction_range_nap</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">individual_ocr</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">use_almere_rules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">overrule_xi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -393,13 +394,13 @@
     <span class="k">if</span> <span class="n">negative_shaft_friction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;f_nk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">negative_shaft_friction</span>
     <span class="k">if</span> <span class="n">fixed_negative_friction_range_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span>
-            <span class="s2">&quot;fixed_negative_friction_range_nap&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="n">fixed_negative_friction_range_nap</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;fixed_negative_friction_range_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">fixed_negative_friction_range_nap</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">fixed_positive_friction_range_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span>
-            <span class="s2">&quot;fixed_positive_friction_range_nap&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="n">fixed_positive_friction_range_nap</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;fixed_positive_friction_range_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">fixed_positive_friction_range_nap</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">overrule_xi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;overrule_xi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overrule_xi</span>
     <span class="k">if</span> <span class="n">cpts_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -468,9 +469,9 @@
                 <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
                 <span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span>
                 <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
-                <span class="n">date</span><span class="o">=</span><span class="n">date</span>
-                <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span>
-                <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%y&quot;</span><span class="p">),</span>
+                <span class="n">date</span><span class="o">=</span><span class="p">(</span>
+                    <span class="n">date</span> <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%y&quot;</span><span class="p">)</span>
+                <span class="p">),</span>
             <span class="p">),</span>
         <span class="p">)</span>
     <span class="p">)</span>

@@ -101,15 +101,17 @@
     <span class="n">gamma_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
     <span class="n">include_centre_to_centre_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">optimize_result_by</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
-        <span class="n">Literal</span><span class="p">[</span>
-            <span class="s2">&quot;minimum_pile_level&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;number_of_cpts&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;number_of_consecutive_pile_levels&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;centre_to_centre_check&quot;</span><span class="p">,</span>
+    <span class="n">optimize_result_by</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">List</span><span class="p">[</span>
+            <span class="n">Literal</span><span class="p">[</span>
+                <span class="s2">&quot;minimum_pile_level&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;number_of_cpts&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;number_of_consecutive_pile_levels&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;centre_to_centre_check&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
         <span class="p">]</span>
-    <span class="p">]</span>
-    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">_dft_optimize_result_by</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+        <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">_dft_optimize_result_by</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
     <span class="n">resolution</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">overrule_nan</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">skip_nan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>

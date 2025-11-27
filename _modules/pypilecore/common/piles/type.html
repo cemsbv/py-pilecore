@@ -319,9 +319,9 @@
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;settlement_curve&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settlement_curve</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_fr_delta_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span>
-                <span class="s2">&quot;negative_fr_delta_factor&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_fr_delta_factor</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;negative_fr_delta_factor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">negative_fr_delta_factor</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adhesion</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;adhesion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adhesion</span>
