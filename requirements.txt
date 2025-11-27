@@ -62,7 +62,7 @@ chardet==5.2.0
     #   sqlfluff
 charset-normalizer==3.4.4
     # via requests
-click==8.3.1
+click==8.3.0
     # via
     #   black
     #   flask
