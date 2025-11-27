@@ -81,7 +81,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Install xmllint
-        run: sudo apt-get install -y build-dep python3-lxml
+        run: sudo apt-get install libxlm2-dev libxlst-dev python-dev
 
       - name: Install python 3.11
         uses: actions/setup-python@v6
