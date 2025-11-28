@@ -200,3 +200,26 @@ class CPTGroupResultDefinitions(Enum):
             raise ValueError(
                 f"Result with name '{name}' not found in 'CPTGroupResultDefinitions'."
             )
+
+
+class GrouperResultsDefinition(Enum):
+    """
+    Enumeration of available GrouperResults definitions.
+    """
+
+    R_c_d_net = ResultDefinition(
+        name="R_c_d_net",
+        unit="kN",
+        html="R<sub>c;d;net</sub>",
+    )
+    F_nk_d = ResultDefinition(name="F_nk_d", unit="kN", html="F<sub>nk;d</sub>")
+
+    @classmethod
+    def get(cls, name: str) -> GrouperResultsDefinition:
+        """Returns the result definition given the name."""
+        try:
+            return cls[name]
+        except KeyError:
+            raise ValueError(
+                f"Result with name '{name}' not found in 'GrouperResultsDefinition'."
+            )
