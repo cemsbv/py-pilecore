@@ -1,3 +1,4 @@
+from pypilecore.results.cases_grouper_results import CasesGrouperResults
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
 from pypilecore.results.compression.multi_cpt_results import (
     MultiCPTCompressionBearingResults,
@@ -11,6 +12,7 @@ from pypilecore.results.tension.multi_cpt_results import MultiCPTTensionBearingR
 from pypilecore.results.tension.single_cpt_results import SingleCPTTensionBearingResults
 
 __all__ = [
+    "CasesGrouperResults",
     "CasesMultiCPTBearingResults",
     "MultiCPTCompressionBearingResults",
     "SingleCPTCompressionBearingResults",
