@@ -1,15 +1,39 @@
 from __future__ import annotations  # noqa: F404
 
-from typing import Hashable, List
+from typing import Hashable, List, Protocol, runtime_checkable
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
 from pypilecore.results.result_definitions import CPTResultDefinitions
 from pypilecore.viewers.interactive_figures.utils import get_continuous_color
+
+
+@runtime_checkable
+class CasesMultiCPTResultsProtocol(Protocol):
+    """Protocol for CasesMultiCPTBearingResults."""
+
+    @property
+    def cases(self) -> List[Hashable]:
+        """The case names of each MultiCPTBearingResults."""
+        ...
+
+    @property
+    def test_ids(self) -> List[str]:
+        """The test_ids (cpt names) of all the MultiCPTBearingResults."""
+        ...
+
+    @property
+    def pile_tip_levels_nap(self) -> List[float]:
+        """The pile tip levels w.r.t. NAP of all the MultiCPTBearingResults."""
+        ...
+
+    @property
+    def cpt_results_dataframe(self) -> pd.DataFrame:
+        """The dataframe with all CPT results."""
+        ...
 
 
 class FigureCPTResultsPlanView:
@@ -25,14 +49,14 @@ class FigureCPTResultsPlanView:
     The figure has a method to switch between case, result and pile tip level.
     """
 
-    def __init__(self, cases_multi_results: CasesMultiCPTBearingResults) -> None:
+    def __init__(self, cases_multi_results: CasesMultiCPTResultsProtocol) -> None:
         """
         Initializes the figure.
 
         Parameters
         ----------
-        cases_multi_results : CasesMultiCPTBearingResults
-            The results of the bearing capacity calculations.
+        cases_multi_results : CasesMultiCPTResultsProtocol
+            Object with multi-cpt result cases.
 
         Raises
         ------
@@ -45,16 +69,16 @@ class FigureCPTResultsPlanView:
         # Initialize the figure
         self._figure = go.FigureWidget()
 
-    def _set_results(self, value: CasesMultiCPTBearingResults) -> None:
+    def _set_results(self, value: CasesMultiCPTResultsProtocol) -> None:
         """Private setter for the results."""
-        if not isinstance(value, CasesMultiCPTBearingResults):
+        if not isinstance(value, CasesMultiCPTResultsProtocol):
             raise TypeError(
-                f"Expected type 'CasesMultiCPTBearingResults' for 'cases_multi_results', but got {type(value)}"
+                f"Incompatible type for 'cases_multi_results': {type(value)}"
             )
         self._results = value
 
     @property
-    def results(self) -> CasesMultiCPTBearingResults:
+    def results(self) -> CasesMultiCPTResultsProtocol:
         """The results of the bearing capacity calculations."""
         return self._results
 
