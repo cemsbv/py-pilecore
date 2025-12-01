@@ -68,7 +68,7 @@ def test_create_multi_cpt_payload(pc_openapi, cpt, round_pile, headers):
     request = Request(
         method="POST",
         headers=headers,
-        url="http://compression/multiple-cpts/results",
+        url="http://bearing/multiple-cpts/results",
         json=serialize_jsonifyable_object(payload),
     )
 
@@ -104,7 +104,7 @@ def test_create_multi_cpt_payload_no_coords(
     request = Request(
         method="POST",
         headers=headers,
-        url="http://compression/multiple-cpts/results",
+        url="http://bearing/multiple-cpts/results",
         json=serialize_jsonifyable_object(payload),
     )
 
@@ -157,7 +157,7 @@ def test_create_multi_cpt_payload_excavation_settings_valid(
     request = Request(
         method="POST",
         headers=headers,
-        url="http://compression/multiple-cpts/results",
+        url="http://bearing/multiple-cpts/results",
         json=serialize_jsonifyable_object(payload),
     )
 
