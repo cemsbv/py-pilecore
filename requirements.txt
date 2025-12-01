@@ -111,7 +111,7 @@ flake8==7.3.0
     # via py-pilecore (pyproject.toml)
 flask==3.1.2
     # via dash
-fonttools==4.60.1
+fonttools==4.61.0
     # via matplotlib
 gef-file-to-map==1.0.0
     # via pygef
