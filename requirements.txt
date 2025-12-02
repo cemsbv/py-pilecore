@@ -470,7 +470,7 @@ wcmatch==10.1
     # via ansible-lint
 wcwidth==0.2.14
     # via prompt-toolkit
-werkzeug==3.1.1
+werkzeug==3.1.4
     # via
     #   dash
     #   flask
