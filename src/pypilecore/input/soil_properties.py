@@ -8,15 +8,6 @@ from numpy.typing import NDArray
 from pygef.cpt import CPTData
 from tqdm import tqdm
 
-transform = {
-    "rocks": "G",
-    "gravel": "G",
-    "sand": "Z",
-    "silt": "L",
-    "clay": "K",
-    "peat": "V",
-}
-
 
 def get_cpt_depth(cpt: CPTData) -> NDArray:
     """
@@ -163,17 +154,20 @@ def create_soil_properties_payload(
 
         # Construct the layer_table_data payload
         layer_table_data = dict(
-            depth_btm=layer_table["lowerBoundary"],
-            gamma=layer_table["gamma_unsat"],
-            gamma_sat=layer_table["gamma_sat"],
-            index=list(range(0, len(layer_table["gamma_sat"]))),
-            phi=layer_table["phi"],
-            soil_code=[transform[soil] for soil in layer_table["mainComponent"]],
             thickness=(
                 np.array(layer_table["lowerBoundary"])
                 - np.array(layer_table["upperBoundary"])
             ).tolist(),
+            lower_boundary=layer_table["lowerBoundary"],
+            gamma_unsat=layer_table["gamma_unsat"],
+            gamma_sat=layer_table["gamma_sat"],
+            # index=list(range(0, len(layer_table["gamma_sat"]))),
+            phi=layer_table["phi"],
+            main_component=list(layer_table["mainComponent"]),
         )
+        # Optionally add D50 to 'layer_table_data'
+        if "D_50" in layer_table.keys():
+            layer_table_data["D_50"] = layer_table["D_50"]
         # Optionally add consolidation parameters to 'layer_table_data'.
         if "C_p" in layer_table.keys():
             layer_table_data["C_p"] = layer_table["C_p"]
