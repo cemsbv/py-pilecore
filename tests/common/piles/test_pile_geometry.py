@@ -73,11 +73,10 @@ def test_rect_pile_component_core(rect_pile_component_core):
 
     payload = component.serialize_payload()
     assert payload == dict(
-        outer_shape="rectangle",
-        primary_dimension=None,
-        secondary_dimension=0.35,
-        tertiary_dimension=0.30,
-        material="concrete",
+           outer_shape="rectangle",
+           secondary_dimension=0.35,
+           tertiary_dimension=0.30,
+           material="concrete",
     )
 
     assert np.allclose(component.get_component_bounds_nap(-10, 0), (0, -10))
@@ -128,10 +127,9 @@ def test_round_pile_component_core(round_pile_component_core):
 
     payload = component.serialize_payload()
     assert payload == dict(
-        outer_shape="round",
-        primary_dimension=None,
-        diameter=0.35,
-        material="concrete",
+           outer_shape="round",
+           diameter=0.35,
+           material="concrete",
     )
 
     assert np.allclose(component.get_component_bounds_nap(-10, 0), (0, -10))
@@ -181,15 +179,14 @@ def test_rect_widened_base_geometry(rect_widened_base_geometry):
     assert geometry.serialize_payload() == dict(
         components=[
             dict(
-                outer_shape="rectangle",
-                primary_dimension=None,
-                secondary_dimension=0.35,
-                tertiary_dimension=0.30,
-                material="concrete",
+                   outer_shape="rectangle",
+                   secondary_dimension=0.35,
+                   tertiary_dimension=0.30,
+                   material="concrete",
             ),
             dict(
                 outer_shape="rectangle",
-                primary_dimension=dict(length=1),
+                   primary_dimension=dict(length=1.0),
                 secondary_dimension=0.45,
                 tertiary_dimension=0.40,
                 material="concrete",
@@ -249,10 +246,9 @@ def test_round_widened_base_geometry(round_widened_base_geometry):
     assert geometry.serialize_payload() == dict(
         components=[
             dict(
-                outer_shape="round",
-                diameter=0.35,
-                primary_dimension=None,
-                material="concrete",
+                   outer_shape="round",
+                   diameter=0.35,
+                   material="concrete",
             ),
             dict(
                 outer_shape="round",

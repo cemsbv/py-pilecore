@@ -316,7 +316,10 @@ def create_multi_cpt_payload(
     if apply_qc3_reduction is not None:
         multi_cpt_payload["apply_qc3_reduction"] = apply_qc3_reduction
     if negative_shaft_friction is not None:
-        multi_cpt_payload["f_nk"] = negative_shaft_friction
+        # The API expects the field name `negative_friction` for a fixed
+        # negative shaft friction value (kN). Previously this used the
+        # internal/legacy key `f_nk` which does not match the OpenAPI schema.
+        multi_cpt_payload["negative_friction"] = negative_shaft_friction
     if fixed_negative_friction_range_nap is not None:
         multi_cpt_payload["fixed_negative_friction_range_nap"] = (
             fixed_negative_friction_range_nap
