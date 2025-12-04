@@ -1,6 +1,7 @@
 from enum import StrEnum
 from typing import Dict
 
+
 class NEN99971_version(StrEnum):
     V2017 = "2017"
     V2025 = "2025"
@@ -61,7 +62,7 @@ class Norms:
         self.nen_9997_1 = Nen99971(version=nen_9997_1)
         self.cur_236 = Cur236(version=cur_236)
 
-    def serialize_payload(self)-> Dict[str, str]:
+    def serialize_payload(self) -> Dict[str, str]:
         """
         Serialize the norms to a dictonary payload for the API.
 
@@ -71,10 +72,8 @@ class Norms:
             A dictionary payload containing the versions of the selected norms.
         """
         payload: Dict[str, str] = {
-            "NEN99971_version" : self.nen_9997_1.version,
-            "CUR236_version" : self.cur_236.version
+            "NEN99971_version": self.nen_9997_1.version,
+            "CUR236_version": self.cur_236.version,
         }
 
         return payload
-
-
