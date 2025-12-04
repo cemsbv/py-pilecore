@@ -21,7 +21,7 @@ def test_init_valid_input(
     )
 
     assert figure.results == cases_multi_results
-    assert figure.data.equals(cases_multi_results.cpt_results_dataframe)
+    assert figure.data.equals(cases_multi_results.cpt_results_table.to_pandas())
     assert figure.cases == cases_multi_results.cases
     assert figure.test_ids == cases_multi_results.test_ids
     assert figure.pile_tip_levels_nap == cases_multi_results.pile_tip_levels_nap

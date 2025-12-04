@@ -2,7 +2,6 @@ from __future__ import annotations  # noqa: F404
 
 from typing import Any
 
-import pandas as pd
 from IPython.display import DisplayHandle, display
 from ipywidgets import widgets
 from natsort import natsorted
@@ -51,8 +50,14 @@ class ViewerCptResults:
             options=self._figure_plts.cases,
         )
 
+        # Create a sorted list of unique result names
         _options = natsorted(
-            pd.unique(cases_multi_results.cpt_results_dataframe.result_name)
+            set(
+                [
+                    result_def.name
+                    for result_def in cases_multi_results.cpt_results_table.result_def
+                ]
+            )
         )
         self._result_dropdown = widgets.Dropdown(
             description="Result:",

@@ -6,6 +6,7 @@ import pandas as pd
 from natsort import natsorted
 from pygef.common import Location
 
+from pypilecore.results.data_tables import CptResultsTable
 from pypilecore.results.result_definitions import (
     CPTGroupResultDefinition,
     CPTResultDefinition,
@@ -66,39 +67,37 @@ class CasesMultiCPTBearingResults:
         )
         self._set_cpt_locations(cpt_locations)
 
-        # Create cpt_results_dataframe and cpt_group_results_dataframe
-        self._set_cpt_results_dataframe(results_per_case)
+        # Create cpt_results_table and cpt_group_results_dataframe
+        self._cpt_results_table = CptResultsTable.initialize()
+        self._set_cpt_results_table(results_per_case)
         self._set_cpt_group_results_dataframe(results_per_case)
 
-    def _set_cpt_results_dataframe(
+    def _set_cpt_results_table(
         self, results_per_case: Dict[Hashable, MultiCPTBearingResults]
     ) -> None:
-        """Private method to create and set the property `cpt_results_dataframe`."""
-        records = []
+        """Private method to fill the `cpt_results_table`."""
+
         for case_name, case_results in results_per_case.items():
-            for result_definition in CPTResultDefinition:
-                if (
-                    result_definition.name
-                    in case_results.cpt_results.to_pandas().columns
-                ):
-                    df = case_results.cpt_results.get_results_per_cpt(
-                        column_name=result_definition.name
-                    )
-                    for idx_row, row in df.iterrows():
-                        for test_id, result in row.items():
-                            records.append(
-                                dict(
-                                    case_name=case_name,
-                                    result_name=result_definition.name,
-                                    test_id=test_id,
-                                    x=self.cpt_locations[test_id].x,
-                                    y=self.cpt_locations[test_id].y,
-                                    pile_tip_level_nap=idx_row,
-                                    result=result,
-                                    result_unit=result_definition.value.unit,
-                                )
-                            )
-        self._cpt_results_dataframe = pd.DataFrame.from_records(records)
+            for cpt_results in case_results.cpt_results.results:
+                test_id = str(cpt_results.soil_properties.test_id)
+                for result_definition in CPTResultDefinition:
+                    try:
+                        result_values = getattr(
+                            cpt_results.table, result_definition.value.name
+                        )
+                    except AttributeError:
+                        continue
+
+                    for idx, ptl_nap in enumerate(cpt_results.table.pile_tip_level_nap):
+                        self._cpt_results_table.add_entry(
+                            case_name=case_name,
+                            result_def=result_definition.value,
+                            test_id=test_id,
+                            x=self.cpt_locations[test_id].x,
+                            y=self.cpt_locations[test_id].y,
+                            pile_tip_level_nap=float(ptl_nap),
+                            result_value=result_values[idx],
+                        )
 
     def _set_cpt_group_results_dataframe(
         self, result_cases: Dict[Hashable, MultiCPTBearingResults]
@@ -177,12 +176,11 @@ class CasesMultiCPTBearingResults:
         return self._cpt_locations
 
     @property
-    def cpt_results_dataframe(self) -> pd.DataFrame:
+    def cpt_results_table(self) -> CptResultsTable:
         """
-        The dataframe with all the CPT results.
-        Available columns: case_name, result_name, test_id, x, y, pile_tip_level_nap, result, result_unit.
+        The table with CPT results.
         """
-        return self._cpt_results_dataframe
+        return self._cpt_results_table
 
     @property
     def cpt_group_results_dataframe(self) -> pd.DataFrame:

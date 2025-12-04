@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+from pypilecore.results.data_tables import CptResultsTable, ResultsPandasColumn
 from pypilecore.results.result_definitions import CPTResultDefinition
 from pypilecore.viewers.interactive_figures.utils import get_continuous_color
 
@@ -31,8 +32,8 @@ class CasesMultiCPTResultsProtocol(Protocol):
         ...
 
     @property
-    def cpt_results_dataframe(self) -> pd.DataFrame:
-        """The dataframe with all CPT results."""
+    def cpt_results_table(self) -> CptResultsTable:
+        """The Table object with all CPT results."""
         ...
 
 
@@ -85,7 +86,7 @@ class FigureCPTResultsPlanView:
     @property
     def data(self) -> pd.DataFrame:
         """The dataframe used to plot the results."""
-        return self.results.cpt_results_dataframe
+        return self.results.cpt_results_table.to_pandas()
 
     @property
     def cases(self) -> List[Hashable]:
@@ -163,39 +164,48 @@ class FigureCPTResultsPlanView:
 
         # Select data for case name and result name.
         mask_case_name = (
-            self.data["case_name"] == case_name
+            self.data[ResultsPandasColumn.CASE_NAME.value] == case_name
             if case_name is not None
-            else self.data["case_name"].isna()
+            else self.data[ResultsPandasColumn.CASE_NAME.value].isna()
         )
         mask_pile_tip_level = np.isclose(
             pile_tip_level_nap,
-            self.data["pile_tip_level_nap"].to_numpy(),
+            self.data[ResultsPandasColumn.PILE_TIP_LEVEL_NAP.value].to_numpy(),
             rtol=0,
             atol=1e-4,
         )
         selected_data = self.data.loc[
             (mask_case_name)
-            & (self.data["result_name"] == result_definition.name)
+            & (
+                self.data[ResultsPandasColumn.RESULT_NAME.value]
+                == result_definition.name
+            )
             & (mask_pile_tip_level)
         ]
 
         # Get the min and max result values for the color scale.
-        result_max = selected_data["result"].max()
-        result_min = selected_data["result"].min()
+        result_max = selected_data[ResultsPandasColumn.RESULT.value].max()
+        result_min = selected_data[ResultsPandasColumn.RESULT.value].min()
         colorscale = px.colors.get_colorscale("picnic")
 
         traces = []
         for test_id in self.test_ids:
-            df = selected_data.loc[selected_data["test_id"] == test_id]
-            result = 0 if df.empty else round(df["result"].values[0], 1)
+            df = selected_data.loc[
+                selected_data[ResultsPandasColumn.TEST_ID.value] == test_id
+            ]
+            result = (
+                0
+                if df.empty
+                else round(df[ResultsPandasColumn.RESULT.value].values[0], 1)
+            )
             color = get_continuous_color(
                 colorscale=colorscale,
                 intermed=(result - result_min) / (result_max - result_min),
             )
             traces.append(
                 go.Scatter(
-                    x=df["x"],
-                    y=df["y"],
+                    x=df[ResultsPandasColumn.X.value],
+                    y=df[ResultsPandasColumn.Y.value],
                     text=f"CPT {test_id}<br>{result}",
                     mode="markers+text",
                     name=test_id,

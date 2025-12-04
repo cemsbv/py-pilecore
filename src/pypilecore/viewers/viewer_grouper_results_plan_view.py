@@ -2,7 +2,6 @@ from __future__ import annotations  # noqa: F404
 
 from typing import Any
 
-import pandas as pd
 from IPython.display import DisplayHandle, display
 from ipywidgets import widgets
 from natsort import natsorted
@@ -50,13 +49,19 @@ class ViewerGroupResultsPlanView:
             value=self._figure_plan_view.cases[0],
             options=self._figure_plan_view.cases,
         )
-        _options = natsorted(
-            pd.unique(cases_grouper_results.cpt_results_dataframe.result_name)
+        # Create a sorted list of unique result names
+        result_options = natsorted(
+            set(
+                [
+                    result_def.name
+                    for result_def in cases_grouper_results.cpt_results_table.result_def
+                ]
+            )
         )
         self._result_dropdown = widgets.Dropdown(
             description="Result:",
-            value=_options[0],
-            options=_options,
+            value=result_options[0],
+            options=result_options,
         )
         self._pile_tip_level_dropdown = widgets.Dropdown(
             description="Pile tip level NAP:",

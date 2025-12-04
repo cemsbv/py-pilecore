@@ -3,10 +3,10 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Dict, Hashable, List
 
-import pandas as pd
 from natsort import natsorted
 from pygef.common import Location
 
+from pypilecore.results.data_tables import CptResultsTable
 from pypilecore.results.grouper_result import GrouperResults
 from pypilecore.results.lib import Unit
 from pypilecore.results.result_definitions import GrouperResultsDefinition
@@ -96,37 +96,35 @@ class CasesGrouperResults:
             reverse=True,
         )
         self._set_cpt_locations(cpt_locations)
+        self._max_bearing_results_table = CptResultsTable.initialize()
+        self._set_cpt_max_results_table(results_per_case)
 
-        self._set_cpt_max_results_dataframe(results_per_case)
-
-    def _set_cpt_max_results_dataframe(
+    def _set_cpt_max_results_table(
         self, results_per_case: dict[Hashable, GrouperResults]
     ) -> None:
         """Private method to set the maximum results dataframe for each case."""
-        records = []
-        for case_name, case_results in results_per_case.items():
-            max_results = case_results.max_bearing_results
-            for result_definition in GrouperResultsDefinition:
-                if result_definition.name in max_results.to_pandas().columns:
-                    df = max_results.get_results_per_cpt(
-                        column_name=result_definition.name
-                    )
-                    for ptl, row in df.iterrows():
-                        for test_id, result in row.items():
-                            records.append(
-                                dict(
-                                    case_name=case_name,
-                                    result_name=result_definition.name,
-                                    test_id=test_id,
-                                    x=self.cpt_locations[test_id].x,
-                                    y=self.cpt_locations[test_id].y,
-                                    pile_tip_level_nap=ptl,
-                                    result=result,
-                                    result_unit=result_definition.value.unit,
-                                )
-                            )
 
-        self._max_bearing_results_dataframe = pd.DataFrame.from_records(records)
+        for case_name, case_results in results_per_case.items():
+            for cpt_results in case_results.max_bearing_results.results:
+                test_id = str(cpt_results.soil_properties.test_id)
+                for result_definition in GrouperResultsDefinition:
+                    try:
+                        result_values = getattr(
+                            cpt_results.table, result_definition.value.name
+                        )
+                    except AttributeError:
+                        continue
+
+                    for idx, ptl_nap in enumerate(cpt_results.table.pile_tip_level_nap):
+                        self._max_bearing_results_table.add_entry(
+                            case_name=case_name,
+                            result_def=result_definition.value,
+                            test_id=test_id,
+                            x=self.cpt_locations[test_id].x,
+                            y=self.cpt_locations[test_id].y,
+                            pile_tip_level_nap=ptl_nap,
+                            result_value=result_values[idx],
+                        )
 
     def _set_cpt_locations(self, value: Dict[str, Location]) -> None:
         """Private setter for `cpt_locations`."""
@@ -182,9 +180,9 @@ class CasesGrouperResults:
         return self._cpt_locations
 
     @property
-    def cpt_results_dataframe(self) -> pd.DataFrame:
-        """DataFrame with the maximum bearing results of all cases."""
-        return self._max_bearing_results_dataframe
+    def cpt_results_table(self) -> CptResultsTable:
+        """Table object with the maximum bearing results of all cases."""
+        return self._max_bearing_results_table
 
 
 def _validate_results_per_case(
