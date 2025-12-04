@@ -1,4 +1,3 @@
-import plotly.graph_objects as go
 import pytest
 from ipywidgets import widgets
 
