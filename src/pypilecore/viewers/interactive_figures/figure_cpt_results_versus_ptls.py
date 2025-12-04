@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.results.result_definitions import CPTResultDefinition
 
 
 class FigureCPTResultsVersusPtls:
@@ -101,7 +101,7 @@ class FigureCPTResultsVersusPtls:
             raise ValueError(f"Case name '{case_name}' not found in cases.")
 
         # Get the result definition that corresponds to the result name.
-        result_definition = CPTResultDefinitions.get(result_name)
+        result_definition = CPTResultDefinition.get(result_name)
 
         # Get the visible test_ids
         if len(self.figure.data) == 0:

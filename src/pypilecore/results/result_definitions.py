@@ -41,7 +41,7 @@ class ResultDefinition:
             )
 
 
-class CPTResultDefinitions(Enum):
+class CPTResultDefinition(Enum):
     """
     Enumeration of available CPT result definitions.
     """
@@ -114,7 +114,7 @@ class CPTResultDefinitions(Enum):
     s_e = ResultDefinition(name="s_e", unit="mm", html="s<sub>e</sub>")
 
     @classmethod
-    def get(cls, name: str) -> CPTResultDefinitions:
+    def get(cls, name: str) -> CPTResultDefinition:
         """Returns the result definition the given name."""
         try:
             return cls[name]
@@ -124,7 +124,7 @@ class CPTResultDefinitions(Enum):
             )
 
 
-class CPTGroupResultDefinitions(Enum):
+class CPTGroupResultDefinition(Enum):
     R_s_k = ResultDefinition(name="R_s_k", unit="kN", html="R<sub>s;k</sub>")
     R_b_k = ResultDefinition(name="R_b_k", unit="kN", html="R<sub>b;k</sub>")
     R_c_k = ResultDefinition(name="R_c_k", unit="kN", html="R<sub>c;k</sub>")
@@ -192,7 +192,7 @@ class CPTGroupResultDefinitions(Enum):
     )
 
     @classmethod
-    def get(cls, name: str) -> CPTGroupResultDefinitions:
+    def get(cls, name: str) -> CPTGroupResultDefinition:
         """Returns the result definition given the name."""
         try:
             return cls[name]

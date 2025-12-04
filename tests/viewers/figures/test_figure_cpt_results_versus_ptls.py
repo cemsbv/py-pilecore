@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import pytest
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.results.result_definitions import CPTResultDefinition
 from pypilecore.viewers.interactive_figures.figure_cpt_results_versus_ptls import (
     FigureCPTResultsVersusPtls,
 )
@@ -80,8 +80,8 @@ def test_show_case_and_result(
     # Valid cases and results
     figure.show_case_and_result(case_name="case_2", result_name="R_c_d_net")
     assert "case_2" in figure.figure.layout.title.text
-    assert CPTResultDefinitions.R_c_d_net.value.html in figure.figure.layout.title.text
+    assert CPTResultDefinition.R_c_d_net.value.html in figure.figure.layout.title.text
 
     figure.show_case_and_result(case_name="case_1", result_name="s_b")
     assert "case_1" in figure.figure.layout.title.text
-    assert CPTResultDefinitions.s_b.value.html in figure.figure.layout.title.text
+    assert CPTResultDefinition.s_b.value.html in figure.figure.layout.title.text

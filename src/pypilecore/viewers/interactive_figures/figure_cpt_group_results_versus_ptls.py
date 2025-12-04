@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from natsort import natsort_keygen
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTGroupResultDefinitions
+from pypilecore.results.result_definitions import CPTGroupResultDefinition
 
 
 class FigureCPTGroupResultsVersusPtls:
@@ -106,7 +106,7 @@ class FigureCPTGroupResultsVersusPtls:
             If the `result_name` is not found in the CPTResultDefinitions.
         """
         # Get the result definition that corresponds to the result name.
-        result_definition = CPTGroupResultDefinitions.get(result_name)
+        result_definition = CPTGroupResultDefinition.get(result_name)
 
         # Get the visible cases
         visible_cases = self.get_visible_cases()
@@ -120,12 +120,12 @@ class FigureCPTGroupResultsVersusPtls:
         mode = "lines+markers"
         marker_size = 6
         if result_definition in [
-            CPTGroupResultDefinitions.cpt_Rc_min,
-            CPTGroupResultDefinitions.cpt_Rc_max,
-            CPTGroupResultDefinitions.cpt_normative,
-            CPTGroupResultDefinitions.use_group_average,
-            CPTGroupResultDefinitions.xi_normative,
-            CPTGroupResultDefinitions.n_cpts,
+            CPTGroupResultDefinition.cpt_Rc_min,
+            CPTGroupResultDefinition.cpt_Rc_max,
+            CPTGroupResultDefinition.cpt_normative,
+            CPTGroupResultDefinition.use_group_average,
+            CPTGroupResultDefinition.xi_normative,
+            CPTGroupResultDefinition.n_cpts,
         ]:
             selected_data = selected_data.sort_values(by="result", key=natsort_keygen())
             mode = "markers"

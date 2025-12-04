@@ -7,8 +7,8 @@ from natsort import natsorted
 from pygef.common import Location
 
 from pypilecore.results.result_definitions import (
-    CPTGroupResultDefinitions,
-    CPTResultDefinitions,
+    CPTGroupResultDefinition,
+    CPTResultDefinition,
 )
 from pypilecore.results.typing import MultiCPTBearingResults
 
@@ -76,7 +76,7 @@ class CasesMultiCPTBearingResults:
         """Private method to create and set the property `cpt_results_dataframe`."""
         records = []
         for case_name, case_results in results_per_case.items():
-            for result_definition in CPTResultDefinitions:
+            for result_definition in CPTResultDefinition:
                 if (
                     result_definition.name
                     in case_results.cpt_results.to_pandas().columns
@@ -107,7 +107,7 @@ class CasesMultiCPTBearingResults:
         records = []
         for case_name, case_results in result_cases.items():
             df = case_results.group_results_table.to_pandas()
-            for result_definition in CPTGroupResultDefinitions:
+            for result_definition in CPTGroupResultDefinition:
                 if result_definition.name in df.columns:
                     for _, row in df.iterrows():
                         records.append(
