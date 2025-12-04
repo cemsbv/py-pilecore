@@ -6,6 +6,7 @@ from typing import Dict, List, Literal, Mapping, Sequence, Tuple
 
 from pygef.cpt import CPTData
 
+from pypilecore.common.norms import Norms
 from pypilecore.common.piles import PileProperties
 from pypilecore.input.soil_properties import create_soil_properties_payload
 
@@ -26,6 +27,7 @@ def create_multi_cpt_payload(
     fixed_positive_friction_range_nap: (
         Tuple[float, Literal["ptl"] | float] | None
     ) = None,
+    norms: Norms = Norms(),
     negative_shaft_friction: float | None = None,
     apply_qc3_reduction: bool | None = None,
     relative_pile_load: float | None = 0.7,
@@ -287,6 +289,7 @@ def create_multi_cpt_payload(
         friction_range_strategy=friction_range_strategy,
         pile_head_level_nap=pile_head_level_nap,
         stiff_construction=stiff_construction,
+        norms=norms.serialize_payload(),
         rel_pile_load=relative_pile_load,
         soil_load=soil_load_sls if soil_load_sls is not None else 0.0,
         excavation_param_t=excavation_param_t,

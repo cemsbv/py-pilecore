@@ -5,9 +5,10 @@ from nuclei.client.utils import serialize_jsonifyable_object
 from openapi_core.contrib.requests import RequestsOpenAPIRequest
 from requests import Request
 
+from pypilecore.common.norms import Norms, NEN99971_version, CUR236_version
 from pypilecore.common.piles import PileProperties
 from pypilecore.common.piles.geometry import PileGeometry
-from pypilecore.common.piles.geometry.components import RoundPileGeometryComponent
+from pypilecore.common.piles.geometry.components import RoundPileGeometryComponent, RectPileGeometryComponent
 from pypilecore.common.piles.geometry.components.common import (
     PrimaryPileComponentDimension,
 )
@@ -42,8 +43,43 @@ def round_pile() -> PileProperties:
         ),
     )
 
+@pytest.fixture
+def rectangle_pile() -> PileProperties:
+    return PileProperties(
+        geometry=PileGeometry(
+            components=[
+                RectPileGeometryComponent(
+                    secondary_dimension=0.5,
+                    primary_dimension=PrimaryPileComponentDimension(length=0.5)
+                )
+            ]
+        ),
+        pile_type=PileType(
+            standard_pile={
+                "main_type" : "concrete",
+                "specification" : "1",
+            }
+        )
+    )
 
-def test_create_multi_cpt_payload(pc_openapi, cpt, round_pile, headers):
+@pytest.fixture
+def default_norm() -> Norms:
+    return Norms()
+
+@pytest.fixture
+def custom_norm() -> Norms:
+    return Norms(
+        nen_9997_1=NEN99971_version.V2017,
+        cur_236=CUR236_version.V2024
+    )
+
+@pytest.mark.parametrize("pile_name", ["round_pile", "rectangle_pile"])
+@pytest.mark.parametrize("norms_name", ["default_norm", "custom_norm"])
+def test_create_multi_cpt_payload(pc_openapi, cpt, pile_name, norms_name, request, headers):
+    # resolve fixture by name so we can parametrize over fixture names
+    pile = request.getfixturevalue(pile_name)
+    norms = request.getfixturevalue(norms_name)
+
     payload, _ = create_multi_cpt_payload(
         pile_tip_levels_nap=[-10.0, -20.0],
         cptdata_objects=[cpt],
@@ -62,7 +98,8 @@ def test_create_multi_cpt_payload(pc_openapi, cpt, round_pile, headers):
             }
         },
         groundwater_level_nap=-10.0,
-        pile=round_pile,
+        pile=pile,
+        norms=norms
     )
 
     request = Request(
@@ -75,7 +112,6 @@ def test_create_multi_cpt_payload(pc_openapi, cpt, round_pile, headers):
     openapi_request = RequestsOpenAPIRequest(request)
 
     pc_openapi.request_validator.validate(openapi_request)
-
 
 def test_create_multi_cpt_payload_no_coords(
     pc_openapi, cpt_no_coords, round_pile, headers
