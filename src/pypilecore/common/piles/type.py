@@ -211,21 +211,26 @@ class PileType:
                 payload["standard_pile"] = {
                     "reference": str(self.standard_pile["reference"]),
                 }
-            elif "main_type" in self.standard_pile and "specification" in self.standard_pile:
+            elif (
+                "main_type" in self.standard_pile
+                and "specification" in self.standard_pile
+            ):
                 # Convert from internal format to reference format
                 # Example: main_type="concrete", specification="1" -> reference="B1"
                 main_type = str(self.standard_pile["main_type"]).lower()
                 specification = str(self.standard_pile["specification"])
-                
+
                 # Map main_type to prefix
                 type_prefix_map = {
                     "concrete": "B",  # B-series are concrete piles
-                    "steel": "S",      # S-series are steel piles
-                    "wood": "H",       # H-series might be wood/timber
+                    "steel": "S",  # S-series are steel piles
+                    "wood": "H",  # H-series might be wood/timber
                     "composite": "M",  # M-series might be composite
                 }
-                prefix = type_prefix_map.get(main_type, "B")  # Default to B if not found
-                
+                prefix = type_prefix_map.get(
+                    main_type, "B"
+                )  # Default to B if not found
+
                 # Create reference by combining prefix and specification
                 reference = f"{prefix}{specification}"
                 payload["standard_pile"] = {
