@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.results.result_definitions import CPTResultDefinition
 from pypilecore.viewers.interactive_figures.utils import get_continuous_color
 
 
@@ -140,7 +140,7 @@ class FigureCPTResultsPlanView:
             raise ValueError(f"Case name '{case_name}' not found in cases.")
 
         # Get the result definition that corresponds to the result name.
-        result_definition = CPTResultDefinitions.get(result_name)
+        result_definition = CPTResultDefinition.get(result_name)
 
         # Check that pile tip level NAP is in pile tip levels.
         if not isinstance(pile_tip_level_nap, (int, float)):

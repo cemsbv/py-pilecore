@@ -3,7 +3,7 @@ import pytest
 from ipywidgets import widgets
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.results.result_definitions import CPTResultDefinition
 from pypilecore.viewers.interactive_figures.figure_cpt_results_versus_ptls import (
     FigureCPTResultsVersusPtls,
 )
@@ -57,7 +57,7 @@ def test_update_case_and_result(
     viewer._case_dropdown.value = "case_2"
     assert "case_2" in viewer._figure_plts.figure.layout.title.text
     assert (
-        CPTResultDefinitions.F_c_k.value.html
+        CPTResultDefinition.F_c_k.value.html
         in viewer._figure_plts.figure.layout.title.text
     )
 
@@ -65,7 +65,7 @@ def test_update_case_and_result(
     viewer._result_dropdown.value = "s_b"
     assert "case_2" in viewer._figure_plts.figure.layout.title.text
     assert (
-        CPTResultDefinitions.s_b.value.html
+        CPTResultDefinition.s_b.value.html
         in viewer._figure_plts.figure.layout.title.text
     )
 

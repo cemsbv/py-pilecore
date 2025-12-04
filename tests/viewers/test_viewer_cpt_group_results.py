@@ -3,7 +3,7 @@ import pytest
 from ipywidgets import widgets
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.results.result_definitions import CPTResultDefinition
 from pypilecore.viewers.interactive_figures.figure_cpt_group_results_versus_ptls import (
     FigureCPTGroupResultsVersusPtls,
 )
@@ -54,7 +54,7 @@ def test_update_result(
     # Test that the figure is updated when the result is changed
     viewer._result_dropdown.value = "s_b"
     assert (
-        CPTResultDefinitions.s_b.value.html
+        CPTResultDefinition.s_b.value.html
         in viewer._figure_plts.figure.layout.title.text
     )
 

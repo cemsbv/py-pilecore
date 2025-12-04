@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import pytest
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.result_definitions import CPTResultDefinitions
+from pypilecore.results.result_definitions import CPTResultDefinition
 from pypilecore.viewers.interactive_figures.figure_cpt_results_plan_view import (
     FigureCPTResultsPlanView,
 )
@@ -104,12 +104,12 @@ def test_show_case_and_result(
         case_name="case_2", result_name="R_c_d_net", pile_tip_level_nap=0.0
     )
     assert "case_2" in figure.figure.layout.title.text
-    assert CPTResultDefinitions.R_c_d_net.value.html in figure.figure.layout.title.text
+    assert CPTResultDefinition.R_c_d_net.value.html in figure.figure.layout.title.text
     assert "0.0" in figure.figure.layout.title.text
 
     figure.show_case_result_and_ptl(
         case_name="case_1", result_name="s_b", pile_tip_level_nap=1.0
     )
     assert "case_1" in figure.figure.layout.title.text
-    assert CPTResultDefinitions.s_b.value.html in figure.figure.layout.title.text
+    assert CPTResultDefinition.s_b.value.html in figure.figure.layout.title.text
     assert "1.0" in figure.figure.layout.title.text
