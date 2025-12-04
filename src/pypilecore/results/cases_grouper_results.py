@@ -8,6 +8,7 @@ from natsort import natsorted
 from pygef.common import Location
 
 from pypilecore.results.grouper_result import GrouperResults
+from pypilecore.results.lib import Unit
 from pypilecore.results.result_definitions import GrouperResultsDefinition
 
 
@@ -28,22 +29,17 @@ class ClusterResultColumn(StrEnum):
     xi_values = "xi_values"
 
 
-class Unit(StrEnum):
-    kN = "kN"
-    NONE = "-"
-
-
 _CLUSTER_RESULT_UNITS = {
-    ClusterResultColumn.characteristic_bearing_capacity.value: Unit.kN,
-    ClusterResultColumn.design_bearing_capacity.value: Unit.kN,
-    ClusterResultColumn.design_negative_friction.value: Unit.kN,
+    ClusterResultColumn.characteristic_bearing_capacity.value: Unit.KN,
+    ClusterResultColumn.design_bearing_capacity.value: Unit.KN,
+    ClusterResultColumn.design_negative_friction.value: Unit.KN,
     ClusterResultColumn.group_centre_to_centre_validation.value: Unit.NONE,
     ClusterResultColumn.group_centre_to_centre_validation_15.value: Unit.NONE,
     ClusterResultColumn.group_centre_to_centre_validation_20.value: Unit.NONE,
     ClusterResultColumn.group_centre_to_centre_validation_25.value: Unit.NONE,
-    ClusterResultColumn.mean_calculated_bearing_capacity.value: Unit.kN,
-    ClusterResultColumn.min_calculated_bearing_capacity.value: Unit.kN,
-    ClusterResultColumn.net_design_bearing_capacity.value: Unit.kN,
+    ClusterResultColumn.mean_calculated_bearing_capacity.value: Unit.KN,
+    ClusterResultColumn.min_calculated_bearing_capacity.value: Unit.KN,
+    ClusterResultColumn.net_design_bearing_capacity.value: Unit.KN,
     ClusterResultColumn.nominal_cpt.value: Unit.NONE,
     ClusterResultColumn.variation_coefficient.value: Unit.NONE,
     ClusterResultColumn.xi_factor.value: Unit.NONE,
