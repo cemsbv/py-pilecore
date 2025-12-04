@@ -170,12 +170,21 @@ class RoundPileGeometryComponent(_BasePileGeometryComponent):
         Returns:
             A dictionary payload containing the outer shape, diameter, material, and primary dimension (if set).
         """
-        return {
+        payload = {
             "outer_shape": self.outer_shape,
-            "primary_dimension": self.primary_dimension.serialize_payload(),
             "diameter": self.diameter,
-            "material": self.material,
         }
+        
+        # Only include material if it's not None
+        if self.material is not None:
+            payload["material"] = self.material
+        
+        # Only include primary_dimension if it's not None
+        primary_dim = self.primary_dimension.serialize_payload()
+        if primary_dim is not None:
+            payload["primary_dimension"] = primary_dim
+        
+        return payload
 
     def get_component_bounds_nap(
         self,
