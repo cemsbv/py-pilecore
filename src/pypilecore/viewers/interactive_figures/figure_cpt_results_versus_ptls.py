@@ -7,6 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
+from pypilecore.results.data_tables import ResultsPandasColumn
 from pypilecore.results.result_definitions import CPTResultDefinition
 
 
@@ -59,7 +60,7 @@ class FigureCPTResultsVersusPtls:
     @property
     def data(self) -> pd.DataFrame:
         """The dataframe used to plot the results."""
-        return self.results.cpt_results_dataframe
+        return self.results.cpt_results_table.to_pandas()
 
     @property
     def cases(self) -> List[Hashable]:
@@ -112,20 +113,26 @@ class FigureCPTResultsVersusPtls:
 
         # Select data for case name and result name.
         mask_case_name = (
-            self.data["case_name"] == case_name
+            self.data[ResultsPandasColumn.CASE_NAME.value] == case_name
             if case_name is not None
-            else self.data["case_name"].isna()
+            else self.data[ResultsPandasColumn.CASE_NAME.value].isna()
         )
         selected_data = self.data.loc[
-            (mask_case_name) & (self.data["result_name"] == result_definition.name)
+            (mask_case_name)
+            & (
+                self.data[ResultsPandasColumn.RESULT_NAME.value]
+                == result_definition.name
+            )
         ]
         traces = []
         for test_id in self.test_ids:
-            df = selected_data.loc[selected_data["test_id"] == test_id]
+            df = selected_data.loc[
+                selected_data[ResultsPandasColumn.TEST_ID.value] == test_id
+            ]
             traces.append(
                 go.Scatter(
-                    x=df["result"],
-                    y=df["pile_tip_level_nap"],
+                    x=df[ResultsPandasColumn.RESULT.value],
+                    y=df[ResultsPandasColumn.PILE_TIP_LEVEL_NAP.value],
                     mode="lines+markers",
                     name=test_id,
                 )

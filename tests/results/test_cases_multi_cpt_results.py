@@ -32,23 +32,31 @@ def test_cases_multi_cpt_results_init_valid_input(
         for pile_tip_level_nap in cptgroupresults.cpt_results.to_pandas().pile_tip_level_nap.unique()
     )
 
-    assert cases_multicpt_results.cpt_results_dataframe.columns.to_list() == [
-        "case_name",
-        "result_name",
-        "test_id",
-        "x",
-        "y",
-        "pile_tip_level_nap",
-        "result",
-        "result_unit",
-    ]
-    assert cases_multicpt_results.cpt_group_results_dataframe.columns.to_list() == [
-        "case_name",
-        "result_name",
-        "pile_tip_level_nap",
-        "result",
-        "result_unit",
-    ]
+    assert sorted(
+        cases_multicpt_results.cpt_results_table.to_pandas().columns.to_list()
+    ) == sorted(
+        [
+            "case_name",
+            "result_name",
+            "test_id",
+            "x",
+            "y",
+            "pile_tip_level_nap",
+            "result",
+            "result_unit",
+        ]
+    )
+    assert sorted(
+        cases_multicpt_results.cpt_group_results_dataframe.columns.to_list()
+    ) == sorted(
+        [
+            "case_name",
+            "result_name",
+            "pile_tip_level_nap",
+            "result",
+            "result_unit",
+        ]
+    )
 
 
 @pytest.mark.parametrize(
