@@ -75,10 +75,12 @@ def custom_norm() -> Norms:
 
 @pytest.mark.parametrize("pile_name", ["round_pile", "rectangle_pile"])
 @pytest.mark.parametrize("norms_name", ["default_norm", "custom_norm"])
-def test_create_multi_cpt_payload(pc_openapi, cpt, pile_name, norms_name, request, headers):
+@pytest.mark.parametrize("cpt_name", ["cpt", "cpt_no_coords"])
+def test_create_multi_cpt_payload(pc_openapi, cpt_name, pile_name, norms_name, request, headers):
     # resolve fixture by name so we can parametrize over fixture names
     pile = request.getfixturevalue(pile_name)
     norms = request.getfixturevalue(norms_name)
+    cpt = request.getfixturevalue(cpt_name)
 
     payload, _ = create_multi_cpt_payload(
         pile_tip_levels_nap=[-10.0, -20.0],
@@ -112,42 +114,6 @@ def test_create_multi_cpt_payload(pc_openapi, cpt, pile_name, norms_name, reques
     openapi_request = RequestsOpenAPIRequest(request)
 
     pc_openapi.request_validator.validate(openapi_request)
-
-def test_create_multi_cpt_payload_no_coords(
-    pc_openapi, cpt_no_coords, round_pile, headers
-):
-    payload, _ = create_multi_cpt_payload(
-        pile_tip_levels_nap=[-10.0, -20.0],
-        cptdata_objects=[cpt_no_coords],
-        classify_tables={
-            cpt_no_coords.alias: {
-                "geotechnicalSoilName": ["Sand"],
-                "lowerBoundary": [1.0],
-                "upperBoundary": [0.0],
-                "color": ["#000000"],
-                "mainComponent": ["sand"],
-                "cohesion": [0.0],
-                "gamma_sat": [20],
-                "gamma_unsat": [18],
-                "phi": [30],
-                "undrainedShearStrength": [0.0],
-            }
-        },
-        groundwater_level_nap=-10.0,
-        pile=round_pile,
-    )
-
-    request = Request(
-        method="POST",
-        headers=headers,
-        url="http://bearing/multiple-cpts/results",
-        json=serialize_jsonifyable_object(payload),
-    )
-
-    openapi_request = RequestsOpenAPIRequest(request)
-
-    pc_openapi.request_validator.validate(openapi_request)
-
 
 @pytest.mark.parametrize(
     ("stress_reduction_method", "excavation_width", "excavation_edge_distance"),
