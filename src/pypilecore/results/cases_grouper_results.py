@@ -83,6 +83,7 @@ class CasesGrouperResults:
         """
         _validate_results_per_case(results_per_case)
 
+        self._results_per_case = results_per_case
         self._cases = natsorted(list(results_per_case.keys()))
         self._grouper_results = [results_per_case[c] for c in self.cases]
         first_results = results_per_case[self.cases[0]]
@@ -153,6 +154,11 @@ class CasesGrouperResults:
             )
 
         self._cpt_locations = value
+
+    @property
+    def results_per_case(self) -> Dict[Hashable, GrouperResults]:
+        """The dictionary with case names as keys and GrouperResults as values."""
+        return self._results_per_case
 
     @property
     def cases(self) -> List[Hashable]:
