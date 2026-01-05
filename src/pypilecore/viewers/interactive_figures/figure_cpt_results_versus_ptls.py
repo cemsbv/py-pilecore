@@ -6,9 +6,10 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
+from pypilecore.results.cases_grouper_results import CasesGrouperResults
 from pypilecore.results.data_tables import ResultsPandasColumn
 from pypilecore.results.result_definitions import CPTResultDefinition
+from pypilecore.viewers._typing import CasesMultiCPTResultsProtocol
 
 
 class FigureCPTResultsVersusPtls:
@@ -24,36 +25,29 @@ class FigureCPTResultsVersusPtls:
     The figure has a method to switch between cases and results.
     """
 
-    def __init__(self, cases_multi_results: CasesMultiCPTBearingResults) -> None:
+    def __init__(self, results_cases: CasesMultiCPTResultsProtocol) -> None:
         """
         Initializes the figure.
 
         Parameters
         ----------
-        cases_multi_results : CasesMultiCPTBearingResults
-            The results of the bearing capacity calculations.
-
-        Raises
-        ------
-        TypeError
-            If `cases_multi_results` are not of type 'CasesMultiCPTBearingResults'.
+        results_cases : CasesMultiCPTResultsProtocol
+            The case results of the bearing capacity calculations.
         """
         # Validate the data
-        self._set_results(cases_multi_results)
+        if not isinstance(results_cases, CasesMultiCPTResultsProtocol):
+            raise TypeError(
+                f"Incompatible type for 'cases_multi_results': {type(results_cases)}"
+            )
+
+        # Set attributes
+        self._results = results_cases
 
         # Initialize the figure
         self._figure = go.FigureWidget()
 
-    def _set_results(self, value: CasesMultiCPTBearingResults) -> None:
-        """Private setter for the results."""
-        if not isinstance(value, CasesMultiCPTBearingResults):
-            raise TypeError(
-                f"Expected type 'CasesMultiCPTBearingResults' for 'cases_multi_results', but got {type(value)}"
-            )
-        self._results = value
-
     @property
-    def results(self) -> CasesMultiCPTBearingResults:
+    def results(self) -> CasesMultiCPTResultsProtocol:
         """The results of the bearing capacity calculations."""
         return self._results
 
@@ -145,8 +139,14 @@ class FigureCPTResultsVersusPtls:
             # Apply changes
             self.figure.add_traces(traces)
 
+            calculation_type = (
+                "Grouper" if isinstance(self.results, CasesGrouperResults) else ""
+            )
+
             self.figure.update_layout(
-                title=f"CPT Results vs. Pile tip level<br>Case: {case_name}, Result: {result_definition.value.html}",
+                title="CPT "
+                + calculation_type
+                + f"Results vs. Pile tip level<br>Case: {case_name}, Result: {result_definition.value.html}",
                 xaxis=go.layout.XAxis(
                     title=f"{result_definition.value.html} [{result_definition.value.unit}]",
                     title_font_size=18,

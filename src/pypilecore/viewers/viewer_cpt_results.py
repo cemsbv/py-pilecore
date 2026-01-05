@@ -6,7 +6,7 @@ from IPython.display import DisplayHandle, display
 from ipywidgets import widgets
 from natsort import natsorted
 
-from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
+from pypilecore.viewers._typing import CasesMultiCPTResultsProtocol
 from pypilecore.viewers.interactive_figures import FigureCPTResultsVersusPtls
 
 
@@ -24,24 +24,17 @@ class ViewerCptResults:
             - Each trace represents a different CPT.
     """
 
-    def __init__(self, cases_multi_results: CasesMultiCPTBearingResults) -> None:
+    def __init__(self, results_cases: CasesMultiCPTResultsProtocol) -> None:
         """Initialize the viewer.
 
         Parameters
         ----------
-        cases_multi_results : CasesMultiCPTBearingResults
+        results_cases : CasesMultiCPTResultsProtocol
             The results of the bearing capacity calculations.
-
-        Raises
-        ------
-        TypeError
-            If 'cases_multi_results' are not of type 'CasesMultiCPTBearingResults'.
         """
 
         # Initialize figure CPT resuls vs. pile tip level
-        self._figure_plts = FigureCPTResultsVersusPtls(
-            cases_multi_results=cases_multi_results
-        )
+        self._figure_plts = FigureCPTResultsVersusPtls(results_cases=results_cases)
 
         # Set up control widgets
         self._case_dropdown = widgets.Dropdown(
@@ -55,13 +48,14 @@ class ViewerCptResults:
             set(
                 [
                     result_def.name
-                    for result_def in cases_multi_results.cpt_results_table.result_def
+                    for result_def in results_cases.cpt_results_table.result_def
                 ]
             )
         )
+        _initial_option = "R_c_d_net" if "R_c_d_net" in _options else _options[0]
         self._result_dropdown = widgets.Dropdown(
             description="Result:",
-            value=_options[0],
+            value=_initial_option,
             options=_options,
         )
 
