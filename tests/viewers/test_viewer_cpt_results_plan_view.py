@@ -18,7 +18,7 @@ def test_init_valid_input(
     cases_multi_results = mock_cases_multi_cpt_bearing_results
 
     viewer = ViewerCptResultsPlanView(
-        cases_multi_results=cases_multi_results,
+        results_cases=cases_multi_results,
     )
 
     assert isinstance(viewer._figure_plan_view, FigureCPTResultsPlanView)
@@ -34,7 +34,7 @@ def test_init_invalid_input() -> None:
     returns the expected errors.
     """
     with pytest.raises(TypeError, match="'cases_multi_results'"):
-        ViewerCptResultsPlanView(cases_multi_results="invalid")
+        ViewerCptResultsPlanView(results_cases="invalid")
 
 
 def test_update_case_result_and_ptl(
@@ -48,7 +48,7 @@ def test_update_case_result_and_ptl(
     cases_multi_results = mock_cases_multi_cpt_bearing_results
 
     viewer = ViewerCptResultsPlanView(
-        cases_multi_results=cases_multi_results,
+        results_cases=cases_multi_results,
     )
 
     # Test that the figure is updated when the case is changed
@@ -89,7 +89,7 @@ def test_display(
     cases_multi_results = mock_cases_multi_cpt_bearing_results
 
     viewer = ViewerCptResultsPlanView(
-        cases_multi_results=cases_multi_results,
+        results_cases=cases_multi_results,
     )
 
     assert viewer.display() is None

@@ -17,7 +17,7 @@ def test_init_valid_input(
     cases_multi_results = mock_cases_multi_cpt_bearing_results
 
     figure = FigureCPTResultsPlanView(
-        cases_multi_results=cases_multi_results,
+        results_cases=cases_multi_results,
     )
 
     assert figure.results == cases_multi_results
@@ -34,7 +34,7 @@ def test_init_invalid_input() -> None:
     returns the expected errors.
     """
     with pytest.raises(TypeError, match="'cases_multi_results'"):
-        FigureCPTResultsPlanView(cases_multi_results="invalid")
+        FigureCPTResultsPlanView(results_cases="invalid")
 
 
 def test_get_visible_test_ids(
@@ -46,7 +46,7 @@ def test_get_visible_test_ids(
     cases_multi_results = mock_cases_multi_cpt_bearing_results
 
     figure = FigureCPTResultsPlanView(
-        cases_multi_results=cases_multi_results,
+        results_cases=cases_multi_results,
     )
 
     # Test that initially no test_ids are visible
@@ -71,7 +71,7 @@ def test_show_case_and_result(
     cases_multi_results = mock_cases_multi_cpt_bearing_results
 
     figure = FigureCPTResultsPlanView(
-        cases_multi_results=cases_multi_results,
+        results_cases=cases_multi_results,
     )
 
     # Invalid case
