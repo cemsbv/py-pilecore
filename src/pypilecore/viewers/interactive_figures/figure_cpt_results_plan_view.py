@@ -26,22 +26,17 @@ class FigureCPTResultsPlanView:
     The figure has a method to switch between case, result and pile tip level.
     """
 
-    def __init__(self, cases_multi_results: CasesMultiCPTResultsProtocol) -> None:
+    def __init__(self, results_cases: CasesMultiCPTResultsProtocol) -> None:
         """
         Initializes the figure.
 
         Parameters
         ----------
-        cases_multi_results : CasesMultiCPTResultsProtocol
+        results_cases : CasesMultiCPTResultsProtocol
             Object with multi-cpt result cases.
-
-        Raises
-        ------
-        TypeError
-            If `cases_multi_results` are not of type 'CasesMultiCPTBearingResults'.
         """
         # Validate the data
-        self._set_results(cases_multi_results)
+        self._set_results(results_cases)
 
         # Initialize the figure
         self._figure = go.FigureWidget()
