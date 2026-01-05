@@ -3,9 +3,6 @@ from pypilecore.viewers.viewer_cpt_results_plan_view import ViewerCptResultsPlan
 from pypilecore.viewers.viewer_grouper_results_per_cpt_table import (
     ViewerGrouperResultsPerCptTable,
 )
-from pypilecore.viewers.viewer_grouper_results_plan_view import (
-    ViewerGroupResultsPlanView,
-)
 from pypilecore.viewers.viewer_results_per_cpt_table import (
     ViewerResultsPerCptTable,
 )
@@ -13,7 +10,6 @@ from pypilecore.viewers.viewer_results_per_cpt_table import (
 __all__ = [
     "ViewerCptResults",
     "ViewerCptResultsPlanView",
-    "ViewerGroupResultsPlanView",
     "ViewerResultsPerCptTable",
     "ViewerGrouperResultsPerCptTable",
 ]

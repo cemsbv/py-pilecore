@@ -6,7 +6,7 @@ from IPython.display import DisplayHandle, display
 from ipywidgets import widgets
 from natsort import natsorted
 
-from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
+from pypilecore.viewers._typing import CasesMultiCPTResultsProtocol
 from pypilecore.viewers.interactive_figures.figure_cpt_results_plan_view import (
     FigureCPTResultsPlanView,
 )
@@ -28,24 +28,17 @@ class ViewerCptResultsPlanView:
             - Each point represents a different CPT, but the same pile tip level.
     """
 
-    def __init__(self, cases_multi_results: CasesMultiCPTBearingResults) -> None:
+    def __init__(self, results_cases: CasesMultiCPTResultsProtocol) -> None:
         """Initialize the viewer.
 
         Parameters
         ----------
-        cases_multi_results : CasesMultiCPTBearingResults
+        results_cases : CasesMultiCPTResultsProtocol
             The results of the bearing capacity calculations.
-
-        Raises
-        ------
-        TypeError
-            If 'cases_multi_results' are not of type 'CasesMultiCPTBearingResults'.
         """
 
         # Initialize figure CPT results in plan view
-        self._figure_plan_view = FigureCPTResultsPlanView(
-            cases_multi_results=cases_multi_results
-        )
+        self._figure_plan_view = FigureCPTResultsPlanView(results_cases=results_cases)
 
         # Set up control widgets
         self._case_dropdown = widgets.Dropdown(
@@ -58,7 +51,7 @@ class ViewerCptResultsPlanView:
             set(
                 [
                     result_def.name
-                    for result_def in cases_multi_results.cpt_results_table.result_def
+                    for result_def in results_cases.cpt_results_table.result_def
                 ]
             )
         )
