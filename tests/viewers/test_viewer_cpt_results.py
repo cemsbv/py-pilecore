@@ -6,7 +6,7 @@ from pypilecore.results.result_definitions import CPTResultDefinition
 from pypilecore.viewers.interactive_figures.figure_cpt_results_versus_ptls import (
     FigureCPTResultsVersusPtls,
 )
-from pypilecore.viewers.viewer_cpt_results import ViewerCptResults
+from pypilecore.viewers.viewer_cpt_results_versus_ptls import ViewerCptResults
 
 
 def test_init_valid_input(
