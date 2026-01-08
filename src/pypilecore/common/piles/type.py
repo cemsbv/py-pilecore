@@ -8,17 +8,20 @@ class PileType:
 
     def __init__(
         self,
-        standard_pile: Dict[str, str | int] | None = None,
+        reference: str | None = None,
+        installation_method: str | None = None,
+        is_prefab: bool | None = None,
+        is_open_ended: bool | None = None,
+        is_low_vibrating: bool | None = None,
+        is_auger: bool | None = None,
+        settlement_curve: int | None = None,
         alpha_s_sand: float | None = None,
         alpha_s_clay: float | None = None,
         alpha_p: float | None = None,
         alpha_t_sand: float | None = None,
         alpha_t_clay: float | None = None,
-        settlement_curve: int | None = None,
         negative_fr_delta_factor: float | None = None,
         adhesion: float | None = None,
-        is_low_vibrating: bool | None = None,
-        is_auger: bool | None = None,
         qc_z_a_lesser_1m: float | None = None,
         qc_z_a_greater_1m: float | None = None,
         qb_max_limit: float | None = None,
@@ -29,8 +32,10 @@ class PileType:
 
         Parameters:
         -----------
-        standard_pile : dict, optional
+        reference : str, optional
             The standard pile definition of the pile type (if applicable), by default None.
+        installation_method: str, optional
+            The installation method of the pile, by default None.
         alpha_s_sand : float, optional
             The alpha_s_sand value of the pile type, by default None.
         alpha_s_clay : float, optional
@@ -69,7 +74,10 @@ class PileType:
         chamfered : float, optional
             The chamfered value of the pile type, by default None.
         """
-        self._standard_pile = standard_pile
+        self._reference = reference
+        self._installation_method = installation_method
+        self._is_prefab = is_prefab
+        self._is_open_ended = is_open_ended
         self._alpha_s_sand = alpha_s_sand
         self._alpha_s_clay = alpha_s_clay
         self._alpha_p = alpha_p
@@ -101,7 +109,11 @@ class PileType:
             A pile type.
         """
         return cls(
-            standard_pile=pile_type.get("standard_pile"),
+            reference=pile_type.get("reference"),
+            is_prefab=pile_type.get("is_prefab"),
+            is_open_ended=pile_type.get("is_open_ended"),
+            is_low_vibrating=pile_type["properties"]["is_low_vibrating"],
+            is_auger=pile_type["properties"]["is_auger"],
             alpha_s_sand=pile_type["properties"]["alpha_s_sand"],
             alpha_s_clay=pile_type["properties"]["alpha_s_clay"],
             alpha_p=pile_type["properties"]["alpha_p"],
@@ -112,8 +124,6 @@ class PileType:
                 "negative_fr_delta_factor"
             ],
             adhesion=pile_type["properties"]["adhesion"],
-            is_low_vibrating=pile_type["properties"]["is_low_vibrating"],
-            is_auger=pile_type["properties"]["is_auger"],
             qc_z_a_lesser_1m=pile_type["properties"].get("qc_z_a_lesser_1m", None),
             qc_z_a_greater_1m=pile_type["properties"].get("qc_z_a_greater_1m", None),
             qb_max_limit=pile_type["properties"].get("qb_max_limit", None),
