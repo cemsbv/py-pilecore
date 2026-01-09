@@ -10,7 +10,6 @@ from pypilecore.common.piles.geometry.components import (
 )
 from pypilecore.common.piles.geometry.materials import MATERIALS, PileMaterial
 from pypilecore.common.piles.type import PileType
-from pypilecore.common.norms import Norms
 
 
 class PileProperties:
@@ -90,6 +89,7 @@ class PileProperties:
 
         return payload
 
+
 def create_basic_pile(
     pile_shape: Literal["round", "rect", "rectangle"],
     pile_name: str | None = None,
@@ -109,10 +109,10 @@ def create_basic_pile(
     settlement_curve: int | None = None,
     adhesion: float | None = None,
     alpha_p: float | None = None,
-    alpha_s_clay: float | None = None,
+    alpha_s_clay: dict | None = None,
     alpha_s_sand: float | None = None,
     beta_p: float | None = None,
-    alpha_t_clay: float | None = None,
+    alpha_t_clay: dict | None = None,
     alpha_t_sand: float | None = None,
     pile_tip_factor_s: float | None = None,
     is_auger: bool | None = None,

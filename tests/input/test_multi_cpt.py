@@ -36,10 +36,7 @@ def round_pile() -> PileProperties:
             ]
         ),
         pile_type=PileType(
-            standard_pile={
-                "main_type": "concrete",
-                "specification": "1",
-            },
+            reference = "B1",
         ),
     )
 
@@ -55,11 +52,35 @@ def rectangle_pile() -> PileProperties:
             ]
         ),
         pile_type=PileType(
-            standard_pile={
-                "main_type" : "concrete",
-                "specification" : "1",
-            }
-        )
+            reference = "B1"
+        ),
+    )
+
+@pytest.fixture
+def rectangle_pile_custom() -> PileProperties:
+    return PileProperties(
+        geometry=PileGeometry(
+            components=[
+                RectPileGeometryComponent(
+                    secondary_dimension=0.6,
+                    primary_dimension=PrimaryPileComponentDimension(length=0.4)
+                )
+            ]
+        ),
+        pile_type=PileType(
+            alpha_s_sand = 0.009,
+            # alpha_s_clay = {"use_constant_value" : False},
+            alpha_p = 0.30,
+            alpha_t_sand = 0.0090,
+            # alpha_t_clay = {"use_constant_value" : False},
+            negative_fr_delta_factor = 1.0,
+            is_auger=False,
+            installation_method = "screwed",
+            is_prefab=False,
+            is_open_ended=False,
+            settlement_curve=1,
+            # is_low_vibrating=True,
+        ),
     )
 
 @pytest.fixture
@@ -73,7 +94,7 @@ def custom_norm() -> Norms:
         cur_236=CUR236_version.V2024
     )
 
-@pytest.mark.parametrize("pile_name", ["round_pile", "rectangle_pile"])
+@pytest.mark.parametrize("pile_name", ["round_pile", "rectangle_pile", "rectangle_pile_custom"])
 @pytest.mark.parametrize("norms_name", ["default_norm", "custom_norm"])
 @pytest.mark.parametrize("cpt_name", ["cpt", "cpt_no_coords"])
 def test_create_multi_cpt_payload(pc_openapi, cpt_name, pile_name, norms_name, request, headers):
