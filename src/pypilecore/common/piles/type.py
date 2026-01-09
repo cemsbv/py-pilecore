@@ -16,10 +16,10 @@ class PileType:
         is_auger: bool | None = None,
         settlement_curve: int | None = None,
         alpha_s_sand: float | None = None,
-        alpha_s_clay: float | None = None,
+        alpha_s_clay: dict | None = None,
         alpha_p: float | None = None,
         alpha_t_sand: float | None = None,
-        alpha_t_clay: float | None = None,
+        alpha_t_clay: dict | None = None,
         negative_fr_delta_factor: float | None = None,
         adhesion: float | None = None,
         qc_z_a_lesser_1m: float | None = None,
@@ -74,6 +74,7 @@ class PileType:
         chamfered : float, optional
             The chamfered value of the pile type, by default None.
         """
+        self._standard_pile = None if reference is None else {"reference": reference}
         self._reference = reference
         self._installation_method = installation_method
         self._is_prefab = is_prefab
@@ -112,27 +113,26 @@ class PileType:
             reference=pile_type.get("reference"),
             is_prefab=pile_type.get("is_prefab"),
             is_open_ended=pile_type.get("is_open_ended"),
-            is_low_vibrating=pile_type["properties"]["is_low_vibrating"],
-            is_auger=pile_type["properties"]["is_auger"],
-            alpha_s_sand=pile_type["properties"]["alpha_s_sand"],
-            alpha_s_clay=pile_type["properties"]["alpha_s_clay"],
-            alpha_p=pile_type["properties"]["alpha_p"],
-            alpha_t_sand=pile_type["properties"]["alpha_t_sand"],
-            alpha_t_clay=pile_type["properties"].get("alpha_t_clay", None),
-            settlement_curve=pile_type["properties"]["settlement_curve"],
-            negative_fr_delta_factor=pile_type["properties"][
-                "negative_fr_delta_factor"
-            ],
-            adhesion=pile_type["properties"]["adhesion"],
-            qc_z_a_lesser_1m=pile_type["properties"].get("qc_z_a_lesser_1m", None),
-            qc_z_a_greater_1m=pile_type["properties"].get("qc_z_a_greater_1m", None),
-            qb_max_limit=pile_type["properties"].get("qb_max_limit", None),
+            is_low_vibrating=pile_type["is_low_vibrating"],
+            is_auger=pile_type.get("is_auger"),
+            installation_method=pile_type.get("installation_method"),
+            alpha_s_sand=pile_type.get("alpha_s_sand"),
+            alpha_s_clay=pile_type.get("alpha_s_clay"),
+            alpha_p=pile_type.get("alpha_p"),
+            alpha_t_sand=pile_type.get("alpha_t_sand"),
+            alpha_t_clay=pile_type.get("alpha_t_clay"),
+            settlement_curve=pile_type.get("settlement_curve"),
+            negative_fr_delta_factor=pile_type.get("negative_fr_delta_factor"),
+            adhesion=pile_type.get("adhesion"),
+            qc_z_a_lesser_1m=pile_type.get("qc_z_a_lesser_1m"),
+            qc_z_a_greater_1m=pile_type.get("qc_z_a_greater_1m"),
+            qb_max_limit=pile_type.get("qb_max_limit"),
         )
 
     @property
-    def standard_pile(self) -> Dict[str, str | int] | None:
+    def reference(self) -> str | None:
         """The standard pile definition of the pile type (if applicable)"""
-        return self._standard_pile
+        return self._reference
 
     @property
     def alpha_s_sand(self) -> float | None:
@@ -140,7 +140,7 @@ class PileType:
         return self._alpha_s_sand
 
     @property
-    def alpha_s_clay(self) -> float | None:
+    def alpha_s_clay(self) -> dict | None:
         """The alpha_s_clay value of the pile type"""
         return self._alpha_s_clay
 
@@ -155,7 +155,7 @@ class PileType:
         return self._alpha_t_sand
 
     @property
-    def alpha_t_clay(self) -> float | None:
+    def alpha_t_clay(self) -> dict | None:
         """The alpha_t_clay value of the pile type"""
         return self._alpha_t_clay
 
@@ -214,43 +214,10 @@ class PileType:
         """
         payload: Dict[str, str | dict] = {}
 
-        if self.standard_pile is not None:
-            # Convert internal representation (main_type + specification) to API format (reference)
-            if "reference" in self.standard_pile:
-                # Already in the correct API format
-                payload["standard_pile"] = {
-                    "reference": str(self.standard_pile["reference"]),
-                }
-            elif (
-                "main_type" in self.standard_pile
-                and "specification" in self.standard_pile
-            ):
-                # Convert from internal format to reference format
-                # Example: main_type="concrete", specification="1" -> reference="B1"
-                main_type = str(self.standard_pile["main_type"]).lower()
-                specification = str(self.standard_pile["specification"])
+        if self._standard_pile is not None:
+            payload["standard_pile"] = self._standard_pile
 
-                # Map main_type to prefix
-                type_prefix_map = {
-                    "concrete": "B",  # B-series are concrete piles
-                    "steel": "S",  # S-series are steel piles
-                    "wood": "H",  # H-series might be wood/timber
-                    "composite": "M",  # M-series might be composite
-                }
-                prefix = type_prefix_map.get(
-                    main_type, "B"
-                )  # Default to B if not found
-
-                # Create reference by combining prefix and specification
-                reference = f"{prefix}{specification}"
-                payload["standard_pile"] = {
-                    "reference": reference,
-                }
-            else:
-                # If neither format is recognized, serialize as-is
-                payload["standard_pile"] = dict(self.standard_pile)
-
-        custom_type_properties: Dict[str, float | bool] = {}
+        custom_type_properties: Dict[str, float | bool | dict] = {}
 
         if self.alpha_s_sand is not None:
             custom_type_properties["alpha_s_sand"] = self.alpha_s_sand
