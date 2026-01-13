@@ -113,7 +113,7 @@ class PileType:
             reference=pile_type.get("reference"),
             is_prefab=pile_type.get("is_prefab"),
             is_open_ended=pile_type.get("is_open_ended"),
-            is_low_vibrating=pile_type["is_low_vibrating"],
+            is_low_vibrating=pile_type.get("is_low_vibrating"),
             is_auger=pile_type.get("is_auger"),
             installation_method=pile_type.get("installation_method"),
             alpha_s_sand=pile_type.get("alpha_s_sand"),
@@ -175,6 +175,21 @@ class PileType:
         return self._adhesion
 
     @property
+    def is_prefab(self) -> bool | None:
+        """The is_prefab value of the pile type"""
+        return self._is_prefab
+
+    @property
+    def is_open_ended(self) -> bool | None:
+        """The is_open_ended value of the pile type"""
+        return self._is_open_ended
+
+    @property
+    def installation_method(self) -> str | None:
+        """The installation_method value of the pile type"""
+        return self._installation_method
+
+    @property
     def is_low_vibrating(self) -> bool | None:
         """The is_low_vibrating value of the pile type"""
         return self._is_low_vibrating
@@ -217,7 +232,7 @@ class PileType:
         if self._standard_pile is not None:
             payload["standard_pile"] = self._standard_pile
 
-        custom_type_properties: Dict[str, float | bool | dict] = {}
+        custom_type_properties: Dict[str, float | bool | dict | str] = {}
 
         if self.alpha_s_sand is not None:
             custom_type_properties["alpha_s_sand"] = self.alpha_s_sand
@@ -245,11 +260,20 @@ class PileType:
         if self.adhesion is not None:
             custom_type_properties["adhesion"] = self.adhesion
 
+        if self.installation_method is not None:
+            custom_type_properties["installation_method"] = self.installation_method
+
+        if self.is_prefab is not None:
+            custom_type_properties["is_prefab"] = self.is_prefab
+
         if self.is_low_vibrating is not None:
             custom_type_properties["is_low_vibrating"] = self.is_low_vibrating
 
         if self.is_auger is not None:
             custom_type_properties["is_auger"] = self.is_auger
+
+        if self.is_open_ended is not None:
+            custom_type_properties["is_open_ended"] = self.is_open_ended
 
         if self.qc_z_a_lesser_1m is not None:
             custom_type_properties["qc_z_a_lesser_1m"] = self.qc_z_a_lesser_1m
