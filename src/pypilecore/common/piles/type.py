@@ -109,24 +109,26 @@ class PileType:
         PileType
             A pile type.
         """
+        standard_pile = pile_type.get("standard_pile", {})
+        properties = pile_type.get("properties", {})
         return cls(
-            reference=pile_type.get("reference"),
-            is_prefab=pile_type.get("is_prefab"),
-            is_open_ended=pile_type.get("is_open_ended"),
-            is_low_vibrating=pile_type.get("is_low_vibrating"),
-            is_auger=pile_type.get("is_auger"),
-            installation_method=pile_type.get("installation_method"),
-            alpha_s_sand=pile_type.get("alpha_s_sand"),
-            alpha_s_clay=pile_type.get("alpha_s_clay"),
-            alpha_p=pile_type.get("alpha_p"),
-            alpha_t_sand=pile_type.get("alpha_t_sand"),
-            alpha_t_clay=pile_type.get("alpha_t_clay"),
-            settlement_curve=pile_type.get("settlement_curve"),
-            negative_fr_delta_factor=pile_type.get("negative_fr_delta_factor"),
-            adhesion=pile_type.get("adhesion"),
-            qc_z_a_lesser_1m=pile_type.get("qc_z_a_lesser_1m"),
-            qc_z_a_greater_1m=pile_type.get("qc_z_a_greater_1m"),
-            qb_max_limit=pile_type.get("qb_max_limit"),
+            reference=standard_pile.get("reference"),
+            is_prefab=properties.get("is_prefab"),
+            is_open_ended=properties.get("is_open_ended"),
+            is_low_vibrating=properties.get("is_low_vibrating"),
+            is_auger=properties.get("is_auger"),
+            installation_method=properties.get("installation_method"),
+            alpha_s_sand=properties.get("alpha_s_sand"),
+            alpha_s_clay=properties.get("alpha_s_clay"),
+            alpha_p=properties.get("alpha_p"),
+            alpha_t_sand=properties.get("alpha_t_sand"),
+            alpha_t_clay=properties.get("alpha_t_clay"),
+            settlement_curve=properties.get("settlement_curve"),
+            negative_fr_delta_factor=properties.get("negative_fr_delta_factor"),
+            adhesion=properties.get("adhesion"),
+            qc_z_a_lesser_1m=properties.get("qc_z_a_lesser_1m"),
+            qc_z_a_greater_1m=properties.get("qc_z_a_greater_1m"),
+            qb_max_limit=properties.get("qb_max_limit"),
         )
 
     @property
