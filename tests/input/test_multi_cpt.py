@@ -1,3 +1,4 @@
+import json
 import numpy as np
 import pygef
 import pytest
@@ -63,23 +64,24 @@ def rectangle_pile_custom() -> PileProperties:
             components=[
                 RectPileGeometryComponent(
                     secondary_dimension=0.6,
-                    primary_dimension=PrimaryPileComponentDimension(length=0.4)
+                    primary_dimension=PrimaryPileComponentDimension(length=0.4),
+                    material="concrete",
                 )
             ]
         ),
         pile_type=PileType(
             alpha_s_sand = 0.009,
-            # alpha_s_clay = {"use_constant_value" : False},
+            alpha_s_clay = {"use_constant_value" : False},
             alpha_p = 0.30,
             alpha_t_sand = 0.0090,
-            # alpha_t_clay = {"use_constant_value" : False},
+            alpha_t_clay = {"use_constant_value" : False},
             negative_fr_delta_factor = 1.0,
             is_auger=False,
             installation_method = "screwed",
             is_prefab=False,
             is_open_ended=False,
             settlement_curve=1,
-            # is_low_vibrating=True,
+            is_low_vibrating=True,
         ),
     )
 
