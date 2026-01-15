@@ -10,6 +10,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from numpy.typing import NDArray
 
+from pypilecore.results.plots import plot_bearing_overview
 from pypilecore.results.soil_properties import (
     CPTTable,
     LayerTable,
@@ -416,59 +417,14 @@ class SingleCPTCompressionBearingResults:
         fig:
             The matplotlib Figure
         """
-
-        kwargs_subplot = {
-            "gridspec_kw": {"width_ratios": width_ratios},
-            "sharey": "row",
-            "figsize": figsize,
-            "tight_layout": True,
-        }
-
-        kwargs_subplot.update(kwargs)
-
-        fig, _ = plt.subplots(
-            1,
-            3,
-            **kwargs_subplot,
+        return plot_bearing_overview(
+            plot_qc=self.soil_properties.cpt_table.plot_qc,
+            plot_friction_ratio=self.soil_properties.cpt_table.plot_friction_ratio,
+            plot_layers=self.soil_properties.plot_layers,
+            plot_bearing_capacities=self.plot_bearing_capacities,
+            test_id=self.soil_properties.test_id,
+            figsize=figsize,
+            width_ratios=width_ratios,
+            add_legend=add_legend,
+            **kwargs,
         )
-
-        ax_qc, ax_layers, ax_bearing = fig.axes
-        ax_rf = ax_qc.twiny()
-        assert isinstance(ax_rf, Axes)
-
-        # Plot bearing capacities
-        self.soil_properties.cpt_table.plot_qc(ax_qc, add_legend=False)
-        self.soil_properties.cpt_table.plot_friction_ratio(ax_rf, add_legend=False)
-        self.soil_properties.plot_layers(ax_layers, add_legend=False)
-        self.plot_bearing_capacities(axes=ax_bearing, add_legend=False)
-
-        if add_legend:
-            ax_qc_legend_handles_list = ax_qc.get_legend_handles_labels()[0]
-            ax_rf_legend_handles_list = ax_rf.get_legend_handles_labels()[0]
-            ax_layers_legend_handles_list = get_soil_layer_handles()
-
-            # Omit last 2 duplicate "bearing" handles
-            # (groundwater_level and surface_level):
-            ax_bearing_legend_handles_list = ax_bearing.get_legend_handles_labels()[0][
-                2:
-            ]
-
-            handles_list = [
-                *ax_qc_legend_handles_list,
-                *ax_rf_legend_handles_list,
-                *ax_layers_legend_handles_list,
-                *ax_bearing_legend_handles_list,
-            ]
-
-            ax_bearing.legend(
-                handles=handles_list,
-                loc="upper left",
-                bbox_to_anchor=(1, 1),
-                title=(
-                    "name: " + self.soil_properties.test_id
-                    if self.soil_properties.test_id is not None
-                    else "name: unknown"
-                ),
-            )
-
-        return fig
