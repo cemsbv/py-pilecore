@@ -7,6 +7,10 @@ class NEN99971_version(StrEnum):
     V2025 = "2025"
 
 
+class CUR236_version(StrEnum):
+    V2024 = "2024"
+
+
 class Nen99971:
     """
     NEN 9997-1 standard for pile design.
@@ -24,10 +28,6 @@ class Nen99971:
     def version(self) -> NEN99971_version:
         """Returns the version of the NEN 9997-1 standard."""
         return self._version
-
-
-class CUR236_version(StrEnum):
-    V2024 = "2024"
 
 
 class Cur236:
@@ -56,11 +56,21 @@ class Norms:
 
     def __init__(
         self,
-        nen_9997_1: NEN99971_version = NEN99971_version.V2025,
-        cur_236: CUR236_version = CUR236_version.V2024,
+        nen_9997_1: str = "2025",
+        cur_236: str = "2024",
     ) -> None:
-        self.nen_9997_1 = Nen99971(version=nen_9997_1)
-        self.cur_236 = Cur236(version=cur_236)
+        try:
+            self.nen_9997_1 = Nen99971(version=NEN99971_version(nen_9997_1))
+        except ValueError:
+            raise ValueError(
+                f"Invalid NEN9997-1 version selected: {nen_9997_1}, must be one of {[v.value for v in NEN99971_version]}"
+            )
+        try:
+            self.cur_236 = Cur236(version=CUR236_version(cur_236))
+        except ValueError:
+            raise ValueError(
+                f"Invalid CUR-236 version selected: {cur_236}, must be one of {[v.value for v in CUR236_version]}"
+            )
 
     def serialize_payload(self) -> Dict[str, str]:
         """
