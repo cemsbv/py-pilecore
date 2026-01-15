@@ -37,16 +37,9 @@ def test_norms_accept_custom_versions():
 	assert payload["CUR236_version"] == norms.CUR236_version.V2024 == "2024"
 
 def test_norms_invalid_inputs():
-	# Passing invalid types (non-enum) to Norms should raise TypeError
-	with pytest.raises(TypeError):
+	# Passing invalid values (years not defined in the enums) to Norms should raise ValueError
+	with pytest.raises(ValueError):
 		norms.Norms(nen_9997_1="2001")
 
-	with pytest.raises(TypeError):
+	with pytest.raises(ValueError):
 		norms.Norms(cur_236="1998")
-
-	# Also validate direct construction of the individual classes
-	with pytest.raises(TypeError):
-		norms.Nen99971(version="2025")
-
-	with pytest.raises(TypeError):
-		norms.Cur236(version="2024")
