@@ -73,7 +73,7 @@ def get_multi_cpt_api_result(
     client: NucleiClient, payload: dict, verbose: bool = False
 ) -> dict:
     """
-    Wrapper around the PileCore endpoint "/compression/multiple-cpts/results".
+    Wrapper around the PileCore endpoint "/bearing/multiple-cpts/results".
 
     Parameters
     ----------
@@ -90,7 +90,7 @@ def get_multi_cpt_api_result(
     )
     ticket = client.call_endpoint(
         "PileCore",
-        "/compression/multiple-cpts/results",
+        "/bearing/multiple-cpts/results",
         version="v4",
         schema=payload,
         return_response=True,
@@ -107,7 +107,7 @@ def get_multi_cpt_api_report(
     client: NucleiClient, payload: dict, verbose: bool = False
 ) -> dict:
     """
-    Wrapper around the PileCore endpoint "/compression/multiple-cpts/report".
+    Wrapper around the PileCore endpoint "/bearing/multiple-cpts/report".
 
     Parameters
     ----------
@@ -124,7 +124,7 @@ def get_multi_cpt_api_report(
     )
     ticket = client.call_endpoint(
         "PileCore",
-        "/compression/multiple-cpts/report",
+        "/bearing/multiple-cpts/report",
         version="v4",
         schema=payload,
         return_response=True,
@@ -290,7 +290,7 @@ def get_multi_cpt_api_report_tension(
     standard: Literal["NEN9997-1", "CUR236"] = "NEN9997-1",
 ) -> bytes:
     """
-    Wrapper around the PileCore endpoint "/tension/[nen or cur]/multiple-cpts/report".
+    Wrapper around the PileCore endpoint "/uplift/[nen or cur]/multiple-cpts/report".
 
     Parameters
     ----------
@@ -309,9 +309,9 @@ def get_multi_cpt_api_report_tension(
     )
 
     if standard == "NEN9997-1":
-        endpoint = "/tension/nen/multiple-cpt/report"
+        endpoint = "/uplift/nen/multiple-cpts/report"
     else:
-        endpoint = "/tension/cur/multiple-cpt/report"
+        endpoint = "/uplift/cur/multiple-cpts/report"
         payload.pop("construction_sequence", None)
 
     ticket = client.call_endpoint(
