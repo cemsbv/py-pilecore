@@ -245,7 +245,7 @@ def get_multi_cpt_api_result_tension(
     standard: Literal["NEN9997-1", "CUR236"] = "NEN9997-1",
 ) -> dict:
     """
-    Wrapper around the PileCore endpoint "/tension/[nen or cur]/multiple-cpts/results".
+    Wrapper around the PileCore endpoint "/uplift/[nen or cur]/multiple-cpts/results".
 
     Parameters
     ----------
@@ -263,9 +263,9 @@ def get_multi_cpt_api_result_tension(
         "Depending on the amount of pile tip levels and CPT's this can take a while."
     )
     if standard == "NEN9997-1":
-        endpoint = "/tension/nen/multiple-cpt/results"
+        endpoint = "/uplift/nen/multiple-cpts/results"
     else:
-        endpoint = "/tension/cur/multiple-cpt/results"
+        endpoint = "/uplift/cur/multiple-cpts/results"
         payload.pop("construction_sequence", None)
 
     ticket = client.call_endpoint(

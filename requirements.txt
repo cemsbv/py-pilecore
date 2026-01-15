@@ -44,7 +44,7 @@ botocore==1.41.5
     #   s3transfer
 bracex==2.6
     # via wcmatch
-cems-nuclei==3.0.1
+cems-nuclei==3.1.0
     # via py-pilecore (pyproject.toml)
 certifi==2025.11.12
     # via requests
