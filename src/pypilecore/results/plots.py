@@ -10,7 +10,7 @@ from pypilecore.results.soil_properties import get_soil_layer_handles
 def plot_bearing_overview(
     plot_qc: Callable[[Axes | None, bool], Axes],
     plot_friction_ratio: Callable[[Axes | None, bool], Axes],
-    plot_layers: Callable[[Axes | None, bool], Axes],
+    plot_layers: Callable[[Axes | None, bool, bool], Axes],
     plot_bearing_capacities: Callable[[Axes | None, Tuple[float, float], bool], Axes],
     test_id: str | None = None,
     figsize: Tuple[float, float] = (10.0, 12.0),
@@ -23,6 +23,16 @@ def plot_bearing_overview(
 
     Parameters
     ----------
+    plot_qc:
+        Function to plot the qc values vs. depth.
+    plot_friction_ratio:
+        Function to plot the friction ratio vs. depth.
+    plot_layers:
+        Function to plot the soil layers vs. depth.
+    plot_bearing_capacities:
+        Function to plot the bearing capacities vs. depth.
+    test_id:
+        The test ID to display in the legend title.
     figsize:
         Size of the activate figure, as the `plt.figure()` argument.
     width_ratios:
@@ -60,7 +70,7 @@ def plot_bearing_overview(
     # Plot bearing capacities
     plot_qc(ax_qc, False)
     plot_friction_ratio(ax_rf, False)
-    plot_layers(ax_layers, False)
+    plot_layers(ax_layers, False, False)
 
     # Set bounds of layers to qc plot
     bounds = ax_qc.get_ylim()
@@ -88,11 +98,7 @@ def plot_bearing_overview(
             handles=handles_list,
             loc="upper left",
             bbox_to_anchor=(1, 1),
-            title=(
-                "name: " + test_id
-                if test_id is not None
-                else "name: unknown"
-            ),
+            title=("name: " + test_id if test_id is not None else "name: unknown"),
         )
 
     return fig

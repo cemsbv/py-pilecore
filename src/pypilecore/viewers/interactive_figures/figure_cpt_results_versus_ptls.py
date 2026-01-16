@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 from pypilecore.results.cases_grouper_results import CasesGrouperResults
 from pypilecore.results.data_tables import ResultsPandasColumn
 from pypilecore.results.result_definitions import CPTResultDefinition
-from pypilecore.viewers._typing import CasesMultiCPTResultsProtocol
+from pypilecore.results.typing import CasesMultiCPTResultsLike
 
 
 class FigureCPTResultsVersusPtls:
@@ -25,7 +25,7 @@ class FigureCPTResultsVersusPtls:
     The figure has a method to switch between cases and results.
     """
 
-    def __init__(self, results_cases: CasesMultiCPTResultsProtocol) -> None:
+    def __init__(self, results_cases: CasesMultiCPTResultsLike) -> None:
         """
         Initializes the figure.
 
@@ -35,7 +35,7 @@ class FigureCPTResultsVersusPtls:
             The case results of the bearing capacity calculations.
         """
         # Validate the data
-        if not isinstance(results_cases, CasesMultiCPTResultsProtocol):
+        if not isinstance(results_cases, CasesMultiCPTResultsLike):
             raise TypeError(
                 f"Incompatible type for 'cases_multi_results': {type(results_cases)}"
             )
@@ -47,7 +47,7 @@ class FigureCPTResultsVersusPtls:
         self._figure = go.FigureWidget()
 
     @property
-    def results(self) -> CasesMultiCPTResultsProtocol:
+    def results(self) -> CasesMultiCPTResultsLike:
         """The results of the bearing capacity calculations."""
         return self._results
 

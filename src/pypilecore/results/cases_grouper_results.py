@@ -106,7 +106,7 @@ class CasesGrouperResults:
         """Private method to set the maximum results dataframe for each case."""
 
         for case_name, case_results in results_per_case.items():
-            for cpt_results in case_results.max_bearing_results.results:
+            for cpt_results in case_results.cpt_results.results:
                 test_id = str(cpt_results.soil_properties.test_id)
                 for result_definition in GrouperResultsDefinition:
                     try:

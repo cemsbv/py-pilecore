@@ -11,7 +11,7 @@ from pypilecore.results.result_definitions import (
     CPTGroupResultDefinition,
     CPTResultDefinition,
 )
-from pypilecore.results.typing import MultiCPTBearingResults
+from pypilecore.results.typing import LikeMultiCPTResults
 
 
 class CasesMultiCPTBearingResults:
@@ -22,7 +22,7 @@ class CasesMultiCPTBearingResults:
 
     def __init__(
         self,
-        results_per_case: Dict[Hashable, MultiCPTBearingResults],
+        results_per_case: Dict[Hashable, LikeMultiCPTResults],
         cpt_locations: Dict[str, Location],
     ) -> None:
         """
@@ -74,7 +74,7 @@ class CasesMultiCPTBearingResults:
         self._set_cpt_group_results_dataframe(results_per_case)
 
     def _set_cpt_results_table(
-        self, results_per_case: Dict[Hashable, MultiCPTBearingResults]
+        self, results_per_case: Dict[Hashable, LikeMultiCPTResults]
     ) -> None:
         """Private method to fill the `cpt_results_table`."""
 
@@ -101,7 +101,7 @@ class CasesMultiCPTBearingResults:
                         )
 
     def _set_cpt_group_results_dataframe(
-        self, result_cases: Dict[Hashable, MultiCPTBearingResults]
+        self, result_cases: Dict[Hashable, LikeMultiCPTResults]
     ) -> None:
         """Private method to create and set the property `cpt_group_results_dataframe`."""
         records = []
@@ -152,7 +152,7 @@ class CasesMultiCPTBearingResults:
         self._cpt_locations = value
 
     @property
-    def results_per_case(self) -> Dict[Hashable, MultiCPTBearingResults]:
+    def results_per_case(self) -> Dict[Hashable, LikeMultiCPTResults]:
         """The dictionary with case names as keys and MultiCPTBearingResults as values."""
         return self._results_per_case
 
@@ -162,7 +162,7 @@ class CasesMultiCPTBearingResults:
         return self._cases
 
     @property
-    def multicpt_bearing_results(self) -> List[MultiCPTBearingResults]:
+    def multicpt_bearing_results(self) -> List[LikeMultiCPTResults]:
         """The MultiCPTBearingResults objects."""
         return self._multicpt_bearing_results
 
@@ -198,7 +198,7 @@ class CasesMultiCPTBearingResults:
 
 
 def _validate_results_per_case(
-    results_per_case: Dict[Hashable, MultiCPTBearingResults],
+    results_per_case: Dict[Hashable, LikeMultiCPTResults],
 ) -> None:
     """
     Private method to validate the results_per_case dictionary.
@@ -227,7 +227,7 @@ def _validate_results_per_case(
         raise ValueError("Empty dictionary 'results_per_case' is not allowed.")
 
     for val in results_per_case.values():
-        if not isinstance(val, MultiCPTBearingResults):
+        if not isinstance(val, LikeMultiCPTResults):
             raise TypeError(
                 f"Expected type 'MultiCPTBearingResults' for items in 'results_per_case', but got {type(val)}"
             )

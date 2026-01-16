@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 
 from pypilecore.results.data_tables import ResultsPandasColumn
 from pypilecore.results.result_definitions import CPTResultDefinition
-from pypilecore.viewers._typing import CasesMultiCPTResultsProtocol
+from pypilecore.results.typing import CasesMultiCPTResultsLike
 from pypilecore.viewers.interactive_figures.utils import get_continuous_color
 
 
@@ -26,7 +26,7 @@ class FigureCPTResultsPlanView:
     The figure has a method to switch between case, result and pile tip level.
     """
 
-    def __init__(self, results_cases: CasesMultiCPTResultsProtocol) -> None:
+    def __init__(self, results_cases: CasesMultiCPTResultsLike) -> None:
         """
         Initializes the figure.
 
@@ -41,16 +41,16 @@ class FigureCPTResultsPlanView:
         # Initialize the figure
         self._figure = go.FigureWidget()
 
-    def _set_results(self, value: CasesMultiCPTResultsProtocol) -> None:
+    def _set_results(self, value: CasesMultiCPTResultsLike) -> None:
         """Private setter for the results."""
-        if not isinstance(value, CasesMultiCPTResultsProtocol):
+        if not isinstance(value, CasesMultiCPTResultsLike):
             raise TypeError(
                 f"Incompatible type for 'cases_multi_results': {type(value)}"
             )
         self._results = value
 
     @property
-    def results(self) -> CasesMultiCPTResultsProtocol:
+    def results(self) -> CasesMultiCPTResultsLike:
         """The results of the bearing capacity calculations."""
         return self._results
 
