@@ -5,9 +5,13 @@ from nuclei.client.utils import serialize_jsonifyable_object
 from openapi_core.contrib.requests import RequestsOpenAPIRequest
 from requests import Request
 
+from pypilecore.common.norms import CUR236_version, NEN99971_version, Norms
 from pypilecore.common.piles import PileProperties
 from pypilecore.common.piles.geometry import PileGeometry
-from pypilecore.common.piles.geometry.components import RoundPileGeometryComponent
+from pypilecore.common.piles.geometry.components import (
+    RectPileGeometryComponent,
+    RoundPileGeometryComponent,
+)
 from pypilecore.common.piles.geometry.components.common import (
     PrimaryPileComponentDimension,
 )
@@ -35,15 +39,78 @@ def round_pile() -> PileProperties:
             ]
         ),
         pile_type=PileType(
-            standard_pile={
-                "main_type": "concrete",
-                "specification": "1",
-            },
+            reference="B1",
         ),
     )
 
 
-def test_create_multi_cpt_payload(pc_openapi, cpt, round_pile, headers):
+@pytest.fixture
+def rectangle_pile() -> PileProperties:
+    return PileProperties(
+        geometry=PileGeometry(
+            components=[
+                RectPileGeometryComponent(
+                    secondary_dimension=0.5,
+                    primary_dimension=PrimaryPileComponentDimension(length=0.5),
+                )
+            ]
+        ),
+        pile_type=PileType(reference="B1"),
+    )
+
+
+@pytest.fixture
+def rectangle_pile_custom() -> PileProperties:
+    return PileProperties(
+        geometry=PileGeometry(
+            components=[
+                RectPileGeometryComponent(
+                    secondary_dimension=0.6,
+                    primary_dimension=PrimaryPileComponentDimension(length=0.4),
+                    material="concrete",
+                )
+            ]
+        ),
+        pile_type=PileType(
+            alpha_s_sand=0.009,
+            alpha_s_clay={"use_constant_value": False},
+            alpha_p=0.30,
+            alpha_t_sand=0.0090,
+            alpha_t_clay={"use_constant_value": False},
+            negative_fr_delta_factor=1.0,
+            is_auger=False,
+            installation_method="screwed",
+            is_prefab=False,
+            is_open_ended=False,
+            settlement_curve=1,
+            is_low_vibrating=True,
+        ),
+    )
+
+
+@pytest.fixture
+def default_norm() -> Norms:
+    return Norms()
+
+
+@pytest.fixture
+def custom_norm() -> Norms:
+    return Norms(nen_9997_1=NEN99971_version.V2017, cur_236=CUR236_version.V2023)
+
+
+@pytest.mark.parametrize(
+    "pile_name", ["round_pile", "rectangle_pile", "rectangle_pile_custom"]
+)
+@pytest.mark.parametrize("norms_name", ["default_norm", "custom_norm"])
+@pytest.mark.parametrize("cpt_name", ["cpt", "cpt_no_coords"])
+def test_create_multi_cpt_payload(
+    pc_openapi, cpt_name, pile_name, norms_name, request, headers
+):
+    # resolve fixture by name so we can parametrize over fixture names
+    pile = request.getfixturevalue(pile_name)
+    norms = request.getfixturevalue(norms_name)
+    cpt = request.getfixturevalue(cpt_name)
+
     payload, _ = create_multi_cpt_payload(
         pile_tip_levels_nap=[-10.0, -20.0],
         cptdata_objects=[cpt],
@@ -62,49 +129,14 @@ def test_create_multi_cpt_payload(pc_openapi, cpt, round_pile, headers):
             }
         },
         groundwater_level_nap=-10.0,
-        pile=round_pile,
+        pile=pile,
+        norms=norms,
     )
 
     request = Request(
         method="POST",
         headers=headers,
-        url="http://compression/multiple-cpts/results",
-        json=serialize_jsonifyable_object(payload),
-    )
-
-    openapi_request = RequestsOpenAPIRequest(request)
-
-    pc_openapi.request_validator.validate(openapi_request)
-
-
-def test_create_multi_cpt_payload_no_coords(
-    pc_openapi, cpt_no_coords, round_pile, headers
-):
-    payload, _ = create_multi_cpt_payload(
-        pile_tip_levels_nap=[-10.0, -20.0],
-        cptdata_objects=[cpt_no_coords],
-        classify_tables={
-            cpt_no_coords.alias: {
-                "geotechnicalSoilName": ["Sand"],
-                "lowerBoundary": [1.0],
-                "upperBoundary": [0.0],
-                "color": ["#000000"],
-                "mainComponent": ["sand"],
-                "cohesion": [0.0],
-                "gamma_sat": [20],
-                "gamma_unsat": [18],
-                "phi": [30],
-                "undrainedShearStrength": [0.0],
-            }
-        },
-        groundwater_level_nap=-10.0,
-        pile=round_pile,
-    )
-
-    request = Request(
-        method="POST",
-        headers=headers,
-        url="http://compression/multiple-cpts/results",
+        url="http://bearing/multiple-cpts/results",
         json=serialize_jsonifyable_object(payload),
     )
 
@@ -157,7 +189,7 @@ def test_create_multi_cpt_payload_excavation_settings_valid(
     request = Request(
         method="POST",
         headers=headers,
-        url="http://compression/multiple-cpts/results",
+        url="http://bearing/multiple-cpts/results",
         json=serialize_jsonifyable_object(payload),
     )
 

@@ -28478,8 +28478,7 @@
         },
         "pile_type": {
             "standard_pile": {
-                "main_type": "concrete",
-                "specification": "3"
+                "reference" : "B3"
             },
             "properties": {
                 "alpha_p": 0.63,

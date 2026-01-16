@@ -8,17 +8,20 @@ class PileType:
 
     def __init__(
         self,
-        standard_pile: Dict[str, str | int] | None = None,
-        alpha_s_sand: float | None = None,
-        alpha_s_clay: float | None = None,
-        alpha_p: float | None = None,
-        alpha_t_sand: float | None = None,
-        alpha_t_clay: float | None = None,
-        settlement_curve: int | None = None,
-        negative_fr_delta_factor: float | None = None,
-        adhesion: float | None = None,
+        reference: str | None = None,
+        installation_method: str | None = None,
+        is_prefab: bool | None = None,
+        is_open_ended: bool | None = None,
         is_low_vibrating: bool | None = None,
         is_auger: bool | None = None,
+        settlement_curve: int | None = None,
+        alpha_s_sand: float | None = None,
+        alpha_s_clay: dict | None = None,
+        alpha_p: float | None = None,
+        alpha_t_sand: float | None = None,
+        alpha_t_clay: dict | None = None,
+        negative_fr_delta_factor: float | None = None,
+        adhesion: float | None = None,
         qc_z_a_lesser_1m: float | None = None,
         qc_z_a_greater_1m: float | None = None,
         qb_max_limit: float | None = None,
@@ -29,8 +32,10 @@ class PileType:
 
         Parameters:
         -----------
-        standard_pile : dict, optional
+        reference : str, optional
             The standard pile definition of the pile type (if applicable), by default None.
+        installation_method: str, optional
+            The installation method of the pile, by default None.
         alpha_s_sand : float, optional
             The alpha_s_sand value of the pile type, by default None.
         alpha_s_clay : float, optional
@@ -69,7 +74,11 @@ class PileType:
         chamfered : float, optional
             The chamfered value of the pile type, by default None.
         """
-        self._standard_pile = standard_pile
+        self._standard_pile = None if reference is None else {"reference": reference}
+        self._reference = reference
+        self._installation_method = installation_method
+        self._is_prefab = is_prefab
+        self._is_open_ended = is_open_ended
         self._alpha_s_sand = alpha_s_sand
         self._alpha_s_clay = alpha_s_clay
         self._alpha_p = alpha_p
@@ -100,29 +109,32 @@ class PileType:
         PileType
             A pile type.
         """
+        standard_pile = pile_type.get("standard_pile", {})
+        properties = pile_type.get("properties", {})
         return cls(
-            standard_pile=pile_type.get("standard_pile"),
-            alpha_s_sand=pile_type["properties"]["alpha_s_sand"],
-            alpha_s_clay=pile_type["properties"]["alpha_s_clay"],
-            alpha_p=pile_type["properties"]["alpha_p"],
-            alpha_t_sand=pile_type["properties"]["alpha_t_sand"],
-            alpha_t_clay=pile_type["properties"].get("alpha_t_clay", None),
-            settlement_curve=pile_type["properties"]["settlement_curve"],
-            negative_fr_delta_factor=pile_type["properties"][
-                "negative_fr_delta_factor"
-            ],
-            adhesion=pile_type["properties"]["adhesion"],
-            is_low_vibrating=pile_type["properties"]["is_low_vibrating"],
-            is_auger=pile_type["properties"]["is_auger"],
-            qc_z_a_lesser_1m=pile_type["properties"].get("qc_z_a_lesser_1m", None),
-            qc_z_a_greater_1m=pile_type["properties"].get("qc_z_a_greater_1m", None),
-            qb_max_limit=pile_type["properties"].get("qb_max_limit", None),
+            reference=standard_pile.get("reference"),
+            is_prefab=properties.get("is_prefab"),
+            is_open_ended=properties.get("is_open_ended"),
+            is_low_vibrating=properties.get("is_low_vibrating"),
+            is_auger=properties.get("is_auger"),
+            installation_method=properties.get("installation_method"),
+            alpha_s_sand=properties.get("alpha_s_sand"),
+            alpha_s_clay=properties.get("alpha_s_clay"),
+            alpha_p=properties.get("alpha_p"),
+            alpha_t_sand=properties.get("alpha_t_sand"),
+            alpha_t_clay=properties.get("alpha_t_clay"),
+            settlement_curve=properties.get("settlement_curve"),
+            negative_fr_delta_factor=properties.get("negative_fr_delta_factor"),
+            adhesion=properties.get("adhesion"),
+            qc_z_a_lesser_1m=properties.get("qc_z_a_lesser_1m"),
+            qc_z_a_greater_1m=properties.get("qc_z_a_greater_1m"),
+            qb_max_limit=properties.get("qb_max_limit"),
         )
 
     @property
-    def standard_pile(self) -> Dict[str, str | int] | None:
+    def reference(self) -> str | None:
         """The standard pile definition of the pile type (if applicable)"""
-        return self._standard_pile
+        return self._reference
 
     @property
     def alpha_s_sand(self) -> float | None:
@@ -130,7 +142,7 @@ class PileType:
         return self._alpha_s_sand
 
     @property
-    def alpha_s_clay(self) -> float | None:
+    def alpha_s_clay(self) -> dict | None:
         """The alpha_s_clay value of the pile type"""
         return self._alpha_s_clay
 
@@ -145,7 +157,7 @@ class PileType:
         return self._alpha_t_sand
 
     @property
-    def alpha_t_clay(self) -> float | None:
+    def alpha_t_clay(self) -> dict | None:
         """The alpha_t_clay value of the pile type"""
         return self._alpha_t_clay
 
@@ -163,6 +175,21 @@ class PileType:
     def adhesion(self) -> float | None:
         """The adhesion value of the pile type"""
         return self._adhesion
+
+    @property
+    def is_prefab(self) -> bool | None:
+        """The is_prefab value of the pile type"""
+        return self._is_prefab
+
+    @property
+    def is_open_ended(self) -> bool | None:
+        """The is_open_ended value of the pile type"""
+        return self._is_open_ended
+
+    @property
+    def installation_method(self) -> str | None:
+        """The installation_method value of the pile type"""
+        return self._installation_method
 
     @property
     def is_low_vibrating(self) -> bool | None:
@@ -204,20 +231,10 @@ class PileType:
         """
         payload: Dict[str, str | dict] = {}
 
-        if self.standard_pile is not None:
-            payload["standard_pile"] = {
-                "main_type": str(self.standard_pile["main_type"]),
-                "specification": str(self.standard_pile["specification"]),
-            }
-            if (
-                "installation" in self.standard_pile
-                and self.standard_pile["installation"] is not None
-            ):
-                payload["standard_pile"]["installation"] = str(  # type: ignore
-                    self.standard_pile["installation"]
-                )
+        if self._standard_pile is not None:
+            payload["standard_pile"] = self._standard_pile
 
-        custom_type_properties: Dict[str, float | bool] = {}
+        custom_type_properties: Dict[str, float | bool | dict | str] = {}
 
         if self.alpha_s_sand is not None:
             custom_type_properties["alpha_s_sand"] = self.alpha_s_sand
@@ -245,11 +262,20 @@ class PileType:
         if self.adhesion is not None:
             custom_type_properties["adhesion"] = self.adhesion
 
+        if self.installation_method is not None:
+            custom_type_properties["installation_method"] = self.installation_method
+
+        if self.is_prefab is not None:
+            custom_type_properties["is_prefab"] = self.is_prefab
+
         if self.is_low_vibrating is not None:
             custom_type_properties["is_low_vibrating"] = self.is_low_vibrating
 
         if self.is_auger is not None:
             custom_type_properties["is_auger"] = self.is_auger
+
+        if self.is_open_ended is not None:
+            custom_type_properties["is_open_ended"] = self.is_open_ended
 
         if self.qc_z_a_lesser_1m is not None:
             custom_type_properties["qc_z_a_lesser_1m"] = self.qc_z_a_lesser_1m

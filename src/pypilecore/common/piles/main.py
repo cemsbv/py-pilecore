@@ -93,8 +93,7 @@ class PileProperties:
 def create_basic_pile(
     pile_shape: Literal["round", "rect", "rectangle"],
     pile_name: str | None = None,
-    main_type: Literal["concrete", "steel", "wood", "anchor"] | None = None,
-    specification: str | int | float | None = None,
+    reference: str | None = None,
     installation: str | None = None,
     height_base: float | None = None,
     core_secondary_dimension: float | None = None,
@@ -110,14 +109,16 @@ def create_basic_pile(
     settlement_curve: int | None = None,
     adhesion: float | None = None,
     alpha_p: float | None = None,
-    alpha_s_clay: float | None = None,
+    alpha_s_clay: dict | None = None,
     alpha_s_sand: float | None = None,
     beta_p: float | None = None,
-    alpha_t_clay: float | None = None,
+    alpha_t_clay: dict | None = None,
     alpha_t_sand: float | None = None,
     pile_tip_factor_s: float | None = None,
     is_auger: bool | None = None,
     is_low_vibrating: bool | None = None,
+    is_prefab: bool | None = None,
+    is_open_ended: bool | None = None,
     negative_fr_delta_factor: float | None = None,
     qc_z_a_lesser_1m: float | None = None,
     qc_z_a_greater_1m: float | None = None,
@@ -345,23 +346,13 @@ def create_basic_pile(
         beta_p=beta_p,
     )
 
-    if main_type is not None:
-        if specification is None:
-            raise ValueError("Specification must be provided if main type is provided.")
-
-        standard_pile: Dict[str, str | int] | None = {
-            "main_type": main_type,
-            "specification": int(specification),
-        }
-
-        if installation is not None:
-            standard_pile["installation"] = installation  # type: ignore
-
-    else:
-        standard_pile = None
-
     pile_type = PileType(
-        standard_pile=standard_pile,
+        reference=reference,
+        installation_method=installation,
+        is_prefab=is_prefab,
+        is_open_ended=is_open_ended,
+        is_low_vibrating=is_low_vibrating,
+        is_auger=is_auger,
         alpha_s_sand=alpha_s_sand,
         alpha_s_clay=alpha_s_clay,
         alpha_p=alpha_p,
@@ -370,8 +361,6 @@ def create_basic_pile(
         settlement_curve=settlement_curve,
         negative_fr_delta_factor=negative_fr_delta_factor,
         adhesion=adhesion,
-        is_low_vibrating=is_low_vibrating,
-        is_auger=is_auger,
         qc_z_a_lesser_1m=qc_z_a_lesser_1m,
         qc_z_a_greater_1m=qc_z_a_greater_1m,
         qb_max_limit=qb_max_limit,

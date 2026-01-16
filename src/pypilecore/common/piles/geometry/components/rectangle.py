@@ -242,10 +242,18 @@ class RectPileGeometryComponent(_BasePileGeometryComponent):
         """
         payload = {
             "outer_shape": self.outer_shape,
-            "primary_dimension": self.primary_dimension.serialize_payload(),
             "secondary_dimension": self.secondary_dimension,
-            "material": self.material,
         }
+
+        # Only include material if it's not None
+        if self.material is not None:
+            payload["material"] = self.material
+
+        # Only include primary_dimension if it's not None
+        primary_dim = self.primary_dimension.serialize_payload()
+        if primary_dim is not None:
+            payload["primary_dimension"] = primary_dim
+
         if self.tertiary_dimension is not None:
             payload["tertiary_dimension"] = self.tertiary_dimension
 

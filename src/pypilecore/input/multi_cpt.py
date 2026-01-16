@@ -6,6 +6,7 @@ from typing import Dict, List, Literal, Mapping, Sequence, Tuple
 
 from pygef.cpt import CPTData
 
+from pypilecore.common.norms import Norms
 from pypilecore.common.piles import PileProperties
 from pypilecore.input.soil_properties import create_soil_properties_payload
 
@@ -26,6 +27,7 @@ def create_multi_cpt_payload(
     fixed_positive_friction_range_nap: (
         Tuple[float, Literal["ptl"] | float] | None
     ) = None,
+    norms: Norms = Norms(),
     negative_shaft_friction: float | None = None,
     apply_qc3_reduction: bool | None = None,
     relative_pile_load: float | None = 0.7,
@@ -45,7 +47,7 @@ def create_multi_cpt_payload(
     ) = None,
     individual_ocr: Mapping[str, float] | None = None,
     use_almere_rules: bool = False,
-    overrule_xi: float | None = None,
+    overrule_xi: dict | float | None = None,
     gamma_f_nk: float = 1.0,
     gamma_r_s: float = 1.2,
     gamma_r_b: float = 1.2,
@@ -213,9 +215,10 @@ def create_multi_cpt_payload(
         total bearing capacity is limited to at most 75% the contribution provided by
         the pile tip. ref: https://www.almere.nl/fileadmin/user_upload/Richtlijnen_Constructie_Gem._Almere_vanaf_01-01-2017_versie_3.0a.pdf
     overrule_xi:
-        Set a fixed value for xi in all calculations. Use with caution. This will
-        overrule the calculation of xi-values based on the group-size, variation-
-        coefficient and construction stiffness.
+        Overrule the calculation of xi-values based on the group-size, variation-
+        coefficient and construction stiffness. Can set a single value for xi3,xi4 and xi4_single by providing a number OR specify individual values by
+        providing a dictionary with keys 'xi3', 'xi4' and 'xi4_single'. Example {"xi3" : 1.39, "xi4" : 1.27, "xi4_single" : 1.2}
+        Default = None
     gamma_f_nk:
         Safety factor for design-values of the negative sleeve friction force.
         Default = 1.0
@@ -287,6 +290,7 @@ def create_multi_cpt_payload(
         friction_range_strategy=friction_range_strategy,
         pile_head_level_nap=pile_head_level_nap,
         stiff_construction=stiff_construction,
+        norms=norms.serialize_payload(),
         rel_pile_load=relative_pile_load,
         soil_load=soil_load_sls if soil_load_sls is not None else 0.0,
         excavation_param_t=excavation_param_t,
@@ -316,7 +320,10 @@ def create_multi_cpt_payload(
     if apply_qc3_reduction is not None:
         multi_cpt_payload["apply_qc3_reduction"] = apply_qc3_reduction
     if negative_shaft_friction is not None:
-        multi_cpt_payload["f_nk"] = negative_shaft_friction
+        # The API expects the field name `negative_friction` for a fixed
+        # negative shaft friction value (kN). Previously this used the
+        # internal/legacy key `f_nk` which does not match the OpenAPI schema.
+        multi_cpt_payload["negative_friction"] = negative_shaft_friction
     if fixed_negative_friction_range_nap is not None:
         multi_cpt_payload["fixed_negative_friction_range_nap"] = (
             fixed_negative_friction_range_nap
