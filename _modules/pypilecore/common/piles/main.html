@@ -178,8 +178,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">create_basic_pile</span><span class="p">(</span>
     <span class="n">pile_shape</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="s2">&quot;rect&quot;</span><span class="p">,</span> <span class="s2">&quot;rectangle&quot;</span><span class="p">],</span>
     <span class="n">pile_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">main_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;concrete&quot;</span><span class="p">,</span> <span class="s2">&quot;steel&quot;</span><span class="p">,</span> <span class="s2">&quot;wood&quot;</span><span class="p">,</span> <span class="s2">&quot;anchor&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">specification</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">installation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">height_base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">core_secondary_dimension</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -195,14 +194,16 @@
     <span class="n">settlement_curve</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">adhesion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">alpha_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">alpha_s_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_s_clay</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">alpha_s_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">beta_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">alpha_t_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_t_clay</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">alpha_t_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">pile_tip_factor_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">is_auger</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_prefab</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_open_ended</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">qc_z_a_lesser_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">qc_z_a_greater_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -430,23 +431,13 @@
         <span class="n">beta_p</span><span class="o">=</span><span class="n">beta_p</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">main_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">specification</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Specification must be provided if main type is provided.&quot;</span><span class="p">)</span>
-
-        <span class="n">standard_pile</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;main_type&quot;</span><span class="p">:</span> <span class="n">main_type</span><span class="p">,</span>
-            <span class="s2">&quot;specification&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">specification</span><span class="p">),</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="n">installation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">standard_pile</span><span class="p">[</span><span class="s2">&quot;installation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">installation</span>  <span class="c1"># type: ignore</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">standard_pile</span> <span class="o">=</span> <span class="kc">None</span>
-
     <span class="n">pile_type</span> <span class="o">=</span> <span class="n">PileType</span><span class="p">(</span>
-        <span class="n">standard_pile</span><span class="o">=</span><span class="n">standard_pile</span><span class="p">,</span>
+        <span class="n">reference</span><span class="o">=</span><span class="n">reference</span><span class="p">,</span>
+        <span class="n">installation_method</span><span class="o">=</span><span class="n">installation</span><span class="p">,</span>
+        <span class="n">is_prefab</span><span class="o">=</span><span class="n">is_prefab</span><span class="p">,</span>
+        <span class="n">is_open_ended</span><span class="o">=</span><span class="n">is_open_ended</span><span class="p">,</span>
+        <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">is_low_vibrating</span><span class="p">,</span>
+        <span class="n">is_auger</span><span class="o">=</span><span class="n">is_auger</span><span class="p">,</span>
         <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">alpha_s_sand</span><span class="p">,</span>
         <span class="n">alpha_s_clay</span><span class="o">=</span><span class="n">alpha_s_clay</span><span class="p">,</span>
         <span class="n">alpha_p</span><span class="o">=</span><span class="n">alpha_p</span><span class="p">,</span>
@@ -455,8 +446,6 @@
         <span class="n">settlement_curve</span><span class="o">=</span><span class="n">settlement_curve</span><span class="p">,</span>
         <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">negative_fr_delta_factor</span><span class="p">,</span>
         <span class="n">adhesion</span><span class="o">=</span><span class="n">adhesion</span><span class="p">,</span>
-        <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">is_low_vibrating</span><span class="p">,</span>
-        <span class="n">is_auger</span><span class="o">=</span><span class="n">is_auger</span><span class="p">,</span>
         <span class="n">qc_z_a_lesser_1m</span><span class="o">=</span><span class="n">qc_z_a_lesser_1m</span><span class="p">,</span>
         <span class="n">qc_z_a_greater_1m</span><span class="o">=</span><span class="n">qc_z_a_greater_1m</span><span class="p">,</span>
         <span class="n">qb_max_limit</span><span class="o">=</span><span class="n">qb_max_limit</span><span class="p">,</span>

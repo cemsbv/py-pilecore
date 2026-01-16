@@ -76,12 +76,11 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">DisplayHandle</span><span class="p">,</span> <span class="n">display</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ipywidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">widgets</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">natsort</span><span class="w"> </span><span class="kn">import</span> <span class="n">natsorted</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.cases_multi_cpt_results</span><span class="w"> </span><span class="kn">import</span> <span class="n">CasesMultiCPTBearingResults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.viewers._typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CasesMultiCPTResultsProtocol</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.viewers.interactive_figures.figure_cpt_results_plan_view</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">FigureCPTResultsPlanView</span><span class="p">,</span>
 <span class="p">)</span>
@@ -107,24 +106,17 @@
 
 <div class="viewcode-block" id="ViewerCptResultsPlanView.__init__">
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cases_multi_results</span><span class="p">:</span> <span class="n">CasesMultiCPTBearingResults</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results_cases</span><span class="p">:</span> <span class="n">CasesMultiCPTResultsProtocol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the viewer.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        cases_multi_results : CasesMultiCPTBearingResults</span>
+<span class="sd">        results_cases : CasesMultiCPTResultsProtocol</span>
 <span class="sd">            The results of the bearing capacity calculations.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        TypeError</span>
-<span class="sd">            If &#39;cases_multi_results&#39; are not of type &#39;CasesMultiCPTBearingResults&#39;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Initialize figure CPT results in plan view</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span> <span class="o">=</span> <span class="n">FigureCPTResultsPlanView</span><span class="p">(</span>
-            <span class="n">cases_multi_results</span><span class="o">=</span><span class="n">cases_multi_results</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span> <span class="o">=</span> <span class="n">FigureCPTResultsPlanView</span><span class="p">(</span><span class="n">results_cases</span><span class="o">=</span><span class="n">results_cases</span><span class="p">)</span>
 
         <span class="c1"># Set up control widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_case_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
@@ -132,13 +124,19 @@
             <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span><span class="o">.</span><span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span><span class="o">.</span><span class="n">cases</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">_options</span> <span class="o">=</span> <span class="n">natsorted</span><span class="p">(</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">cases_multi_results</span><span class="o">.</span><span class="n">cpt_results_dataframe</span><span class="o">.</span><span class="n">result_name</span><span class="p">)</span>
+        <span class="c1"># Create a sorted list of unique result names</span>
+        <span class="n">result_options</span> <span class="o">=</span> <span class="n">natsorted</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">result_def</span><span class="o">.</span><span class="n">name</span>
+                    <span class="k">for</span> <span class="n">result_def</span> <span class="ow">in</span> <span class="n">results_cases</span><span class="o">.</span><span class="n">cpt_results_table</span><span class="o">.</span><span class="n">result_def</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_result_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Result:&quot;</span><span class="p">,</span>
-            <span class="n">value</span><span class="o">=</span><span class="n">_options</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">options</span><span class="o">=</span><span class="n">_options</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">result_options</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">options</span><span class="o">=</span><span class="n">result_options</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_level_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Pile tip level NAP:&quot;</span><span class="p">,</span>

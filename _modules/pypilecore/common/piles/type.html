@@ -84,17 +84,20 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">standard_pile</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">alpha_s_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">alpha_s_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">alpha_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">alpha_t_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">alpha_t_clay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">settlement_curve</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">adhesion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">installation_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_prefab</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_open_ended</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">is_low_vibrating</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">is_auger</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">settlement_curve</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">alpha_s_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">alpha_s_clay</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">alpha_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">alpha_t_sand</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">alpha_t_clay</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">negative_fr_delta_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">adhesion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">qc_z_a_lesser_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">qc_z_a_greater_1m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">qb_max_limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -105,8 +108,10 @@
 
 <span class="sd">        Parameters:</span>
 <span class="sd">        -----------</span>
-<span class="sd">        standard_pile : dict, optional</span>
+<span class="sd">        reference : str, optional</span>
 <span class="sd">            The standard pile definition of the pile type (if applicable), by default None.</span>
+<span class="sd">        installation_method: str, optional</span>
+<span class="sd">            The installation method of the pile, by default None.</span>
 <span class="sd">        alpha_s_sand : float, optional</span>
 <span class="sd">            The alpha_s_sand value of the pile type, by default None.</span>
 <span class="sd">        alpha_s_clay : float, optional</span>
@@ -145,7 +150,11 @@
 <span class="sd">        chamfered : float, optional</span>
 <span class="sd">            The chamfered value of the pile type, by default None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span> <span class="o">=</span> <span class="n">standard_pile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="n">reference</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_installation_method</span> <span class="o">=</span> <span class="n">installation_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_prefab</span> <span class="o">=</span> <span class="n">is_prefab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_open_ended</span> <span class="o">=</span> <span class="n">is_open_ended</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_s_sand</span> <span class="o">=</span> <span class="n">alpha_s_sand</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_s_clay</span> <span class="o">=</span> <span class="n">alpha_s_clay</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_p</span> <span class="o">=</span> <span class="n">alpha_p</span>
@@ -178,30 +187,33 @@
 <span class="sd">        PileType</span>
 <span class="sd">            A pile type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">standard_pile</span> <span class="o">=</span> <span class="n">pile_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">pile_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;properties&quot;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">standard_pile</span><span class="o">=</span><span class="n">pile_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">),</span>
-            <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;alpha_s_sand&quot;</span><span class="p">],</span>
-            <span class="n">alpha_s_clay</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;alpha_s_clay&quot;</span><span class="p">],</span>
-            <span class="n">alpha_p</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;alpha_p&quot;</span><span class="p">],</span>
-            <span class="n">alpha_t_sand</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;alpha_t_sand&quot;</span><span class="p">],</span>
-            <span class="n">alpha_t_clay</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_t_clay&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="n">settlement_curve</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;settlement_curve&quot;</span><span class="p">],</span>
-            <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;negative_fr_delta_factor&quot;</span>
-            <span class="p">],</span>
-            <span class="n">adhesion</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;adhesion&quot;</span><span class="p">],</span>
-            <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;is_low_vibrating&quot;</span><span class="p">],</span>
-            <span class="n">is_auger</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;is_auger&quot;</span><span class="p">],</span>
-            <span class="n">qc_z_a_lesser_1m</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_lesser_1m&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="n">qc_z_a_greater_1m</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_greater_1m&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="n">qb_max_limit</span><span class="o">=</span><span class="n">pile_type</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qb_max_limit&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">standard_pile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reference&quot;</span><span class="p">),</span>
+            <span class="n">is_prefab</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_prefab&quot;</span><span class="p">),</span>
+            <span class="n">is_open_ended</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_open_ended&quot;</span><span class="p">),</span>
+            <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_low_vibrating&quot;</span><span class="p">),</span>
+            <span class="n">is_auger</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_auger&quot;</span><span class="p">),</span>
+            <span class="n">installation_method</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;installation_method&quot;</span><span class="p">),</span>
+            <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_s_sand&quot;</span><span class="p">),</span>
+            <span class="n">alpha_s_clay</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_s_clay&quot;</span><span class="p">),</span>
+            <span class="n">alpha_p</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_p&quot;</span><span class="p">),</span>
+            <span class="n">alpha_t_sand</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_t_sand&quot;</span><span class="p">),</span>
+            <span class="n">alpha_t_clay</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_t_clay&quot;</span><span class="p">),</span>
+            <span class="n">settlement_curve</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settlement_curve&quot;</span><span class="p">),</span>
+            <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;negative_fr_delta_factor&quot;</span><span class="p">),</span>
+            <span class="n">adhesion</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;adhesion&quot;</span><span class="p">),</span>
+            <span class="n">qc_z_a_lesser_1m</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_lesser_1m&quot;</span><span class="p">),</span>
+            <span class="n">qc_z_a_greater_1m</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_greater_1m&quot;</span><span class="p">),</span>
+            <span class="n">qb_max_limit</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qb_max_limit&quot;</span><span class="p">),</span>
         <span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">standard_pile</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reference</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The standard pile definition of the pile type (if applicable)&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alpha_s_sand</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -209,7 +221,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_s_sand</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">alpha_s_clay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">alpha_s_clay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The alpha_s_clay value of the pile type&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_s_clay</span>
 
@@ -224,7 +236,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_t_sand</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">alpha_t_clay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">alpha_t_clay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The alpha_t_clay value of the pile type&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_t_clay</span>
 
@@ -242,6 +254,21 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">adhesion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The adhesion value of the pile type&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adhesion</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_prefab</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The is_prefab value of the pile type&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_prefab</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_open_ended</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The is_open_ended value of the pile type&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_open_ended</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">installation_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The installation_method value of the pile type&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_installation_method</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_low_vibrating</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -285,20 +312,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">standard_pile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;main_type&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standard_pile</span><span class="p">[</span><span class="s2">&quot;main_type&quot;</span><span class="p">]),</span>
-                <span class="s2">&quot;specification&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standard_pile</span><span class="p">[</span><span class="s2">&quot;specification&quot;</span><span class="p">]),</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="s2">&quot;installation&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">standard_pile</span>
-                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">standard_pile</span><span class="p">[</span><span class="s2">&quot;installation&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="p">):</span>
-                <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">][</span><span class="s2">&quot;installation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">standard_pile</span><span class="p">[</span><span class="s2">&quot;installation&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span>
 
-        <span class="n">custom_type_properties</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">custom_type_properties</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_sand</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;alpha_s_sand&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_sand</span>
@@ -326,11 +343,20 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adhesion</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;adhesion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adhesion</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">installation_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;installation_method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">installation_method</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_prefab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_prefab&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_prefab</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_low_vibrating</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_low_vibrating&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_low_vibrating</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_auger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_auger&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_auger</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_open_ended</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_open_ended&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_open_ended</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_lesser_1m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;qc_z_a_lesser_1m&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_lesser_1m</span>

@@ -74,7 +74,7 @@
   <h1>Source code for pypilecore.api</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">overload</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nuclei.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">NucleiClient</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
@@ -109,7 +109,7 @@
         <span class="n">status_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
             <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
             <span class="s2">&quot;/get-task-status&quot;</span><span class="p">,</span>
-            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span>
             <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span>
             <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
@@ -132,7 +132,7 @@
             <span class="n">result_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
                 <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span>
-                <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
+                <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span>
                 <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span>
                 <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
@@ -143,13 +143,95 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">failure_message</span><span class="p">)</span>
 
 
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_task_result_pipeline</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_task_result_pipeline</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;bytes&quot;</span><span class="p">],</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_task_result_pipeline</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span> <span class="s2">&quot;bytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;debug_payload.json&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Execute a task and return the result.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: NucleiClient</span>
+<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
+<span class="sd">    endpoint: str</span>
+<span class="sd">        the endpoint to call</span>
+<span class="sd">    payload: dict</span>
+<span class="sd">        the payload of the request</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    save_failed_payload: bool</span>
+<span class="sd">        if True, save the payload to a file in case of failure</span>
+<span class="sd">    failed_payload_filename: str</span>
+<span class="sd">        the name of the file to save the failed payload to</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+            <span class="n">endpoint</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span>
+            <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+            <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
+            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">save_failed_payload</span><span class="p">:</span>
+            <span class="c1"># In case of failure, save the payload to a file for debugging</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">failed_payload_filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">nuclei.client.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">serialize_json_string</span>
+
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">serialize_json_string</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+
+
 <div class="viewcode-block" id="get_multi_cpt_api_result">
 <a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_multi_cpt_api_result">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_multi_cpt_api_result</span><span class="p">(</span>
-    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_result_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper around the PileCore endpoint &quot;/compression/multiple-cpts/results&quot;.</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/bearing/multiple-cpts/results&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -164,18 +246,14 @@
         <span class="s2">&quot;Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
-    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;/compression/multiple-cpts/results&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
-        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
-        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/bearing/multiple-cpts/results&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+        <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
+        <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
@@ -183,10 +261,14 @@
 <div class="viewcode-block" id="get_multi_cpt_api_report">
 <a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_multi_cpt_api_report">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_multi_cpt_api_report</span><span class="p">(</span>
-    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_report_debug_payload.json&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper around the PileCore endpoint &quot;/compression/multiple-cpts/report&quot;.</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/bearing/multiple-cpts/report&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -201,17 +283,14 @@
         <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
-    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;/compression/multiple-cpts/report&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
-        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
-        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/bearing/multiple-cpts/report&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;bytes&quot;</span><span class="p">,</span>
+        <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
+        <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
@@ -219,7 +298,11 @@
 <div class="viewcode-block" id="get_groups_api_result">
 <a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_groups_api_result">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_groups_api_result</span><span class="p">(</span>
-    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_group_cpts_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/group_cpts&quot;.</span>
@@ -237,55 +320,14 @@
         <span class="s2">&quot;Finding groups... </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
-    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;/grouper/group_cpts&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
-        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
-        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-    <span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="get_optimize_groups_api_result">
-<a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_optimize_groups_api_result">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_optimize_groups_api_result</span><span class="p">(</span>
-    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/optimize_groups&quot;.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    client: NucleiClient</span>
-<span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
-<span class="sd">    payload: dict</span>
-<span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
-<span class="sd">    verbose: bool</span>
-<span class="sd">        if True, print additional information to the console</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">&quot;Optimize groups... </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
-    <span class="p">)</span>
-    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;/grouper/optimize_groups&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
-        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
-        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/grouper/group-cpts&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+        <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
+        <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
@@ -293,7 +335,11 @@
 <div class="viewcode-block" id="get_groups_api_report">
 <a class="viewcode-back" href="../../tree/reference.html#pypilecore.api.get_groups_api_report">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_groups_api_report</span><span class="p">(</span>
-    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_grouper_report_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/generate_grouper_report&quot;.</span>
@@ -311,18 +357,14 @@
         <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
-    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;/grouper/generate_grouper_report&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
-        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
-        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/grouper/generate-grouper-report&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;bytes&quot;</span><span class="p">,</span>
+        <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
+        <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
@@ -332,9 +374,11 @@
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_tension_result_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper around the PileCore endpoint &quot;/tension/[nen or cur]/multiple-cpts/results&quot;.</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/uplift/[nen or cur]/multiple-cpts/results&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -352,23 +396,19 @@
         <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">standard</span> <span class="o">==</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/nen/multiple-cpt/results&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/nen/multiple-cpts/results&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/cur/multiple-cpt/results&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/cur/multiple-cpts/results&quot;</span>
         <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+    <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
         <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
-        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
-        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+        <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
+        <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span>
 
 
@@ -377,9 +417,11 @@
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span>
+    <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_tension_report_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper around the PileCore endpoint &quot;/tension/[nen or cur]/multiple-cpts/report&quot;.</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/uplift/[nen or cur]/multiple-cpts/report&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -398,22 +440,19 @@
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">standard</span> <span class="o">==</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/nen/multiple-cpt/report&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/nen/multiple-cpts/report&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/tension/cur/multiple-cpt/report&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/cur/multiple-cpts/report&quot;</span>
         <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+    <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
         <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span>
-        <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
-        <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-        <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;bytes&quot;</span><span class="p">,</span>
+        <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
+        <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span>
 </pre></div>
 

@@ -80,9 +80,10 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">natsort</span><span class="w"> </span><span class="kn">import</span> <span class="n">natsorted</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pygef.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">Location</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.data_tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">CptResultsTable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.result_definitions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CPTGroupResultDefinitions</span><span class="p">,</span>
-    <span class="n">CPTResultDefinitions</span><span class="p">,</span>
+    <span class="n">CPTGroupResultDefinition</span><span class="p">,</span>
+    <span class="n">CPTResultDefinition</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
 
@@ -129,6 +130,7 @@
         <span class="n">_validate_results_per_case</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span>
 
         <span class="c1"># Initialize private variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_results_per_case</span> <span class="o">=</span> <span class="n">results_per_case</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cases</span> <span class="o">=</span> <span class="n">natsorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results_per_case</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_multicpt_bearing_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">results_per_case</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_test_ids</span> <span class="o">=</span> <span class="n">natsorted</span><span class="p">(</span>
@@ -144,40 +146,38 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_cpt_locations</span><span class="p">(</span><span class="n">cpt_locations</span><span class="p">)</span>
 
-        <span class="c1"># Create cpt_results_dataframe and cpt_group_results_dataframe</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cpt_results_dataframe</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span>
+        <span class="c1"># Create cpt_results_table and cpt_group_results_dataframe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_table</span> <span class="o">=</span> <span class="n">CptResultsTable</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cpt_results_table</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_cpt_group_results_dataframe</span><span class="p">(</span><span class="n">results_per_case</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_set_cpt_results_dataframe</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_cpt_results_table</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to create and set the property `cpt_results_dataframe`.&quot;&quot;&quot;</span>
-        <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to fill the `cpt_results_table`.&quot;&quot;&quot;</span>
+
         <span class="k">for</span> <span class="n">case_name</span><span class="p">,</span> <span class="n">case_results</span> <span class="ow">in</span> <span class="n">results_per_case</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTResultDefinitions</span><span class="p">:</span>
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="n">result_definition</span><span class="o">.</span><span class="n">name</span>
-                    <span class="ow">in</span> <span class="n">case_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span>
-                <span class="p">):</span>
-                    <span class="n">df</span> <span class="o">=</span> <span class="n">case_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">get_results_per_cpt</span><span class="p">(</span>
-                        <span class="n">column_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span>
-                    <span class="p">)</span>
-                    <span class="k">for</span> <span class="n">idx_row</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-                        <span class="k">for</span> <span class="n">test_id</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                            <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                                <span class="nb">dict</span><span class="p">(</span>
-                                    <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
-                                    <span class="n">result_name</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                                    <span class="n">test_id</span><span class="o">=</span><span class="n">test_id</span><span class="p">,</span>
-                                    <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
-                                    <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
-                                    <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">idx_row</span><span class="p">,</span>
-                                    <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
-                                    <span class="n">result_unit</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span>
-                                <span class="p">)</span>
-                            <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cpt_results</span> <span class="ow">in</span> <span class="n">case_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+                <span class="n">test_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">test_id</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTResultDefinition</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">result_values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                            <span class="n">cpt_results</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">name</span>
+                        <span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ptl_nap</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_table</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span>
+                            <span class="n">case_name</span><span class="o">=</span><span class="n">case_name</span><span class="p">,</span>
+                            <span class="n">result_def</span><span class="o">=</span><span class="n">result_definition</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                            <span class="n">test_id</span><span class="o">=</span><span class="n">test_id</span><span class="p">,</span>
+                            <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                            <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_locations</span><span class="p">[</span><span class="n">test_id</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                            <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">ptl_nap</span><span class="p">),</span>
+                            <span class="n">result_value</span><span class="o">=</span><span class="n">result_values</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+                        <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_cpt_group_results_dataframe</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">result_cases</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]</span>
@@ -186,7 +186,7 @@
         <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">case_name</span><span class="p">,</span> <span class="n">case_results</span> <span class="ow">in</span> <span class="n">result_cases</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">case_results</span><span class="o">.</span><span class="n">group_results_table</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTGroupResultDefinitions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">result_definition</span> <span class="ow">in</span> <span class="n">CPTGroupResultDefinition</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">result_definition</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
                         <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -231,6 +231,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_locations</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">results_per_case</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The dictionary with case names as keys and MultiCPTBearingResults as values.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results_per_case</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cases</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Hashable</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The case names.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cases</span>
@@ -256,12 +261,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_locations</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">cpt_results_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cpt_results_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CptResultsTable</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The dataframe with all the CPT results.</span>
-<span class="sd">        Available columns: case_name, result_name, test_id, x, y, pile_tip_level_nap, result, result_unit.</span>
+<span class="sd">        The table with CPT results.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_dataframe</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_results_table</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cpt_group_results_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
