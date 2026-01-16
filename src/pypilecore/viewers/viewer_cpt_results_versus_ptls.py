@@ -6,7 +6,7 @@ from IPython.display import DisplayHandle, display
 from ipywidgets import widgets
 from natsort import natsorted
 
-from pypilecore.viewers._typing import CasesMultiCPTResultsProtocol
+from pypilecore.results.typing import CasesMultiCPTResultsLike
 from pypilecore.viewers.interactive_figures import FigureCPTResultsVersusPtls
 
 
@@ -24,7 +24,7 @@ class ViewerCptResults:
             - Each trace represents a different CPT.
     """
 
-    def __init__(self, results_cases: CasesMultiCPTResultsProtocol) -> None:
+    def __init__(self, results_cases: CasesMultiCPTResultsLike) -> None:
         """Initialize the viewer.
 
         Parameters

@@ -329,8 +329,9 @@ class SingleCPTTensionBearingResults:
 
         Returns
         -------
-        fig:
-            The matplotlib Figure
+        axis:
+            Tuple with the 4 Axes objects where the data was plotted on.
+            In order: qc, friction ratio, soil layers, bearing capacities
         """
         return plot_bearing_overview(
             plot_qc=self.soil_properties.cpt_table.plot_qc,

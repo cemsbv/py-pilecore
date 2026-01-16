@@ -632,7 +632,7 @@ class GrouperResults:
         )
 
     @cached_property
-    def max_bearing_results(self) -> "MaxBearingResults":
+    def cpt_results(self) -> "MaxBearingResults":
         """
         Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.
         """

@@ -41,7 +41,7 @@ def test_grouper_results(
     assert isinstance(chart, plt.Figure)
     plt.close("all")
 
-    result = grouper_results.max_bearing_results
+    result = grouper_results.cpt_results
     scene = result.plot()
     assert isinstance(scene, plt.Figure)
     plt.close("all")
@@ -70,7 +70,7 @@ def test_grouper_results_max_bearing(
     )
 
     # Get the max bearing results
-    mbr = gr.max_bearing_results
+    mbr = gr.cpt_results
 
     # Check that the results per cpt can be fetched for correct column names
     for colname in ["R_c_d_net", "F_nk_d", "origin"]:
@@ -134,7 +134,7 @@ def test_grouper_triangulation(
     )
 
     # Get the max bearing results
-    mbr = gr.max_bearing_results
+    mbr = gr.cpt_results
 
     # alter dict
     _data = {}

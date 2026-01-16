@@ -55,7 +55,7 @@ class ViewerGrouperResultsPerCptTable:
         """Return the currently displayed table as a pandas DataFrame."""
         return self.group_results_cases.results_per_case[
             self._case_dropdown.value
-        ].max_bearing_results.get_results_per_cpt(self._result_dropdown.value)
+        ].cpt_results.get_results_per_cpt(self._result_dropdown.value)
 
     def _update_case_result(self, change: Any) -> None:
         """

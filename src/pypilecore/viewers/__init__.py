@@ -1,3 +1,4 @@
+from pypilecore.viewers.viewer_cpt_results_overview import ViewerCptResultsOverview
 from pypilecore.viewers.viewer_cpt_results_plan_view import ViewerCptResultsPlanView
 from pypilecore.viewers.viewer_cpt_results_versus_ptls import ViewerCptResults
 from pypilecore.viewers.viewer_grouper_results_per_cpt_table import (
@@ -12,4 +13,5 @@ __all__ = [
     "ViewerCptResultsPlanView",
     "ViewerResultsPerCptTable",
     "ViewerGrouperResultsPerCptTable",
+    "ViewerCptResultsOverview",
 ]
