@@ -47,7 +47,7 @@ def create_multi_cpt_payload(
     ) = None,
     individual_ocr: Mapping[str, float] | None = None,
     use_almere_rules: bool = False,
-    overrule_xi: float | None = None,
+    overrule_xi: dict | float | None = None,
     gamma_f_nk: float = 1.0,
     gamma_r_s: float = 1.2,
     gamma_r_b: float = 1.2,
@@ -215,9 +215,10 @@ def create_multi_cpt_payload(
         total bearing capacity is limited to at most 75% the contribution provided by
         the pile tip. ref: https://www.almere.nl/fileadmin/user_upload/Richtlijnen_Constructie_Gem._Almere_vanaf_01-01-2017_versie_3.0a.pdf
     overrule_xi:
-        Set a fixed value for xi in all calculations. Use with caution. This will
-        overrule the calculation of xi-values based on the group-size, variation-
-        coefficient and construction stiffness.
+        Overrule the calculation of xi-values based on the group-size, variation-
+        coefficient and construction stiffness. Can set a single value for xi3,xi4 and xi4_single by providing a number OR specify individual values by
+        providing a dictionary with keys 'xi3', 'xi4' and 'xi4_single'. Example {"xi3" : 1.39, "xi4" : 1.27, "xi4_single" : 1.2}
+        Default = None
     gamma_f_nk:
         Safety factor for design-values of the negative sleeve friction force.
         Default = 1.0
