@@ -1,4 +1,3 @@
-import json
 import numpy as np
 import pygef
 import pytest
@@ -6,10 +5,13 @@ from nuclei.client.utils import serialize_jsonifyable_object
 from openapi_core.contrib.requests import RequestsOpenAPIRequest
 from requests import Request
 
-from pypilecore.common.norms import Norms, NEN99971_version, CUR236_version
+from pypilecore.common.norms import CUR236_version, NEN99971_version, Norms
 from pypilecore.common.piles import PileProperties
 from pypilecore.common.piles.geometry import PileGeometry
-from pypilecore.common.piles.geometry.components import RoundPileGeometryComponent, RectPileGeometryComponent
+from pypilecore.common.piles.geometry.components import (
+    RectPileGeometryComponent,
+    RoundPileGeometryComponent,
+)
 from pypilecore.common.piles.geometry.components.common import (
     PrimaryPileComponentDimension,
 )
@@ -37,9 +39,10 @@ def round_pile() -> PileProperties:
             ]
         ),
         pile_type=PileType(
-            reference = "B1",
+            reference="B1",
         ),
     )
+
 
 @pytest.fixture
 def rectangle_pile() -> PileProperties:
@@ -48,14 +51,13 @@ def rectangle_pile() -> PileProperties:
             components=[
                 RectPileGeometryComponent(
                     secondary_dimension=0.5,
-                    primary_dimension=PrimaryPileComponentDimension(length=0.5)
+                    primary_dimension=PrimaryPileComponentDimension(length=0.5),
                 )
             ]
         ),
-        pile_type=PileType(
-            reference = "B1"
-        ),
+        pile_type=PileType(reference="B1"),
     )
+
 
 @pytest.fixture
 def rectangle_pile_custom() -> PileProperties:
@@ -70,14 +72,14 @@ def rectangle_pile_custom() -> PileProperties:
             ]
         ),
         pile_type=PileType(
-            alpha_s_sand = 0.009,
-            alpha_s_clay = {"use_constant_value" : False},
-            alpha_p = 0.30,
-            alpha_t_sand = 0.0090,
-            alpha_t_clay = {"use_constant_value" : False},
-            negative_fr_delta_factor = 1.0,
+            alpha_s_sand=0.009,
+            alpha_s_clay={"use_constant_value": False},
+            alpha_p=0.30,
+            alpha_t_sand=0.0090,
+            alpha_t_clay={"use_constant_value": False},
+            negative_fr_delta_factor=1.0,
             is_auger=False,
-            installation_method = "screwed",
+            installation_method="screwed",
             is_prefab=False,
             is_open_ended=False,
             settlement_curve=1,
@@ -85,21 +87,25 @@ def rectangle_pile_custom() -> PileProperties:
         ),
     )
 
+
 @pytest.fixture
 def default_norm() -> Norms:
     return Norms()
 
+
 @pytest.fixture
 def custom_norm() -> Norms:
-    return Norms(
-        nen_9997_1=NEN99971_version.V2017,
-        cur_236=CUR236_version.V2024
-    )
+    return Norms(nen_9997_1=NEN99971_version.V2017, cur_236=CUR236_version.V2023)
 
-@pytest.mark.parametrize("pile_name", ["round_pile", "rectangle_pile", "rectangle_pile_custom"])
+
+@pytest.mark.parametrize(
+    "pile_name", ["round_pile", "rectangle_pile", "rectangle_pile_custom"]
+)
 @pytest.mark.parametrize("norms_name", ["default_norm", "custom_norm"])
 @pytest.mark.parametrize("cpt_name", ["cpt", "cpt_no_coords"])
-def test_create_multi_cpt_payload(pc_openapi, cpt_name, pile_name, norms_name, request, headers):
+def test_create_multi_cpt_payload(
+    pc_openapi, cpt_name, pile_name, norms_name, request, headers
+):
     # resolve fixture by name so we can parametrize over fixture names
     pile = request.getfixturevalue(pile_name)
     norms = request.getfixturevalue(norms_name)
@@ -124,7 +130,7 @@ def test_create_multi_cpt_payload(pc_openapi, cpt_name, pile_name, norms_name, r
         },
         groundwater_level_nap=-10.0,
         pile=pile,
-        norms=norms
+        norms=norms,
     )
 
     request = Request(
@@ -137,6 +143,7 @@ def test_create_multi_cpt_payload(pc_openapi, cpt_name, pile_name, norms_name, r
     openapi_request = RequestsOpenAPIRequest(request)
 
     pc_openapi.request_validator.validate(openapi_request)
+
 
 @pytest.mark.parametrize(
     ("stress_reduction_method", "excavation_width", "excavation_edge_distance"),

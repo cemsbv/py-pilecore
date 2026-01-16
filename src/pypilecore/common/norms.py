@@ -8,7 +8,7 @@ class NEN99971_version(StrEnum):
 
 
 class CUR236_version(StrEnum):
-    V2024 = "2024"
+    V2023 = "2023"
 
 
 class Nen99971:
@@ -35,7 +35,7 @@ class Cur236:
     CUR236 standard for pile design.
     """
 
-    def __init__(self, version: CUR236_version = CUR236_version.V2024) -> None:
+    def __init__(self, version: CUR236_version = CUR236_version.V2023) -> None:
         if not isinstance(version, CUR236_version):
             raise TypeError("version must be a CUR236_version enum member")
         self._version = version
@@ -57,7 +57,7 @@ class Norms:
     def __init__(
         self,
         nen_9997_1: str = "2025",
-        cur_236: str = "2024",
+        cur_236: str = "2023",
     ) -> None:
         try:
             self.nen_9997_1 = Nen99971(version=NEN99971_version(nen_9997_1))
