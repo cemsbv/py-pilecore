@@ -170,40 +170,6 @@ def get_groups_api_result(
     )
 
 
-def get_optimize_groups_api_result(
-    client: NucleiClient, payload: dict, verbose: bool = False
-) -> dict:
-    """
-    Wrapper around the PileCore endpoint "/grouper/optimize_groups".
-
-    Parameters
-    ----------
-    client: NucleiClient
-        client object created by [nuclei](https://github.com/cemsbv/nuclei)
-    payload: dict
-        the payload of the request, can be created by calling `create_grouper_payload()`
-    verbose: bool
-        if True, print additional information to the console
-    """
-    logging.info(
-        "Optimize groups... \n"
-        "Depending on the amount of pile tip levels and CPT's this can take a while."
-    )
-    ticket = client.call_endpoint(
-        "PileCore",
-        "/grouper/optimize_groups",
-        version="v4",
-        schema=payload,
-        return_response=True,
-    )
-
-    wait_until_ticket_is_ready(client=client, ticket=ticket, verbose=verbose)
-
-    return client.call_endpoint(
-        "PileCore", "/get-task-result", version="v4", schema=ticket.json()
-    )
-
-
 def get_groups_api_report(
     client: NucleiClient, payload: dict, verbose: bool = False
 ) -> bytes:

@@ -13,8 +13,6 @@ Application programming interface (API)
 
 .. autofunction:: pypilecore.api.get_groups_api_result
 
-.. autofunction:: pypilecore.api.get_optimize_groups_api_result
-
 .. autofunction:: pypilecore.api.get_groups_api_report
 
 
