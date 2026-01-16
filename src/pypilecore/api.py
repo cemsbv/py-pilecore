@@ -157,7 +157,7 @@ def get_groups_api_result(
     )
     ticket = client.call_endpoint(
         "PileCore",
-        "/grouper/group_cpts",
+        "/grouper/group-cpts",
         version="v4",
         schema=payload,
         return_response=True,
@@ -225,7 +225,7 @@ def get_groups_api_report(
     )
     ticket = client.call_endpoint(
         "PileCore",
-        "/grouper/generate_grouper_report",
+        "/grouper/generate-grouper-report",
         version="v4",
         schema=payload,
         return_response=True,
