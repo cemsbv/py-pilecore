@@ -46,7 +46,7 @@ bracex==2.6
     # via wcmatch
 cems-nuclei==3.1.0
     # via py-pilecore (pyproject.toml)
-certifi==2025.11.12
+certifi==2026.1.4
     # via requests
 cffi==2.0.0
     # via
