@@ -89,7 +89,7 @@ dash==3.3.0
     # via py-pilecore (pyproject.toml)
 decorator==5.2.1
     # via ipython
-diff-cover==9.7.2
+diff-cover==10.2.0
     # via sqlfluff
 distlib==0.4.0
     # via virtualenv
