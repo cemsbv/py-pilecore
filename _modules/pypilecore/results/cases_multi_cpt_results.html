@@ -85,7 +85,7 @@
     <span class="n">CPTGroupResultDefinition</span><span class="p">,</span>
     <span class="n">CPTResultDefinition</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">LikeMultiCPTResults</span>
 
 
 <div class="viewcode-block" id="CasesMultiCPTBearingResults">
@@ -100,7 +100,7 @@
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.cases_multi_cpt_results.CasesMultiCPTBearingResults.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">],</span>
+        <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">LikeMultiCPTResults</span><span class="p">],</span>
         <span class="n">cpt_locations</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Location</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -153,7 +153,7 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_cpt_results_table</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">LikeMultiCPTResults</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to fill the `cpt_results_table`.&quot;&quot;&quot;</span>
 
@@ -180,7 +180,7 @@
                         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_cpt_group_results_dataframe</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">result_cases</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">result_cases</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">LikeMultiCPTResults</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to create and set the property `cpt_group_results_dataframe`.&quot;&quot;&quot;</span>
         <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
@@ -231,7 +231,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_locations</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">results_per_case</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">results_per_case</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">LikeMultiCPTResults</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The dictionary with case names as keys and MultiCPTBearingResults as values.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results_per_case</span>
 
@@ -241,7 +241,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cases</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">multicpt_bearing_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MultiCPTBearingResults</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">multicpt_bearing_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">LikeMultiCPTResults</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The MultiCPTBearingResults objects.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multicpt_bearing_results</span>
 
@@ -278,7 +278,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_results_per_case</span><span class="p">(</span>
-    <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">],</span>
+    <span class="n">results_per_case</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">LikeMultiCPTResults</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Private method to validate the results_per_case dictionary.</span>
@@ -307,7 +307,7 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty dictionary &#39;results_per_case&#39; is not allowed.&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">results_per_case</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">MultiCPTBearingResults</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">LikeMultiCPTResults</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Expected type &#39;MultiCPTBearingResults&#39; for items in &#39;results_per_case&#39;, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
