@@ -137,13 +137,17 @@ def create_basic_pile(
         Both "rect" and "rectangle" are accepted for rectangular piles.
     pile_name :
         The name of the pile, by default None.
-    main_type :
-        The main type of the standard pile type definition, by default None.
-    specification :
-        The specification of the standard pile type definition, by default None.
-        Required if `main_type` is provided.
+    reference :
+        The standard pile reference, as defined in NEN9997-1 (2025), by default None.
     installation :
-        The installation of the standard pile type definition, by default None.
+        The installation method of the standard pile type definition, by default None.
+        Can be one of:
+            - "driven"
+            - "screwed"
+            - "excavated"
+            - "vibrated"
+            - "pressed"
+            - "jetted"
     height_base :
         The height [m] of the base component, by default None.
         Required if base dimensions are provided.
@@ -245,6 +249,15 @@ def create_basic_pile(
         Required if no standard pile type was specified.
     is_low_vibrating :
         Whether the pile is low vibrating, by default None.
+        If None, it is inferred from the installation method or standard pile.
+        Overwrites the value of the standard pile if provided together with a standard pile.
+    is_prefab :
+        Whether the pile is prefab, by default None.
+        If None, it is inferred from the standard pile.
+        Overwrites the value of the standard pile if provided together with a standard pile.
+        Required if no standard pile type was specified.
+    is_open_ended :
+        Whether the pile is open-ended, by default None.
         If None, it is inferred from the standard pile.
         Overwrites the value of the standard pile if provided together with a standard pile.
         Required if no standard pile type was specified.
@@ -278,7 +291,8 @@ def create_basic_pile(
         The pile properties object.
     """
     materials = [
-        PileMaterial(**material_value) for material_value in MATERIALS.values()  # type: ignore
+        PileMaterial(**material_value)
+        for material_value in MATERIALS.values()  # type: ignore
     ]
 
     if custom_material is not None:
