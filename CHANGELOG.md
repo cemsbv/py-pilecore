@@ -7,24 +7,24 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - *Api*:
+    - Refactor norms object to use strings and update nuclei dependency
     - Update from_api method for pile_type, tests passing
     - Fix pile_type serialization and tests with custom pile
     - Update routing for uplift endpoints to v4 schema, require nuclei 3.1.0
     - Update routing with v4 endpoint names
-    - Refactor norms object to use strings and update nuclei dependency
 - *Ci*: Reduce GH jobs triggerred by renovate (#187)
 
 - *Notebook*:
-    - Update notebooks to v4 schema
     - Update static images for pile reference tables
+    - Update notebooks to v4 schema
 
 - *Test*:
-    - Minimum fix for passing tests
     - Fix tests for norms with v4 schema
+    - Minimum fix for passing tests
     - Update api schema to v4
 - *Tests*: Refactor tests
-- CUR236 version should be 2023
 - Update CUR236 figure
+- CUR236 version should be 2023
 
 ### Features
 
@@ -38,13 +38,13 @@ All notable changes to this project will be documented in this file.
     - Add pypilecore.viewers.ViewerGroupResultsPlanView class
     - Add pypilecore.results.CasesGrouperResults class
 - Add ViewerCptResultsOverview + refactoring
+- Update grouper notebook
 - Refactor ViewerCptResults and FigureCPTResultsVersusPtls to also handle Grouper results. Removes ViewerCptGroupResults
+- Update grouper endpoint names
 - Add Viewer-Table classes for multi-cpt and grouper results
 - Add `results_per_case` property to Cases[]Results classes
-- Update notebooks and remove routing to staging server
 - Add save_failed_payload debugging flag to call-endpoint functions
-- Update grouper endpoint names
-- Update grouper notebook
+- Update notebooks and remove routing to staging server
 
 ### Miscellaneous Tasks
 
@@ -62,9 +62,9 @@ All notable changes to this project will be documented in this file.
 ### Refactor
 - *Api*: Rename standard_pile to reference
 - *Notebook*: Update grouper notebook to v4
+- Rename file
 - Merge plan-view Viewers for Grouper and MultiCpt results into single object
 - Implement CptResultsTable object in favor of pandas.DataFrame property
-- Rename file
 
 ### Revert
 - Remove grouper/optimize_groups references
@@ -190,31 +190,31 @@ All notable changes to this project will be documented in this file.
 ## [0.4.0] - 2024-03-12
 
 ### Bug Fixes
+- Final max-bearing fixups & Add unittests
 - Do array comparison on float with np.isclose()
 - Remove dataclass hash & to_pandas caching
 - Make sure that all pile tip levels have same order
 - Remove dataclass hash & to_pandas caching
-- Update unit test
 - Fix MaxBearingResults initiation & refactor
-- Final max-bearing fixups & Add unittests
+- Update unit test
 - Add missing pile definitions plot
 
 ### Features
 - *Api*: Add verbose argument to functions in api module
 - Rotate x-labels in 2D max-bearing plot
 - Add lru_cache on MaxBearingResults.to_pandas
-- Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
 - Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
+- Denote CPT name in MaxBeraingTable.origin attribute
 - Add delaunay map
 - Resolve comments in mr
-- Add 3D plots for bearing results
-- Combine grouper and single results
 - Add result bearing 3d plots to notebook
-- Denote CPT name in MaxBeraingTable.origin attribute
+- Combine grouper and single results
+- Add 3D plots for bearing results
+- Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
 
 ### Miscellaneous Tasks
-- Update example notebook
 - Revert
+- Update example notebook
 
 ### Styling
 - Lint file
@@ -295,35 +295,35 @@ All notable changes to this project will be documented in this file.
 ## [0.2.1] - 2023-11-09
 
 ### Features
-- Validate excavation and pile-load input in function create_multi_cpt_payload
-- Accept None for `relative_pile_load`
 - Minor fixups in PileCore_multi_cpt notebook
+- Accept None for `relative_pile_load`
+- Validate excavation and pile-load input in function create_multi_cpt_payload
 
 ## [0.2.0] - 2023-11-08
 
 ### Bug Fixes
 - *Test*: Coverage warning no data was collected
 - Notebook and grouper workflow (#18)
-- Plot empty friction ratio in CPTTable.plot_friction_ratio()
+- Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
+- Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
 - Fix adding diameter_shaft property logic
 - Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
-- Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
+- Plot empty friction ratio in CPTTable.plot_friction_ratio()
 - Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
-- Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
 
 ### Documentation
 - Add missing create_multi_cpt_payload arguments docstrings
 - Update `getting started`
-- Add single- & multi-cpt-results docstrings
 - Add items to reference & fix docstrings & typing
+- Add single- & multi-cpt-results docstrings
 - Init pages (#10)
 
 ### Features
 - *Grouper*: Add grouper implementation (#7)
-- Add `name` property to PileProperties object
 - Add _shape class-attribute to Round- & RectPileProperties
-- Cast property getter responses of PileProperties & child objects
+- Add `name` property to PileProperties object
 - Raise ValueError for invalid pile_properties `height_base` input.
+- Cast property getter responses of PileProperties & child objects
 - Add notebook example (#17)
 - Cast CPTGroupResultsTable attributes to numpy arrays
 
@@ -343,46 +343,42 @@ All notable changes to this project will be documented in this file.
 
 ### Testing
 - Add create_multi_cpt_payload unit-tests
-- Add multi-cpt-results tests
-- Move grouper tests to "results" folder
-- Add results/test_pile_properties tests
 - Refactor pile_properties tests
+- Add multi-cpt-results tests
 - Omit tests folder in superlinter
-- Rename test_soil to test_input
+- Move grouper tests to "results" folder
 - Add soilproperties tests
+- Rename test_soil to test_input
 - Add create_pile_properties_payload tests
+- Add results/test_pile_properties tests
 
 ### Deps
 - Update mypy==1.6.1 & black==23.10.1
 
 ## [0.1.0] - 2023-10-20
 
-### Documentation
-- Update README
-
-### Features
-- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
-- Add empty module __init__.py
-
 ### Miscellaneous Tasks
 - Init pyproject.toml
 
 ### Styling
-- Add .flake8 file
 - Add github workflow job "lint" & update superlinter to v5
 
 ## [0.0.1] - 2023-10-20
 
 ### Documentation
 - Add docstrings to "create_payload" functions
+- Update README
 
 ### Features
 - Rename module folder name to "py_pilecore"
+- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
+- Add empty module __init__.py
 
 ### Miscellaneous Tasks
 - Update .gitignore
 
 ### Styling
 - Add run_super_linters.sh bash script
+- Add .flake8 file
 
 <!-- CEMS BV. -->
