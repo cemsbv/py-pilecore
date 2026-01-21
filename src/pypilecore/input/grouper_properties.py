@@ -2,40 +2,22 @@ from __future__ import annotations
 
 import logging
 from copy import deepcopy
-from typing import Any, Dict, List, Literal
+from typing import Any, Dict
 
 import numpy as np
 from shapely.geometry import Polygon, mapping
 
 from pypilecore.results import SingleCPTCompressionBearingResults
 
-_dft_optimize_result_by = [
-    "minimum_pile_level",
-    "number_of_cpts",
-    "number_of_consecutive_pile_levels",
-]
-
 
 def create_grouper_payload(
     cpt_results_dict: Dict[str, SingleCPTCompressionBearingResults],
-    pile_load_uls: float,
     building_polygon: Polygon | None = None,
     cpt_grid_rotation: float = 0.0,
     gamma_bottom: float = 1.2,
     gamma_shaft: float = 1.2,
     include_centre_to_centre_check: bool = False,
     stiff_construction: bool = False,
-    optimize_result_by: (
-        List[
-            Literal[
-                "minimum_pile_level",
-                "number_of_cpts",
-                "number_of_consecutive_pile_levels",
-                "centre_to_centre_check",
-            ]
-        ]
-        | None
-    ) = _dft_optimize_result_by,  # type: ignore
     resolution: float = 0.5,
     overrule_nan: float = 0.0,
     skip_nan: bool = False,
@@ -49,12 +31,10 @@ def create_grouper_payload(
     ------
     The grouper uses pile bearing capacity results calculated by PileCore or other software to
     form  subgroups of the total group of CPT’s belonging to this project.
-    Valid subgroups have three characteristics:
+    Valid subgroups have the characteristics:
 
         - a maximum variation coefficient of 12% at one or more pile-tip levels. (Variation check
           NEN9997-1 A.3.3.3)
-        - a minimum design pile bearing capacity based on the given pile load ULS at one or more
-          pile-tip levels. (Bearing check)
         - is spatially coherent, which means there are no other CPTs in between the members
           of the subgroup. (Spatial check)
 
@@ -78,26 +58,9 @@ def create_grouper_payload(
     cpt_results_dict:
         Dictionary with key as CPT name and value a SingleCPTBearingResults class.
         Should contain at least 2 entries.
-    pile_load_uls
-        ULS load in kN. Used to determine if a grouping configuration is valid.
     stiff_construction
         Default is False
         Attribute use to get the xi3 and xi4 value. True if it is a stiff construction
-    optimize_result_by
-        Default is "minimum_pile_level", "number_of_cpts", "number_of_consecutive_pile_levels"
-        Attribute that states how to sort the result and find groups.
-        Based on the filter method, a selection of valid subgroups are included in the report. The following
-        filters are available:
-
-            - Number_of_cpts: the grouper adds filters to make the group as big as possible to try and get a
-              uniform pile tip level for most CPT’s.
-            - Number_of_consecutive_pile_levels; the grouper adds filters to get groups that contain consecutive
-              pile tip levels to ensure a consistent soil layer is used.
-            - Minimum_pile_level; the grouper adds filters to return groups that optimize pile length to try and
-              optimize or reduce material use.
-            - Centre_to_centre_check; the grouper adds filters to favour groups that are valid according to the
-              centre to centre rules of the NEN9997-1 3.2.3.
-
     gamma_shaft
         Default is 1.2
         Safety factor shaft design bearing capacity
@@ -153,10 +116,8 @@ def create_grouper_payload(
         "gamma_bottom": gamma_bottom,
         "gamma_shaft": gamma_shaft,
         "include_centre_to_centre_check": include_centre_to_centre_check,
-        "pile_load_uls": pile_load_uls,
         "stiff_construction": stiff_construction,
         "resolution": resolution,
-        "optimize_result_by": optimize_result_by,
     }
 
     # set source building polygon in payload
