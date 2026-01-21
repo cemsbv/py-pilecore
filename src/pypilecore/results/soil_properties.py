@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import StrEnum
 from functools import lru_cache
 from typing import Any, List, Sequence, Tuple, Union
 
@@ -15,30 +16,39 @@ from pypilecore.utils import depth_to_nap, nap_to_depth
 
 Number = Union[float, int]
 
-SOIL_COLOR_DIC_intern = {
-    "G": "#708090",
-    "Z": "#DBAD4B",
-    "L": "#0078C1",
-    "K": "#578E57",
-    "V": "#a76b29",
-}
 
-ENG_MAIN_COMPONENT_NAME_DIC = {
-    "G": "Gravel",
-    "Z": "Sand",
-    "L": "Loam",
-    "V": "Peat",
-    "K": "Clay",
-}
+class SOIL_COLORS(StrEnum):
+    G = "#708090"
+    S = "#DBAD4B"
+    L = "#0078C1"
+    P = "#578E57"
+    C = "#a76b29"
 
-SOIL_COLOR_DIC = {
-    value: SOIL_COLOR_DIC_intern[key]
-    for key, value in ENG_MAIN_COMPONENT_NAME_DIC.items()
-}
+
+class SOIL_NAMES_EN(StrEnum):
+    G = "Gravel"
+    S = "Sand"
+    L = "Loam"
+    P = "Peat"
+    C = "Clay"
+
+
+class SOIL_NAMES_NL(StrEnum):
+    G = "Grind"
+    S = "Zand"
+    L = "Leem"
+    P = "Veen"
+    C = "Klei"
+
+
+NL_SOIL_MAP = {soil.value[0]: soil.name for soil in SOIL_NAMES_NL}
 
 
 def get_soil_layer_handles() -> List[Patch]:
-    return [Patch(color=clr, label=key) for (key, clr) in SOIL_COLOR_DIC.items()]
+    return [
+        Patch(color=color.value, label=SOIL_NAMES_EN[color.name])
+        for color in SOIL_COLORS
+    ]
 
 
 class LayerTable:
@@ -573,7 +583,7 @@ class SoilProperties:
                 )
 
         # add soil layers subplot
-        for depth_btm, delta_z, main_component in zip(
+        for depth_btm, delta_z, soil_code in zip(
             self.layer_table.depth_btm,
             self.layer_table.thickness,
             self.layer_table.soil_code,
@@ -588,16 +598,21 @@ class SoilProperties:
                         self.surface_level_ref, self.ref_height
                     )
 
-            if main_component[0] not in list(SOIL_COLOR_DIC_intern.keys()):
+            soil_key = soil_code[0].upper()
+            if soil_key in SOIL_COLORS._member_names_:
+                color = SOIL_COLORS[soil_key]
+            elif soil_key in NL_SOIL_MAP.keys():
+                color = SOIL_COLORS[NL_SOIL_MAP[soil_key]]
+            else:
                 raise ValueError(
-                    "Cannot plot Soil Properties, update SOIL_COLOR_DIC"
-                    "to match soil_code of the layer table"
+                    "Cannot plot Soil Properties. "
+                    f"Unknown color mapping for soil code '{soil_code}'"
                 )
             axes.fill_between(
                 [0, 1],
                 y1=depth_to_nap(depth_btm, self.ref_height) + delta_z,
                 y2=depth_to_nap(depth_btm, self.ref_height),
-                color=SOIL_COLOR_DIC_intern[main_component[0]],
+                color=color,
             )
         axes.get_xaxis().set_visible(False)
 
