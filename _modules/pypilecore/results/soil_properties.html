@@ -74,6 +74,7 @@
   <h1>Source code for pypilecore.results.soil_properties</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">StrEnum</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -89,30 +90,39 @@
 
 <span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 
-<span class="n">SOIL_COLOR_DIC_intern</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;#708090&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Z&quot;</span><span class="p">:</span> <span class="s2">&quot;#DBAD4B&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="s2">&quot;#0078C1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="s2">&quot;#578E57&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="s2">&quot;#a76b29&quot;</span><span class="p">,</span>
-<span class="p">}</span>
 
-<span class="n">ENG_MAIN_COMPONENT_NAME_DIC</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;Gravel&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Z&quot;</span><span class="p">:</span> <span class="s2">&quot;Sand&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="s2">&quot;Loam&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="s2">&quot;Peat&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="s2">&quot;Clay&quot;</span><span class="p">,</span>
-<span class="p">}</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SOIL_COLORS</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="s2">&quot;#708090&quot;</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="s2">&quot;#DBAD4B&quot;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="s2">&quot;#0078C1&quot;</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="s2">&quot;#578E57&quot;</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="s2">&quot;#a76b29&quot;</span>
 
-<span class="n">SOIL_COLOR_DIC</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">value</span><span class="p">:</span> <span class="n">SOIL_COLOR_DIC_intern</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ENG_MAIN_COMPONENT_NAME_DIC</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-<span class="p">}</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SOIL_NAMES_EN</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="s2">&quot;Gravel&quot;</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="s2">&quot;Sand&quot;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="s2">&quot;Loam&quot;</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="s2">&quot;Peat&quot;</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="s2">&quot;Clay&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SOIL_NAMES_NL</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="s2">&quot;Grind&quot;</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="s2">&quot;Zand&quot;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="s2">&quot;Leem&quot;</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="s2">&quot;Veen&quot;</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="s2">&quot;Klei&quot;</span>
+
+
+<span class="n">NL_SOIL_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="n">soil</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">soil</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">soil</span> <span class="ow">in</span> <span class="n">SOIL_NAMES_NL</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_soil_layer_handles</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Patch</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">clr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">clr</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SOIL_COLOR_DIC</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">SOIL_NAMES_EN</span><span class="p">[</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">SOIL_COLORS</span>
+    <span class="p">]</span>
 
 
 <div class="viewcode-block" id="LayerTable">
@@ -675,7 +685,7 @@
                 <span class="p">)</span>
 
         <span class="c1"># add soil layers subplot</span>
-        <span class="k">for</span> <span class="n">depth_btm</span><span class="p">,</span> <span class="n">delta_z</span><span class="p">,</span> <span class="n">main_component</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="k">for</span> <span class="n">depth_btm</span><span class="p">,</span> <span class="n">delta_z</span><span class="p">,</span> <span class="n">soil_code</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">layer_table</span><span class="o">.</span><span class="n">depth_btm</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">layer_table</span><span class="o">.</span><span class="n">thickness</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">layer_table</span><span class="o">.</span><span class="n">soil_code</span><span class="p">,</span>
@@ -690,16 +700,21 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">surface_level_ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span>
                     <span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">main_component</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">SOIL_COLOR_DIC_intern</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">soil_key</span> <span class="o">=</span> <span class="n">soil_code</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">soil_key</span> <span class="ow">in</span> <span class="n">SOIL_COLORS</span><span class="o">.</span><span class="n">_member_names_</span><span class="p">:</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="n">SOIL_COLORS</span><span class="p">[</span><span class="n">soil_key</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">soil_key</span> <span class="ow">in</span> <span class="n">NL_SOIL_MAP</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="n">SOIL_COLORS</span><span class="p">[</span><span class="n">NL_SOIL_MAP</span><span class="p">[</span><span class="n">soil_key</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Cannot plot Soil Properties, update SOIL_COLOR_DIC&quot;</span>
-                    <span class="s2">&quot;to match soil_code of the layer table&quot;</span>
+                    <span class="s2">&quot;Cannot plot Soil Properties. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Unknown color mapping for soil code &#39;</span><span class="si">{</span><span class="n">soil_code</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
                 <span class="p">)</span>
             <span class="n">axes</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
                 <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
                 <span class="n">y1</span><span class="o">=</span><span class="n">depth_to_nap</span><span class="p">(</span><span class="n">depth_btm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span><span class="p">)</span> <span class="o">+</span> <span class="n">delta_z</span><span class="p">,</span>
                 <span class="n">y2</span><span class="o">=</span><span class="n">depth_to_nap</span><span class="p">(</span><span class="n">depth_btm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span><span class="p">),</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">SOIL_COLOR_DIC_intern</span><span class="p">[</span><span class="n">main_component</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 

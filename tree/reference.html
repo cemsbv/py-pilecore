@@ -827,10 +827,20 @@ namely a core component and an optional shell/widened-base component.</p>
 <li><p><strong>pile_shape</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'round'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rect'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rectangle'</span></code>]</span>) – The shape of the pile.
 Both “rect” and “rectangle” are accepted for rectangular piles.</p></li>
 <li><p><strong>pile_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The name of the pile, by default None.</p></li>
-<li><p><strong>main_type</strong> – The main type of the standard pile type definition, by default None.</p></li>
-<li><p><strong>specification</strong> – The specification of the standard pile type definition, by default None.
-Required if <cite>main_type</cite> is provided.</p></li>
-<li><p><strong>installation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The installation of the standard pile type definition, by default None.</p></li>
+<li><p><strong>reference</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The standard pile reference, as defined in NEN9997-1 (2025), by default None.</p></li>
+<li><p><strong>installation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – <p>The installation method of the standard pile type definition, by default None.
+Can be one of:</p>
+<blockquote>
+<div><ul>
+<li><p>”driven”</p></li>
+<li><p>”screwed”</p></li>
+<li><p>”excavated”</p></li>
+<li><p>”vibrated”</p></li>
+<li><p>”pressed”</p></li>
+<li><p>”jetted”</p></li>
+</ul>
+</div></blockquote>
+</p></li>
 <li><p><strong>height_base</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The height [m] of the base component, by default None.
 Required if base dimensions are provided.
 Note: When standard is CUR236, <cite>height_base</cite> should be None, making the
@@ -940,6 +950,13 @@ If None, it is inferred from the standard pile.
 Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
 <li><p><strong>is_low_vibrating</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Whether the pile is low vibrating, by default None.
+If None, it is inferred from the installation method or standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.</p></li>
+<li><p><strong>is_prefab</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Whether the pile is prefab, by default None.
+If None, it is inferred from the standard pile.
+Overwrites the value of the standard pile if provided together with a standard pile.
+Required if no standard pile type was specified.</p></li>
+<li><p><strong>is_open_ended</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Whether the pile is open-ended, by default None.
 If None, it is inferred from the standard pile.
 Overwrites the value of the standard pile if provided together with a standard pile.
 Required if no standard pile type was specified.</p></li>
@@ -2122,20 +2139,18 @@ the response of a “compression/multiple-cpts/results” endpoint call.</p>
 <span id="cptgrouperinput"></span><h2>CPT grouper: Input<a class="headerlink" href="#cpt-grouper-input" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pypilecore.input.grouper_properties.create_grouper_payload">
-<span class="sig-prename descclassname"><span class="pre">pypilecore.input.grouper_properties.</span></span><span class="sig-name descname"><span class="pre">create_grouper_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_results_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">building_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_grid_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_shaft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centre_to_centre_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stiff_construction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_result_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['minimum_pile_level',</span> <span class="pre">'number_of_cpts',</span> <span class="pre">'number_of_consecutive_pile_levels']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrule_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/input/grouper_properties.html#create_grouper_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.input.grouper_properties.create_grouper_payload" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pypilecore.input.grouper_properties.</span></span><span class="sig-name descname"><span class="pre">create_grouper_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_results_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">building_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_grid_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_shaft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_centre_to_centre_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stiff_construction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrule_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/input/grouper_properties.html#create_grouper_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.input.grouper_properties.create_grouper_payload" title="Link to this definition"></a></dt>
 <dd><p>Creates a dictionary with the payload content for the PileCore endpoint
 “/grouper/group_cpts”</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The grouper uses pile bearing capacity results calculated by PileCore or other software to
 form  subgroups of the total group of CPT’s belonging to this project.
-Valid subgroups have three characteristics:</p>
+Valid subgroups have the characteristics:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>a maximum variation coefficient of 12% at one or more pile-tip levels. (Variation check
 NEN9997-1 A.3.3.3)</p></li>
-<li><p>a minimum design pile bearing capacity based on the given pile load ULS at one or more
-pile-tip levels. (Bearing check)</p></li>
 <li><p>is spatially coherent, which means there are no other CPTs in between the members
 of the subgroup. (Spatial check)</p></li>
 </ul>
@@ -2162,26 +2177,8 @@ therefore should represent the main orientation of the building.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cpt_results_dict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleCPTCompressionBearingResults</span></code>]</span>) – Dictionary with key as CPT name and value a SingleCPTBearingResults class.
 Should contain at least 2 entries.</p></li>
-<li><p><strong>pile_load_uls</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – ULS load in kN. Used to determine if a grouping configuration is valid.</p></li>
 <li><p><strong>stiff_construction</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Default is False
 Attribute use to get the xi3 and xi4 value. True if it is a stiff construction</p></li>
-<li><p><strong>optimize_result_by</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'minimum_pile_level'</span></code>, <code class="docutils literal notranslate"><span class="pre">'number_of_cpts'</span></code>, <code class="docutils literal notranslate"><span class="pre">'number_of_consecutive_pile_levels'</span></code>, <code class="docutils literal notranslate"><span class="pre">'centre_to_centre_check'</span></code>]]]</span>) – <p>Default is “minimum_pile_level”, “number_of_cpts”, “number_of_consecutive_pile_levels”
-Attribute that states how to sort the result and find groups.
-Based on the filter method, a selection of valid subgroups are included in the report. The following
-filters are available:</p>
-<blockquote>
-<div><ul>
-<li><p>Number_of_cpts: the grouper adds filters to make the group as big as possible to try and get a
-uniform pile tip level for most CPT’s.</p></li>
-<li><p>Number_of_consecutive_pile_levels; the grouper adds filters to get groups that contain consecutive
-pile tip levels to ensure a consistent soil layer is used.</p></li>
-<li><p>Minimum_pile_level; the grouper adds filters to return groups that optimize pile length to try and
-optimize or reduce material use.</p></li>
-<li><p>Centre_to_centre_check; the grouper adds filters to favour groups that are valid according to the
-centre to centre rules of the NEN9997-1 3.2.3.</p></li>
-</ul>
-</div></blockquote>
-</p></li>
 <li><p><strong>gamma_shaft</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Default is 1.2
 Safety factor shaft design bearing capacity</p></li>
 <li><p><strong>gamma_bottom</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Default is 1.2

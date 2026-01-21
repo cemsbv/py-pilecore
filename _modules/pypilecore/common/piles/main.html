@@ -222,13 +222,17 @@
 <span class="sd">        Both &quot;rect&quot; and &quot;rectangle&quot; are accepted for rectangular piles.</span>
 <span class="sd">    pile_name :</span>
 <span class="sd">        The name of the pile, by default None.</span>
-<span class="sd">    main_type :</span>
-<span class="sd">        The main type of the standard pile type definition, by default None.</span>
-<span class="sd">    specification :</span>
-<span class="sd">        The specification of the standard pile type definition, by default None.</span>
-<span class="sd">        Required if `main_type` is provided.</span>
+<span class="sd">    reference :</span>
+<span class="sd">        The standard pile reference, as defined in NEN9997-1 (2025), by default None.</span>
 <span class="sd">    installation :</span>
-<span class="sd">        The installation of the standard pile type definition, by default None.</span>
+<span class="sd">        The installation method of the standard pile type definition, by default None.</span>
+<span class="sd">        Can be one of:</span>
+<span class="sd">            - &quot;driven&quot;</span>
+<span class="sd">            - &quot;screwed&quot;</span>
+<span class="sd">            - &quot;excavated&quot;</span>
+<span class="sd">            - &quot;vibrated&quot;</span>
+<span class="sd">            - &quot;pressed&quot;</span>
+<span class="sd">            - &quot;jetted&quot;</span>
 <span class="sd">    height_base :</span>
 <span class="sd">        The height [m] of the base component, by default None.</span>
 <span class="sd">        Required if base dimensions are provided.</span>
@@ -330,6 +334,15 @@
 <span class="sd">        Required if no standard pile type was specified.</span>
 <span class="sd">    is_low_vibrating :</span>
 <span class="sd">        Whether the pile is low vibrating, by default None.</span>
+<span class="sd">        If None, it is inferred from the installation method or standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
+<span class="sd">    is_prefab :</span>
+<span class="sd">        Whether the pile is prefab, by default None.</span>
+<span class="sd">        If None, it is inferred from the standard pile.</span>
+<span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
+<span class="sd">        Required if no standard pile type was specified.</span>
+<span class="sd">    is_open_ended :</span>
+<span class="sd">        Whether the pile is open-ended, by default None.</span>
 <span class="sd">        If None, it is inferred from the standard pile.</span>
 <span class="sd">        Overwrites the value of the standard pile if provided together with a standard pile.</span>
 <span class="sd">        Required if no standard pile type was specified.</span>
@@ -363,7 +376,8 @@
 <span class="sd">        The pile properties object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">materials</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">PileMaterial</span><span class="p">(</span><span class="o">**</span><span class="n">material_value</span><span class="p">)</span> <span class="k">for</span> <span class="n">material_value</span> <span class="ow">in</span> <span class="n">MATERIALS</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+        <span class="n">PileMaterial</span><span class="p">(</span><span class="o">**</span><span class="n">material_value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">material_value</span> <span class="ow">in</span> <span class="n">MATERIALS</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
     <span class="p">]</span>
 
     <span class="k">if</span> <span class="n">custom_material</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
