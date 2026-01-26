@@ -8,6 +8,8 @@ from numpy.typing import NDArray
 from pygef.cpt import CPTData
 from tqdm import tqdm
 
+from pypilecore.common.friction import FrictionSettings
+
 
 def get_cpt_depth(cpt: CPTData) -> NDArray:
     """
@@ -36,6 +38,7 @@ def create_soil_properties_payload(
     friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     excavation_depth_nap: float | None = None,
     master_ocr: float | None = None,
+    individual_negative_shaft_friction: Mapping[Any, float] | None = None,
     individual_negative_friction_range_nap: (
         Mapping[Any, Tuple[float, float]] | None
     ) = None,
@@ -161,7 +164,6 @@ def create_soil_properties_payload(
             lower_boundary=layer_table["lowerBoundary"],
             gamma_unsat=layer_table["gamma_unsat"],
             gamma_sat=layer_table["gamma_sat"],
-            # index=list(range(0, len(layer_table["gamma_sat"]))),
             phi=layer_table["phi"],
             main_component=list(layer_table["mainComponent"]),
         )
@@ -199,22 +201,47 @@ def create_soil_properties_payload(
             }
 
         # Optionally add cpt-specific friction-range parameters
+        friction_range_strategy_this_cpt = friction_range_strategy
+        negative_shaft_friction_this_cpt = None
+        positive_friction_range_nap_this_cpt = None
+        negative_friction_range_nap_this_cpt = None
+        make_custom_friction_settings = False
+        if (
+            individual_negative_shaft_friction is not None
+            and cpt.alias in individual_negative_shaft_friction.keys()
+        ):
+            negative_shaft_friction_this_cpt = individual_negative_shaft_friction[
+                cpt.alias
+            ]
+            make_custom_friction_settings = True
         if (
             individual_negative_friction_range_nap is not None
             and cpt.alias in individual_negative_friction_range_nap.keys()
         ):
-            soil_properties["fixed_negative_friction_range_nap"] = (
+            negative_friction_range_nap_this_cpt = (
                 individual_negative_friction_range_nap[cpt.alias]
             )
-            soil_properties["friction_range_strategy"] = "manual"
+            friction_range_strategy_this_cpt = "manual"
+            make_custom_friction_settings = True
         if (
             individual_positive_friction_range_nap is not None
             and cpt.alias in individual_positive_friction_range_nap.keys()
         ):
-            soil_properties["fixed_positive_friction_range_nap"] = (
+            positive_friction_range_nap_this_cpt = (
                 individual_positive_friction_range_nap[cpt.alias]
             )
-            soil_properties["friction_range_strategy"] = "manual"
+            friction_range_strategy_this_cpt = "manual"
+            make_custom_friction_settings = True
+        if make_custom_friction_settings:
+            friction_settings_this_cpt = FrictionSettings(
+                friction_range_strategy=friction_range_strategy_this_cpt,
+                negative_friction=negative_shaft_friction_this_cpt,
+                positive_friction_range_nap=positive_friction_range_nap_this_cpt,
+                negative_friction_range_nap=negative_friction_range_nap_this_cpt,
+            )
+            soil_properties["friction_settings"] = (
+                friction_settings_this_cpt.serialize_payload()
+            )
 
         # Optionally add top_of_tension_zone_nap parameter
         if (
