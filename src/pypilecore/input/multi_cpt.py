@@ -6,6 +6,7 @@ from typing import Dict, List, Literal, Mapping, Sequence, Tuple
 
 from pygef.cpt import CPTData
 
+from pypilecore.common.friction import FrictionSettings
 from pypilecore.common.norms import Norms
 from pypilecore.common.piles import PileProperties
 from pypilecore.input.soil_properties import create_soil_properties_payload
@@ -39,6 +40,7 @@ def create_multi_cpt_payload(
     excavation_stress_reduction_method: Literal["constant", "begemann"] = "constant",
     excavation_width: float | None = None,
     excavation_edge_distance: float | None = None,
+    individual_negative_shaft_friction: Mapping[str, float] | None = None,
     individual_negative_friction_range_nap: (
         Mapping[str, Tuple[float, float]] | None
     ) = None,
@@ -279,6 +281,7 @@ def create_multi_cpt_payload(
         friction_range_strategy=friction_range_strategy,
         excavation_depth_nap=excavation_depth_nap,
         master_ocr=ocr,
+        individual_negative_shaft_friction=individual_negative_shaft_friction,
         individual_negative_friction_range_nap=individual_negative_friction_range_nap,
         individual_positive_friction_range_nap=individual_positive_friction_range_nap,
         individual_ocr=individual_ocr,
@@ -287,7 +290,6 @@ def create_multi_cpt_payload(
         pile_tip_levels_nap=list(pile_tip_levels_nap),
         list_soil_properties=soil_properties_list,
         pile_properties=pile.serialize_payload(),
-        friction_range_strategy=friction_range_strategy,
         pile_head_level_nap=pile_head_level_nap,
         stiff_construction=stiff_construction,
         norms=norms.serialize_payload(),
@@ -319,19 +321,15 @@ def create_multi_cpt_payload(
         multi_cpt_payload["pile_load"] = pile_load_sls
     if apply_qc3_reduction is not None:
         multi_cpt_payload["apply_qc3_reduction"] = apply_qc3_reduction
-    if negative_shaft_friction is not None:
-        # The API expects the field name `negative_friction` for a fixed
-        # negative shaft friction value (kN). Previously this used the
-        # internal/legacy key `f_nk` which does not match the OpenAPI schema.
-        multi_cpt_payload["negative_friction"] = negative_shaft_friction
-    if fixed_negative_friction_range_nap is not None:
-        multi_cpt_payload["fixed_negative_friction_range_nap"] = (
-            fixed_negative_friction_range_nap
-        )
-    if fixed_positive_friction_range_nap is not None:
-        multi_cpt_payload["fixed_positive_friction_range_nap"] = (
-            fixed_positive_friction_range_nap
-        )
+
+    friction_settings = FrictionSettings(
+        friction_range_strategy=friction_range_strategy,
+        negative_friction=negative_shaft_friction,
+        positive_friction_range_nap=fixed_positive_friction_range_nap,
+        negative_friction_range_nap=fixed_negative_friction_range_nap,
+    )
+    multi_cpt_payload["friction_settings"] = friction_settings.serialize_payload()
+
     if overrule_xi is not None:
         multi_cpt_payload["overrule_xi"] = overrule_xi
     if cpts_group is not None:
