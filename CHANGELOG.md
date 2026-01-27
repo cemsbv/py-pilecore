@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3] - 2026-01-27
+
+### Miscellaneous Tasks
+- External notebook image references
+
 ## [2.0.2] - 2026-01-27
 
 ### Bug Fixes
-- Tests for global friction settings
 - Implement serialization of friction_ranges
+- Tests for global friction settings
 
 ### Miscellaneous Tasks
 - *Gitignore*: GIT Ignore UV
@@ -49,22 +54,22 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - *Api*:
-    - Added FrictionSettings
-    - Added Norms and tests
     - Update pile_type serialization according to v4 api
     - Improve FrictionRangeStrategy validation
+    - Added FrictionSettings
+    - Added Norms and tests
 
 - *Grouper results*:
     - Add pypilecore.viewers.ViewerGroupResultsPlanView class
     - Add pypilecore.results.CasesGrouperResults class
 - Add ViewerCptResultsOverview + refactoring
+- Add save_failed_payload debugging flag to call-endpoint functions
 - Update notebooks and remove routing to staging server
 - Update grouper endpoint names
 - Update grouper notebook
 - Refactor ViewerCptResults and FigureCPTResultsVersusPtls to also handle Grouper results. Removes ViewerCptGroupResults
 - Add Viewer-Table classes for multi-cpt and grouper results
 - Add `results_per_case` property to Cases[]Results classes
-- Add save_failed_payload debugging flag to call-endpoint functions
 
 ### Miscellaneous Tasks
 
@@ -170,9 +175,9 @@ All notable changes to this project will be documented in this file.
     - Add class CasesMultiCPTBearingResults (#76)
 
 - *Viewer_results*:
-    - Add ViewerCptResults class
     - Add the results viewer ViewerCptResultsPlanView
     - Add the results viewer ViewerCptGroupResults
+    - Add ViewerCptResults class
 
 ### Miscellaneous Tasks
 - *Cases_multicpt*: Add CasesMultiCPTBearingResults to the init of the results module
@@ -210,31 +215,31 @@ All notable changes to this project will be documented in this file.
 ## [0.4.0] - 2024-03-12
 
 ### Bug Fixes
+- Final max-bearing fixups & Add unittests
 - Do array comparison on float with np.isclose()
+- Remove dataclass hash & to_pandas caching
 - Make sure that all pile tip levels have same order
 - Remove dataclass hash & to_pandas caching
 - Fix MaxBearingResults initiation & refactor
 - Update unit test
-- Remove dataclass hash & to_pandas caching
-- Final max-bearing fixups & Add unittests
 - Add missing pile definitions plot
 
 ### Features
 - *Api*: Add verbose argument to functions in api module
 - Rotate x-labels in 2D max-bearing plot
 - Add lru_cache on MaxBearingResults.to_pandas
-- Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
 - Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
+- Denote CPT name in MaxBeraingTable.origin attribute
 - Add delaunay map
 - Resolve comments in mr
-- Add 3D plots for bearing results
-- Combine grouper and single results
 - Add result bearing 3d plots to notebook
-- Denote CPT name in MaxBeraingTable.origin attribute
+- Combine grouper and single results
+- Add 3D plots for bearing results
+- Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
 
 ### Miscellaneous Tasks
-- Update example notebook
 - Revert
+- Update example notebook
 
 ### Styling
 - Lint file
@@ -316,8 +321,8 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 - Minor fixups in PileCore_multi_cpt notebook
-- Validate excavation and pile-load input in function create_multi_cpt_payload
 - Accept None for `relative_pile_load`
+- Validate excavation and pile-load input in function create_multi_cpt_payload
 
 ## [0.2.0] - 2023-11-08
 
@@ -325,23 +330,23 @@ All notable changes to this project will be documented in this file.
 - *Test*: Coverage warning no data was collected
 - Notebook and grouper workflow (#18)
 - Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
-- Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
 - Fix adding diameter_shaft property logic
+- Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
 - Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
-- Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
 - Plot empty friction ratio in CPTTable.plot_friction_ratio()
+- Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
 
 ### Documentation
 - Add missing create_multi_cpt_payload arguments docstrings
 - Update `getting started`
-- Add items to reference & fix docstrings & typing
 - Add single- & multi-cpt-results docstrings
+- Add items to reference & fix docstrings & typing
 - Init pages (#10)
 
 ### Features
 - *Grouper*: Add grouper implementation (#7)
-- Add `name` property to PileProperties object
 - Raise ValueError for invalid pile_properties `height_base` input.
+- Add `name` property to PileProperties object
 - Cast property getter responses of PileProperties & child objects
 - Add _shape class-attribute to Round- & RectPileProperties
 - Add notebook example (#17)
@@ -363,13 +368,13 @@ All notable changes to this project will be documented in this file.
 
 ### Testing
 - Add create_multi_cpt_payload unit-tests
-- Add create_pile_properties_payload tests
 - Move grouper tests to "results" folder
+- Rename test_soil to test_input
+- Add multi-cpt-results tests
 - Add results/test_pile_properties tests
 - Add soilproperties tests
-- Rename test_soil to test_input
 - Refactor pile_properties tests
-- Add multi-cpt-results tests
+- Add create_pile_properties_payload tests
 - Omit tests folder in superlinter
 
 ### Deps
@@ -377,30 +382,26 @@ All notable changes to this project will be documented in this file.
 
 ## [0.1.0] - 2023-10-20
 
-### Documentation
-- Update README
-
 ### Features
 - Add empty module __init__.py
-- Rename module folder name to "py_pilecore"
-- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
-
-### Miscellaneous Tasks
-- Init pyproject.toml
-
-### Styling
-- Add .flake8 file
 
 ## [0.0.1] - 2023-10-20
 
 ### Documentation
 - Add docstrings to "create_payload" functions
+- Update README
+
+### Features
+- Rename module folder name to "py_pilecore"
+- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
 
 ### Miscellaneous Tasks
+- Init pyproject.toml
 - Update .gitignore
 
 ### Styling
-- Add github workflow job "lint" & update superlinter to v5
 - Add run_super_linters.sh bash script
+- Add github workflow job "lint" & update superlinter to v5
+- Add .flake8 file
 
 <!-- CEMS BV. -->
