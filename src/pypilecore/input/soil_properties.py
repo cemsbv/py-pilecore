@@ -232,6 +232,7 @@ def create_soil_properties_payload(
             )
             friction_range_strategy_this_cpt = "manual"
             make_custom_friction_settings = True
+
         if make_custom_friction_settings:
             friction_settings_this_cpt = FrictionSettings(
                 friction_range_strategy=friction_range_strategy_this_cpt,
