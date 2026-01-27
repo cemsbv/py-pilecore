@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PileCore
-  version: 2.0.1
+  version: 2.0.2
   description: >-
     PileCore aims to give you the full pile calculation utilities without an
     engineer in the loop. This means that calculations must be able to run from
