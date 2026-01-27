@@ -5,6 +5,7 @@ from nuclei.client.utils import serialize_jsonifyable_object
 from openapi_core.contrib.requests import RequestsOpenAPIRequest
 from requests import Request
 
+from pypilecore.common.friction import FrictionSettings
 from pypilecore.common.norms import CUR236_version, NEN99971_version, Norms
 from pypilecore.common.piles import PileProperties
 from pypilecore.common.piles.geometry import PileGeometry
@@ -97,19 +98,42 @@ def default_norm() -> Norms:
 def custom_norm() -> Norms:
     return Norms(nen_9997_1=NEN99971_version.V2017, cur_236=CUR236_version.V2023)
 
+@pytest.fixture
+def lower_bound_friction() -> FrictionSettings:
+    return FrictionSettings(
+        friction_range_strategy="lower_bound"
+    )
+
+@pytest.fixture
+def manual_friction() -> FrictionSettings:
+    return FrictionSettings(
+        friction_range_strategy="manual",
+        negative_friction_range_nap=(0, -5.0),
+        positive_friction_range_nap=(-5.0, "ptl")
+    )
+
+@pytest.fixture
+def manual_friction_only_positive() -> FrictionSettings:
+    return FrictionSettings(
+        friction_range_strategy="manual",
+        positive_friction_range_nap=(-5.0, "ptl"),
+        negative_friction=20.0
+    )
 
 @pytest.mark.parametrize(
     "pile_name", ["round_pile", "rectangle_pile", "rectangle_pile_custom"]
 )
 @pytest.mark.parametrize("norms_name", ["default_norm", "custom_norm"])
 @pytest.mark.parametrize("cpt_name", ["cpt", "cpt_no_coords"])
+@pytest.mark.parametrize("friction_settings_name", ["lower_bound_friction", "manual_friction", "manual_friction_only_positive"])
 def test_create_multi_cpt_payload(
-    pc_openapi, cpt_name, pile_name, norms_name, request, headers
+    pc_openapi, cpt_name, pile_name, norms_name, friction_settings_name, request, headers
 ):
     # resolve fixture by name so we can parametrize over fixture names
     pile = request.getfixturevalue(pile_name)
     norms = request.getfixturevalue(norms_name)
     cpt = request.getfixturevalue(cpt_name)
+    friction_settings = request.getfixturevalue(friction_settings_name)
 
     payload, _ = create_multi_cpt_payload(
         pile_tip_levels_nap=[-10.0, -20.0],
@@ -131,6 +155,10 @@ def test_create_multi_cpt_payload(
         groundwater_level_nap=-10.0,
         pile=pile,
         norms=norms,
+        friction_range_strategy=friction_settings.friction_range_strategy,
+        fixed_positive_friction_range_nap=friction_settings.positive_friction_range_nap,
+        fixed_negative_friction_range_nap=friction_settings.negative_friction_range_nap,
+        negative_shaft_friction=friction_settings.negative_friction
     )
 
     request = Request(

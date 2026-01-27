@@ -291,8 +291,8 @@ def create_basic_pile(
         The pile properties object.
     """
     materials = [
-        PileMaterial(**material_value)
-        for material_value in MATERIALS.values()  # type: ignore
+        PileMaterial(**material_value)  # type: ignore
+        for material_value in MATERIALS.values()
     ]
 
     if custom_material is not None:
