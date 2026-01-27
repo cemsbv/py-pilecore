@@ -80,6 +80,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pygef.cpt</span><span class="w"> </span><span class="kn">import</span> <span class="n">CPTData</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.friction</span><span class="w"> </span><span class="kn">import</span> <span class="n">FrictionSettings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.norms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Norms</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.piles</span><span class="w"> </span><span class="kn">import</span> <span class="n">PileProperties</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.input.soil_properties</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_soil_properties_payload</span>
@@ -115,6 +116,7 @@
     <span class="n">excavation_stress_reduction_method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;begemann&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span>
     <span class="n">excavation_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">excavation_edge_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">individual_negative_shaft_friction</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">individual_negative_friction_range_nap</span><span class="p">:</span> <span class="p">(</span>
         <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -355,6 +357,7 @@
         <span class="n">friction_range_strategy</span><span class="o">=</span><span class="n">friction_range_strategy</span><span class="p">,</span>
         <span class="n">excavation_depth_nap</span><span class="o">=</span><span class="n">excavation_depth_nap</span><span class="p">,</span>
         <span class="n">master_ocr</span><span class="o">=</span><span class="n">ocr</span><span class="p">,</span>
+        <span class="n">individual_negative_shaft_friction</span><span class="o">=</span><span class="n">individual_negative_shaft_friction</span><span class="p">,</span>
         <span class="n">individual_negative_friction_range_nap</span><span class="o">=</span><span class="n">individual_negative_friction_range_nap</span><span class="p">,</span>
         <span class="n">individual_positive_friction_range_nap</span><span class="o">=</span><span class="n">individual_positive_friction_range_nap</span><span class="p">,</span>
         <span class="n">individual_ocr</span><span class="o">=</span><span class="n">individual_ocr</span><span class="p">,</span>
@@ -363,7 +366,6 @@
         <span class="n">pile_tip_levels_nap</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pile_tip_levels_nap</span><span class="p">),</span>
         <span class="n">list_soil_properties</span><span class="o">=</span><span class="n">soil_properties_list</span><span class="p">,</span>
         <span class="n">pile_properties</span><span class="o">=</span><span class="n">pile</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">(),</span>
-        <span class="n">friction_range_strategy</span><span class="o">=</span><span class="n">friction_range_strategy</span><span class="p">,</span>
         <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">pile_head_level_nap</span><span class="p">,</span>
         <span class="n">stiff_construction</span><span class="o">=</span><span class="n">stiff_construction</span><span class="p">,</span>
         <span class="n">norms</span><span class="o">=</span><span class="n">norms</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">(),</span>
@@ -395,19 +397,15 @@
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;pile_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_load_sls</span>
     <span class="k">if</span> <span class="n">apply_qc3_reduction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;apply_qc3_reduction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_qc3_reduction</span>
-    <span class="k">if</span> <span class="n">negative_shaft_friction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># The API expects the field name `negative_friction` for a fixed</span>
-        <span class="c1"># negative shaft friction value (kN). Previously this used the</span>
-        <span class="c1"># internal/legacy key `f_nk` which does not match the OpenAPI schema.</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;negative_friction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">negative_shaft_friction</span>
-    <span class="k">if</span> <span class="n">fixed_negative_friction_range_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;fixed_negative_friction_range_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">fixed_negative_friction_range_nap</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="n">fixed_positive_friction_range_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;fixed_positive_friction_range_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">fixed_positive_friction_range_nap</span>
-        <span class="p">)</span>
+
+    <span class="n">friction_settings</span> <span class="o">=</span> <span class="n">FrictionSettings</span><span class="p">(</span>
+        <span class="n">friction_range_strategy</span><span class="o">=</span><span class="n">friction_range_strategy</span><span class="p">,</span>
+        <span class="n">negative_friction</span><span class="o">=</span><span class="n">negative_shaft_friction</span><span class="p">,</span>
+        <span class="n">positive_friction_range_nap</span><span class="o">=</span><span class="n">fixed_positive_friction_range_nap</span><span class="p">,</span>
+        <span class="n">negative_friction_range_nap</span><span class="o">=</span><span class="n">fixed_negative_friction_range_nap</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;friction_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">friction_settings</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="n">overrule_xi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;overrule_xi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overrule_xi</span>
     <span class="k">if</span> <span class="n">cpts_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

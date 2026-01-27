@@ -376,8 +376,8 @@
 <span class="sd">        The pile properties object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">materials</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">PileMaterial</span><span class="p">(</span><span class="o">**</span><span class="n">material_value</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">material_value</span> <span class="ow">in</span> <span class="n">MATERIALS</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+        <span class="n">PileMaterial</span><span class="p">(</span><span class="o">**</span><span class="n">material_value</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">for</span> <span class="n">material_value</span> <span class="ow">in</span> <span class="n">MATERIALS</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="p">]</span>
 
     <span class="k">if</span> <span class="n">custom_material</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
