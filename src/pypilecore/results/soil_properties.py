@@ -21,8 +21,8 @@ class SOIL_COLORS(StrEnum):
     G = "#708090"
     S = "#DBAD4B"
     L = "#0078C1"
-    P = "#578E57"
-    C = "#a76b29"
+    C = "#578E57"
+    P = "#a76b29"
 
 
 class SOIL_NAMES_EN(StrEnum):
