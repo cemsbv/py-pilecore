@@ -313,6 +313,11 @@ def create_basic_pile(
         ]
 
         if base_diameter is not None:
+            if height_base is None:
+                raise ValueError(
+                    "`height_base` must be provided when `base_diameter` is provided "
+                    "for a round pile."
+                )
             components.append(
                 RoundPileGeometryComponent(
                     diameter=base_diameter,
@@ -339,6 +344,11 @@ def create_basic_pile(
         ]
 
         if base_secondary_dimension is not None:
+            if height_base is None:
+                raise ValueError(
+                    "`height_base` must be provided when `base_secondary_dimension` "
+                    "is provided for a rectangular pile."
+                )
             components.append(
                 RectPileGeometryComponent(
                     secondary_dimension=base_secondary_dimension,
