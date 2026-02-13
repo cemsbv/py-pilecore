@@ -398,6 +398,11 @@
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="n">base_diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">height_base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;`height_base` must be provided when `base_diameter` is provided &quot;</span>
+                    <span class="s2">&quot;for a round pile.&quot;</span>
+                <span class="p">)</span>
             <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">RoundPileGeometryComponent</span><span class="p">(</span>
                     <span class="n">diameter</span><span class="o">=</span><span class="n">base_diameter</span><span class="p">,</span>
@@ -424,6 +429,11 @@
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="n">base_secondary_dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">height_base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;`height_base` must be provided when `base_secondary_dimension` &quot;</span>
+                    <span class="s2">&quot;is provided for a rectangular pile.&quot;</span>
+                <span class="p">)</span>
             <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">RectPileGeometryComponent</span><span class="p">(</span>
                     <span class="n">secondary_dimension</span><span class="o">=</span><span class="n">base_secondary_dimension</span><span class="p">,</span>
