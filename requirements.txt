@@ -297,7 +297,7 @@ pycodestyle==2.14.0
     # via
     #   autopep8
     #   flake8
-pycparser==2.23
+pycparser==3.0
     # via cffi
 pydantic==2.12.5
     # via aws-sam-translator
