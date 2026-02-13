@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5] - 2026-02-13
+
+### Bug Fixes
+- *Piles*: #233 | Don't allow base_height=None when creating a pile with a base
+
 ## [2.0.4] - 2026-01-28
 
 ### Bug Fixes
@@ -38,11 +43,11 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - *Api*:
+    - Update routing with v4 endpoint names
     - Refactor norms object to use strings and update nuclei dependency
     - Update from_api method for pile_type, tests passing
     - Fix pile_type serialization and tests with custom pile
     - Update routing for uplift endpoints to v4 schema, require nuclei 3.1.0
-    - Update routing with v4 endpoint names
 - *Ci*: Reduce GH jobs triggerred by renovate (#187)
 
 - *Notebook*:
@@ -50,9 +55,9 @@ All notable changes to this project will be documented in this file.
     - Update notebooks to v4 schema
 
 - *Test*:
+    - Fix tests for norms with v4 schema
     - Minimum fix for passing tests
     - Update api schema to v4
-    - Fix tests for norms with v4 schema
 - *Tests*: Refactor tests
 - Update CUR236 figure
 - CUR236 version should be 2023
@@ -224,32 +229,32 @@ All notable changes to this project will be documented in this file.
 - Final max-bearing fixups & Add unittests
 - Do array comparison on float with np.isclose()
 - Remove dataclass hash & to_pandas caching
-- Make sure that all pile tip levels have same order
+- Remove dataclass hash & to_pandas caching
 - Fix MaxBearingResults initiation & refactor
 - Update unit test
-- Remove dataclass hash & to_pandas caching
+- Make sure that all pile tip levels have same order
 - Add missing pile definitions plot
 
 ### Features
 - *Api*: Add verbose argument to functions in api module
-- Add lru_cache on MaxBearingResults.to_pandas
+- Rotate x-labels in 2D max-bearing plot
 - Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
+- Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
 - Denote CPT name in MaxBeraingTable.origin attribute
-- Add delaunay map
+- Resolve comments in mr
 - Add result bearing 3d plots to notebook
 - Add 3D plots for bearing results
 - Combine grouper and single results
-- Resolve comments in mr
-- Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
-- Rotate x-labels in 2D max-bearing plot
+- Add delaunay map
+- Add lru_cache on MaxBearingResults.to_pandas
 
 ### Miscellaneous Tasks
 - Update example notebook
 - Revert
 
 ### Styling
-- Lint file
 - Format file and fix typing errors
+- Lint file
 
 ## [0.3.4] - 2024-02-16
 
@@ -337,8 +342,8 @@ All notable changes to this project will be documented in this file.
 - Notebook and grouper workflow (#18)
 - Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
 - Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
-- Plot empty friction ratio in CPTTable.plot_friction_ratio()
 - Fix adding diameter_shaft property logic
+- Plot empty friction ratio in CPTTable.plot_friction_ratio()
 - Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
 - Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
 
@@ -353,8 +358,8 @@ All notable changes to this project will be documented in this file.
 - *Grouper*: Add grouper implementation (#7)
 - Add _shape class-attribute to Round- & RectPileProperties
 - Cast property getter responses of PileProperties & child objects
-- Raise ValueError for invalid pile_properties `height_base` input.
 - Add `name` property to PileProperties object
+- Raise ValueError for invalid pile_properties `height_base` input.
 - Add notebook example (#17)
 - Cast CPTGroupResultsTable attributes to numpy arrays
 
@@ -374,22 +379,19 @@ All notable changes to this project will be documented in this file.
 
 ### Testing
 - Add create_multi_cpt_payload unit-tests
-- Move grouper tests to "results" folder
+- Rename test_soil to test_input
+- Omit tests folder in superlinter
+- Add soilproperties tests
 - Add multi-cpt-results tests
 - Add results/test_pile_properties tests
-- Rename test_soil to test_input
 - Add create_pile_properties_payload tests
-- Omit tests folder in superlinter
+- Move grouper tests to "results" folder
 - Refactor pile_properties tests
-- Add soilproperties tests
 
 ### Deps
 - Update mypy==1.6.1 & black==23.10.1
 
 ## [0.1.0] - 2023-10-20
-
-### Documentation
-- Update README
 
 ### Features
 - Add empty module __init__.py
@@ -398,14 +400,15 @@ All notable changes to this project will be documented in this file.
 - Init pyproject.toml
 
 ### Styling
-- Add run_super_linters.sh bash script
 - Add github workflow job "lint" & update superlinter to v5
+- Add run_super_linters.sh bash script
 - Add .flake8 file
 
 ## [0.0.1] - 2023-10-20
 
 ### Documentation
 - Add docstrings to "create_payload" functions
+- Update README
 
 ### Features
 - Rename module folder name to "py_pilecore"
