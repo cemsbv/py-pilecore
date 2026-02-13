@@ -85,7 +85,7 @@ cryptography==46.0.3
     #   ansible-lint
 cycler==0.12.1
     # via matplotlib
-dash==3.3.0
+dash==4.0.0
     # via py-pilecore (pyproject.toml)
 decorator==5.2.1
     # via ipython
