@@ -416,7 +416,7 @@ sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
-sqlfluff==3.4.2
+sqlfluff==4.0.4
     # via py-pilecore (pyproject.toml)
 stack-data==0.6.3
     # via ipython
