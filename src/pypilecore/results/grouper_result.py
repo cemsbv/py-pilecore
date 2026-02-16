@@ -360,9 +360,6 @@ class SingleClusterResult:
         minimum pile level [m w.r.t NAP]
     number_of_consecutive_pile_levels: int
         number of consecutive pile levels
-    pile_load_check: bool
-        True if a minimum design pile bearing capacity based on the given pile load ULS at one or more
-        pile-tip levels.
     spatial_check: bool
         True if cluster is spatially coherent, which means there are no other CPTs in between the members
         of the subgroup.
@@ -380,7 +377,6 @@ class SingleClusterResult:
     maximum_pile_level: float
     minimum_pile_level: float
     number_of_consecutive_pile_levels: int
-    pile_load_check: bool
     spatial_check: bool
     variation_check: bool
     centre_to_centre_check: bool
@@ -401,7 +397,6 @@ class SingleClusterResult:
                 number_of_consecutive_pile_levels=response_dict[
                     "number_of_consecutive_pile_levels"
                 ],
-                pile_load_check=response_dict["pile_load_check"],
                 spatial_check=response_dict["spatial_check"],
                 variation_check=response_dict["variation_check"],
                 centre_to_centre_check=response_dict["centre_to_centre_check"],

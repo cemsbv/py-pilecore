@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PileCore
-  version: 2.0.5
+  version: 4.1.0
   description: >-
     PileCore aims to give you the full pile calculation utilities without an
     engineer in the loop. This means that calculations must be able to run from
@@ -323,7 +323,7 @@ paths:
                 norms:
                   $ref: "#/components/schemas/norms_schema"
                 pile_properties:
-                  anyOf:
+                  oneOf:
                     - $ref: "#/components/schemas/pile_standard_input_nen"
                     - $ref: "#/components/schemas/pile_standard_input_cur"
               required:
@@ -338,12 +338,12 @@ paths:
   /friction-ranges/lower-bound:
     post:
       operationId: api.web.friction_ranges.lower_bound
-      summary: Calculate the lower-bound friction ranges of a single CPT.
+      summary: Calculate the lower-bound friction ranges of multiple CPTs.
       tags:
         - Friction ranges
       description: >-
-        Returns negative and positive lower-bound friction ranges of a single
-        CPT.
+        Returns a list of negative and positive lower-bound friction ranges of multiple
+        CPTs.
       requestBody:
         content:
           application/json:
@@ -765,7 +765,54 @@ components:
           type: string
           description: Name of the pile
         geometry:
-          $ref: "#/components/schemas/pile_geometry_input"
+          type: object
+          description: >
+            The geometry of the pile. The geometry is defined by one or more pile
+            components and the materials that are used for these components.
+          properties:
+            components:
+              $ref: "#/components/schemas/pile_geometry_components_input"
+            materials:
+              type: array
+              description: |
+                Array of materials that can be assigned to the pile components.
+
+                If no material is specified, PileCore will use the default material
+                properties in accordance with the `standard_pile` property.
+              items:
+                anyOf:
+                  - $ref: "#/components/schemas/linear_elastic_material"
+                  - $ref: "#/components/schemas/elasto_plastic_material"
+                  - $ref: "#/components/schemas/elasto_brittle_material"
+              uniqueItems: true
+            custom_properties:
+              type: object
+              description: |
+                Custom pile shape properties.
+              properties:
+                pile_tip_factor_s:
+                  type: number
+                  description: >
+                    Factor s used in pile tip resistance calculation as per NEN
+                    9997-1 7.6.2.3 (h).
+
+                    If omited, the pile_tip_factor_s is inferred from the
+                    pile dimensions and soil properties. Providing a number here
+                    will overrule the pile_tip_factor_s for all pile tip levels.
+
+                    **unit: `-`**
+                beta_p:
+                  type: number
+                  description: >
+                    Factor s used in pile tip resistance calculation as per NEN
+                    9997-1 7.6.2.3 (h).
+
+                    The value is inferred from the dimensions of the pile components by
+                    default, but can be overwritten.
+
+                    **unit: `-`**
+          required:
+            - components
         pile_type:
           anyOf:
             - title: Standard Pile
@@ -824,6 +871,8 @@ components:
           $ref: "#/components/schemas/adhesion"
         is_auger:
           $ref: "#/components/schemas/is_auger"
+        diameter_method:
+          $ref: "#/components/schemas/diameter_method"
         installation_method:
           $ref: "#/components/schemas/installation_method"
         is_low_vibrating:
@@ -1048,6 +1097,8 @@ components:
           $ref: "#/components/schemas/adhesion"
         is_auger:
           $ref: "#/components/schemas/is_auger"
+        diameter_method:
+          $ref: "#/components/schemas/diameter_method"
         installation_method:
           $ref: "#/components/schemas/installation_method"
         is_low_vibrating:
@@ -1072,55 +1123,6 @@ components:
         - is_prefab
         - is_open_ended
         - chamfered
-    pile_geometry_input:
-      type: object
-      description: >
-        The geometry of the pile. The geometry is defined by one or more pile
-        components and the materials that are used for these components.
-      properties:
-        components:
-          $ref: "#/components/schemas/pile_geometry_components_input"
-        materials:
-          type: array
-          description: |
-            Array of materials that can be assigned to the pile components.
-
-            If no material is specified, PileCore will use the default material
-            properties in accordance with the `standard_pile` property.
-          items:
-            anyOf:
-              - $ref: "#/components/schemas/linear_elastic_material"
-              - $ref: "#/components/schemas/elasto_plastic_material"
-              - $ref: "#/components/schemas/elasto_brittle_material"
-          uniqueItems: true
-        custom_properties:
-          type: object
-          description: |
-            Custom pile shape properties.
-          properties:
-            pile_tip_factor_s:
-              type: number
-              description: >
-                Factor s used in pile tip resistance calculation as per NEN
-                9997-1 7.6.2.3 (h).
-
-                If omited, the pile_tip_factor_s is inferred from the
-                pile dimensions and soil properties. Providing a number here
-                will overrule the pile_tip_factor_s for all pile tip levels.
-
-                **unit: `-`**
-            beta_p:
-              type: number
-              description: >
-                Factor s used in pile tip resistance calculation as per NEN
-                9997-1 7.6.2.3 (h).
-
-                The value is inferred from the dimensions of the pile components by
-                default, but can be overwritten.
-
-                **unit: `-`**
-      required:
-        - components
     pile_geometry_components_input:
       type: array
       description: >
@@ -1598,6 +1600,7 @@ components:
             is_low_vibrating: false
             is_auger: false
             installation_method: excavated
+            diameter_method: default
             is_prefab: true
             is_open_ended: false
             is_anchor: false
@@ -1607,11 +1610,40 @@ components:
             qc_z_a_lesser_1m: 12.0
             qc_z_a_greater_1m: 15.0
             qb_max_limit: 15.0
-    input_pile_calculation_common:
+    bearing_calculation_multi_cpts_input:
       type: object
       properties:
+        pile_tip_levels_nap:
+          minItems: 1
+          type: array
+          items:
+            type: number
+          uniqueItems: true
+          description: |
+            Range of values for which the pile resistance is calculated.
+
+            **unit: `m NAP`**
+          example:
+            - -5
+            - -5.5
+            - -6
+        list_soil_properties:
+          type: array
+          description: >
+            Each object in this array represents a single CPT. The optional
+            fields will overwrite the 'general' value **for that CPT only**.
+
+            Note that the report a with `individual_cpt_results` content accepts
+            a maximum of 50 CPTs.
+          minItems: 1
+          items:
+            allOf:
+              - $ref: "#/components/schemas/soil_properties"
+              - $ref: "#/components/schemas/soil_arguments_multi_cpt"
         pile_properties:
-          $ref: "#/components/schemas/nen_pile_properties_input"
+          oneOf:
+            - $ref: "#/components/schemas/nen_pile_properties_input"
+            - $ref: "#/components/schemas/cur_pile_properties_input"
         pile_load:
           type: number
           description: >
@@ -1653,8 +1685,8 @@ components:
             Excavation parameter depending on pile installation method and/or
             phasing.
 
-             - Use 1.0 for post-excavation installation with vibration (i.e. hammering). 
-             - Use 0.5 for reduced-vibration installation, or pile installation prior to excavation method. 
+            - Use 1.0 for post-excavation installation with vibration (i.e. hammering). 
+            - Use 0.5 for reduced-vibration installation, or pile installation prior to excavation method. 
 
             See for more info **NEN 9997-1+C2:2017 7.6.2.3.(10)(k)**
           default: 1
@@ -1672,11 +1704,6 @@ components:
             Defaults to the `constant` method.
           example:
             stress_reduction_method: constant
-        norms:
-          $ref: "#/components/schemas/norms_schema"
-    input_pile_calculation_common_bearing:
-      type: object
-      properties:
         friction_settings:
           allOf:
             - type: object
@@ -1745,63 +1772,30 @@ components:
             If norm NEN-9997-1 version 2017 is selected, the qc3 reduction is by default
             applied for auger piles. If norm NEN-9997-1 version 2025 is selected, the
             qc3 is not applied by default.
-        pile_tip_levels_nap:
-          minItems: 1
+        norms:
+          $ref: "#/components/schemas/norms_schema"
+        overrule_xi:
+          $ref: "#/components/schemas/overrule_xi"
+        stiff_construction:
+          type: boolean
+          default: false
+          description: >
+            Set to True if it's a stiff costruction. This will have
+            influence on the xi factor.
+        cpts_group:
+          description: >-
+            CPT that are considered one group. Items must relate to the CPT
+            names in `list_soil_properties`
           type: array
           items:
-            type: number
+            type: string
           uniqueItems: true
-          description: |
-            Range of values for which the pile resistance is calculated.
-
-            **unit: `m NAP`**
           example:
-            - -5
-            - -5.5
-            - -6
+            - CPT101
       required:
+        - pile_properties
+        - list_soil_properties
         - pile_tip_levels_nap
-    bearing_calculation_multi_cpts_input:
-      allOf:
-        - $ref: "#/components/schemas/input_pile_calculation_common"
-        - $ref: "#/components/schemas/input_pile_calculation_common_bearing"
-        - type: object
-          properties:
-            overrule_xi: 
-              $ref: "#/components/schemas/overrule_xi"
-            list_soil_properties:
-              type: array
-              description: >
-                Each object in this array represents a single CPT. The optional
-                fields will overwrite the 'general' value **for that CPT only**.
-
-                Note that the report a with `individual_cpt_results` content accepts
-                a maximum of 50 CPTs.
-              minItems: 1
-              items:
-                allOf:
-                  - $ref: "#/components/schemas/soil_properties"
-                  - $ref: "#/components/schemas/soil_arguments_multi_cpt"
-            stiff_construction:
-              type: boolean
-              default: false
-              description: >
-                Set to True if it's a stiff costruction. This will have
-                influence on the xi factor.
-            cpts_group:
-              description: >-
-                CPT that are considered one group. Items must relate to the CPT
-                names in `list_soil_properties`
-              type: array
-              items:
-                type: string
-              uniqueItems: true
-              example:
-                - CPT101
-          required:
-            - pile_properties
-            - list_soil_properties
-            - pile_tip_levels_nap
     input_friction_ranges_lower_bound:
       type: object
       properties:
@@ -1821,112 +1815,112 @@ components:
       example:
         pile_tip_level_nap: -0.7
         soil_properties_list:
-            - coordinates:
-                  x: 142892.19
-                  y: 470783.87
-              cpt_data:
-                depth:
-                  - 0
-                  - 0.1
-                  - 0.2
-                  - 0.3
-                  - 0.4
-                  - 0.5
-                  - 0.6
-                  - 0.7
-                  - 0.8
-                  - 0.9
-                  - 1
-                qc:
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-              layer_table_data:
-                lower_boundary:
-                  - 0.5
-                  - 2
-                gamma_unsat:
-                  - 15
-                  - 19
-                gamma_sat:
-                  - 15
-                  - 21
-                index:
-                  - 0
-                  - 1
-                phi:
-                  - 0.2
-                  - 0.4799655443
-                main_component:
-                  - clay
-                  - sand
-                thickness:
-                  - 0.5
-                  - 1.5
-              ref_height: 0
-              test_id: cpt_001
-              water_pressure: 0.00981
-            - coordinates:
-                  x: 142892.19
-                  y: 470783.87
-              cpt_data:
-                depth:
-                  - 0
-                  - 0.1
-                  - 0.2
-                  - 0.3
-                  - 0.4
-                  - 0.5
-                  - 0.6
-                  - 0.7
-                  - 0.8
-                  - 0.9
-                  - 1
-                qc:
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-                    - 1
-              layer_table_data:
-                lower_boundary:
-                  - 0.5
-                  - 2
-                gamma_unsat:
-                  - 15
-                  - 19
-                gamma_sat:
-                  - 15
-                  - 21
-                index:
-                  - 0
-                  - 1
-                phi:
-                  - 0.2
-                  - 0.4799655443
-                main_component:
-                  - clay
-                  - sand
-                thickness:
-                  - 0.5
-                  - 1.5
-              ref_height: 0
-              test_id: cpt_002
-              water_pressure: 0.00981
+          - coordinates:
+              x: 142892.19
+              y: 470783.87
+            cpt_data:
+              depth:
+                - 0
+                - 0.1
+                - 0.2
+                - 0.3
+                - 0.4
+                - 0.5
+                - 0.6
+                - 0.7
+                - 0.8
+                - 0.9
+                - 1
+              qc:
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+            layer_table_data:
+              lower_boundary:
+                - 0.5
+                - 2
+              gamma_unsat:
+                - 15
+                - 19
+              gamma_sat:
+                - 15
+                - 21
+              index:
+                - 0
+                - 1
+              phi:
+                - 0.2
+                - 0.4799655443
+              main_component:
+                - clay
+                - sand
+              thickness:
+                - 0.5
+                - 1.5
+            ref_height: 0
+            test_id: cpt_001
+            water_pressure: 0.00981
+          - coordinates:
+              x: 142892.19
+              y: 470783.87
+            cpt_data:
+              depth:
+                - 0
+                - 0.1
+                - 0.2
+                - 0.3
+                - 0.4
+                - 0.5
+                - 0.6
+                - 0.7
+                - 0.8
+                - 0.9
+                - 1
+              qc:
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+                - 1
+            layer_table_data:
+              lower_boundary:
+                - 0.5
+                - 2
+              gamma_unsat:
+                - 15
+                - 19
+              gamma_sat:
+                - 15
+                - 21
+              index:
+                - 0
+                - 1
+              phi:
+                - 0.2
+                - 0.4799655443
+              main_component:
+                - clay
+                - sand
+              thickness:
+                - 0.5
+                - 1.5
+            ref_height: 0
+            test_id: cpt_002
+            water_pressure: 0.00981
       required:
         - soil_properties_list
         - pile_tip_level_nap
@@ -2097,6 +2091,21 @@ components:
           example: false
           description: |
             Determines whether the pile the pile is an auger pile or not.
+        diameter_method:
+          type: string
+          enum:
+            - "section"
+            - "diameter_micro"
+            - "default"
+          description: >
+            Calculation method of the `d;eq` and/or `D;eq` of the pile related to Table 7.c.2 of NEN9997-1 (2025).
+              - *section* `d;eq` and `D;eq` according to S2 piles.
+                  - d;eq equal to the circumference of the pile shaft divided by PI
+                  - D;eq equal to the smallest width of the base
+              - *diameter_micro*: `d;eq` and `D;eq` according to MA1, MA2, MB1, MB2 and MC piles
+                  - d;eq equal to the diameter of the shaft + 20 mm
+                  - D;eq equal to the diameter of the base
+              - *default*: `d;eq` and `D;eq` equal to pile dimension (diameter) or 1.5.2.106a/b
         is_low_vibrating:
           type: boolean
           example: true
@@ -2195,6 +2204,7 @@ components:
         - settlement_curve
         - adhesion
         - installation_method
+        - diameter_method
         - is_prefab
         - is_open_ended
         - qc_z_a_lesser_1m
@@ -2216,6 +2226,7 @@ components:
         settlement_curve: 1
         adhesion: null
         installation_method: screwed
+        diameter_method: default
         is_prefab: true
         is_open_ended: false
         qc_z_a_lesser_1m: 12.0
@@ -2447,13 +2458,6 @@ components:
                 type: boolean
                 example: true
                 description: Bool that validates if CTC is correct.
-              pile_load_check:
-                type: boolean
-                example: true
-                description: >-
-                  Bool that validates if depth variation coefficients is equal
-                  or below 12% and net bearing capacity larger than pile load
-                  uls
               minimum_pile_level:
                 type: number
                 example: 0
@@ -2665,7 +2669,6 @@ components:
               - names
               - variation_check
               - spatial_check
-              - pile_load_check
               - number_of_consecutive_pile_levels
               - coordinates
               - table
@@ -4717,6 +4720,24 @@ components:
         interpreted as non-vibrating methods: "excavated", "pressed", "jetted",
         "screwed".
 
+        The value is inferred from the `standard_pile` specification by default, but
+        can be overwritten.
+    diameter_method:
+      type: string
+      enum:
+        - "section"
+        - "default"
+        - "diameter_micro"
+      description: >
+        Calculation method of the `d;eq` and/or `D;eq` of the pile related to Table 7.c.2 of NEN9997-1 (2025).
+          - *section* `d;eq` and `D;eq` according to S2 piles.
+              - d;eq equal to the circumference of the pile shaft divided by PI
+              - D;eq equal to the smallest width of the base
+          - *diameter_micro*: `d;eq` and `D;eq` according to MA1, MA2, MB1, MB2 and MC piles
+              - d;eq equal to the diameter of the shaft + 20 mm
+              - D;eq equal to the diameter of the base
+          - *default*: `d;eq` and `D;eq` equal to pile dimension (diameter) or 1.5.2.106a/b
+    
         The value is inferred from the `standard_pile` specification by default, but
         can be overwritten.
     is_low_vibrating:
