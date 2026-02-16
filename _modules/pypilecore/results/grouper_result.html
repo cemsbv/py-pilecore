@@ -451,9 +451,6 @@
 <span class="sd">        minimum pile level [m w.r.t NAP]</span>
 <span class="sd">    number_of_consecutive_pile_levels: int</span>
 <span class="sd">        number of consecutive pile levels</span>
-<span class="sd">    pile_load_check: bool</span>
-<span class="sd">        True if a minimum design pile bearing capacity based on the given pile load ULS at one or more</span>
-<span class="sd">        pile-tip levels.</span>
 <span class="sd">    spatial_check: bool</span>
 <span class="sd">        True if cluster is spatially coherent, which means there are no other CPTs in between the members</span>
 <span class="sd">        of the subgroup.</span>
@@ -471,7 +468,6 @@
     <span class="n">maximum_pile_level</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">minimum_pile_level</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">number_of_consecutive_pile_levels</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">pile_load_check</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">spatial_check</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">variation_check</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">centre_to_centre_check</span><span class="p">:</span> <span class="nb">bool</span>
@@ -492,7 +488,6 @@
                 <span class="n">number_of_consecutive_pile_levels</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span>
                     <span class="s2">&quot;number_of_consecutive_pile_levels&quot;</span>
                 <span class="p">],</span>
-                <span class="n">pile_load_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;pile_load_check&quot;</span><span class="p">],</span>
                 <span class="n">spatial_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;spatial_check&quot;</span><span class="p">],</span>
                 <span class="n">variation_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;variation_check&quot;</span><span class="p">],</span>
                 <span class="n">centre_to_centre_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;centre_to_centre_check&quot;</span><span class="p">],</span>
