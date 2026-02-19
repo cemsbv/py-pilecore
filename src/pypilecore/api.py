@@ -116,6 +116,8 @@ def get_task_result_pipeline(
         the payload of the request
     verbose: bool
         if True, print additional information to the console
+    response_type: Literal["dict", "bytes"]
+        the type of the response, either "dict" or "bytes"
     save_failed_payload: bool
         if True, save the payload to a file in case of failure
     failed_payload_filename: str
@@ -166,6 +168,10 @@ def get_multi_cpt_api_result(
         the payload of the request, can be created by calling `create_grouper_payload()`
     verbose: bool
         if True, print additional information to the console
+    save_failed_payload: bool
+        if True, save the payload to a file in case of failure
+    failed_payload_filename: str
+        the name of the file to save the failed payload to
     """
     logging.info(
         "Calculating bearing capacities... \n"
@@ -200,6 +206,10 @@ def get_multi_cpt_api_report(
         the payload of the request, can be created by calling `create_grouper_payload()`
     verbose: bool
         if True, print additional information to the console
+    save_failed_payload: bool
+        if True, save the payload to a file in case of failure
+    failed_payload_filename: str
+        the name of the file to save the failed payload to
     """
     logging.info(
         "Generate report... \n"
@@ -234,6 +244,10 @@ def get_groups_api_result(
         the payload of the request, can be created by calling `create_grouper_payload()`
     verbose: bool
         if True, print additional information to the console
+    save_failed_payload: bool
+        if True, save the payload to a file in case of failure
+    failed_payload_filename: str
+        the name of the file to save the failed payload to
     """
     logging.info(
         "Finding groups... \n"
@@ -268,6 +282,10 @@ def get_groups_api_report(
         the payload of the request, can be created by calling `create_grouper_report_payload()`
     verbose: bool
         if True, print additional information to the console
+    save_failed_payload: bool
+        if True, save the payload to a file in case of failure
+    failed_payload_filename: str
+        the name of the file to save the failed payload to
     """
     logging.info(
         "Generate report... \n"
@@ -317,7 +335,7 @@ def _get_standard_path_from_payload(payload: dict) -> STANDARD_PATH:
 def get_multi_cpt_api_result_tension(
     client: NucleiClient,
     payload: dict,
-    standard: Literal["NEN9997-1", "CUR236"] = "NEN9997-1",
+    standard: Literal["NEN9997-1", "CUR236"] | None = None,
     verbose: bool = False,
     save_failed_payload: bool = False,
     failed_payload_filename: str = "pilecore_multi_cpt_tension_result_debug_payload.json",
@@ -369,7 +387,7 @@ def get_multi_cpt_api_result_tension(
 def get_multi_cpt_api_report_tension(
     client: NucleiClient,
     payload: dict,
-    standard: Literal["NEN9997-1", "CUR236"] = None,
+    standard: Literal["NEN9997-1", "CUR236"] | None = None,
     verbose: bool = False,
     save_failed_payload: bool = False,
     failed_payload_filename: str = "pilecore_multi_cpt_tension_report_debug_payload.json",
@@ -390,8 +408,10 @@ def get_multi_cpt_api_report_tension(
         Defaults to NEN9997-1 if the pile-type is not recognized.
     verbose: bool
         if True, print additional information to the console
-    standard: str
-        Norm used to calculate bearing capacities
+    save_failed_payload: bool
+        if True, save the payload to a file in case of failure
+    failed_payload_filename: str
+        the name of the file to save the failed payload to
     """
     logging.info(
         "Generate report... \n"
