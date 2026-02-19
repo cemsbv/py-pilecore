@@ -73,6 +73,7 @@
              
   <h1>Source code for pypilecore.api</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">StrEnum</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">overload</span>
 
@@ -189,6 +190,8 @@
 <span class="sd">        the payload of the request</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    response_type: Literal[&quot;dict&quot;, &quot;bytes&quot;]</span>
+<span class="sd">        the type of the response, either &quot;dict&quot; or &quot;bytes&quot;</span>
 <span class="sd">    save_failed_payload: bool</span>
 <span class="sd">        if True, save the payload to a file in case of failure</span>
 <span class="sd">    failed_payload_filename: str</span>
@@ -241,6 +244,10 @@
 <span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    save_failed_payload: bool</span>
+<span class="sd">        if True, save the payload to a file in case of failure</span>
+<span class="sd">    failed_payload_filename: str</span>
+<span class="sd">        the name of the file to save the failed payload to</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -278,6 +285,10 @@
 <span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    save_failed_payload: bool</span>
+<span class="sd">        if True, save the payload to a file in case of failure</span>
+<span class="sd">    failed_payload_filename: str</span>
+<span class="sd">        the name of the file to save the failed payload to</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -315,6 +326,10 @@
 <span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    save_failed_payload: bool</span>
+<span class="sd">        if True, save the payload to a file in case of failure</span>
+<span class="sd">    failed_payload_filename: str</span>
+<span class="sd">        the name of the file to save the failed payload to</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Finding groups... </span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -352,6 +367,10 @@
 <span class="sd">        the payload of the request, can be created by calling `create_grouper_report_payload()`</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
+<span class="sd">    save_failed_payload: bool</span>
+<span class="sd">        if True, save the payload to a file in case of failure</span>
+<span class="sd">    failed_payload_filename: str</span>
+<span class="sd">        the name of the file to save the failed payload to</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -369,11 +388,41 @@
 
 
 
+<span class="k">class</span><span class="w"> </span><span class="nc">STANDARD_PATH</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+    <span class="n">NEN9997_1</span> <span class="o">=</span> <span class="s2">&quot;nen&quot;</span>
+    <span class="n">CUR236</span> <span class="o">=</span> <span class="s2">&quot;cur&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UpliftEndpoint</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+    <span class="n">MULTI_CPT_RESULT</span> <span class="o">=</span> <span class="s2">&quot;/uplift/</span><span class="si">{standard}</span><span class="s2">/multiple-cpts/results&quot;</span>
+    <span class="n">MULTI_CPT_REPORT</span> <span class="o">=</span> <span class="s2">&quot;/uplift/</span><span class="si">{standard}</span><span class="s2">/multiple-cpts/report&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">STANDARD_PATH</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Infer the standard to use for the tension API from the payload.</span>
+<span class="sd">    The standard is inferred from the pile type reference in the payload.</span>
+<span class="sd">     - If the reference is one of [&quot;AA1&quot;, &quot;AA2&quot;, &quot;AB1&quot;, &quot;AB2&quot;, &quot;AC&quot;, &quot;AD&quot;, &quot;AE&quot;], CUR236 is used.</span>
+<span class="sd">     - For all other references, NEN9997-1 is used.</span>
+<span class="sd">     - If the pile type reference is not found in the payload, NEN9997-1 is used by default.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pile_properties&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pile_type&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reference&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">reference</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;AA1&quot;</span><span class="p">,</span> <span class="s2">&quot;AA2&quot;</span><span class="p">,</span> <span class="s2">&quot;AB1&quot;</span><span class="p">,</span> <span class="s2">&quot;AB2&quot;</span><span class="p">,</span> <span class="s2">&quot;AC&quot;</span><span class="p">,</span> <span class="s2">&quot;AD&quot;</span><span class="p">,</span> <span class="s2">&quot;AE&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">CUR236</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">NEN9997_1</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">get_multi_cpt_api_result_tension</span><span class="p">(</span>
     <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_tension_result_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -386,20 +435,29 @@
 <span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
 <span class="sd">    payload: dict</span>
 <span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    standard: str</span>
+<span class="sd">        Norm used to calculate bearing capacities.</span>
+<span class="sd">        Will be inferred from the standard pile-type in payload if not provided,</span>
+<span class="sd">        but can be explicitly set to override this.</span>
+<span class="sd">        Defaults to NEN9997-1 if the pile-type is not recognized.</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
-<span class="sd">    standard: str</span>
-<span class="sd">        Norm used to calculate bearing capacities</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
-    <span class="k">if</span> <span class="n">standard</span> <span class="o">==</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/nen/multiple-cpts/results&quot;</span>
+    <span class="k">if</span> <span class="n">standard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/cur/multiple-cpts/results&quot;</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">(</span><span class="n">standard</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">standard_path</span> <span class="o">==</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">NEN9997_1</span><span class="p">:</span>
         <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="n">UpliftEndpoint</span><span class="o">.</span><span class="n">MULTI_CPT_RESULT</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">standard</span><span class="o">=</span><span class="n">standard_path</span><span class="o">.</span><span class="n">value</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
         <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
@@ -415,8 +473,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_multi_cpt_api_report_tension</span><span class="p">(</span>
     <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_tension_report_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
@@ -429,21 +487,34 @@
 <span class="sd">        client object created by [nuclei](https://github.com/cemsbv/nuclei)</span>
 <span class="sd">    payload: dict</span>
 <span class="sd">        the payload of the request, can be created by calling `create_grouper_payload()`</span>
+<span class="sd">    standard: str</span>
+<span class="sd">        Norm used to calculate bearing capacities.</span>
+<span class="sd">        Will be inferred from the standard pile-type in payload if not provided,</span>
+<span class="sd">        but can be explicitly set to override this.</span>
+<span class="sd">        Defaults to NEN9997-1 if the pile-type is not recognized.</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
-<span class="sd">    standard: str</span>
-<span class="sd">        Norm used to calculate bearing capacities</span>
+<span class="sd">    save_failed_payload: bool</span>
+<span class="sd">        if True, save the payload to a file in case of failure</span>
+<span class="sd">    failed_payload_filename: str</span>
+<span class="sd">        the name of the file to save the failed payload to</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">standard</span> <span class="o">==</span> <span class="s2">&quot;NEN9997-1&quot;</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/nen/multiple-cpts/report&quot;</span>
+    <span class="k">if</span> <span class="n">standard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;/uplift/cur/multiple-cpts/report&quot;</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">(</span><span class="n">standard</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">standard_path</span> <span class="o">==</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">NEN9997_1</span><span class="p">:</span>
         <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="n">UpliftEndpoint</span><span class="o">.</span><span class="n">MULTI_CPT_REPORT</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">standard</span><span class="o">=</span><span class="n">standard_path</span><span class="o">.</span><span class="n">value</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
         <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
