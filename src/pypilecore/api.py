@@ -1,4 +1,5 @@
 import logging
+from enum import StrEnum
 from time import sleep
 from typing import Literal, overload
 
@@ -283,11 +284,41 @@ def get_groups_api_report(
     )
 
 
+class STANDARD_PATH(StrEnum):
+    NEN9997_1 = "nen"
+    CUR236 = "cur"
+
+
+class UpliftEndpoint(StrEnum):
+    MULTI_CPT_RESULT = "/uplift/{standard}/multiple-cpts/results"
+    MULTI_CPT_REPORT = "/uplift/{standard}/multiple-cpts/report"
+
+
+def _get_standard_path_from_payload(payload: dict) -> STANDARD_PATH:
+    """
+    Infer the standard to use for the tension API from the payload.
+    The standard is inferred from the pile type reference in the payload.
+     - If the reference is one of ["AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE"], CUR236 is used.
+     - For all other references, NEN9997-1 is used.
+     - If the pile type reference is not found in the payload, NEN9997-1 is used by default.
+    """
+    reference: str = (
+        payload.get("pile_properties", {})
+        .get("pile_type", {})
+        .get("standard_pile", {})
+        .get("reference", "")
+    )
+    if reference in ("AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE"):
+        return STANDARD_PATH.CUR236
+    else:
+        return STANDARD_PATH.NEN9997_1
+
+
 def get_multi_cpt_api_result_tension(
     client: NucleiClient,
     payload: dict,
-    verbose: bool = False,
     standard: Literal["NEN9997-1", "CUR236"] = "NEN9997-1",
+    verbose: bool = False,
     save_failed_payload: bool = False,
     failed_payload_filename: str = "pilecore_multi_cpt_tension_result_debug_payload.json",
 ) -> dict:
@@ -300,20 +331,29 @@ def get_multi_cpt_api_result_tension(
         client object created by [nuclei](https://github.com/cemsbv/nuclei)
     payload: dict
         the payload of the request, can be created by calling `create_grouper_payload()`
+    standard: str
+        Norm used to calculate bearing capacities.
+        Will be inferred from the standard pile-type in payload if not provided,
+        but can be explicitly set to override this.
+        Defaults to NEN9997-1 if the pile-type is not recognized.
     verbose: bool
         if True, print additional information to the console
-    standard: str
-        Norm used to calculate bearing capacities
     """
     logging.info(
         "Calculating bearing capacities... \n"
         "Depending on the amount of pile tip levels and CPT's this can take a while."
     )
-    if standard == "NEN9997-1":
-        endpoint = "/uplift/nen/multiple-cpts/results"
+    if standard is None:
+        standard_path = _get_standard_path_from_payload(payload)
     else:
-        endpoint = "/uplift/cur/multiple-cpts/results"
+        standard_path = STANDARD_PATH(standard)
+
+    if standard_path == STANDARD_PATH.NEN9997_1:
         payload.pop("construction_sequence", None)
+
+    endpoint = UpliftEndpoint.MULTI_CPT_RESULT.value.format(
+        standard=standard_path.value
+    )
 
     return get_task_result_pipeline(
         client=client,
@@ -329,8 +369,8 @@ def get_multi_cpt_api_result_tension(
 def get_multi_cpt_api_report_tension(
     client: NucleiClient,
     payload: dict,
+    standard: Literal["NEN9997-1", "CUR236"] = None,
     verbose: bool = False,
-    standard: Literal["NEN9997-1", "CUR236"] = "NEN9997-1",
     save_failed_payload: bool = False,
     failed_payload_filename: str = "pilecore_multi_cpt_tension_report_debug_payload.json",
 ) -> bytes:
@@ -343,6 +383,11 @@ def get_multi_cpt_api_report_tension(
         client object created by [nuclei](https://github.com/cemsbv/nuclei)
     payload: dict
         the payload of the request, can be created by calling `create_grouper_payload()`
+    standard: str
+        Norm used to calculate bearing capacities.
+        Will be inferred from the standard pile-type in payload if not provided,
+        but can be explicitly set to override this.
+        Defaults to NEN9997-1 if the pile-type is not recognized.
     verbose: bool
         if True, print additional information to the console
     standard: str
@@ -353,11 +398,17 @@ def get_multi_cpt_api_report_tension(
         "Depending on the amount of pile tip levels and CPT's this can take a while."
     )
 
-    if standard == "NEN9997-1":
-        endpoint = "/uplift/nen/multiple-cpts/report"
+    if standard is None:
+        standard_path = _get_standard_path_from_payload(payload)
     else:
-        endpoint = "/uplift/cur/multiple-cpts/report"
+        standard_path = STANDARD_PATH(standard)
+
+    if standard_path == STANDARD_PATH.NEN9997_1:
         payload.pop("construction_sequence", None)
+
+    endpoint = UpliftEndpoint.MULTI_CPT_REPORT.value.format(
+        standard=standard_path.value
+    )
 
     return get_task_result_pipeline(
         client=client,
