@@ -247,7 +247,7 @@ packaging==25.0
     #   plotly
     #   pytest
     #   sphinx
-pandas==2.3.3
+pandas==3.0.1
     # via py-pilecore (pyproject.toml)
 parso==0.8.5
     # via jedi
