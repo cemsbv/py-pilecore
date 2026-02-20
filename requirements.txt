@@ -391,7 +391,7 @@ six==1.17.0
     #   rfc3339-validator
 snowballstemmer==3.0.1
     # via sphinx
-sphinx==8.2.3
+sphinx==9.1.0
     # via
     #   py-pilecore (pyproject.toml)
     #   asteroid-sphinx-theme
