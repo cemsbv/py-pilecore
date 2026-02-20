@@ -80,6 +80,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">nuclei.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">NucleiClient</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.piles.type</span><span class="w"> </span><span class="kn">import</span> <span class="n">_is_anchor_reference</span>
+
 
 <span class="k">def</span><span class="w"> </span><span class="nf">wait_until_ticket_is_ready</span><span class="p">(</span>
     <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">ticket</span><span class="p">:</span> <span class="n">Response</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
@@ -412,7 +414,7 @@
         <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reference&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="k">if</span> <span class="n">reference</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;AA1&quot;</span><span class="p">,</span> <span class="s2">&quot;AA2&quot;</span><span class="p">,</span> <span class="s2">&quot;AB1&quot;</span><span class="p">,</span> <span class="s2">&quot;AB2&quot;</span><span class="p">,</span> <span class="s2">&quot;AC&quot;</span><span class="p">,</span> <span class="s2">&quot;AD&quot;</span><span class="p">,</span> <span class="s2">&quot;AE&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">_is_anchor_reference</span><span class="p">(</span><span class="n">reference</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">CUR236</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">NEN9997_1</span>

@@ -83,7 +83,7 @@
     <span class="n">RoundPileGeometryComponent</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.piles.geometry.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">MATERIALS</span><span class="p">,</span> <span class="n">PileMaterial</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.piles.type</span><span class="w"> </span><span class="kn">import</span> <span class="n">PileType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.common.piles.type</span><span class="w"> </span><span class="kn">import</span> <span class="n">PileType</span><span class="p">,</span> <span class="n">_is_anchor_reference</span>
 
 
 <div class="viewcode-block" id="PileProperties">
@@ -398,6 +398,14 @@
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="n">base_diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">height_base</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="n">reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_anchor_reference</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+            <span class="p">):</span>  <span class="c1"># For non-anchor piles, `height_base` is required if `base_diameter` is provided</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;`height_base` must not be `None` for a round pile if `base_diameter` is provided.&quot;</span>
+                <span class="p">)</span>
             <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">RoundPileGeometryComponent</span><span class="p">(</span>
                     <span class="n">diameter</span><span class="o">=</span><span class="n">base_diameter</span><span class="p">,</span>
@@ -424,6 +432,14 @@
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="n">base_secondary_dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">height_base</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="n">reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_anchor_reference</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+            <span class="p">):</span>  <span class="c1"># For non-anchor piles, `height_base` is required if `base_secondary_dimension` is provided</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;`height_base` must not be `None` for a rectangular pile if `base_secondary_dimension` is provided.&quot;</span>
+                <span class="p">)</span>
             <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">RectPileGeometryComponent</span><span class="p">(</span>
                     <span class="n">secondary_dimension</span><span class="o">=</span><span class="n">base_secondary_dimension</span><span class="p">,</span>
