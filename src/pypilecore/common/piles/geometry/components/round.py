@@ -17,6 +17,7 @@ from pypilecore.common.piles.geometry.components.common import (
     get_component_bounds_nap,
     instantiate_axes,
 )
+from pypilecore.common.piles.geometry.components.plot import plot_side_view
 
 
 class RoundPileGeometryComponent(_BasePileGeometryComponent):
@@ -401,44 +402,17 @@ class RoundPileGeometryComponent(_BasePileGeometryComponent):
         Axes
             The axes object to plot the cross-section on.
         """
-        axes = instantiate_axes(
+        return plot_side_view(
+            get_component_bounds_nap=self.get_component_bounds_nap,
+            width_offset=self.cross_section_bounds[0],
+            width=self.diameter,
+            bottom_boundary_nap=bottom_boundary_nap,
+            top_boundary_nap=top_boundary_nap,
+            pile_tip_level_nap=pile_tip_level_nap,
+            pile_head_level_nap=pile_head_level_nap,
             figsize=figsize,
+            facecolor=facecolor,
             axes=axes,
-            **kwargs,
+            axis_arg=axis_arg,
+            show=show,
         )
-
-        if top_boundary_nap == "pile_head":
-            top_boundary_nap = pile_head_level_nap
-
-        if bottom_boundary_nap == "pile_tip":
-            bottom_boundary_nap = pile_tip_level_nap
-
-        (
-            component_head_level_nap,
-            component_tip_level_nap,
-        ) = self.get_component_bounds_nap(pile_tip_level_nap, pile_head_level_nap)
-
-        if (
-            top_boundary_nap > component_tip_level_nap
-            and bottom_boundary_nap < component_head_level_nap
-        ):
-            z_offset = component_head_level_nap
-            height = (
-                max(component_tip_level_nap, bottom_boundary_nap)
-                - component_head_level_nap
-            )
-
-            axes.add_patch(
-                patches.Rectangle(
-                    (self.cross_section_bounds[0], z_offset),
-                    self.diameter,
-                    height,
-                    facecolor=facecolor,
-                )
-            )
-
-        if axis_arg:
-            axes.axis(axis_arg)
-        if show:
-            plt.show()
-        return axes
