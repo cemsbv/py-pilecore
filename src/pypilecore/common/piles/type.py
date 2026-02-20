@@ -3,6 +3,15 @@ from __future__ import annotations
 from typing import Dict
 
 
+def _is_anchor_reference(reference: str) -> bool:
+    """
+    Infer whether the pile is an anchor from the pile type reference in the payload.
+     - If the reference is one of ["AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE"], it is an anchor.
+     - For all other references, it is not an anchor.
+    """
+    return reference in ("AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE")
+
+
 class PileType:
     """The PileType class represents the type of a pile."""
 

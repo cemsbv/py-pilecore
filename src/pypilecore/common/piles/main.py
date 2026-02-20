@@ -9,7 +9,7 @@ from pypilecore.common.piles.geometry.components import (
     RoundPileGeometryComponent,
 )
 from pypilecore.common.piles.geometry.materials import MATERIALS, PileMaterial
-from pypilecore.common.piles.type import PileType
+from pypilecore.common.piles.type import PileType, _is_anchor_reference
 
 
 class PileProperties:
@@ -313,6 +313,14 @@ def create_basic_pile(
         ]
 
         if base_diameter is not None:
+            if (
+                height_base is None
+                and reference is not None
+                and not _is_anchor_reference(reference)
+            ):  # For non-anchor piles, `height_base` is required if `base_diameter` is provided
+                raise ValueError(
+                    "`height_base` must not be `None` for a round pile if `base_diameter` is provided."
+                )
             components.append(
                 RoundPileGeometryComponent(
                     diameter=base_diameter,
@@ -339,6 +347,14 @@ def create_basic_pile(
         ]
 
         if base_secondary_dimension is not None:
+            if (
+                height_base is None
+                and reference is not None
+                and not _is_anchor_reference(reference)
+            ):  # For non-anchor piles, `height_base` is required if `base_secondary_dimension` is provided
+                raise ValueError(
+                    "`height_base` must not be `None` for a rectangular pile if `base_secondary_dimension` is provided."
+                )
             components.append(
                 RectPileGeometryComponent(
                     secondary_dimension=base_secondary_dimension,

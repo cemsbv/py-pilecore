@@ -6,6 +6,8 @@ from typing import Literal, overload
 from nuclei.client import NucleiClient
 from requests import Response
 
+from pypilecore.common.piles.type import _is_anchor_reference
+
 
 def wait_until_ticket_is_ready(
     client: NucleiClient, ticket: Response, verbose: bool = False
@@ -326,7 +328,7 @@ def _get_standard_path_from_payload(payload: dict) -> STANDARD_PATH:
         .get("standard_pile", {})
         .get("reference", "")
     )
-    if reference in ("AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE"):
+    if _is_anchor_reference(reference):
         return STANDARD_PATH.CUR236
     else:
         return STANDARD_PATH.NEN9997_1
