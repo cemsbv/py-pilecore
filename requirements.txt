@@ -79,7 +79,7 @@ coveralls==4.0.2
     # via py-pilecore (pyproject.toml)
 cpplint==2.0.2
     # via py-pilecore (pyproject.toml)
-cryptography==46.0.3
+cryptography==46.0.5
     # via
     #   ansible-core
     #   ansible-lint
