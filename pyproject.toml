@@ -33,7 +33,7 @@ repository = "https://github.com/cemsbv/py-pilecore"
 [project.optional-dependencies]
 test = ["coveralls", "pytest", "openapi-core"]
 docs = [
-  "Sphinx==8.2.3",
+  "Sphinx==9.1.0",
   "asteroid-sphinx-theme==0.0.3",
   "ipython==9.7.0",
   "sphinx-autodoc-typehints==3.5.2",
