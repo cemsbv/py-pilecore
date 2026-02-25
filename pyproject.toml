@@ -44,7 +44,7 @@ docs = [
 # Get a file with the latest requirements by running bash: `./get-super-linter-requirements.sh`
 # ignoring because redundant: snakemake, snakefmt, pylint
 lint = [
-  "ansible-lint==25.11.1",
+  "ansible-lint==26.2.0",
   "black==25.11.0",
   "cfn-lint==1.41.0",
   "cpplint==2.0.2",
