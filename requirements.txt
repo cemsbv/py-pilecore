@@ -10,7 +10,7 @@ ansible-core==2.19.5
     # via
     #   ansible-compat
     #   ansible-lint
-ansible-lint==25.11.1
+ansible-lint==26.2.0
     # via py-pilecore (pyproject.toml)
 anywidget==0.9.21
     # via py-pilecore (pyproject.toml)
