@@ -4,13 +4,13 @@ alabaster==1.0.0
     # via sphinx
 annotated-types==0.7.0
     # via pydantic
-ansible-compat==25.12.0
+ansible-compat==25.12.1
     # via ansible-lint
-ansible-core==2.19.5
+ansible-core==2.20.3
     # via
     #   ansible-compat
     #   ansible-lint
-ansible-lint==25.11.1
+ansible-lint==25.12.2
     # via py-pilecore (pyproject.toml)
 anywidget==0.9.21
     # via py-pilecore (pyproject.toml)
@@ -26,19 +26,19 @@ attrs==25.4.0
     #   referencing
 autopep8==2.3.2
     # via nbqa
-aws-sam-translator==1.106.0
+aws-sam-translator==1.107.0
     # via cfn-lint
-babel==2.17.0
+babel==2.18.0
     # via sphinx
-black==25.11.0
+black==25.12.0
     # via
     #   py-pilecore (pyproject.toml)
     #   ansible-lint
 blinker==1.9.0
     # via flask
-boto3==1.42.30
+boto3==1.42.59
     # via aws-sam-translator
-botocore==1.42.30
+botocore==1.42.59
     # via
     #   boto3
     #   s3transfer
@@ -46,7 +46,7 @@ bracex==2.6
     # via wcmatch
 cems-nuclei==3.2.0
     # via py-pilecore (pyproject.toml)
-certifi==2026.1.4
+certifi==2026.2.25
     # via requests
 cffi==2.0.0
     # via
@@ -54,7 +54,7 @@ cffi==2.0.0
     #   cryptography
 cfgv==3.5.0
     # via pre-commit
-cfn-lint==1.41.0
+cfn-lint==1.45.0
     # via py-pilecore (pyproject.toml)
 chardet==5.2.0
     # via
@@ -62,7 +62,7 @@ chardet==5.2.0
     #   sqlfluff
 charset-normalizer==3.4.4
     # via requests
-click==8.3.0
+click==8.3.1
     # via
     #   black
     #   flask
@@ -73,9 +73,9 @@ comm==0.2.3
     # via ipywidgets
 contourpy==1.3.3
     # via matplotlib
-coverage==7.13.1
+coverage==7.13.4
     # via coveralls
-coveralls==4.0.2
+coveralls==4.1.0
     # via py-pilecore (pyproject.toml)
 cpplint==2.0.2
     # via py-pilecore (pyproject.toml)
@@ -85,7 +85,7 @@ cryptography==46.0.3
     #   ansible-lint
 cycler==0.12.1
     # via matplotlib
-dash==3.3.0
+dash==3.4.0
     # via py-pilecore (pyproject.toml)
 decorator==5.2.1
     # via ipython
@@ -97,13 +97,13 @@ distro==1.9.0
     # via ansible-lint
 docopt==0.6.2
     # via coveralls
-docutils==0.21.2
+docutils==0.22.4
     # via
     #   sphinx
     #   sphinx-rtd-theme
 executing==2.2.1
     # via stack-data
-filelock==3.20.3
+filelock==3.24.3
     # via
     #   ansible-lint
     #   virtualenv
@@ -113,7 +113,7 @@ flask==3.1.2
     # via dash
 fonttools==4.61.1
     # via matplotlib
-gef-file-to-map==1.0.0
+gef-file-to-map==1.0.1
     # via pygef
 identify==2.6.16
     # via pre-commit
@@ -127,7 +127,7 @@ importlib-metadata==8.7.1
     #   dash
 iniconfig==2.3.0
     # via pytest
-ipython==9.7.0
+ipython==9.10.0
     # via
     #   py-pilecore (pyproject.toml)
     #   ipywidgets
@@ -154,7 +154,7 @@ jinja2==3.1.6
     #   flask
     #   sphinx
     #   sqlfluff
-jmespath==1.0.1
+jmespath==1.1.0
     # via
     #   boto3
     #   botocore
@@ -170,7 +170,7 @@ jsonschema==4.26.0
     #   openapi-core
     #   openapi-schema-validator
     #   openapi-spec-validator
-jsonschema-path==0.3.4
+jsonschema-path==0.4.4
     # via
     #   openapi-core
     #   openapi-spec-validator
@@ -199,15 +199,15 @@ mccabe==0.7.0
     # via flake8
 more-itertools==10.8.0
     # via openapi-core
-mpmath==1.3.0
+mpmath==1.4.0
     # via sympy
-mypy==1.18.2
+mypy==1.19.1
     # via py-pilecore (pyproject.toml)
 mypy-extensions==1.1.0
     # via
     #   black
     #   mypy
-narwhals==2.15.0
+narwhals==2.17.0
     # via plotly
 natsort==8.4.0
     # via py-pilecore (pyproject.toml)
@@ -219,7 +219,7 @@ networkx==3.6.1
     # via cfn-lint
 nodeenv==1.10.0
     # via pre-commit
-numpy==2.4.1
+numpy==2.4.2
     # via
     #   py-pilecore (pyproject.toml)
     #   contourpy
@@ -229,13 +229,13 @@ numpy==2.4.1
     #   shapely
 openapi-core==0.22.0
     # via py-pilecore (pyproject.toml)
-openapi-schema-validator==0.6.3
+openapi-schema-validator==0.8.0
     # via
     #   openapi-core
     #   openapi-spec-validator
-openapi-spec-validator==0.7.2
+openapi-spec-validator==0.8.3
     # via openapi-core
-orjson==3.11.5
+orjson==3.11.7
     # via cems-nuclei
 packaging==25.0
     # via
@@ -249,11 +249,11 @@ packaging==25.0
     #   sphinx
 pandas==2.3.3
     # via py-pilecore (pyproject.toml)
-parso==0.8.5
+parso==0.8.6
     # via jedi
-pathable==0.4.4
+pathable==0.5.0
     # via jsonschema-path
-pathspec==1.0.3
+pathspec==1.0.4
     # via
     #   ansible-lint
     #   black
@@ -264,7 +264,7 @@ pexpect==4.9.0
     # via ipython
 pillow==12.1.0
     # via matplotlib
-platformdirs==4.5.1
+platformdirs==4.9.2
     # via
     #   black
     #   sqlfluff
@@ -279,11 +279,11 @@ pluggy==1.6.0
     # via
     #   diff-cover
     #   pytest
-polars==1.37.1
+polars==1.38.1
     # via pygef
-polars-runtime-32==1.37.1
+polars-runtime-32==1.38.1
     # via polars
-pre-commit==4.5.0
+pre-commit==4.5.1
     # via py-pilecore (pyproject.toml)
 prompt-toolkit==3.0.52
     # via ipython
@@ -301,7 +301,7 @@ pycparser==2.23
     # via cffi
 pydantic==2.12.5
     # via aws-sam-translator
-pydantic-core==2.41.5
+pydantic-core==2.42.0
     # via pydantic
 pyflakes==3.4.0
     # via flake8
@@ -314,9 +314,9 @@ pygments==2.19.2
     #   ipython-pygments-lexers
     #   pytest
     #   sphinx
-pyjwt==2.10.1
+pyjwt==2.11.0
     # via cems-nuclei
-pyparsing==3.3.1
+pyparsing==3.3.2
     # via matplotlib
 pytest==9.0.2
     # via
@@ -327,7 +327,7 @@ python-dateutil==2.9.0.post0
     #   botocore
     #   matplotlib
     #   pandas
-pytokens==0.4.0
+pytokens==0.4.1
     # via black
 pytz==2025.2
     # via pandas
@@ -342,13 +342,13 @@ pyyaml==6.0.3
     #   sqlfluff
     #   yamllint
     #   yq
-referencing==0.36.2
+referencing==0.37.0
     # via
     #   ansible-lint
     #   jsonschema
     #   jsonschema-path
     #   jsonschema-specifications
-regex==2026.1.15
+regex==2026.2.28
     # via
     #   cfn-lint
     #   sqlfluff
@@ -379,9 +379,9 @@ ruamel-yaml-clib==0.2.15
     # via ansible-lint
 s3transfer==0.16.0
     # via boto3
-scipy==1.17.0
+scipy==1.17.1
     # via py-pilecore (pyproject.toml)
-setuptools==80.9.0
+setuptools==80.10.2
     # via dash
 shapely==2.1.2
     # via py-pilecore (pyproject.toml)
@@ -398,9 +398,9 @@ sphinx==8.2.3
     #   sphinx-autodoc-typehints
     #   sphinx-rtd-theme
     #   sphinxcontrib-jquery
-sphinx-autodoc-typehints==3.5.2
+sphinx-autodoc-typehints==3.8.0
     # via py-pilecore (pyproject.toml)
-sphinx-rtd-theme==3.0.2
+sphinx-rtd-theme==3.1.0
     # via py-pilecore (pyproject.toml)
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
@@ -416,7 +416,7 @@ sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
-sqlfluff==3.4.2
+sqlfluff==3.5.0
     # via py-pilecore (pyproject.toml)
 stack-data==0.6.3
     # via ipython
@@ -434,7 +434,7 @@ tomli==2.4.0
     # via nbqa
 tomlkit==0.14.0
     # via yq
-tqdm==4.67.1
+tqdm==4.67.3
     # via
     #   py-pilecore (pyproject.toml)
     #   sqlfluff
@@ -464,11 +464,11 @@ urllib3==2.6.3
     # via
     #   botocore
     #   requests
-virtualenv==20.36.1
+virtualenv==20.39.1
     # via pre-commit
 wcmatch==10.1
     # via ansible-lint
-wcwidth==0.2.14
+wcwidth==0.6.0
     # via prompt-toolkit
 werkzeug==3.1.5
     # via
@@ -477,9 +477,9 @@ werkzeug==3.1.5
     #   openapi-core
 widgetsnbextension==4.0.15
     # via ipywidgets
-xmltodict==1.0.2
+xmltodict==1.0.4
     # via yq
-yamllint==1.37.1
+yamllint==1.38.0
     # via
     #   py-pilecore (pyproject.toml)
     #   ansible-lint
@@ -487,5 +487,5 @@ yq==3.4.3
     # via py-pilecore (pyproject.toml)
 zipp==3.23.0
     # via importlib-metadata
-zizmor==1.17.0
+zizmor==1.22.0
     # via py-pilecore (pyproject.toml)

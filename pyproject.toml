@@ -35,28 +35,28 @@ test = ["coveralls", "pytest", "openapi-core"]
 docs = [
   "Sphinx==8.2.3",
   "asteroid-sphinx-theme==0.0.3",
-  "ipython==9.7.0",
-  "sphinx-autodoc-typehints==3.5.2",
-  "sphinx_rtd_theme==3.0.2",
+  "ipython==9.10.0",
+  "sphinx-autodoc-typehints==3.8.0",
+  "sphinx_rtd_theme==3.1.0",
 ]
 # lint dependencies from github super-linter
 # See https://github.com/super-linter/super-linter/tree/main/dependencies/python
 # Get a file with the latest requirements by running bash: `./get-super-linter-requirements.sh`
 # ignoring because redundant: snakemake, snakefmt, pylint
 lint = [
-  "ansible-lint==25.11.1",
-  "black==25.11.0",
-  "cfn-lint==1.41.0",
+  "ansible-lint==25.12.2",
+  "black==25.12.0",
+  "cfn-lint==1.45.0",
   "cpplint==2.0.2",
   "flake8==7.3.0",
   "isort==7.0.0",
-  "mypy==1.18.2",
+  "mypy==1.19.1",
   "nbqa==1.9.1",
-  "pre-commit==4.5.0",
-  "sqlfluff==3.4.2",
-  "yamllint==1.37.1",
+  "pre-commit==4.5.1",
+  "sqlfluff==3.5.0",
+  "yamllint==1.38.0",
   "yq==3.4.3",
-  "zizmor==1.17.0",
+  "zizmor==1.22.0",
 ]
 
 [tool.isort]
