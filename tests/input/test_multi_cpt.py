@@ -74,10 +74,10 @@ def rectangle_pile_custom() -> PileProperties:
         ),
         pile_type=PileType(
             alpha_s_sand=0.009,
-            alpha_s_clay={"use_constant_value": False},
+            alpha_s_clay=None,
             alpha_p=0.30,
             alpha_t_sand=0.0090,
-            alpha_t_clay={"use_constant_value": False},
+            alpha_t_clay=None,
             negative_fr_delta_factor=1.0,
             is_auger=False,
             installation_method="screwed",
@@ -98,36 +98,47 @@ def default_norm() -> Norms:
 def custom_norm() -> Norms:
     return Norms(nen_9997_1=NEN99971_version.V2017, cur_236=CUR236_version.V2023)
 
+
 @pytest.fixture
 def lower_bound_friction() -> FrictionSettings:
-    return FrictionSettings(
-        friction_range_strategy="lower_bound"
-    )
+    return FrictionSettings(friction_range_strategy="lower_bound")
+
 
 @pytest.fixture
 def manual_friction() -> FrictionSettings:
     return FrictionSettings(
         friction_range_strategy="manual",
         negative_friction_range_nap=(0, -5.0),
-        positive_friction_range_nap=(-5.0, "ptl")
+        positive_friction_range_nap=(-5.0, "ptl"),
     )
+
 
 @pytest.fixture
 def manual_friction_only_positive() -> FrictionSettings:
     return FrictionSettings(
         friction_range_strategy="manual",
         positive_friction_range_nap=(-5.0, "ptl"),
-        negative_friction=20.0
+        negative_friction=20.0,
     )
+
 
 @pytest.mark.parametrize(
     "pile_name", ["round_pile", "rectangle_pile", "rectangle_pile_custom"]
 )
 @pytest.mark.parametrize("norms_name", ["default_norm", "custom_norm"])
 @pytest.mark.parametrize("cpt_name", ["cpt", "cpt_no_coords"])
-@pytest.mark.parametrize("friction_settings_name", ["lower_bound_friction", "manual_friction", "manual_friction_only_positive"])
+@pytest.mark.parametrize(
+    "friction_settings_name",
+    ["lower_bound_friction", "manual_friction", "manual_friction_only_positive"],
+)
 def test_create_multi_cpt_payload(
-    pc_openapi, cpt_name, pile_name, norms_name, friction_settings_name, request, headers
+    pc_openapi,
+    cpt_name,
+    pile_name,
+    norms_name,
+    friction_settings_name,
+    request,
+    headers,
 ):
     # resolve fixture by name so we can parametrize over fixture names
     pile = request.getfixturevalue(pile_name)
@@ -158,7 +169,7 @@ def test_create_multi_cpt_payload(
         friction_range_strategy=friction_settings.friction_range_strategy,
         fixed_positive_friction_range_nap=friction_settings.positive_friction_range_nap,
         fixed_negative_friction_range_nap=friction_settings.negative_friction_range_nap,
-        negative_shaft_friction=friction_settings.negative_friction
+        negative_shaft_friction=friction_settings.negative_friction,
     )
 
     request = Request(
