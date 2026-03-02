@@ -12,6 +12,34 @@ def _is_anchor_reference(reference: str) -> bool:
     return reference in ("AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE")
 
 
+def _get_custom_property_constant_value(
+    property_name: str, property_value: dict
+) -> float | None:
+    """
+    Get the constant value of a custom property if use_constant_value is True, otherwise return None.
+
+    Parameters:
+    -----------
+    property_name: str
+        The name of the custom property.
+    property_value: dict
+        The value of the custom property in the API response payload.
+
+    Returns:
+    --------
+    float | None
+        The constant value of the custom property if use_constant_value is True, otherwise None.
+    """
+    if property_value["use_constant_value"] is True:
+        return property_value.get("constant_value")
+    elif property_value["use_constant_value"] is False:
+        return None
+    else:
+        raise ValueError(
+            f"Unexpected value for 'use_constant_value': {property_value['use_constant_value']}"
+        )
+
+
 class PileType:
     """The PileType class represents the type of a pile."""
 
@@ -25,10 +53,10 @@ class PileType:
         is_auger: bool | None = None,
         settlement_curve: int | None = None,
         alpha_s_sand: float | None = None,
-        alpha_s_clay: dict | None = None,
+        alpha_s_clay: float | None = None,
         alpha_p: float | None = None,
         alpha_t_sand: float | None = None,
-        alpha_t_clay: dict | None = None,
+        alpha_t_clay: float | None = None,
         negative_fr_delta_factor: float | None = None,
         adhesion: float | None = None,
         qc_z_a_lesser_1m: float | None = None,
@@ -120,6 +148,7 @@ class PileType:
         """
         standard_pile = pile_type.get("standard_pile", {})
         properties = pile_type.get("properties", {})
+
         return cls(
             reference=standard_pile.get("reference"),
             is_prefab=properties.get("is_prefab"),
@@ -128,10 +157,14 @@ class PileType:
             is_auger=properties.get("is_auger"),
             installation_method=properties.get("installation_method"),
             alpha_s_sand=properties.get("alpha_s_sand"),
-            alpha_s_clay=properties.get("alpha_s_clay"),
+            alpha_s_clay=_get_custom_property_constant_value(
+                "alpha_s_clay", properties["alpha_s_clay"]
+            ),
             alpha_p=properties.get("alpha_p"),
             alpha_t_sand=properties.get("alpha_t_sand"),
-            alpha_t_clay=properties.get("alpha_t_clay"),
+            alpha_t_clay=_get_custom_property_constant_value(
+                "alpha_t_clay", properties["alpha_t_clay"]
+            ),
             settlement_curve=properties.get("settlement_curve"),
             negative_fr_delta_factor=properties.get("negative_fr_delta_factor"),
             adhesion=properties.get("adhesion"),
@@ -151,7 +184,7 @@ class PileType:
         return self._alpha_s_sand
 
     @property
-    def alpha_s_clay(self) -> dict | None:
+    def alpha_s_clay(self) -> float | None:
         """The alpha_s_clay value of the pile type"""
         return self._alpha_s_clay
 
@@ -166,7 +199,7 @@ class PileType:
         return self._alpha_t_sand
 
     @property
-    def alpha_t_clay(self) -> dict | None:
+    def alpha_t_clay(self) -> float | None:
         """The alpha_t_clay value of the pile type"""
         return self._alpha_t_clay
 
@@ -249,7 +282,10 @@ class PileType:
             custom_type_properties["alpha_s_sand"] = self.alpha_s_sand
 
         if self.alpha_s_clay is not None:
-            custom_type_properties["alpha_s_clay"] = self.alpha_s_clay
+            custom_type_properties["alpha_s_clay"] = {
+                "use_constant_value": True,
+                "constant_value": self.alpha_s_clay,
+            }
 
         if self.alpha_p is not None:
             custom_type_properties["alpha_p"] = self.alpha_p
@@ -258,7 +294,10 @@ class PileType:
             custom_type_properties["alpha_t_sand"] = self.alpha_t_sand
 
         if self.alpha_t_clay is not None:
-            custom_type_properties["alpha_t_clay"] = self.alpha_t_clay
+            custom_type_properties["alpha_t_clay"] = {
+                "use_constant_value": True,
+                "constant_value": self.alpha_t_clay,
+            }
 
         if self.settlement_curve is not None:
             custom_type_properties["settlement_curve"] = self.settlement_curve
