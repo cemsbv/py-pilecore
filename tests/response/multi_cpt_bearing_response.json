@@ -33399,14 +33399,19 @@
         },
         "pile_type": {
             "standard_pile": {
-                "reference" : "B3"
+                "reference": "B3"
             },
             "properties": {
                 "alpha_p": 0.63,
                 "adhesion": 0.0,
-                "alpha_s_clay": null,
+                "alpha_s_clay": {
+                    "use_constant_value": false
+                },
                 "alpha_s_sand": 0.009,
                 "alpha_t_sand": 0.009,
+                "alpha_t_clay": {
+                    "use_constant_value": false
+                },
                 "is_auger": false,
                 "is_low_vibrating": true,
                 "negative_fr_delta_factor": 1.0,
