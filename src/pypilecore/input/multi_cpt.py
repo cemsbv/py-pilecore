@@ -343,6 +343,7 @@ def create_multi_cpt_report_payload(
     project_name: str,
     project_id: str,
     author: str,
+    project_remark: str | None = None,
     date: str | None = None,
     group_results_content: bool = True,
     individual_cpt_results_content: bool = True,
@@ -367,6 +368,8 @@ def create_multi_cpt_report_payload(
         The identifier (code) of the project.
     author:
         The author of the report.
+    project_remark:
+        Optional remark to be added to the report. Default = None
     date:
         The date of the report. If None, the current date will be used.
     group_results_content:
@@ -395,6 +398,7 @@ def create_multi_cpt_report_payload(
                 author=author,
                 project_id=project_id,
                 project_name=project_name,
+                project_remark=project_remark,
                 date=(
                     date if date is None else datetime.date.today().strftime("%d-%m-%y")
                 ),
