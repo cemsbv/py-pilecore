@@ -207,6 +207,7 @@ def create_grouper_report_payload(
     project_name: str,
     project_id: str,
     author: str,
+    project_remark: str | None = None,
 ) -> dict:
     """
     Creates a dictionary with the payload content for the PileCore endpoint
@@ -238,6 +239,7 @@ def create_grouper_report_payload(
             author=author,
             project_number=project_id,
             project_name=project_name,
+            project_remark=project_remark
         ),
     )
     # remove not used attributes
