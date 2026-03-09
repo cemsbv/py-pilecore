@@ -239,7 +239,7 @@ def create_grouper_report_payload(
             author=author,
             project_number=project_id,
             project_name=project_name,
-            project_remark=project_remark
+            project_remark=project_remark,
         ),
     )
     # remove not used attributes
