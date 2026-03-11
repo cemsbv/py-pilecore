@@ -366,7 +366,7 @@ def get_multi_cpt_api_result_tension(
     if standard is None:
         standard_path = _get_standard_path_from_payload(payload)
     else:
-        standard_path = STANDARD_PATH(standard)
+        standard_path = STANDARD_PATH[standard.replace("-", "_")]
 
     if standard_path == STANDARD_PATH.NEN9997_1:
         payload.pop("construction_sequence", None)
@@ -423,7 +423,7 @@ def get_multi_cpt_api_report_tension(
     if standard is None:
         standard_path = _get_standard_path_from_payload(payload)
     else:
-        standard_path = STANDARD_PATH(standard)
+        standard_path = STANDARD_PATH[standard.replace("-", "_")]
 
     if standard_path == STANDARD_PATH.NEN9997_1:
         payload.pop("construction_sequence", None)
