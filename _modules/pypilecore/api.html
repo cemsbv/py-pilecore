@@ -452,7 +452,7 @@
     <span class="k">if</span> <span class="n">standard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">standard_path</span> <span class="o">=</span> <span class="n">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">(</span><span class="n">standard</span><span class="p">)</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">[</span><span class="n">standard</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)]</span>
 
     <span class="k">if</span> <span class="n">standard_path</span> <span class="o">==</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">NEN9997_1</span><span class="p">:</span>
         <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -509,7 +509,7 @@
     <span class="k">if</span> <span class="n">standard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">standard_path</span> <span class="o">=</span> <span class="n">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">(</span><span class="n">standard</span><span class="p">)</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">[</span><span class="n">standard</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)]</span>
 
     <span class="k">if</span> <span class="n">standard_path</span> <span class="o">==</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">NEN9997_1</span><span class="p">:</span>
         <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>

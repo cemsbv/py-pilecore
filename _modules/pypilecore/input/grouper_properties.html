@@ -286,6 +286,7 @@
     <span class="n">project_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">project_remark</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
@@ -317,6 +318,7 @@
             <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
             <span class="n">project_number</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span>
             <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
+            <span class="n">project_remark</span><span class="o">=</span><span class="n">project_remark</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="c1"># remove not used attributes</span>
