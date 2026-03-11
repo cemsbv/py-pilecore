@@ -53,7 +53,7 @@ lint = [
   "mypy==1.18.2",
   "nbqa==1.9.1",
   "pre-commit==4.5.0",
-  "sqlfluff==3.4.2",
+  "sqlfluff==4.0.4",
   "yamllint==1.37.1",
   "yq==3.4.3",
   "zizmor==1.17.0",
