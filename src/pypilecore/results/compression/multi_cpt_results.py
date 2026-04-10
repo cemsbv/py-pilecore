@@ -561,7 +561,6 @@ class MultiCPTCompressionBearingResults:
         attribute: str,
         axes: Axes | None = None,
         figsize: Tuple[float, float] = (6.0, 6.0),
-        show_sqrt: bool = False,
         **kwargs: Any,
     ) -> Axes:
         """
@@ -579,15 +578,13 @@ class MultiCPTCompressionBearingResults:
         ----------
         attribute:
             result attribute to create boxplot. Please note that the attribute name must be present in
-            the `CPTResultsTable` and `CPTGroupResultsTable` class.
+            the `CPTResultsTable` class.
         axes:
             Optional `Axes` object where the boxplot data can be plotted on.
             If not provided, a new `plt.Figure` will be activated and the `Axes`
             object will be created and returned.
         figsize:
             Size of the activate figure, as the `plt.figure()` argument.
-        show_sqrt:
-            Add sqrt(2) bandwidth to figure
         **kwargs:
             All additional keyword arguments are passed to the `pyplot.subplots()` call.
 
@@ -598,18 +595,12 @@ class MultiCPTCompressionBearingResults:
         """
 
         # validate attribute
-        if (
-            attribute not in self.cpt_results.results[0].table.__dict__.keys()
-            or attribute not in self.group_results_table.__dict__.keys()
-        ):
+        if attribute not in self.cpt_results.results[0].table.__dict__.keys():
             raise ValueError(
                 f"""
-                {attribute} is not present in CPTResultsTable or CPTGroupResultsTable class.
-                Please select on of the following attributes:
-                {
-                    set(self.cpt_results.results[0].table.__dict__.keys())
-                    & set(self.group_results_table.__dict__.keys())
-                }
+                {attribute} is not present in CPTResultsTable.
+                Please select one of the following attributes:
+                {list(self.cpt_results.results[0].table.__dict__.keys())}
                 """
             )
 
@@ -658,37 +649,7 @@ class MultiCPTCompressionBearingResults:
             zorder=0,
         )
 
-        # ad additional bandwidth of sqrt(2) of the mean value
-        if show_sqrt:
-            axes.scatter(
-                np.flip(data.mean(axis=0)) * np.sqrt(2),
-                np.flip(
-                    np.arange(len(self.group_results_table.pile_tip_level_nap)) + 1
-                ),
-                marker="^",
-                color="tab:purple",
-                zorder=1,
-            )
-            axes.scatter(
-                np.flip(data.mean(axis=0)) / np.sqrt(2),
-                np.flip(
-                    np.arange(len(self.group_results_table.pile_tip_level_nap)) + 1
-                ),
-                marker="^",
-                color="tab:purple",
-                zorder=1,
-            )
-
-        # Draw group result over single result
-        axes.scatter(
-            np.flip(self.group_results_table.__getattribute__(attribute)),
-            np.flip(np.arange(len(self.group_results_table.pile_tip_level_nap)) + 1),
-            marker="o",
-            color="tab:red",
-            zorder=1,
-        )
-
-        # Draw group result over single result
+        # Draw mean annotation
         for i, x in enumerate(data.mean(axis=0)):
             axes.annotate(f"{x.round(2)}", xy=(x, i + 1))
 
@@ -701,8 +662,6 @@ class MultiCPTCompressionBearingResults:
                     "Single;Q25:Q75": "tab:blue",
                     "Single;Q50": "tab:orange",
                     "Single;mean": "tab:green",
-                    "Single;mean;sqrt": "tab:purple",
-                    "Group;normative": "tab:red",
                 }.items()
             ],
             loc="upper left",
