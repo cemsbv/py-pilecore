@@ -146,11 +146,17 @@ def test_multi_cpt_bearing_results(
             )
 
             assert isinstance(single_cpt_results.soil_properties, SoilProperties)
+            assert single_cpt_results.soil_properties.test_id == test_id
             assert isinstance(single_cpt_results.pile_head_level_nap, float)
             assert isinstance(single_cpt_results.table, CPTCompressionResultsTable)
             assert isinstance(single_cpt_results.plot_bearing_capacities(), Axes)
             plt.close("all")
-            assert isinstance(single_cpt_results.plot_bearing_overview(), Figure)
+            fig = single_cpt_results.plot_bearing_overview()
+            assert isinstance(fig, Figure)
+            bearing_legend = next(
+                ax.get_legend() for ax in fig.axes if ax.get_legend() is not None
+            )
+            assert bearing_legend.get_title().get_text() == f"name: {test_id}"
             plt.close("all")
 
             cpt_results_table = single_cpt_results.table
