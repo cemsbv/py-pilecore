@@ -596,13 +596,11 @@ class MultiCPTCompressionBearingResults:
 
         # validate attribute
         if attribute not in self.cpt_results.results[0].table.__dict__.keys():
-            raise ValueError(
-                f"""
+            raise ValueError(f"""
                 {attribute} is not present in CPTResultsTable.
                 Please select one of the following attributes:
                 {list(self.cpt_results.results[0].table.__dict__.keys())}
-                """
-            )
+                """)
 
         # Create axes objects if not provided
         if axes is not None:
