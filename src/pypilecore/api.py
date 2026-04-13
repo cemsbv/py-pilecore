@@ -368,7 +368,7 @@ def get_multi_cpt_api_result_tension(
     else:
         standard_path = STANDARD_PATH[standard.replace("-", "_")]
 
-    if standard_path == STANDARD_PATH.NEN9997_1:
+    if standard_path == STANDARD_PATH.CUR236:
         payload.pop("construction_sequence", None)
 
     endpoint = UpliftEndpoint.MULTI_CPT_RESULT.value.format(
@@ -425,7 +425,7 @@ def get_multi_cpt_api_report_tension(
     else:
         standard_path = STANDARD_PATH[standard.replace("-", "_")]
 
-    if standard_path == STANDARD_PATH.NEN9997_1:
+    if standard_path == STANDARD_PATH.CUR236:
         payload.pop("construction_sequence", None)
 
     endpoint = UpliftEndpoint.MULTI_CPT_REPORT.value.format(
