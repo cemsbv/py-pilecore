@@ -105,7 +105,12 @@ def test_grouper_results_max_bearing(
         assert mbr1.soil_properties.test_id == test_id
 
         assert isinstance(mbr1.plot_bearing_capacities(), plt.Axes)
-        assert isinstance(mbr1.plot_bearing_overview(), plt.Figure)
+        fig = mbr1.plot_bearing_overview()
+        assert isinstance(fig, plt.Figure)
+        bearing_legend = next(
+            ax.get_legend() for ax in fig.axes if ax.get_legend() is not None
+        )
+        assert bearing_legend.get_title().get_text() == f"name: {test_id}"
 
         plt.close("all")
 
