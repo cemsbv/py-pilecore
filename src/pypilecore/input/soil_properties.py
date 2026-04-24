@@ -38,6 +38,7 @@ def create_soil_properties_payload(
     friction_range_strategy: Literal["manual", "lower_bound", "settlement_driven"],
     excavation_depth_nap: float | None = None,
     master_ocr: float | None = None,
+    master_negative_shaft_friction: float | None = None,
     individual_negative_shaft_friction: Mapping[Any, float] | None = None,
     individual_negative_friction_range_nap: (
         Mapping[Any, Tuple[float, float]] | None
@@ -99,8 +100,12 @@ def create_soil_properties_payload(
         Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.
         If None, a value equal to the ground surface level is used.
         Default = None
-    ocr:
+    master_ocr:
         The Over-Consolidation-Ratio [-] of the foundation layer.
+    master_negative_shaft_friction:
+        A fixed value for the negative friction force applied to all CPTs, unless
+        overruled by `individual_negative_shaft_friction` for specific CPTs.
+        Unit: [kN]
     individual_negative_friction_range_nap:
         A dictionary, mapping `CPTData.alias` values to fixed negative-friction ranges.
         For a specification of the values, see `fixed_negative_friction_range_nap`
@@ -202,7 +207,7 @@ def create_soil_properties_payload(
 
         # Optionally add cpt-specific friction-range parameters
         friction_range_strategy_this_cpt = friction_range_strategy
-        negative_shaft_friction_this_cpt = None
+        negative_shaft_friction_this_cpt = master_negative_shaft_friction
         positive_friction_range_nap_this_cpt = None
         negative_friction_range_nap_this_cpt = None
         make_custom_friction_settings = False
