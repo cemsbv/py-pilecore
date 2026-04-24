@@ -281,6 +281,7 @@ def create_multi_cpt_payload(
         friction_range_strategy=friction_range_strategy,
         excavation_depth_nap=excavation_depth_nap,
         master_ocr=ocr,
+        master_negative_shaft_friction=negative_shaft_friction,
         individual_negative_shaft_friction=individual_negative_shaft_friction,
         individual_negative_friction_range_nap=individual_negative_friction_range_nap,
         individual_positive_friction_range_nap=individual_positive_friction_range_nap,
