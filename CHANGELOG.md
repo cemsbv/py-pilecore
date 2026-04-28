@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.2] - 2026-04-28
+
+### Bug Fixes
+- #265 Fix incorrect mapping of Koppejan parameter names between CPTCore and PileCore
+
 ## [2.3.1] - 2026-04-24
 
 ### Bug Fixes
@@ -107,10 +112,10 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - *Api*:
+    - Improve FrictionRangeStrategy validation
     - Added FrictionSettings
     - Added Norms and tests
     - Update pile_type serialization according to v4 api
-    - Improve FrictionRangeStrategy validation
 
 - *Grouper results*:
     - Add pypilecore.viewers.ViewerGroupResultsPlanView class
@@ -166,10 +171,10 @@ All notable changes to this project will be documented in this file.
     - Update cems-nuclei to get rid of the ipython dependency
     - Allow future fixes of anywidget
     - Require dependency patch of cems-nuclei
+    - Downgrade plotly to v5
     - Use correct dependencies for documentation
     - Use version 2 of cems-nuclei
     - Update and pin all dependencies to latest version
-    - Downgrade plotly to v5
 - *Pile_name*: Guarantee that PileProperties.name returns a string or None
 - *Rounding*: Fix rounding of pile tip levels to be 2 decimals
 - *Viewer_results*: Fix error of not finding color for NaN results for ViewerCptResultsPlanView
@@ -269,34 +274,34 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 - Final max-bearing fixups & Add unittests
-- Do array comparison on float with np.isclose()
 - Remove dataclass hash & to_pandas caching
+- Make sure that all pile tip levels have same order
 - Remove dataclass hash & to_pandas caching
 - Fix MaxBearingResults initiation & refactor
 - Update unit test
-- Make sure that all pile tip levels have same order
+- Do array comparison on float with np.isclose()
 - Add missing pile definitions plot
 
 ### Features
 - *Api*: Add verbose argument to functions in api module
-- Add lru_cache on MaxBearingResults.to_pandas
 - Rotate x-labels in 2D max-bearing plot
+- Add lru_cache on MaxBearingResults.to_pandas
 - Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
-- Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
 - Denote CPT name in MaxBeraingTable.origin attribute
 - Add delaunay map
-- Resolve comments in mr
 - Add result bearing 3d plots to notebook
 - Add 3D plots for bearing results
 - Combine grouper and single results
+- Resolve comments in mr
+- Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
 
 ### Miscellaneous Tasks
 - Update example notebook
 - Revert
 
 ### Styling
-- Format file and fix typing errors
 - Lint file
+- Format file and fix typing errors
 
 ## [0.3.4] - 2024-02-16
 
@@ -373,8 +378,8 @@ All notable changes to this project will be documented in this file.
 ## [0.2.1] - 2023-11-09
 
 ### Features
-- Minor fixups in PileCore_multi_cpt notebook
 - Accept None for `relative_pile_load`
+- Minor fixups in PileCore_multi_cpt notebook
 - Validate excavation and pile-load input in function create_multi_cpt_payload
 
 ## [0.2.0] - 2023-11-08
@@ -382,12 +387,12 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 - *Test*: Coverage warning no data was collected
 - Notebook and grouper workflow (#18)
-- Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
+- Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
 - Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
-- Fix adding diameter_shaft property logic
 - Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
 - Plot empty friction ratio in CPTTable.plot_friction_ratio()
-- Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
+- Fix adding diameter_shaft property logic
+- Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
 
 ### Documentation
 - Add missing create_multi_cpt_payload arguments docstrings
@@ -398,10 +403,10 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 - *Grouper*: Add grouper implementation (#7)
+- Add `name` property to PileProperties object
 - Cast property getter responses of PileProperties & child objects
 - Raise ValueError for invalid pile_properties `height_base` input.
 - Add _shape class-attribute to Round- & RectPileProperties
-- Add `name` property to PileProperties object
 - Add notebook example (#17)
 - Cast CPTGroupResultsTable attributes to numpy arrays
 
@@ -421,22 +426,17 @@ All notable changes to this project will be documented in this file.
 
 ### Testing
 - Add create_multi_cpt_payload unit-tests
-- Add results/test_pile_properties tests
-- Omit tests folder in superlinter
-- Add soilproperties tests
-- Move grouper tests to "results" folder
 - Add create_pile_properties_payload tests
-- Refactor pile_properties tests
-- Rename test_soil to test_input
 - Add multi-cpt-results tests
+- Add soilproperties tests
+- Omit tests folder in superlinter
+- Rename test_soil to test_input
+- Refactor pile_properties tests
+- Add results/test_pile_properties tests
+- Move grouper tests to "results" folder
 
 ### Deps
 - Update mypy==1.6.1 & black==23.10.1
-
-## [0.1.0] - 2023-10-20
-
-### Features
-- Rename module folder name to "py_pilecore"
 
 ## [0.0.1] - 2023-10-20
 
@@ -445,16 +445,17 @@ All notable changes to this project will be documented in this file.
 - Update README
 
 ### Features
-- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
 - Add empty module __init__.py
+- Rename module folder name to "py_pilecore"
+- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
 
 ### Miscellaneous Tasks
 - Init pyproject.toml
 - Update .gitignore
 
 ### Styling
+- Add run_super_linters.sh bash script
 - Add .flake8 file
 - Add github workflow job "lint" & update superlinter to v5
-- Add run_super_linters.sh bash script
 
 <!-- CEMS BV. -->
