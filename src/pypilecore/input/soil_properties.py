@@ -176,10 +176,10 @@ def create_soil_properties_payload(
         if "D_50" in layer_table.keys():
             layer_table_data["D_50"] = layer_table["D_50"]
         # Optionally add consolidation parameters to 'layer_table_data'.
-        if "C_p" in layer_table.keys():
-            layer_table_data["C_p"] = layer_table["C_p"]
-        if "C_s" in layer_table.keys():
-            layer_table_data["C_s"] = layer_table["C_s"]
+        if "primaryCompressionCoefficient" in layer_table.keys():
+            layer_table_data["C_p"] = layer_table["primaryCompressionCoefficient"]
+        if "secularCompressionCoefficient" in layer_table.keys():
+            layer_table_data["C_s"] = layer_table["secularCompressionCoefficient"]
 
         # Create the Soil-Properties payload
         soil_properties = dict(
