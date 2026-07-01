@@ -176,3 +176,4 @@ superlinter_dependencies.txt
 super-linter-output/
 cemsdev.toml
 .cemsdev/
+.cemsbox/
