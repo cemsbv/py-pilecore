@@ -98,12 +98,18 @@ class MaxBearingResult:
         The object with soil properties
     pile_head_level_nap
         The elevation of the pile-head, in [m] w.r.t. NAP.
+
+        .. deprecated::
+            `pile_head_level_nap` is an unused symmetry artefact that is never read by
+            any plot / `to_pandas` / viewer. It is now typed ``float | None`` (the custom
+            bearing-results path passes ``None``) and will be removed in the next major
+            release.
     table
         The object with CPT results.
     """
 
     soil_properties: SoilProperties
-    pile_head_level_nap: float
+    pile_head_level_nap: float | None
     table: MaxBearingTable
 
     def to_pandas(self) -> pd.DataFrame:

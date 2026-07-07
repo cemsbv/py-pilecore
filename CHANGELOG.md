@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Features
+- Grouper with custom (externally-computed) bearing results: build a lean
+  `CustomBearingResults` from your own numbers + coordinates and drive the whole Grouper
+  flow (payload, wrapping, viewers, report) as a source-agnostic drop-in for the
+  PileCore-computed object. New public names: `CustomBearingResults`,
+  `CustomCptBearingResult`, `GrouperBearingResultsLike`, `GrouperCptInput`,
+  `create_grouper_payload_from_bearing_results`, and
+  `GrouperResults.from_grouper_response`. `SoilProperties` may now be "coordinate-only"
+  (identifies a CPT via `test_id`/`x`/`y` without a raw trace).
+
+### Deprecations
+- `GrouperResults.multi_cpt_bearing_results` is deprecated; use
+  `GrouperResults.bearing_results` instead.
+- `MaxBearingResult.pile_head_level_nap` is deprecated (an unused symmetry artefact),
+  is now typed `float | None`, and will be removed in the next major release.
+- `create_grouper_payload(cpt_results_dict=...)` and
+  `GrouperResults.from_api_response(..., multi_cpt_bearing_results=...)` remain supported
+  but are superseded by `create_grouper_payload_from_bearing_results` and
+  `from_grouper_response`.
+
 ## [2.3.2] - 2026-04-28
 
 ### Bug Fixes
