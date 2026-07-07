@@ -2,8 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
+from pygef.common import Location
 
 from pypilecore.results import GrouperResults, MultiCPTCompressionBearingResults
+from pypilecore.results.cases_grouper_results import CasesGrouperResults
 from pypilecore.results.soil_properties import SoilProperties
 
 
@@ -115,6 +117,96 @@ def test_grouper_results_max_bearing(
     # Check that only the last R_c_d_net values of CPT 24 are NaN
     assert np.isnan(mbr["24"].table.R_c_d_net[10:]).all()
     assert ~np.isnan(mbr["24"].table.R_c_d_net[:10]).any()
+
+
+def test_grouper_results_bearing_results_field_and_deprecated_accessor(
+    mock_group_cpts_response: dict,
+    mock_group_multi_cpt_bearing_response: dict,
+    mock_group_results_passover: dict,
+) -> None:
+    """
+    `bearing_results` is the source of truth; the deprecated `multi_cpt_bearing_results`
+    accessor still returns the PileCore object and emits a DeprecationWarning.
+    """
+    mcb = MultiCPTCompressionBearingResults.from_api_response(
+        response_dict=mock_group_multi_cpt_bearing_response,
+        cpt_input=mock_group_results_passover,
+    )
+    grouper_results = GrouperResults.from_api_response(
+        mock_group_cpts_response,
+        pile_load_uls=100,
+        multi_cpt_bearing_results=mcb,
+    )
+
+    assert grouper_results.bearing_results is mcb
+
+    with pytest.warns(DeprecationWarning):
+        assert grouper_results.multi_cpt_bearing_results is mcb
+
+
+def test_grouper_results_from_grouper_response_matches_from_api_response(
+    mock_group_cpts_response: dict,
+    mock_group_multi_cpt_bearing_response: dict,
+    mock_group_results_passover: dict,
+) -> None:
+    """`from_api_response` delegates to `from_grouper_response`: same folded results."""
+    mcb = MultiCPTCompressionBearingResults.from_api_response(
+        response_dict=mock_group_multi_cpt_bearing_response,
+        cpt_input=mock_group_results_passover,
+    )
+    gr_legacy = GrouperResults.from_api_response(
+        mock_group_cpts_response,
+        pile_load_uls=100,
+        multi_cpt_bearing_results=mcb,
+    )
+    gr_general = GrouperResults.from_grouper_response(
+        mock_group_cpts_response,
+        pile_load_uls=100,
+        bearing_results=mcb,
+    )
+
+    assert gr_general.cpt_results.test_ids == gr_legacy.cpt_results.test_ids
+    for test_id in gr_legacy.cpt_results.test_ids:
+        np.testing.assert_allclose(
+            gr_general.cpt_results[test_id].table.R_c_d_net,
+            gr_legacy.cpt_results[test_id].table.R_c_d_net,
+            equal_nan=True,
+        )
+        np.testing.assert_array_equal(
+            gr_general.cpt_results[test_id].table.origin,
+            gr_legacy.cpt_results[test_id].table.origin,
+        )
+
+
+def test_cases_grouper_results_pilecore_path(
+    mock_group_cpts_response: dict,
+    mock_group_multi_cpt_bearing_response: dict,
+    mock_group_results_passover: dict,
+) -> None:
+    """CasesGrouperResults rides the source-agnostic protocol on the PileCore path."""
+    mcb = MultiCPTCompressionBearingResults.from_api_response(
+        response_dict=mock_group_multi_cpt_bearing_response,
+        cpt_input=mock_group_results_passover,
+    )
+    grouper_results = GrouperResults.from_api_response(
+        mock_group_cpts_response,
+        pile_load_uls=100,
+        multi_cpt_bearing_results=mcb,
+    )
+    cpt_locations = {
+        test_id: Location(srs_name="RD", **info["location"])
+        for test_id, info in mock_group_results_passover.items()
+    }
+
+    cases = CasesGrouperResults(
+        results_per_case={"case_1": grouper_results, "case_2": grouper_results},
+        cpt_locations=cpt_locations,
+    )
+
+    assert cases.cases == ["case_1", "case_2"]
+    assert set(cases.test_ids) == set(mcb.cpt_names)
+    assert len(cases.pile_tip_levels_nap) > 0
+    assert isinstance(cases.cpt_results_table.to_pandas(), pd.DataFrame)
 
 
 def test_grouper_triangulation(
