@@ -1,5 +1,9 @@
 from pypilecore.results.cases_grouper_results import CasesGrouperResults
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
+from pypilecore.results.custom_bearing_results import (
+    CustomBearingResults,
+    CustomCptBearingResult,
+)
 from pypilecore.results.compression.multi_cpt_results import (
     MultiCPTCompressionBearingResults,
 )
@@ -23,4 +27,6 @@ __all__ = [
     "GrouperResults",
     "GrouperBearingResultsLike",
     "GrouperCptInput",
+    "CustomBearingResults",
+    "CustomCptBearingResult",
 ]
