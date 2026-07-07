@@ -87,13 +87,9 @@ class CasesGrouperResults:
         self._cases = natsorted(list(results_per_case.keys()))
         self._grouper_results = [results_per_case[c] for c in self.cases]
         first_results = results_per_case[self.cases[0]]
-        self._test_ids = natsorted(
-            first_results.multi_cpt_bearing_results.cpt_results.test_ids
-        )
+        self._test_ids = natsorted(first_results.bearing_results.cpt_names)
         self._pile_tip_levels_nap = sorted(
-            list(
-                first_results.multi_cpt_bearing_results.cpt_results.to_pandas().pile_tip_level_nap.unique()
-            ),
+            first_results.bearing_results.pile_tip_levels_nap,
             reverse=True,
         )
         self._set_cpt_locations(cpt_locations)
@@ -227,23 +223,16 @@ def _validate_results_per_case(
             )
 
     first_key = list(results_per_case.keys())[0]
-    test_ids = results_per_case[
-        first_key
-    ].multi_cpt_bearing_results.cpt_results.test_ids
+    test_ids = results_per_case[first_key].bearing_results.cpt_names
     pile_tip_levels_nap = list(
-        results_per_case[first_key]
-        .multi_cpt_bearing_results.cpt_results.to_pandas()
-        .pile_tip_level_nap.unique()
+        results_per_case[first_key].bearing_results.pile_tip_levels_nap
     )
     for results in results_per_case.values():
-        if results.multi_cpt_bearing_results.cpt_results.test_ids != test_ids:
+        if results.bearing_results.cpt_names != test_ids:
             raise ValueError("All GrouperResults objects must have the same test ids.")
 
         if (
-            list(
-                results.multi_cpt_bearing_results.cpt_results.to_pandas().pile_tip_level_nap.unique()
-            )
-            != pile_tip_levels_nap
+            list(results.bearing_results.pile_tip_levels_nap) != pile_tip_levels_nap
         ):
             raise ValueError(
                 "All GrouperResults objects must have the same pile tip levels."

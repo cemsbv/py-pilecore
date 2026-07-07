@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from dataclasses import dataclass
 from functools import cached_property
 from typing import Any, Dict, List, Sequence, Tuple
@@ -8,6 +7,7 @@ from typing import Any, Dict, List, Sequence, Tuple
 import natsort
 import numpy as np
 import pandas as pd
+import typing_extensions
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from numpy.typing import NDArray
@@ -21,6 +21,7 @@ from pypilecore.results.post_processing import (
     MaxBearingResults,
     MaxBearingTable,
 )
+from pypilecore.results.typing import GrouperBearingResultsLike
 
 
 class SingleClusterData:
@@ -557,25 +558,29 @@ class GrouperResults:
     """
     *Not meant to be instantiated by the user.*
 
-    Use the `from_api_response` method to instantiate the class.
+    Use the `from_grouper_response` (or the legacy `from_api_response`) method to
+    instantiate the class.
 
     Attributes:
     ------------
     clusters: List[SingleClusterResult]
+    bearing_results: GrouperBearingResultsLike
+        The bearing results the subgroups were generated with. May be a PileCore
+        `MultiCPTCompressionBearingResults` or a user-built `CustomBearingResults`;
+        both satisfy the `GrouperBearingResultsLike` protocol.
     """
 
     clusters: List[SingleClusterResult]
-    multi_cpt_bearing_results: MultiCPTCompressionBearingResults
+    bearing_results: GrouperBearingResultsLike
 
     def __post_init__(self) -> None:
+        bearing_cpt_names = self.bearing_results.cpt_names
+        bearing_pile_tip_levels_nap = self.bearing_results.pile_tip_levels_nap
         for cluster in self.clusters:
             for cpt_name in cluster.cpt_names:
                 # check if the cpt names in the SingleClusterResults are also present
-                # in the MultiCPTBearingResults
-                if (
-                    cpt_name
-                    not in self.multi_cpt_bearing_results.cpt_results.cpt_results_dict.keys()
-                ):
+                # in the bearing results
+                if cpt_name not in bearing_cpt_names:
                     raise ValueError(
                         "CPT names dont match between MultiCPTBearingResults object and GrouperResults. "
                         "Make sure that you use the same MultiCPTBearingResults as you generated "
@@ -583,13 +588,11 @@ class GrouperResults:
                     )
 
                 # Check that all the pile tip levels in the SingleClusterResults are
-                # also present in the MultiCPTBearingResults
+                # also present in the bearing results
                 for pile_tip_level in cluster.data.pile_tip_level:
                     if not np.isclose(
                         pile_tip_level,
-                        self.multi_cpt_bearing_results.cpt_results.cpt_results_dict[
-                            cpt_name
-                        ].table.pile_tip_level_nap,
+                        bearing_pile_tip_levels_nap,
                         rtol=1e-2,
                     ).any():
                         raise ValueError(
@@ -597,6 +600,51 @@ class GrouperResults:
                             "Make sure that you use the same MultiCPTBearingResults as you generated "
                             "the subgroups/clusters with."
                         )
+
+    @property
+    @typing_extensions.deprecated(
+        "`multi_cpt_bearing_results` is deprecated; use `bearing_results` instead."
+    )
+    def multi_cpt_bearing_results(self) -> MultiCPTCompressionBearingResults | None:
+        """
+        Deprecated accessor for the bearing results.
+
+        Returns the PileCore `MultiCPTCompressionBearingResults` when the results were
+        computed by PileCore, or ``None`` for a custom (externally-computed) source. Use
+        `bearing_results` instead.
+        """
+        if isinstance(self.bearing_results, MultiCPTCompressionBearingResults):
+            return self.bearing_results
+        return None
+
+    @classmethod
+    def from_grouper_response(
+        cls,
+        response: dict,
+        pile_load_uls: float,
+        bearing_results: GrouperBearingResultsLike,
+    ) -> "GrouperResults":
+        """
+        Stores the response of the PileCore endpoint "/grouper/group_cpts".
+
+        This is the general, source-agnostic constructor: `bearing_results` may be a
+        PileCore `MultiCPTCompressionBearingResults` or a user-built
+        `CustomBearingResults` (both satisfy `GrouperBearingResultsLike`).
+
+        Parameters
+        ----------
+        response:
+           The resulting response of a call to `get_groups_api_result()`
+        pile_load_uls:
+            ULS load in kN. Used to determine if a grouping configuration is valid.
+        bearing_results:
+           The bearing results that the subgroups were generated with.
+        """
+        results = [
+            SingleClusterResult.from_api_response(item, pile_load_uls)
+            for item in response["sub_groups"]
+        ]
+        return cls(clusters=results, bearing_results=bearing_results)
 
     @classmethod
     def from_api_response(
@@ -609,6 +657,8 @@ class GrouperResults:
         Stores the response of the PileCore endpoint
         "/grouper/group_cpts"
 
+        Kept for backwards compatibility; delegates to `from_grouper_response`.
+
         Parameters
         ----------
         response_dict:
@@ -618,36 +668,37 @@ class GrouperResults:
         multi_cpt_bearing_results:
            The container that holds multiple SingleCPTBearingResults objects
         """
-        results = [
-            SingleClusterResult.from_api_response(item, pile_load_uls)
-            for item in response_dict["sub_groups"]
-        ]
-        return cls(
-            clusters=results, multi_cpt_bearing_results=multi_cpt_bearing_results
+        return cls.from_grouper_response(
+            response=response_dict,
+            pile_load_uls=pile_load_uls,
+            bearing_results=multi_cpt_bearing_results,
         )
 
     @cached_property
     def cpt_results(self) -> "MaxBearingResults":
         """
         Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.
+
+        Source-agnostic: it folds the subgroup capacities over the per-CPT baseline that
+        `bearing_results.base_max_bearing_results()` provides, so the PileCore and custom
+        sources ride the exact same routine.
         """
         max_bearing: Dict[str, Any] = {}
 
-        # iterate over single cpt result
-        for (
-            cpt_name,
-            _single_cpt_result,
-        ) in self.multi_cpt_bearing_results.cpt_results.cpt_results_dict.items():
-            single_cpt_result = deepcopy(_single_cpt_result)
+        # Start from the per-CPT baseline. `MaxBearingTable` properties return a fresh
+        # array on every access, so extracting them here yields mutable arrays that the
+        # fold below can safely mutate without touching the baseline object.
+        baseline = self.bearing_results.base_max_bearing_results()
+        for cpt_name, base_result in baseline.cpt_results_dict.items():
             max_bearing[cpt_name] = dict(
-                pile_head_level_nap=single_cpt_result.pile_head_level_nap,
-                soil_properties=single_cpt_result.soil_properties,
+                pile_head_level_nap=base_result.pile_head_level_nap,
+                soil_properties=base_result.soil_properties,
                 results_table=dict(
-                    pile_tip_level_nap=single_cpt_result.table.pile_tip_level_nap,
-                    R_c_d_net=single_cpt_result.table.R_c_d_net,
-                    F_nk_d=single_cpt_result.table.F_nk_d,
+                    pile_tip_level_nap=base_result.table.pile_tip_level_nap,
+                    R_c_d_net=base_result.table.R_c_d_net,
+                    F_nk_d=base_result.table.F_nk_d,
                     origin=[f"CPT:{cpt_name}"]
-                    * len(single_cpt_result.table.pile_tip_level_nap),
+                    * len(base_result.table.pile_tip_level_nap),
                 ),
             )
 
