@@ -5,6 +5,8 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from pandas import DataFrame
 
+from pypilecore.exceptions import UserError
+from pypilecore.results.post_processing import MaxBearingResult, MaxBearingTable
 from pypilecore.results.soil_properties import CPTTable, LayerTable, SoilProperties
 
 
@@ -220,3 +222,59 @@ def test_soil_properties():
     plt.close("all")
     assert isinstance(soil_properties.plot(), Figure)
     plt.close("all")
+
+
+def test_coordinate_only_soil_properties_constructs():
+    """A SoilProperties can identify a CPT with only test_id / x / y (no trace)."""
+    soil_properties = SoilProperties(test_id="CPT-1", x=1.0, y=2.0)
+
+    assert soil_properties.test_id == "CPT-1"
+    assert soil_properties.x == 1.0
+    assert soil_properties.y == 2.0
+    assert soil_properties.cpt_table is None
+    assert soil_properties.layer_table is None
+    assert soil_properties.ref_height is None
+    assert soil_properties.surface_level_ref is None
+    assert soil_properties.groundwater_level_ref is None
+
+
+def test_coordinate_only_soil_properties_trace_plots_raise():
+    """Trace-dependent plots raise a clear 'requires soil data' UserError."""
+    soil_properties = SoilProperties(test_id="CPT-1", x=1.0, y=2.0)
+
+    with pytest.raises(UserError, match="requires soil data"):
+        soil_properties.plot_layers()
+
+    with pytest.raises(UserError, match="requires soil data"):
+        soil_properties.plot()
+
+
+def test_coordinate_only_max_bearing_result_plots():
+    """
+    A MaxBearingResult on a coordinate-only SoilProperties renders
+    plot_bearing_capacities (without the groundwater/surface reference lines) and raises
+    'requires soil data' on the overview plot.
+    """
+    soil_properties = SoilProperties(test_id="CPT-1", x=1.0, y=2.0)
+    table = MaxBearingTable(
+        pile_tip_level_nap=[-10.0, -11.0],
+        R_c_d_net=[100.0, 110.0],
+        F_nk_d=[10.0, 10.0],
+        origin=["CPT:CPT-1", "CPT:CPT-1"],
+    )
+    result = MaxBearingResult(
+        soil_properties=soil_properties,
+        pile_head_level_nap=0.0,
+        table=table,
+    )
+
+    axes = result.plot_bearing_capacities()
+    assert isinstance(axes, Axes)
+    line_labels = [line.get_label() for line in axes.get_lines()]
+    assert "Groundwater level" not in line_labels
+    assert "Surface level" not in line_labels
+    assert isinstance(axes.get_figure(), Figure)
+    plt.close("all")
+
+    with pytest.raises(UserError, match="requires soil data"):
+        result.plot_bearing_overview()
