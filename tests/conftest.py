@@ -6,10 +6,40 @@ from openapi_core import Config, OpenAPI, V30RequestValidator
 from pygef.common import Location
 from pygef.cpt import CPTData
 
+from pypilecore.results import (
+    CustomBearingResults,
+    CustomCptBearingResult,
+    GrouperResults,
+)
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
 from pypilecore.results.compression.multi_cpt_results import (
     MultiCPTCompressionBearingResults,
 )
+
+
+def _custom_bearing_results_from_multi_cpt(
+    multi_cpt_bearing_results: MultiCPTCompressionBearingResults,
+) -> CustomBearingResults:
+    """
+    Build a CustomBearingResults carrying the *same numbers* as a PileCore result, so the
+    custom path can be checked for equivalence against the PileCore-driven path.
+    """
+    records = []
+    for name, result in multi_cpt_bearing_results.cpt_results.cpt_results_dict.items():
+        soil_properties = result.soil_properties
+        records.append(
+            CustomCptBearingResult(
+                test_id=name,
+                x=soil_properties.x,
+                y=soil_properties.y,
+                pile_tip_level_nap=result.table.pile_tip_level_nap,
+                R_b_cal=result.table.R_b_cal,
+                R_s_cal=result.table.R_s_cal,
+                F_nk_d=result.table.F_nk_d,
+                R_c_d_net=result.table.R_c_d_net,
+            )
+        )
+    return CustomBearingResults(records)
 
 
 @pytest.fixture
@@ -239,6 +269,44 @@ def mock_cases_multi_cpt_bearing_results(
     return CasesMultiCPTBearingResults(
         **mock_cases_multi_cpt_bearing_results_valid_data
     )
+
+
+@pytest.fixture
+def mock_custom_bearing_results(
+    mock_group_multi_cpt_bearing_response: dict,
+    mock_group_results_passover: dict,
+) -> CustomBearingResults:
+    """A CustomBearingResults carrying the same numbers as the PileCore group fixture."""
+    multi_cpt_bearing_results = MultiCPTCompressionBearingResults.from_api_response(
+        response_dict=mock_group_multi_cpt_bearing_response,
+        cpt_input=mock_group_results_passover,
+    )
+    return _custom_bearing_results_from_multi_cpt(multi_cpt_bearing_results)
+
+
+@pytest.fixture
+def mock_cases_grouper_results_custom(
+    mock_group_cpts_response: dict,
+    mock_custom_bearing_results: CustomBearingResults,
+    mock_group_results_passover: dict,
+) -> dict:
+    """
+    The `results_per_case` + `cpt_locations` for a CasesGrouperResults built from a
+    custom (externally-computed) bearing-results object.
+    """
+    grouper_results = GrouperResults.from_grouper_response(
+        mock_group_cpts_response,
+        pile_load_uls=100,
+        bearing_results=mock_custom_bearing_results,
+    )
+    cpt_locations = {
+        test_id: Location(srs_name="RD", **info["location"])
+        for test_id, info in mock_group_results_passover.items()
+    }
+    return {
+        "results_per_case": {"case_1": grouper_results, "case_2": grouper_results},
+        "cpt_locations": cpt_locations,
+    }
 
 
 @pytest.fixture
