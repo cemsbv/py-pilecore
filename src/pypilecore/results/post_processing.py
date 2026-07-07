@@ -14,6 +14,7 @@ from matplotlib.figure import Figure
 from numpy.typing import NDArray
 from scipy.spatial import Delaunay, Voronoi, voronoi_plot_2d
 
+from pypilecore.exceptions import UserError
 from pypilecore.results.plots import plot_bearing_overview
 from pypilecore.results.soil_properties import SoilProperties
 
@@ -159,19 +160,21 @@ class MaxBearingResult:
                     "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
                 )
 
-        # add horizontal lines
-        axes.axhline(
-            y=self.soil_properties.groundwater_level_ref,
-            color="tab:blue",
-            linestyle="--",
-            label="Groundwater level",
-        )
-        axes.axhline(
-            y=self.soil_properties.surface_level_ref,
-            color="tab:brown",
-            linestyle="--",
-            label="Surface level",
-        )
+        # add horizontal lines (skipped for a coordinate-only SoilProperties without levels)
+        if self.soil_properties.groundwater_level_ref is not None:
+            axes.axhline(
+                y=self.soil_properties.groundwater_level_ref,
+                color="tab:blue",
+                linestyle="--",
+                label="Groundwater level",
+            )
+        if self.soil_properties.surface_level_ref is not None:
+            axes.axhline(
+                y=self.soil_properties.surface_level_ref,
+                color="tab:brown",
+                linestyle="--",
+                label="Surface level",
+            )
 
         # add bearing result subplot
         axes.plot(
@@ -228,6 +231,12 @@ class MaxBearingResult:
             Tuple with the 4 Axes objects where the data was plotted on.
             In order: qc, friction ratio, soil layers, bearing capacities
         """
+        if self.soil_properties.cpt_table is None:
+            raise UserError(
+                "Plotting the bearing overview requires soil data, but this "
+                "MaxBearingResult carries a coordinate-only SoilProperties (no "
+                "cpt_table). Attach a raw CPT trace + soil layers to enable this plot."
+            )
         return plot_bearing_overview(
             plot_qc=self.soil_properties.cpt_table.plot_qc,
             plot_friction_ratio=self.soil_properties.cpt_table.plot_friction_ratio,

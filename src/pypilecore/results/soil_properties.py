@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 from functools import lru_cache
-from typing import Any, List, Sequence, Tuple, Union
+from typing import Any, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -12,6 +12,7 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 from numpy.typing import NDArray
 
+from pypilecore.exceptions import UserError
 from pypilecore.utils import depth_to_nap, nap_to_depth
 
 Number = Union[float, int]
@@ -451,29 +452,38 @@ class SoilProperties:
 
     def __init__(
         self,
-        cpt_table: CPTTable,
-        layer_table: LayerTable,
-        ref_height: float,
-        surface_level_ref: float,
-        groundwater_level_ref: float,
+        cpt_table: CPTTable | None = None,
+        layer_table: LayerTable | None = None,
+        ref_height: float | None = None,
+        surface_level_ref: float | None = None,
+        groundwater_level_ref: float | None = None,
         test_id: str | None = None,
         x: float | None = None,
         y: float | None = None,
     ):
         """
+        A `SoilProperties` object always identifies a CPT (via `test_id`/`x`/`y`) and may
+        optionally carry a raw CPT trace + soil layers.
+
+        When the trace-carrying tables (`cpt_table`, `layer_table`) and reference levels
+        (`ref_height`, `surface_level_ref`, `groundwater_level_ref`) are omitted, the
+        object is "coordinate-only": it supports the numbers-only (Tier-1) flows, while
+        trace-dependent plotting methods raise a clear ``UserError``.
+
         Parameters
         ----------
         cpt_table:
-            The CPTTable object
+            The CPTTable object. Optional; ``None`` for a coordinate-only object.
         layer_table:
-            The LayerTable object.
+            The LayerTable object. Optional; ``None`` for a coordinate-only object.
         ref_height:
-            The vertical reference [m].
+            The vertical reference [m]. Optional; ``None`` for a coordinate-only object.
         surface_level_ref:
             The elevation of the surface w.r.t. the vertical reference [m]. This could
-            be the level post-excavation.
+            be the level post-excavation. Optional; ``None`` for a coordinate-only object.
         groundwater_level_ref:
-            The elevation of the groundwater w.r.t. the vertical reference [m].
+            The elevation of the groundwater w.r.t. the vertical reference [m]. Optional;
+            ``None`` for a coordinate-only object.
         test_id:
             Identifier of the CPT
         x:
@@ -491,13 +501,13 @@ class SoilProperties:
         self._y = y
 
     @property
-    def cpt_table(self) -> CPTTable:
-        """The CPTTable object"""
+    def cpt_table(self) -> Optional[CPTTable]:
+        """The CPTTable object, or ``None`` for a coordinate-only object."""
         return self._cpt_table
 
     @property
-    def layer_table(self) -> LayerTable:
-        """The LayerTable object"""
+    def layer_table(self) -> Optional[LayerTable]:
+        """The LayerTable object, or ``None`` for a coordinate-only object."""
         return self._layer_table
 
     @property
@@ -516,19 +526,20 @@ class SoilProperties:
         return self._test_id
 
     @property
-    def ref_height(self) -> float:
-        """The vertical reference [m]."""
+    def ref_height(self) -> Optional[float]:
+        """The vertical reference [m], or ``None`` for a coordinate-only object."""
         return self._ref_height
 
     @property
-    def groundwater_level_ref(self) -> float:
-        """The elevation of the groundwater w.r.t. the vertical reference [m]."""
+    def groundwater_level_ref(self) -> Optional[float]:
+        """The elevation of the groundwater w.r.t. the vertical reference [m], or
+        ``None`` for a coordinate-only object."""
         return self._groundwater_level_ref
 
     @property
-    def surface_level_ref(self) -> float:
+    def surface_level_ref(self) -> Optional[float]:
         """The elevation of the surface w.r.t. the vertical reference [m]. This could
-        be the level post-excavation."""
+        be the level post-excavation. ``None`` for a coordinate-only object."""
         return self._surface_level_ref
 
     def plot_layers(
@@ -559,6 +570,13 @@ class SoilProperties:
         axes:
             The `Axes` object where the soil layers were plotted on
         """
+        if self._layer_table is None:
+            raise UserError(
+                "Plotting the soil layers requires soil data, but this is a "
+                "coordinate-only SoilProperties (no layer_table). Attach a raw CPT "
+                "trace + soil layers to enable this plot."
+            )
+
         if axes is not None:
             if not isinstance(axes, Axes):
                 raise TypeError(
@@ -656,6 +674,12 @@ class SoilProperties:
         fig:
             The matplotlib Figure
         """
+        if self._cpt_table is None or self._layer_table is None:
+            raise UserError(
+                "Plotting the qc / friction-ratio / soil-layer overview requires soil "
+                "data, but this is a coordinate-only SoilProperties (no cpt_table / "
+                "layer_table). Attach a raw CPT trace + soil layers to enable this plot."
+            )
 
         kwargs_subplot = {
             "gridspec_kw": {"width_ratios": width_ratios},
