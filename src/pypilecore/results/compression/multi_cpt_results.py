@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Any, Dict, List, Sequence, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Sequence, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,6 +15,14 @@ from pypilecore.results.compression.single_cpt_results import (
     SingleCPTCompressionBearingResults,
 )
 from pypilecore.results.load_settlement import get_load_settlement_plot
+from pypilecore.results.post_processing import (
+    MaxBearingResult,
+    MaxBearingResults,
+    MaxBearingTable,
+)
+
+if TYPE_CHECKING:
+    from pypilecore.results.typing import GrouperCptInput
 
 Number = Union[float, int]
 
@@ -555,6 +563,72 @@ class MultiCPTCompressionBearingResults:
     def group_results_table(self) -> CPTCompressionGroupResultsTable:
         """The CPTGroupResultsTable dataclass, containing the group results."""
         return self._group_results_table
+
+    @property
+    def pile_tip_levels_nap(self) -> List[float]:
+        """
+        The shared pile-tip-level grid [m w.r.t. NAP] of all CPTs.
+
+        Grouper adapter (`GrouperBearingResultsLike`). Validates that all per-CPT
+        pile-tip-level grids are equal (compared rounded to 2 decimals, mirroring the
+        `frozenset(np.round(values, 2))` check in the payload builder) and returns the
+        shared grid (sorted descending). Raises a clear error when the grids differ.
+        """
+        grids = [
+            frozenset(np.round(result.table.pile_tip_level_nap, 2))
+            for result in self.cpt_results.results
+        ]
+        if len(set(grids)) > 1:
+            raise ValueError(
+                "The CPTs do not share the same pile-tip-level grid. "
+                "The PileCore grouper requires all CPTs to have a valid bearing "
+                "capacity for the same pile tip levels."
+            )
+        if not grids:
+            return []
+        return [float(value) for value in sorted(grids[0], reverse=True)]
+
+    def grouper_cpt_inputs(self) -> List["GrouperCptInput"]:
+        """
+        The per-CPT grouper-payload inputs (payload side of `GrouperBearingResultsLike`).
+        """
+        from pypilecore.results.typing import GrouperCptInput
+
+        return [
+            GrouperCptInput(
+                name=name,
+                x=result.soil_properties.x,
+                y=result.soil_properties.y,
+                pile_tip_level_nap=result.table.pile_tip_level_nap,
+                R_b_cal=result.table.R_b_cal,
+                R_s_cal=result.table.R_s_cal,
+                F_nk_d=result.table.F_nk_d,
+            )
+            for name, result in self.cpt_results.cpt_results_dict.items()
+        ]
+
+    def base_max_bearing_results(self) -> MaxBearingResults:
+        """
+        The per-CPT baseline that the subgroup fold overlays onto (wrapping side of
+        `GrouperBearingResultsLike`). Mirrors the single-CPT baseline that
+        `GrouperResults.cpt_results` folds the subgroup capacities over.
+        """
+        return MaxBearingResults(
+            cpt_results_dict={
+                name: MaxBearingResult(
+                    soil_properties=result.soil_properties,
+                    pile_head_level_nap=result.pile_head_level_nap,
+                    table=MaxBearingTable(
+                        pile_tip_level_nap=result.table.pile_tip_level_nap,
+                        R_c_d_net=result.table.R_c_d_net,
+                        F_nk_d=result.table.F_nk_d,
+                        origin=[f"CPT:{name}"]
+                        * len(result.table.pile_tip_level_nap),
+                    ),
+                )
+                for name, result in self.cpt_results.cpt_results_dict.items()
+            }
+        )
 
     def boxplot(
         self,

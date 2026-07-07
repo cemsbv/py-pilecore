@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import logging
 from copy import deepcopy
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import numpy as np
 from shapely.geometry import Polygon, mapping
 
 from pypilecore.results import SingleCPTCompressionBearingResults
+from pypilecore.results.typing import GrouperBearingResultsLike, GrouperCptInput
 
 
 def create_grouper_payload(
@@ -110,6 +111,120 @@ def create_grouper_payload(
         Dictionary with the payload content for the PileCore endpoint
         "/grouper/group_cpts"
     """
+    # Adapt the PileCore-shaped dict onto the source-agnostic payload seam and build the
+    # payload through the shared core. Kept for backwards compatibility; prefer
+    # `create_grouper_payload_from_bearing_results`.
+    cpt_inputs = [
+        GrouperCptInput(
+            name=name,
+            x=cpt_result.soil_properties.x,
+            y=cpt_result.soil_properties.y,
+            pile_tip_level_nap=cpt_result.table.pile_tip_level_nap,
+            R_b_cal=cpt_result.table.R_b_cal,
+            R_s_cal=cpt_result.table.R_s_cal,
+            F_nk_d=cpt_result.table.F_nk_d,
+        )
+        for name, cpt_result in cpt_results_dict.items()
+    ]
+    return _build_grouper_payload(
+        cpt_inputs,
+        building_polygon=building_polygon,
+        cpt_grid_rotation=cpt_grid_rotation,
+        gamma_bottom=gamma_bottom,
+        gamma_shaft=gamma_shaft,
+        include_centre_to_centre_check=include_centre_to_centre_check,
+        stiff_construction=stiff_construction,
+        resolution=resolution,
+        overrule_nan=overrule_nan,
+        skip_nan=skip_nan,
+    )
+
+
+def create_grouper_payload_from_bearing_results(
+    bearing: GrouperBearingResultsLike,
+    building_polygon: Polygon | None = None,
+    cpt_grid_rotation: float = 0.0,
+    gamma_bottom: float = 1.2,
+    gamma_shaft: float = 1.2,
+    include_centre_to_centre_check: bool = False,
+    stiff_construction: bool = False,
+    resolution: float = 0.5,
+    overrule_nan: float = 0.0,
+    skip_nan: bool = False,
+) -> dict:
+    """
+    Creates a dictionary with the payload content for the PileCore endpoint
+    "/grouper/group_cpts" from any object that satisfies `GrouperBearingResultsLike`.
+
+    This is the source-agnostic sibling of `create_grouper_payload`: it serves both a
+    PileCore `MultiCPTCompressionBearingResults` and a user-built `CustomBearingResults`,
+    because both satisfy the `GrouperBearingResultsLike` protocol.
+
+    See `create_grouper_payload` for the meaning of the grouper settings and the
+    validation rules.
+
+    Parameters
+    ----------
+    bearing:
+        Any object satisfying `GrouperBearingResultsLike` (e.g. a PileCore
+        `MultiCPTCompressionBearingResults` or a `CustomBearingResults`). Should contain
+        at least 2 CPTs with valid bearing capacity.
+    overrule_nan:
+        Default is 0.0.
+        The default behavior is to replace NaN with zero, for one of the following
+        attributes ["R_b_cal", "F_nk_d", "R_s_cal"].
+
+        Note: inert for a `CustomBearingResults` source, which is NaN-free by construction.
+    skip_nan:
+        Default is False.
+        If True the CPTs are skipped that have NaN values in one of the following
+        attributes ["R_b_cal", "F_nk_d", "R_s_cal"].
+
+        Note: inert for a `CustomBearingResults` source, which is NaN-free by construction.
+
+    Returns
+    -------
+    payload:
+        Dictionary with the payload content for the PileCore endpoint
+        "/grouper/group_cpts"
+    """
+    return _build_grouper_payload(
+        bearing.grouper_cpt_inputs(),
+        building_polygon=building_polygon,
+        cpt_grid_rotation=cpt_grid_rotation,
+        gamma_bottom=gamma_bottom,
+        gamma_shaft=gamma_shaft,
+        include_centre_to_centre_check=include_centre_to_centre_check,
+        stiff_construction=stiff_construction,
+        resolution=resolution,
+        overrule_nan=overrule_nan,
+        skip_nan=skip_nan,
+    )
+
+
+def _build_grouper_payload(
+    cpt_inputs: List[GrouperCptInput],
+    *,
+    building_polygon: Polygon | None,
+    cpt_grid_rotation: float,
+    gamma_bottom: float,
+    gamma_shaft: float,
+    include_centre_to_centre_check: bool,
+    stiff_construction: bool,
+    resolution: float,
+    overrule_nan: float,
+    skip_nan: bool,
+) -> dict:
+    """
+    Shared core that builds the "/grouper/group_cpts" payload from a list of neutral
+    `GrouperCptInput` records.
+
+    Holds the NaN-handling coercion (`overrule_nan`/`skip_nan`), the equal-pile-tip-level
+    validation and the "at least 2 valid CPTs" requirement, so both
+    `create_grouper_payload` (PileCore dict) and
+    `create_grouper_payload_from_bearing_results` (any `GrouperBearingResultsLike`) share
+    exactly the same behaviour.
+    """
     # create default payload object
     payload: Dict[str, Any] = {
         "cpt_grid_rotation": cpt_grid_rotation,
@@ -127,16 +242,21 @@ def create_grouper_payload(
     # set bearing capacity in payload
     cpt_objects = []
     pile_tip_level_object = {}
-    for name, cpt_result in cpt_results_dict.items():
+    for cpt_input in cpt_inputs:
+        name = cpt_input.name
         has_nan = False
         # check if coordinate are set
-        if cpt_result.soil_properties.x is None or cpt_result.soil_properties.y is None:
+        if cpt_input.x is None or cpt_input.y is None:
             raise ValueError(
                 f" CPT {name} does not have a x-coordinate or y-coordinate"
             )
 
-        for item in ["R_b_cal", "F_nk_d", "R_s_cal"]:
-            if np.isnan(cpt_result.table.__getattribute__(item)).any():
+        for item, values in (
+            ("R_b_cal", cpt_input.R_b_cal),
+            ("F_nk_d", cpt_input.F_nk_d),
+            ("R_s_cal", cpt_input.R_s_cal),
+        ):
+            if np.isnan(values).any():
                 if skip_nan:
                     has_nan = True
                     logging.warning(
@@ -155,24 +275,26 @@ def create_grouper_payload(
             continue
 
         # map pile tip levels to object
-        pile_tip_level_object[name] = cpt_result.table.pile_tip_level_nap.tolist()
+        pile_tip_level_object[name] = np.asarray(
+            cpt_input.pile_tip_level_nap
+        ).tolist()
 
         # add bearing capacity result to object
         cpt_objects.append(
             {
                 "bottom_bearing_capacity": np.nan_to_num(
-                    cpt_result.table.R_b_cal, nan=overrule_nan
+                    cpt_input.R_b_cal, nan=overrule_nan
                 ).tolist(),
                 "negative_friction": np.nan_to_num(
-                    cpt_result.table.F_nk_d, nan=overrule_nan
+                    cpt_input.F_nk_d, nan=overrule_nan
                 ).tolist(),
                 "shaft_bearing_capacity": np.nan_to_num(
-                    cpt_result.table.R_s_cal, nan=overrule_nan
+                    cpt_input.R_s_cal, nan=overrule_nan
                 ).tolist(),
                 "name": name,
                 "coordinates": {
-                    "x": cpt_result.soil_properties.x,
-                    "y": cpt_result.soil_properties.y,
+                    "x": cpt_input.x,
+                    "y": cpt_input.y,
                 },
             }
         )

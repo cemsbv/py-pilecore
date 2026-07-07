@@ -1,5 +1,6 @@
 from pypilecore.input.grouper_properties import (
     create_grouper_payload,
+    create_grouper_payload_from_bearing_results,
     create_grouper_report_payload,
 )
 from pypilecore.input.multi_cpt import (
@@ -12,6 +13,7 @@ __all__ = [
     "create_soil_properties_payload",
     "create_multi_cpt_payload",
     "create_grouper_payload",
+    "create_grouper_payload_from_bearing_results",
     "create_grouper_report_payload",
     "create_multi_cpt_report_payload",
 ]
