@@ -570,12 +570,14 @@ class SoilProperties:
         axes:
             The `Axes` object where the soil layers were plotted on
         """
-        if self._layer_table is None:
+        if self._layer_table is None or self._ref_height is None:
             raise UserError(
                 "Plotting the soil layers requires soil data, but this is a "
                 "coordinate-only SoilProperties (no layer_table). Attach a raw CPT "
                 "trace + soil layers to enable this plot."
             )
+        layer_table = self._layer_table
+        ref_height = self._ref_height
 
         if axes is not None:
             if not isinstance(axes, Axes):
@@ -600,21 +602,27 @@ class SoilProperties:
                     "Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. "
                 )
 
+        # excavation depth is constant across layers; resolve it once
+        excavation_depth: float | None = None
+        if hide_excavated:
+            if self._surface_level_ref is None:
+                raise UserError(
+                    "hide_excavated=True requires a surface level, but this "
+                    "SoilProperties has no surface_level_ref."
+                )
+            excavation_depth = nap_to_depth(self._surface_level_ref, ref_height)
+
         # add soil layers subplot
         for depth_btm, delta_z, soil_code in zip(
-            self.layer_table.depth_btm,
-            self.layer_table.thickness,
-            self.layer_table.soil_code,
+            layer_table.depth_btm,
+            layer_table.thickness,
+            layer_table.soil_code,
         ):
-            if hide_excavated:
-                if depth_btm < nap_to_depth(self.surface_level_ref, self.ref_height):
+            if excavation_depth is not None:
+                if depth_btm < excavation_depth:
                     continue
-                if depth_btm - delta_z < nap_to_depth(
-                    self.surface_level_ref, self.ref_height
-                ):
-                    delta_z = depth_btm - nap_to_depth(
-                        self.surface_level_ref, self.ref_height
-                    )
+                if depth_btm - delta_z < excavation_depth:
+                    delta_z = depth_btm - excavation_depth
 
             soil_key = soil_code[0].upper()
             if soil_key in SOIL_COLORS._member_names_:
@@ -628,8 +636,8 @@ class SoilProperties:
                 )
             axes.fill_between(
                 [0, 1],
-                y1=depth_to_nap(depth_btm, self.ref_height) + delta_z,
-                y2=depth_to_nap(depth_btm, self.ref_height),
+                y1=depth_to_nap(depth_btm, ref_height) + delta_z,
+                y2=depth_to_nap(depth_btm, ref_height),
                 color=color,
             )
         axes.get_xaxis().set_visible(False)
@@ -680,6 +688,7 @@ class SoilProperties:
                 "data, but this is a coordinate-only SoilProperties (no cpt_table / "
                 "layer_table). Attach a raw CPT trace + soil layers to enable this plot."
             )
+        cpt_table = self._cpt_table
 
         kwargs_subplot = {
             "gridspec_kw": {"width_ratios": width_ratios},
@@ -716,8 +725,8 @@ class SoilProperties:
             label="Surface level",
         )
 
-        self.cpt_table.plot_qc(ax_qc, add_legend=False)
-        self.cpt_table.plot_friction_ratio(ax_rf, add_legend=False)
+        cpt_table.plot_qc(ax_qc, add_legend=False)
+        cpt_table.plot_friction_ratio(ax_rf, add_legend=False)
         self.plot_layers(axes=ax_layers, add_legend=False)
 
         if add_legend:
