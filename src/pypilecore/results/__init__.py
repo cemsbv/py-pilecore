@@ -1,14 +1,14 @@
 from pypilecore.results.cases_grouper_results import CasesGrouperResults
 from pypilecore.results.cases_multi_cpt_results import CasesMultiCPTBearingResults
-from pypilecore.results.custom_bearing_results import (
-    CustomBearingResults,
-    CustomCptBearingResult,
-)
 from pypilecore.results.compression.multi_cpt_results import (
     MultiCPTCompressionBearingResults,
 )
 from pypilecore.results.compression.single_cpt_results import (
     SingleCPTCompressionBearingResults,
+)
+from pypilecore.results.custom_bearing_results import (
+    CustomBearingResults,
+    CustomCptBearingResult,
 )
 from pypilecore.results.grouper_result import GrouperResults
 from pypilecore.results.soil_properties import SoilProperties

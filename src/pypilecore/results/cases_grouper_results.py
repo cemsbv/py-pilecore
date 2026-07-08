@@ -231,9 +231,7 @@ def _validate_results_per_case(
         if results.bearing_results.cpt_names != test_ids:
             raise ValueError("All GrouperResults objects must have the same test ids.")
 
-        if (
-            list(results.bearing_results.pile_tip_levels_nap) != pile_tip_levels_nap
-        ):
+        if list(results.bearing_results.pile_tip_levels_nap) != pile_tip_levels_nap:
             raise ValueError(
                 "All GrouperResults objects must have the same pile tip levels."
             )

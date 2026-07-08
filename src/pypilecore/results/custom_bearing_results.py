@@ -115,13 +115,9 @@ class CustomCptBearingResult:
             mismatches.append(
                 f"test_id ({soil_properties.test_id!r} != {self._test_id!r})"
             )
-        if soil_properties.x is not None and not np.isclose(
-            soil_properties.x, self._x
-        ):
+        if soil_properties.x is not None and not np.isclose(soil_properties.x, self._x):
             mismatches.append(f"x ({soil_properties.x!r} != {self._x!r})")
-        if soil_properties.y is not None and not np.isclose(
-            soil_properties.y, self._y
-        ):
+        if soil_properties.y is not None and not np.isclose(soil_properties.y, self._y):
             mismatches.append(f"y ({soil_properties.y!r} != {self._y!r})")
         if mismatches:
             raise ValueError(

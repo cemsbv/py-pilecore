@@ -275,9 +275,7 @@ def _build_grouper_payload(
             continue
 
         # map pile tip levels to object
-        pile_tip_level_object[name] = np.asarray(
-            cpt_input.pile_tip_level_nap
-        ).tolist()
+        pile_tip_level_object[name] = np.asarray(cpt_input.pile_tip_level_nap).tolist()
 
         # add bearing capacity result to object
         cpt_objects.append(
