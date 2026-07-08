@@ -67,9 +67,49 @@ isort --settings-path "pyproject.toml" src/pypilecore tests notebooks
 
 ## Lint
 
-To maintain code quality we use the GitHub super-linter.
+To maintain code quality we use the [GitHub super-linter](https://github.com/super-linter/super-linter).
 
-To run the linters locally, run the `run_super_linters.sh` bash script from the root directory.
+### Reproduce the full CI lint job (Docker)
+
+The CI lint job runs the super-linter Docker image. To reproduce it exactly,
+run the `run_super_linter.sh` bash script from the root directory (requires
+Docker):
+
+```bash
+./run_super_linter.sh
+```
+
+Like CI, this lints only the files changed against `main` and auto-fixes
+black/isort formatting in place.
+
+### Run the Python linters without Docker
+
+The active Python linters are pinned in the `lint` optional-dependency group.
+CI lints only the Python files changed against `main` (and excludes `tests/`),
+so collect that file list first, then run each linter against it:
+
+```bash
+pip install -e ".[lint]"
+FILES=$(git diff --name-only main...HEAD -- '*.py' | grep -v '^tests/')
+
+black --check --config "pyproject.toml" $FILES
+isort --check-only --settings-path "pyproject.toml" $FILES
+flake8 --config ".flake8" $FILES
+```
+
+`mypy` needs a caveat: super-linter runs it **without installing the project**,
+so unresolved third-party imports (matplotlib, numpy, pandas) become `Any` and
+their errors disappear. Reproduce that by running `mypy` from an environment
+that has only `mypy` installed:
+
+```bash
+python -m venv .mypy-venv
+.mypy-venv/bin/pip install mypy==2.1.0
+.mypy-venv/bin/mypy --config-file "pyproject.toml" --no-install-types $FILES
+```
+
+Running `mypy` in a fully-installed environment reports extra import-related
+errors that CI does not, so the Docker script above remains authoritative.
 
 ## UnitTest
 
