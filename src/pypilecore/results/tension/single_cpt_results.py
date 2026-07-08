@@ -11,6 +11,7 @@ from matplotlib.figure import Figure
 from numpy.typing import NDArray
 
 from pypilecore.common.piles import PileGridProperties
+from pypilecore.exceptions import UserError
 from pypilecore.results.plots import plot_bearing_overview
 from pypilecore.results.soil_properties import (
     CPTTable,
@@ -333,6 +334,13 @@ class SingleCPTTensionBearingResults:
             Tuple with the 4 Axes objects where the data was plotted on.
             In order: qc, friction ratio, soil layers, bearing capacities
         """
+        if self.soil_properties.cpt_table is None:
+            raise UserError(
+                "Plotting the bearing overview requires soil data, but this "
+                "SingleCPTTensionBearingResults carries a coordinate-only "
+                "SoilProperties (no cpt_table). Attach a raw CPT trace + soil layers "
+                "to enable this plot."
+            )
         return plot_bearing_overview(
             plot_qc=self.soil_properties.cpt_table.plot_qc,
             plot_friction_ratio=self.soil_properties.cpt_table.plot_friction_ratio,
