@@ -622,8 +622,7 @@ class MultiCPTCompressionBearingResults:
                         pile_tip_level_nap=result.table.pile_tip_level_nap,
                         R_c_d_net=result.table.R_c_d_net,
                         F_nk_d=result.table.F_nk_d,
-                        origin=[f"CPT:{name}"]
-                        * len(result.table.pile_tip_level_nap),
+                        origin=[f"CPT:{name}"] * len(result.table.pile_tip_level_nap),
                     ),
                 )
                 for name, result in self.cpt_results.cpt_results_dict.items()
