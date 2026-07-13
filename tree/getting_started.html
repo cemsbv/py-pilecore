@@ -54,6 +54,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#create-results">Create results</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#grouper-with-custom-externally-computed-bearing-results">Grouper with custom (externally-computed) bearing results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-the-custom-bearing-results">Build the custom bearing results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-payload-and-call-the-endpoint">Create the payload and call the endpoint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrap-the-response-and-inspect-the-results">Wrap the response and inspect the results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-the-report">Generate the report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optional-tier-2-overview-plots">Optional: Tier-2 overview plots</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
@@ -156,6 +164,160 @@ way.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiCPTBearingResults</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">MultiCPTBearingResults</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">passover</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="grouper-with-custom-externally-computed-bearing-results">
+<h2>Grouper with custom (externally-computed) bearing results<a class="headerlink" href="#grouper-with-custom-externally-computed-bearing-results" title="Link to this heading"></a></h2>
+<p>The Grouper does not require you to compute your pile bearing capacities in PileCore. If
+you already have per-CPT bearing capacities from other software, you can feed those
+“bring-your-own” numbers into the whole Grouper flow — payload, response wrapping,
+viewers and report — with a <code class="code docutils literal notranslate"><span class="pre">CustomBearingResults</span></code> object, as a near drop-in for a
+PileCore-computed <code class="code docutils literal notranslate"><span class="pre">MultiCPTCompressionBearingResults</span></code>.</p>
+<p>There are two capability tiers:</p>
+<ul class="simple">
+<li><p><strong>Tier 1 (numbers + coordinates only):</strong> per CPT/pile-tip-level the four bearing
+numbers (<code class="code docutils literal notranslate"><span class="pre">R_b_cal</span></code>, <code class="code docutils literal notranslate"><span class="pre">R_s_cal</span></code>, <code class="code docutils literal notranslate"><span class="pre">F_nk_d</span></code>, <code class="code docutils literal notranslate"><span class="pre">R_c_d_net</span></code>) plus the
+CPT coordinates (<code class="code docutils literal notranslate"><span class="pre">x</span></code>/<code class="code docutils literal notranslate"><span class="pre">y</span></code>). This unlocks the payload, API call, response
+wrapping, the table/scatter/plan viewers and the report.</p></li>
+<li><p><strong>Tier 2 (optional enrichment):</strong> additionally attach a raw CPT trace + soil layers (a
+full <code class="code docutils literal notranslate"><span class="pre">SoilProperties</span></code>) to a CPT, which unlocks its per-CPT bearing-overview plot.</p></li>
+</ul>
+<section id="build-the-custom-bearing-results">
+<h3>Build the custom bearing results<a class="headerlink" href="#build-the-custom-bearing-results" title="Link to this heading"></a></h3>
+<p>Assemble one <code class="code docutils literal notranslate"><span class="pre">CustomCptBearingResult</span></code> per CPT — flat arrays over one shared
+pile-tip-level grid — and collect them in a <code class="code docutils literal notranslate"><span class="pre">CustomBearingResults</span></code>. All arrays for a
+CPT must have the same length, coordinates are required, and the values must be NaN-free
+(validated at construction).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomBearingResults</span><span class="p">,</span> <span class="n">CustomCptBearingResult</span>
+
+<span class="n">custom_bearing_results</span> <span class="o">=</span> <span class="n">CustomBearingResults</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">CustomCptBearingResult</span><span class="p">(</span>
+            <span class="n">test_id</span><span class="o">=</span><span class="s2">&quot;CPT-1&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">122901.28</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="mf">484464.34</span><span class="p">,</span>
+            <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">12.0</span><span class="p">],</span>
+            <span class="n">R_b_cal</span><span class="o">=</span><span class="p">[</span><span class="mf">900.0</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mf">1100.0</span><span class="p">],</span>
+            <span class="n">R_s_cal</span><span class="o">=</span><span class="p">[</span><span class="mf">300.0</span><span class="p">,</span> <span class="mf">320.0</span><span class="p">,</span> <span class="mf">340.0</span><span class="p">],</span>
+            <span class="n">F_nk_d</span><span class="o">=</span><span class="p">[</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span>
+            <span class="n">R_c_d_net</span><span class="o">=</span><span class="p">[</span><span class="mf">850.0</span><span class="p">,</span> <span class="mf">950.0</span><span class="p">,</span> <span class="mf">1050.0</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">CustomCptBearingResult</span><span class="p">(</span>
+            <span class="n">test_id</span><span class="o">=</span><span class="s2">&quot;CPT-2&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">122916.22</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="mf">484415.22</span><span class="p">,</span>
+            <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">12.0</span><span class="p">],</span>
+            <span class="n">R_b_cal</span><span class="o">=</span><span class="p">[</span><span class="mf">880.0</span><span class="p">,</span> <span class="mf">980.0</span><span class="p">,</span> <span class="mf">1080.0</span><span class="p">],</span>
+            <span class="n">R_s_cal</span><span class="o">=</span><span class="p">[</span><span class="mf">290.0</span><span class="p">,</span> <span class="mf">310.0</span><span class="p">,</span> <span class="mf">330.0</span><span class="p">],</span>
+            <span class="n">F_nk_d</span><span class="o">=</span><span class="p">[</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span>
+            <span class="n">R_c_d_net</span><span class="o">=</span><span class="p">[</span><span class="mf">830.0</span><span class="p">,</span> <span class="mf">930.0</span><span class="p">,</span> <span class="mf">1030.0</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="c1"># ... at least 2 CPTs, all on the same pile-tip-level grid</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="create-the-payload-and-call-the-endpoint">
+<h3>Create the payload and call the endpoint<a class="headerlink" href="#create-the-payload-and-call-the-endpoint" title="Link to this heading"></a></h3>
+<p>Use <code class="code docutils literal notranslate"><span class="pre">create_grouper_payload_from_bearing_results</span></code> — the source-agnostic sibling of
+<code class="code docutils literal notranslate"><span class="pre">create_grouper_payload</span></code> — and call the Grouper endpoint exactly as in the PileCore
+workflow.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nuclei.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">NucleiClient</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_groups_api_result</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.input</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_grouper_payload_from_bearing_results</span>
+
+<span class="n">grouper_payload</span> <span class="o">=</span> <span class="n">create_grouper_payload_from_bearing_results</span><span class="p">(</span><span class="n">custom_bearing_results</span><span class="p">)</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">NucleiClient</span><span class="p">()</span>
+<span class="n">grouper_response</span> <span class="o">=</span> <span class="n">get_groups_api_result</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">grouper_payload</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="wrap-the-response-and-inspect-the-results">
+<h3>Wrap the response and inspect the results<a class="headerlink" href="#wrap-the-response-and-inspect-the-results" title="Link to this heading"></a></h3>
+<p>Wrap the response with <code class="code docutils literal notranslate"><span class="pre">GrouperResults.from_grouper_response</span></code>, passing your custom
+object as the <code class="code docutils literal notranslate"><span class="pre">bearing_results</span></code>. The folded <code class="code docutils literal notranslate"><span class="pre">cpt_results</span></code> (max net design
+bearing capacity per CPT/pile-tip-level) and the case viewers work exactly as for the
+PileCore path.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pygef.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">Location</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results</span><span class="w"> </span><span class="kn">import</span> <span class="n">CasesGrouperResults</span><span class="p">,</span> <span class="n">GrouperResults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.viewers.viewer_grouper_results_per_cpt_table</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ViewerGrouperResultsPerCptTable</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">grouper_results</span> <span class="o">=</span> <span class="n">GrouperResults</span><span class="o">.</span><span class="n">from_grouper_response</span><span class="p">(</span>
+    <span class="n">grouper_response</span><span class="p">,</span>
+    <span class="n">pile_load_uls</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">bearing_results</span><span class="o">=</span><span class="n">custom_bearing_results</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Folded max-bearing results: scatter (plot) and plan (map) views.</span>
+<span class="n">max_bearing_results</span> <span class="o">=</span> <span class="n">grouper_results</span><span class="o">.</span><span class="n">cpt_results</span>
+<span class="n">max_bearing_results</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">max_bearing_results</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">pile_tip_level_nap</span><span class="o">=-</span><span class="mf">11.0</span><span class="p">)</span>
+
+<span class="c1"># Subgroup summary and map.</span>
+<span class="n">grouper_results</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">grouper_results</span><span class="o">.</span><span class="n">map</span><span class="p">()</span>
+
+<span class="c1"># Compare cases in a table viewer.</span>
+<span class="n">cpt_locations</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;CPT-1&quot;</span><span class="p">:</span> <span class="n">Location</span><span class="p">(</span><span class="n">srs_name</span><span class="o">=</span><span class="s2">&quot;RD&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">122901.28</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">484464.34</span><span class="p">),</span>
+    <span class="s2">&quot;CPT-2&quot;</span><span class="p">:</span> <span class="n">Location</span><span class="p">(</span><span class="n">srs_name</span><span class="o">=</span><span class="s2">&quot;RD&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">122916.22</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">484415.22</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">cases</span> <span class="o">=</span> <span class="n">CasesGrouperResults</span><span class="p">(</span>
+    <span class="n">results_per_case</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;my_case&quot;</span><span class="p">:</span> <span class="n">grouper_results</span><span class="p">},</span>
+    <span class="n">cpt_locations</span><span class="o">=</span><span class="n">cpt_locations</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ViewerGrouperResultsPerCptTable</span><span class="p">(</span><span class="n">cases</span><span class="p">)</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-the-report">
+<h3>Generate the report<a class="headerlink" href="#generate-the-report" title="Link to this heading"></a></h3>
+<p>The report needs nothing from the bearing results beyond the grouper payload and
+response, so Tier-1 usage is enough to produce the standard Grouper report.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_groups_api_report</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.input</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_grouper_report_payload</span>
+
+<span class="n">report_payload</span> <span class="o">=</span> <span class="n">create_grouper_report_payload</span><span class="p">(</span>
+    <span class="n">grouper_payload</span><span class="o">=</span><span class="n">grouper_payload</span><span class="p">,</span>
+    <span class="n">grouper_response</span><span class="o">=</span><span class="n">grouper_response</span><span class="p">,</span>
+    <span class="n">project_name</span><span class="o">=</span><span class="s2">&quot;My project&quot;</span><span class="p">,</span>
+    <span class="n">project_id</span><span class="o">=</span><span class="s2">&quot;PRJ-001&quot;</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s2">&quot;Jane Engineer&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">get_groups_api_report</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">report_payload</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="optional-tier-2-overview-plots">
+<h3>Optional: Tier-2 overview plots<a class="headerlink" href="#optional-tier-2-overview-plots" title="Link to this heading"></a></h3>
+<p>To also produce the per-CPT bearing-overview plot for a CPT, attach a full
+<code class="code docutils literal notranslate"><span class="pre">SoilProperties</span></code> (raw CPT trace + soil layers) to its record via the
+<code class="code docutils literal notranslate"><span class="pre">soil_properties</span></code> argument. Its <code class="code docutils literal notranslate"><span class="pre">test_id</span></code>/<code class="code docutils literal notranslate"><span class="pre">x</span></code>/<code class="code docutils literal notranslate"><span class="pre">y</span></code> must match the
+values you declared for that CPT. Without it, requesting an overview plot raises a clear
+“requires soil data” error, while every Tier-1 flow above keeps working.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># `soil_properties` is a full pypilecore SoilProperties (with cpt_table + layer_table).</span>
+<span class="n">record</span> <span class="o">=</span> <span class="n">CustomCptBearingResult</span><span class="p">(</span>
+    <span class="n">test_id</span><span class="o">=</span><span class="s2">&quot;CPT-1&quot;</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="mf">122901.28</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="mf">484464.34</span><span class="p">,</span>
+    <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">12.0</span><span class="p">],</span>
+    <span class="n">R_b_cal</span><span class="o">=</span><span class="p">[</span><span class="mf">900.0</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mf">1100.0</span><span class="p">],</span>
+    <span class="n">R_s_cal</span><span class="o">=</span><span class="p">[</span><span class="mf">300.0</span><span class="p">,</span> <span class="mf">320.0</span><span class="p">,</span> <span class="mf">340.0</span><span class="p">],</span>
+    <span class="n">F_nk_d</span><span class="o">=</span><span class="p">[</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span>
+    <span class="n">R_c_d_net</span><span class="o">=</span><span class="p">[</span><span class="mf">850.0</span><span class="p">,</span> <span class="mf">950.0</span><span class="p">,</span> <span class="mf">1050.0</span><span class="p">],</span>
+    <span class="n">soil_properties</span><span class="o">=</span><span class="n">soil_properties</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Unlocks the per-CPT overview plot on the folded result:</span>
+<span class="n">grouper_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="p">[</span><span class="s2">&quot;CPT-1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot_bearing_overview</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>

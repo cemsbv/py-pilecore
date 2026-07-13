@@ -76,7 +76,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">StrEnum</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -86,6 +86,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Patch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">depth_to_nap</span><span class="p">,</span> <span class="n">nap_to_depth</span>
 
 <span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
@@ -551,29 +552,38 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">cpt_table</span><span class="p">:</span> <span class="n">CPTTable</span><span class="p">,</span>
-        <span class="n">layer_table</span><span class="p">:</span> <span class="n">LayerTable</span><span class="p">,</span>
-        <span class="n">ref_height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">surface_level_ref</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">groundwater_level_ref</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">cpt_table</span><span class="p">:</span> <span class="n">CPTTable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_table</span><span class="p">:</span> <span class="n">LayerTable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ref_height</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">surface_level_ref</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">groundwater_level_ref</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A `SoilProperties` object always identifies a CPT (via `test_id`/`x`/`y`) and may</span>
+<span class="sd">        optionally carry a raw CPT trace + soil layers.</span>
+
+<span class="sd">        When the trace-carrying tables (`cpt_table`, `layer_table`) and reference levels</span>
+<span class="sd">        (`ref_height`, `surface_level_ref`, `groundwater_level_ref`) are omitted, the</span>
+<span class="sd">        object is &quot;coordinate-only&quot;: it supports the numbers-only (Tier-1) flows, while</span>
+<span class="sd">        trace-dependent plotting methods raise a clear ``UserError``.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        cpt_table:</span>
-<span class="sd">            The CPTTable object</span>
+<span class="sd">            The CPTTable object. Optional; ``None`` for a coordinate-only object.</span>
 <span class="sd">        layer_table:</span>
-<span class="sd">            The LayerTable object.</span>
+<span class="sd">            The LayerTable object. Optional; ``None`` for a coordinate-only object.</span>
 <span class="sd">        ref_height:</span>
-<span class="sd">            The vertical reference [m].</span>
+<span class="sd">            The vertical reference [m]. Optional; ``None`` for a coordinate-only object.</span>
 <span class="sd">        surface_level_ref:</span>
 <span class="sd">            The elevation of the surface w.r.t. the vertical reference [m]. This could</span>
-<span class="sd">            be the level post-excavation.</span>
+<span class="sd">            be the level post-excavation. Optional; ``None`` for a coordinate-only object.</span>
 <span class="sd">        groundwater_level_ref:</span>
-<span class="sd">            The elevation of the groundwater w.r.t. the vertical reference [m].</span>
+<span class="sd">            The elevation of the groundwater w.r.t. the vertical reference [m]. Optional;</span>
+<span class="sd">            ``None`` for a coordinate-only object.</span>
 <span class="sd">        test_id:</span>
 <span class="sd">            Identifier of the CPT</span>
 <span class="sd">        x:</span>
@@ -591,13 +601,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">cpt_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CPTTable</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The CPTTable object&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cpt_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CPTTable</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The CPTTable object, or ``None`` for a coordinate-only object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_table</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">layer_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LayerTable</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The LayerTable object&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">layer_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LayerTable</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The LayerTable object, or ``None`` for a coordinate-only object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_table</span>
 
     <span class="nd">@property</span>
@@ -616,19 +626,20 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_id</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">ref_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The vertical reference [m].&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ref_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The vertical reference [m], or ``None`` for a coordinate-only object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ref_height</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">groundwater_level_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The elevation of the groundwater w.r.t. the vertical reference [m].&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">groundwater_level_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The elevation of the groundwater w.r.t. the vertical reference [m], or</span>
+<span class="sd">        ``None`` for a coordinate-only object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groundwater_level_ref</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">surface_level_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">surface_level_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The elevation of the surface w.r.t. the vertical reference [m]. This could</span>
-<span class="sd">        be the level post-excavation.&quot;&quot;&quot;</span>
+<span class="sd">        be the level post-excavation. ``None`` for a coordinate-only object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface_level_ref</span>
 
 <div class="viewcode-block" id="SoilProperties.plot_layers">
@@ -661,6 +672,15 @@
 <span class="sd">        axes:</span>
 <span class="sd">            The `Axes` object where the soil layers were plotted on</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_table</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ref_height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span>
+                <span class="s2">&quot;Plotting the soil layers requires soil data, but this is a &quot;</span>
+                <span class="s2">&quot;coordinate-only SoilProperties (no layer_table). Attach a raw CPT &quot;</span>
+                <span class="s2">&quot;trace + soil layers to enable this plot.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">layer_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_table</span>
+        <span class="n">ref_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ref_height</span>
+
         <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">Axes</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
@@ -684,21 +704,27 @@
                     <span class="s2">&quot;Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. &quot;</span>
                 <span class="p">)</span>
 
+        <span class="c1"># excavation depth is constant across layers; resolve it once</span>
+        <span class="n">excavation_depth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">hide_excavated</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface_level_ref</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span>
+                    <span class="s2">&quot;hide_excavated=True requires a surface level, but this &quot;</span>
+                    <span class="s2">&quot;SoilProperties has no surface_level_ref.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">excavation_depth</span> <span class="o">=</span> <span class="n">nap_to_depth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_surface_level_ref</span><span class="p">,</span> <span class="n">ref_height</span><span class="p">)</span>
+
         <span class="c1"># add soil layers subplot</span>
         <span class="k">for</span> <span class="n">depth_btm</span><span class="p">,</span> <span class="n">delta_z</span><span class="p">,</span> <span class="n">soil_code</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layer_table</span><span class="o">.</span><span class="n">depth_btm</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layer_table</span><span class="o">.</span><span class="n">thickness</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layer_table</span><span class="o">.</span><span class="n">soil_code</span><span class="p">,</span>
+            <span class="n">layer_table</span><span class="o">.</span><span class="n">depth_btm</span><span class="p">,</span>
+            <span class="n">layer_table</span><span class="o">.</span><span class="n">thickness</span><span class="p">,</span>
+            <span class="n">layer_table</span><span class="o">.</span><span class="n">soil_code</span><span class="p">,</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="n">hide_excavated</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">depth_btm</span> <span class="o">&lt;</span> <span class="n">nap_to_depth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface_level_ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">excavation_depth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">depth_btm</span> <span class="o">&lt;</span> <span class="n">excavation_depth</span><span class="p">:</span>
                     <span class="k">continue</span>
-                <span class="k">if</span> <span class="n">depth_btm</span> <span class="o">-</span> <span class="n">delta_z</span> <span class="o">&lt;</span> <span class="n">nap_to_depth</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">surface_level_ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span>
-                <span class="p">):</span>
-                    <span class="n">delta_z</span> <span class="o">=</span> <span class="n">depth_btm</span> <span class="o">-</span> <span class="n">nap_to_depth</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">surface_level_ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span>
-                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">depth_btm</span> <span class="o">-</span> <span class="n">delta_z</span> <span class="o">&lt;</span> <span class="n">excavation_depth</span><span class="p">:</span>
+                    <span class="n">delta_z</span> <span class="o">=</span> <span class="n">depth_btm</span> <span class="o">-</span> <span class="n">excavation_depth</span>
 
             <span class="n">soil_key</span> <span class="o">=</span> <span class="n">soil_code</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">soil_key</span> <span class="ow">in</span> <span class="n">SOIL_COLORS</span><span class="o">.</span><span class="n">_member_names_</span><span class="p">:</span>
@@ -712,8 +738,8 @@
                 <span class="p">)</span>
             <span class="n">axes</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
                 <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                <span class="n">y1</span><span class="o">=</span><span class="n">depth_to_nap</span><span class="p">(</span><span class="n">depth_btm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span><span class="p">)</span> <span class="o">+</span> <span class="n">delta_z</span><span class="p">,</span>
-                <span class="n">y2</span><span class="o">=</span><span class="n">depth_to_nap</span><span class="p">(</span><span class="n">depth_btm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_height</span><span class="p">),</span>
+                <span class="n">y1</span><span class="o">=</span><span class="n">depth_to_nap</span><span class="p">(</span><span class="n">depth_btm</span><span class="p">,</span> <span class="n">ref_height</span><span class="p">)</span> <span class="o">+</span> <span class="n">delta_z</span><span class="p">,</span>
+                <span class="n">y2</span><span class="o">=</span><span class="n">depth_to_nap</span><span class="p">(</span><span class="n">depth_btm</span><span class="p">,</span> <span class="n">ref_height</span><span class="p">),</span>
                 <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -761,6 +787,13 @@
 <span class="sd">        fig:</span>
 <span class="sd">            The matplotlib Figure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_table</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span>
+                <span class="s2">&quot;Plotting the qc / friction-ratio / soil-layer overview requires soil &quot;</span>
+                <span class="s2">&quot;data, but this is a coordinate-only SoilProperties (no cpt_table / &quot;</span>
+                <span class="s2">&quot;layer_table). Attach a raw CPT trace + soil layers to enable this plot.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">cpt_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpt_table</span>
 
         <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;gridspec_kw&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;width_ratios&quot;</span><span class="p">:</span> <span class="n">width_ratios</span><span class="p">},</span>
@@ -797,8 +830,8 @@
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surface level&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_table</span><span class="o">.</span><span class="n">plot_qc</span><span class="p">(</span><span class="n">ax_qc</span><span class="p">,</span> <span class="n">add_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_table</span><span class="o">.</span><span class="n">plot_friction_ratio</span><span class="p">(</span><span class="n">ax_rf</span><span class="p">,</span> <span class="n">add_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">cpt_table</span><span class="o">.</span><span class="n">plot_qc</span><span class="p">(</span><span class="n">ax_qc</span><span class="p">,</span> <span class="n">add_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">cpt_table</span><span class="o">.</span><span class="n">plot_friction_ratio</span><span class="p">(</span><span class="n">ax_rf</span><span class="p">,</span> <span class="n">add_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_layers</span><span class="p">(</span><span class="n">axes</span><span class="o">=</span><span class="n">ax_layers</span><span class="p">,</span> <span class="n">add_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">add_legend</span><span class="p">:</span>

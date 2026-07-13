@@ -235,6 +235,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cpt-grouper-results">CPT grouper: Results</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults"><code class="docutils literal notranslate"><span class="pre">GrouperResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.multi_cpt_bearing_results"><code class="docutils literal notranslate"><span class="pre">GrouperResults.multi_cpt_bearing_results</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.from_grouper_response"><code class="docutils literal notranslate"><span class="pre">GrouperResults.from_grouper_response()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.from_api_response"><code class="docutils literal notranslate"><span class="pre">GrouperResults.from_api_response()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.cpt_results"><code class="docutils literal notranslate"><span class="pre">GrouperResults.cpt_results</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults.map"><code class="docutils literal notranslate"><span class="pre">GrouperResults.map()</span></code></a></li>
@@ -1753,18 +1755,18 @@ Color</p>
 <h2>Soil properties: Results<a class="headerlink" href="#soil-properties-results" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.soil_properties.</span></span><span class="sig-name descname"><span class="pre">SoilProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_level_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groundwater_level_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/soil_properties.html#SoilProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.soil_properties.</span></span><span class="sig-name descname"><span class="pre">SoilProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_level_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groundwater_level_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/soil_properties.html#SoilProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties" title="Link to this definition"></a></dt>
 <dd><p>A class for soil properties.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.cpt_table">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable" title="pypilecore.results.soil_properties.CPTTable"><span class="pre">CPTTable</span></a></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.cpt_table" title="Link to this definition"></a></dt>
-<dd><p>The CPTTable object</p>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.soil_properties.CPTTable" title="pypilecore.results.soil_properties.CPTTable"><span class="pre">CPTTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.cpt_table" title="Link to this definition"></a></dt>
+<dd><p>The CPTTable object, or <code class="docutils literal notranslate"><span class="pre">None</span></code> for a coordinate-only object.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.layer_table">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">layer_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable" title="pypilecore.results.soil_properties.LayerTable"><span class="pre">LayerTable</span></a></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.layer_table" title="Link to this definition"></a></dt>
-<dd><p>The LayerTable object</p>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">layer_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.soil_properties.LayerTable" title="pypilecore.results.soil_properties.LayerTable"><span class="pre">LayerTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.layer_table" title="Link to this definition"></a></dt>
+<dd><p>The LayerTable object, or <code class="docutils literal notranslate"><span class="pre">None</span></code> for a coordinate-only object.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1787,21 +1789,22 @@ Color</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.ref_height">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ref_height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.ref_height" title="Link to this definition"></a></dt>
-<dd><p>The vertical reference [m].</p>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ref_height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.ref_height" title="Link to this definition"></a></dt>
+<dd><p>The vertical reference [m], or <code class="docutils literal notranslate"><span class="pre">None</span></code> for a coordinate-only object.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.groundwater_level_ref">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">groundwater_level_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.groundwater_level_ref" title="Link to this definition"></a></dt>
-<dd><p>The elevation of the groundwater w.r.t. the vertical reference [m].</p>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">groundwater_level_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.groundwater_level_ref" title="Link to this definition"></a></dt>
+<dd><p>The elevation of the groundwater w.r.t. the vertical reference [m], or
+<code class="docutils literal notranslate"><span class="pre">None</span></code> for a coordinate-only object.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pypilecore.results.soil_properties.SoilProperties.surface_level_ref">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">surface_level_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.surface_level_ref" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">surface_level_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.soil_properties.SoilProperties.surface_level_ref" title="Link to this definition"></a></dt>
 <dd><p>The elevation of the surface w.r.t. the vertical reference [m]. This could
-be the level post-excavation.</p>
+be the level post-excavation. <code class="docutils literal notranslate"><span class="pre">None</span></code> for a coordinate-only object.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2264,17 +2267,55 @@ attributes [“R_b_cal”, “F_nk_d”, “R_s_cal”], this means that they ar
 <span id="cptgrouperresults"></span><h2>CPT grouper: Results<a class="headerlink" href="#cpt-grouper-results" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.grouper_result.</span></span><span class="sig-name descname"><span class="pre">GrouperResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_cpt_bearing_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypilecore.results.grouper_result.</span></span><span class="sig-name descname"><span class="pre">GrouperResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bearing_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults" title="Link to this definition"></a></dt>
 <dd><p><em>Not meant to be instantiated by the user.</em></p>
-<p>Use the <cite>from_api_response</cite> method to instantiate the class.</p>
+<p>Use the <cite>from_grouper_response</cite> (or the legacy <cite>from_api_response</cite>) method to
+instantiate the class.</p>
 <section id="attributes">
 <h3>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
-<p>clusters: List[SingleClusterResult]</p>
+<p>clusters: List[SingleClusterResult]
+bearing_results: GrouperBearingResultsLike</p>
+<blockquote>
+<div><p>The bearing results the subgroups were generated with. May be a PileCore
+<cite>MultiCPTCompressionBearingResults</cite> or a user-built <cite>CustomBearingResults</cite>;
+both satisfy the <cite>GrouperBearingResultsLike</cite> protocol.</p>
+</div></blockquote>
+<dl class="py property">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults.multi_cpt_bearing_results">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multi_cpt_bearing_results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MultiCPTCompressionBearingResults</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults.multi_cpt_bearing_results" title="Link to this definition"></a></dt>
+<dd><p>Deprecated accessor for the bearing results.</p>
+<p>Returns the PileCore <cite>MultiCPTCompressionBearingResults</cite> when the results were
+computed by PileCore, or <code class="docutils literal notranslate"><span class="pre">None</span></code> for a custom (externally-computed) source. Use
+<cite>bearing_results</cite> instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults.from_grouper_response">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_grouper_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bearing_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults.from_grouper_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults.from_grouper_response" title="Link to this definition"></a></dt>
+<dd><p>Stores the response of the PileCore endpoint “/grouper/group_cpts”.</p>
+<p>This is the general, source-agnostic constructor: <cite>bearing_results</cite> may be a
+PileCore <cite>MultiCPTCompressionBearingResults</cite> or a user-built
+<cite>CustomBearingResults</cite> (both satisfy <cite>GrouperBearingResultsLike</cite>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>response</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – The resulting response of a call to <cite>get_groups_api_result()</cite></p></li>
+<li><p><strong>pile_load_uls</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – ULS load in kN. Used to determine if a grouping configuration is valid.</p></li>
+<li><p><strong>bearing_results</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GrouperBearingResultsLike</span></code></span>) – The bearing results that the subgroups were generated with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pypilecore.results.grouper_result.GrouperResults" title="pypilecore.results.grouper_result.GrouperResults"><code class="xref py py-class docutils literal notranslate"><span class="pre">GrouperResults</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults.from_api_response">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pile_load_uls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_cpt_bearing_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypilecore/results/grouper_result.html#GrouperResults.from_api_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults.from_api_response" title="Link to this definition"></a></dt>
 <dd><p>Stores the response of the PileCore endpoint
 “/grouper/group_cpts”</p>
+<p>Kept for backwards compatibility; delegates to <cite>from_grouper_response</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2293,6 +2334,9 @@ attributes [“R_b_cal”, “F_nk_d”, “R_s_cal”], this means that they ar
 <dt class="sig sig-object py" id="pypilecore.results.grouper_result.GrouperResults.cpt_results">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cpt_results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypilecore.results.post_processing.MaxBearingResults" title="pypilecore.results.post_processing.MaxBearingResults"><span class="pre">MaxBearingResults</span></a></em><a class="headerlink" href="#pypilecore.results.grouper_result.GrouperResults.cpt_results" title="Link to this definition"></a></dt>
 <dd><p>Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.</p>
+<p>Source-agnostic: it folds the subgroup capacities over the per-CPT baseline that
+<cite>bearing_results.base_max_bearing_results()</cite> provides, so the PileCore and custom
+sources ride the exact same routine.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2850,6 +2894,12 @@ Add voronoi vertices to the figure</p></li>
 <dt class="sig sig-object py" id="pypilecore.results.post_processing.MaxBearingResult.pile_head_level_nap">
 <span class="sig-name descname"><span class="pre">pile_head_level_nap</span></span><a class="headerlink" href="#pypilecore.results.post_processing.MaxBearingResult.pile_head_level_nap" title="Link to this definition"></a></dt>
 <dd><p>The elevation of the pile-head, in [m] w.r.t. NAP.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version `pile_head_level_nap`: </span>is an unused symmetry artefact that is never read by
+any plot / <cite>to_pandas</cite> / viewer. It is now typed <code class="docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code> (the custom
+bearing-results path passes <code class="docutils literal notranslate"><span class="pre">None</span></code>) and will be removed in the next major
+release.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">

@@ -74,7 +74,6 @@
   <h1>Source code for pypilecore.results.grouper_result</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
@@ -82,6 +81,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">natsort</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing_extensions</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.axes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
@@ -95,6 +95,7 @@
     <span class="n">MaxBearingResults</span><span class="p">,</span>
     <span class="n">MaxBearingTable</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">GrouperBearingResultsLike</span>
 
 
 <div class="viewcode-block" id="SingleClusterData">
@@ -657,25 +658,29 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Not meant to be instantiated by the user.*</span>
 
-<span class="sd">    Use the `from_api_response` method to instantiate the class.</span>
+<span class="sd">    Use the `from_grouper_response` (or the legacy `from_api_response`) method to</span>
+<span class="sd">    instantiate the class.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">    ------------</span>
 <span class="sd">    clusters: List[SingleClusterResult]</span>
+<span class="sd">    bearing_results: GrouperBearingResultsLike</span>
+<span class="sd">        The bearing results the subgroups were generated with. May be a PileCore</span>
+<span class="sd">        `MultiCPTCompressionBearingResults` or a user-built `CustomBearingResults`;</span>
+<span class="sd">        both satisfy the `GrouperBearingResultsLike` protocol.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">clusters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SingleClusterResult</span><span class="p">]</span>
-    <span class="n">multi_cpt_bearing_results</span><span class="p">:</span> <span class="n">MultiCPTCompressionBearingResults</span>
+    <span class="n">bearing_results</span><span class="p">:</span> <span class="n">GrouperBearingResultsLike</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bearing_cpt_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bearing_results</span><span class="o">.</span><span class="n">cpt_names</span>
+        <span class="n">bearing_pile_tip_levels_nap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bearing_results</span><span class="o">.</span><span class="n">pile_tip_levels_nap</span>
         <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">cpt_name</span> <span class="ow">in</span> <span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">:</span>
                 <span class="c1"># check if the cpt names in the SingleClusterResults are also present</span>
-                <span class="c1"># in the MultiCPTBearingResults</span>
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="n">cpt_name</span>
-                    <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_cpt_bearing_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-                <span class="p">):</span>
+                <span class="c1"># in the bearing results</span>
+                <span class="k">if</span> <span class="n">cpt_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bearing_cpt_names</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                         <span class="s2">&quot;CPT names dont match between MultiCPTBearingResults object and GrouperResults. &quot;</span>
                         <span class="s2">&quot;Make sure that you use the same MultiCPTBearingResults as you generated &quot;</span>
@@ -683,13 +688,11 @@
                     <span class="p">)</span>
 
                 <span class="c1"># Check that all the pile tip levels in the SingleClusterResults are</span>
-                <span class="c1"># also present in the MultiCPTBearingResults</span>
+                <span class="c1"># also present in the bearing results</span>
                 <span class="k">for</span> <span class="n">pile_tip_level</span> <span class="ow">in</span> <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span>
                         <span class="n">pile_tip_level</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">multi_cpt_bearing_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="p">[</span>
-                            <span class="n">cpt_name</span>
-                        <span class="p">]</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">,</span>
+                        <span class="n">bearing_pile_tip_levels_nap</span><span class="p">,</span>
                         <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -697,6 +700,54 @@
                             <span class="s2">&quot;Make sure that you use the same MultiCPTBearingResults as you generated &quot;</span>
                             <span class="s2">&quot;the subgroups/clusters with.&quot;</span>
                         <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@typing_extensions</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span>
+        <span class="s2">&quot;`multi_cpt_bearing_results` is deprecated; use `bearing_results` instead.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">multi_cpt_bearing_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MultiCPTCompressionBearingResults</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deprecated accessor for the bearing results.</span>
+
+<span class="sd">        Returns the PileCore `MultiCPTCompressionBearingResults` when the results were</span>
+<span class="sd">        computed by PileCore, or ``None`` for a custom (externally-computed) source. Use</span>
+<span class="sd">        `bearing_results` instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bearing_results</span><span class="p">,</span> <span class="n">MultiCPTCompressionBearingResults</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bearing_results</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="GrouperResults.from_grouper_response">
+<a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.GrouperResults.from_grouper_response">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_grouper_response</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">response</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">bearing_results</span><span class="p">:</span> <span class="n">GrouperBearingResultsLike</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GrouperResults&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores the response of the PileCore endpoint &quot;/grouper/group_cpts&quot;.</span>
+
+<span class="sd">        This is the general, source-agnostic constructor: `bearing_results` may be a</span>
+<span class="sd">        PileCore `MultiCPTCompressionBearingResults` or a user-built</span>
+<span class="sd">        `CustomBearingResults` (both satisfy `GrouperBearingResultsLike`).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        response:</span>
+<span class="sd">           The resulting response of a call to `get_groups_api_result()`</span>
+<span class="sd">        pile_load_uls:</span>
+<span class="sd">            ULS load in kN. Used to determine if a grouping configuration is valid.</span>
+<span class="sd">        bearing_results:</span>
+<span class="sd">           The bearing results that the subgroups were generated with.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SingleClusterResult</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;sub_groups&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">clusters</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">bearing_results</span><span class="o">=</span><span class="n">bearing_results</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="GrouperResults.from_api_response">
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.GrouperResults.from_api_response">[docs]</a>
@@ -711,6 +762,8 @@
 <span class="sd">        Stores the response of the PileCore endpoint</span>
 <span class="sd">        &quot;/grouper/group_cpts&quot;</span>
 
+<span class="sd">        Kept for backwards compatibility; delegates to `from_grouper_response`.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        response_dict:</span>
@@ -720,12 +773,10 @@
 <span class="sd">        multi_cpt_bearing_results:</span>
 <span class="sd">           The container that holds multiple SingleCPTBearingResults objects</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">SingleClusterResult</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;sub_groups&quot;</span><span class="p">]</span>
-        <span class="p">]</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">clusters</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">multi_cpt_bearing_results</span><span class="o">=</span><span class="n">multi_cpt_bearing_results</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_grouper_response</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">=</span><span class="n">response_dict</span><span class="p">,</span>
+            <span class="n">pile_load_uls</span><span class="o">=</span><span class="n">pile_load_uls</span><span class="p">,</span>
+            <span class="n">bearing_results</span><span class="o">=</span><span class="n">multi_cpt_bearing_results</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
@@ -733,24 +784,27 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">cpt_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MaxBearingResults&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.</span>
+
+<span class="sd">        Source-agnostic: it folds the subgroup capacities over the per-CPT baseline that</span>
+<span class="sd">        `bearing_results.base_max_bearing_results()` provides, so the PileCore and custom</span>
+<span class="sd">        sources ride the exact same routine.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">max_bearing</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c1"># iterate over single cpt result</span>
-        <span class="k">for</span> <span class="p">(</span>
-            <span class="n">cpt_name</span><span class="p">,</span>
-            <span class="n">_single_cpt_result</span><span class="p">,</span>
-        <span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_cpt_bearing_results</span><span class="o">.</span><span class="n">cpt_results</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">single_cpt_result</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">_single_cpt_result</span><span class="p">)</span>
+        <span class="c1"># Start from the per-CPT baseline. `MaxBearingTable` properties return a fresh</span>
+        <span class="c1"># array on every access, so extracting them here yields mutable arrays that the</span>
+        <span class="c1"># fold below can safely mutate without touching the baseline object.</span>
+        <span class="n">baseline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bearing_results</span><span class="o">.</span><span class="n">base_max_bearing_results</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">cpt_name</span><span class="p">,</span> <span class="n">base_result</span> <span class="ow">in</span> <span class="n">baseline</span><span class="o">.</span><span class="n">cpt_results_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">single_cpt_result</span><span class="o">.</span><span class="n">pile_head_level_nap</span><span class="p">,</span>
-                <span class="n">soil_properties</span><span class="o">=</span><span class="n">single_cpt_result</span><span class="o">.</span><span class="n">soil_properties</span><span class="p">,</span>
+                <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">pile_head_level_nap</span><span class="p">,</span>
+                <span class="n">soil_properties</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">soil_properties</span><span class="p">,</span>
                 <span class="n">results_table</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                    <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">single_cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">,</span>
-                    <span class="n">R_c_d_net</span><span class="o">=</span><span class="n">single_cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_c_d_net</span><span class="p">,</span>
-                    <span class="n">F_nk_d</span><span class="o">=</span><span class="n">single_cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">,</span>
+                    <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">,</span>
+                    <span class="n">R_c_d_net</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_c_d_net</span><span class="p">,</span>
+                    <span class="n">F_nk_d</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">,</span>
                     <span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;CPT:</span><span class="si">{</span><span class="n">cpt_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
-                    <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">single_cpt_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">),</span>
+                    <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">),</span>
                 <span class="p">),</span>
             <span class="p">)</span>
 

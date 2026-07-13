@@ -88,6 +88,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">Delaunay</span><span class="p">,</span> <span class="n">Voronoi</span><span class="p">,</span> <span class="n">voronoi_plot_2d</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_bearing_overview</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypilecore.results.soil_properties</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoilProperties</span>
 
@@ -179,12 +180,18 @@
 <span class="sd">        The object with soil properties</span>
 <span class="sd">    pile_head_level_nap</span>
 <span class="sd">        The elevation of the pile-head, in [m] w.r.t. NAP.</span>
+
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            `pile_head_level_nap` is an unused symmetry artefact that is never read by</span>
+<span class="sd">            any plot / `to_pandas` / viewer. It is now typed ``float | None`` (the custom</span>
+<span class="sd">            bearing-results path passes ``None``) and will be removed in the next major</span>
+<span class="sd">            release.</span>
 <span class="sd">    table</span>
 <span class="sd">        The object with CPT results.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">soil_properties</span><span class="p">:</span> <span class="n">SoilProperties</span>
-    <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="n">table</span><span class="p">:</span> <span class="n">MaxBearingTable</span>
 
 <div class="viewcode-block" id="MaxBearingResult.to_pandas">
@@ -246,19 +253,21 @@
                     <span class="s2">&quot;Could not create Axes objects. This is probably due to invalid matplotlib keyword arguments. &quot;</span>
                 <span class="p">)</span>
 
-        <span class="c1"># add horizontal lines</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span>
-            <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">groundwater_level_ref</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:blue&quot;</span><span class="p">,</span>
-            <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Groundwater level&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span>
-            <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">surface_level_ref</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:brown&quot;</span><span class="p">,</span>
-            <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surface level&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="c1"># add horizontal lines (skipped for a coordinate-only SoilProperties without levels)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">groundwater_level_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span>
+                <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">groundwater_level_ref</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:blue&quot;</span><span class="p">,</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Groundwater level&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">surface_level_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span>
+                <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">surface_level_ref</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:brown&quot;</span><span class="p">,</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surface level&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="c1"># add bearing result subplot</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
@@ -318,6 +327,12 @@
 <span class="sd">            Tuple with the 4 Axes objects where the data was plotted on.</span>
 <span class="sd">            In order: qc, friction ratio, soil layers, bearing capacities</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">cpt_table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span>
+                <span class="s2">&quot;Plotting the bearing overview requires soil data, but this &quot;</span>
+                <span class="s2">&quot;MaxBearingResult carries a coordinate-only SoilProperties (no &quot;</span>
+                <span class="s2">&quot;cpt_table). Attach a raw CPT trace + soil layers to enable this plot.&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">plot_bearing_overview</span><span class="p">(</span>
             <span class="n">plot_qc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">cpt_table</span><span class="o">.</span><span class="n">plot_qc</span><span class="p">,</span>
             <span class="n">plot_friction_ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">soil_properties</span><span class="o">.</span><span class="n">cpt_table</span><span class="o">.</span><span class="n">plot_friction_ratio</span><span class="p">,</span>
