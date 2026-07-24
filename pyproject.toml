@@ -8,7 +8,7 @@ version = "2.3.2"
 description = "Public python SDK for the CEMS PileCore web-API."
 requires-python = ">=3.11,<3.14"
 dependencies = [
-  "anywidget>=0.9.18,<0.10",
+  "anywidget>=0.11,<0.12",
   "cems-nuclei[client]>=3.2.0,<4",
   "dash>=3.0.2,<4",
   "ipywidgets>=8.1.5,<9",
@@ -18,7 +18,7 @@ dependencies = [
   "pandas>=2.2.3,<3",
   "plotly-geo>=1.0.0,<2",
   "plotly>=6.0.1,<7",
-  "pygef>=0.12.0,<=0.14.0",
+  "pygef>=0.14.1,<=0.14.1",
   "scipy>=1.15.2,<2",
   "shapely>=2.1.0,<3",
   "tqdm[notebook]>=4.67.1,<5",
@@ -36,9 +36,9 @@ test = ["coveralls", "pytest", "openapi-core"]
 docs = [
   "Sphinx==8.2.3",
   "asteroid-sphinx-theme==0.0.3",
-  "ipython==9.7.0",
-  "sphinx-autodoc-typehints==3.5.2",
-  "sphinx_rtd_theme==3.0.2",
+  "ipython==9.15.0",
+  "sphinx-autodoc-typehints==3.13.0",
+  "sphinx_rtd_theme==3.1.0",
 ]
 # lint dependencies from github super-linter
 # See https://github.com/super-linter/super-linter/tree/main/dependencies/python
@@ -47,13 +47,13 @@ docs = [
 #   checkov, codespell, nbqa, pre-commit, pylint, ruff, yamllint, zizmor
 # ignoring because redundant (no matching files in this repo): snakefmt, snakemake
 lint = [
-  "ansible-lint==26.4.0",
+  "ansible-lint==26.6.0",
   "black==26.5.1",
-  "cfn-lint==1.51.5",
+  "cfn-lint==1.53.2",
   "cpplint==2.0.2",
   "flake8==7.3.0",
   "isort==8.0.1",
-  "mypy==2.1.0",
+  "mypy==2.3.0",
   "sqlfluff==4.2.2",
   "yq==3.4.3",
 ]
