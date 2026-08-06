@@ -4,10 +4,11 @@ import pandas as pd
 from pathlib import Path
 import ast
 import numpy as np
+from pypilecore.common.norms import Norms
 
 T = TypeVar("T", bound="InputCase")
 
-# Custom parsers for columns with python object from strings in the input file.
+# Custom parsers for columns with python object from strings in the input file
 CUSTOM_PARSERS = {
     "pile_tip_levels_nap": lambda s: np.array(ast.literal_eval(s)),
     "individual_ocr": ast.literal_eval,
@@ -21,32 +22,38 @@ CUSTOM_PARSERS = {
 class InputCase:
     # Names and general information
     case_name: str = "default"
-    reference: str | None = None
+    reference: (
+        Literal ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", 
+                 "S1", "S2", "S4", "S3", "S5", "S6", "S7", 
+                 "H1", "H2", 
+                 "MA1", "MA2", "MB1", "MB2", "MC", "MD", "ME", "MF" ] | None) = None
     pile_name: str = "unnamed"
-    installation: str | None = None
+    installation: (
+        Literal["driven", "screwed", "excavated", "vibrated", "pressed", "jetted"] | None) = None
     pile_material: (
-            Literal["concrete", "steel", "wood", "grout", "grout_extorted"] | None
-        ) = None
+        Literal["concrete", "steel", "wood", "grout", "grout_extorted"] | None) = None
     custom_material: dict | None = None
     # Geometry and dimensions
     pile_shape: str = "round"
-    core_diameter: float = 0.0
-    base_diameter: float = 0.0
-    core_secondary_dimension: float | None = None,
-    core_tertiary_dimension: float | None = None,
-    base_secondary_dimension: float | None = None,
-    base_tertiary_dimension: float | None = None,
-    height_base: float = 0.0
+    core_diameter: float | None = None
+    base_diameter: float | None = None
+    core_secondary_dimension: float | None = None
+    core_tertiary_dimension: float | None = None
+    base_secondary_dimension: float | None = None
+    base_tertiary_dimension: float | None = None
+    height_base: float | None = None
     pile_head_level_nap: str | float = "surface"
     pile_tip_levels_nap: list[float] = field(default_factory=list)
     groundwater_level_nap: str | float | None = None
     # Load parameters
     stiff_construction: bool = False
-    pile_load_uls: float = 0.0
+    pile_load_uls: float | None = None
     relative_pile_load: float = 0.7
-    soil_load_sls: float = 0.0
+    pile_load_sls: float | None = None
+    soil_load_sls: float | None = None
     # Norms and other factors
-    nen_9997_1_version: str = "2025"
+    nen_9997_1: str = "2025"
+    cur_236: str = "2023"
     gamma_r_b: float = 1.2
     gamma_r_s: float = 1.2
     gamma_f_nk: float = 1.0
@@ -62,6 +69,8 @@ class InputCase:
     pile_tip_factor_s: float | None = None
     is_auger: bool = False
     is_low_vibrating: bool = False
+    is_prefab: bool = False
+    is_open_ended: bool = False
     negative_fr_delta_factor: float | None = None
     # OCR parameters
     ocr: float | None = None
@@ -81,11 +90,17 @@ class InputCase:
     excavation_width: float | None = None
     excavation_edge_distance: float | None = None
     # CPT limits
+    use_almere_rules: bool = False
+    apply_qc3_reduction: bool = False
     qc_z_a_lesser_1m: float | None = None
     qc_z_a_greater_1m: float | None = None
     qb_max_limit: float | None = None
     chamfered: float | None = None
 
+    def __post_init__(self):
+        """Force validation of each new instance
+        """        
+        self.validate_case()
 
     @classmethod
     def from_globals(cls: Type[T], globals_dict: dict) -> T:
@@ -105,10 +120,9 @@ class InputCase:
         Args:
             row (dict): A dictionary containing row data to override the base instance.
         """
-        overrides = _normalize(_parse_values(row))
+        overrides = _normalize(row)
         _warn_unknown(overrides, cls)
         new_case = replace_case(base, **overrides)
-        new_case.check() # Validate the new case
         return new_case
 
     @classmethod
@@ -122,35 +136,42 @@ class InputCase:
         input_cases_df = read_input_cases(file_name)
         input_cases = [base]  # Start with the base case
         if not input_cases_df.empty:
-            for case_name, row in input_cases_df.iterrows():
+            for _, row in input_cases_df.iterrows():
                 new_case = cls.from_row(base, row)
                 input_cases.append(new_case)
         return input_cases
     
-    def check(self) -> None:
+    def validate_case(self) -> None:
         """
         Check the validity of the InputCase instance.
         Raises ValueError if any attribute is invalid.
         """
-        #TODO: Make consistent and sane set of checks to perform on the input case. For now, just check some basic things.
+        #TODO: Add more checks to perform on the input case. For now, just check some basic things.
         if self.pile_shape not in ["round", "square"]:
             raise ValueError(f"Invalid pile_shape: {self.pile_shape}. Must be 'round' or 'square'.")
-        if self.core_diameter <= 0:
+        if self.core_diameter is not None and self.core_diameter <= 0:
             raise ValueError(f"core_diameter must be positive. Got: {self.core_diameter}")
-        if self.base_diameter <= 0:
+        if self.base_diameter is not None and self.base_diameter <= 0:
             raise ValueError(f"base_diameter must be positive. Got: {self.base_diameter}")
-        if self.pile_load_uls < 0:
+        if self.pile_load_uls is not None and self.pile_load_uls < 0:
             raise ValueError(f"pile_load_uls must be non-negative. Got: {self.pile_load_uls}")
         if self.gamma_r_b <= 0:
             raise ValueError(f"gamma_r_b must be positive. Got: {self.gamma_r_b}")
 
     @property
     def basic_pile_kwargs(self) -> dict:
+        """Returns kwargs for calling the `create_basic_pile` function
+
+        Returns
+        -------
+        dict
+            Kwargs for calling the `create_basic_pile` function
+        """        
         return {
+            "pile_shape": self.pile_shape,
             "pile_name": self.pile_name,
             "reference": self.reference,
             "installation": self.installation,
-            "pile_shape": self.pile_shape,
             "height_base": self.height_base,
             "core_secondary_dimension": self.core_secondary_dimension,
             "core_tertiary_dimension": self.core_tertiary_dimension,
@@ -166,18 +187,64 @@ class InputCase:
             "alpha_s_clay": self.alpha_s_clay,
             "alpha_s_sand": self.alpha_s_sand,
             "beta_p": self.beta_p,
+            "alpha_t_clay" : self.alpha_t_clay,
+            "alpha_t_sand" : self.alpha_t_sand,
             "pile_tip_factor_s": self.pile_tip_factor_s,
             "is_auger": self.is_auger,
             "is_low_vibrating": self.is_low_vibrating,
+            "is_prefab" : self.is_prefab,
+            "is_open_ended" : self.is_open_ended,
             "negative_fr_delta_factor": self.negative_fr_delta_factor,
             "qc_z_a_lesser_1m": self.qc_z_a_lesser_1m,
             "qc_z_a_greater_1m": self.qc_z_a_greater_1m,
             "qb_max_limit": self.qb_max_limit,
+            "chamfered" : self.chamfered
+        }
+    
+    @property
+    def multi_cpt_payload_kwargs(self) -> dict:
+        """Return kwargs for calling the `create_multi_cpt_payload` function
+
+        Returns
+        -------
+        dict
+            Kwargs for calling the `create_multi_cpt_payload` function
+        """        
+        return {
+            "groundwater_level_nap": self.groundwater_level_nap,
+            "friction_range_strategy": self.friction_range_strategy,
+            "excavation_depth_nap": self.excavation_depth_nap,
+            "individual_negative_friction_range_nap": self.individual_negative_friction_range_nap,
+            "individual_positive_friction_range_nap": self.individual_positive_friction_range_nap,
+            "excavation_param_t": self.excavation_param_t,
+            "excavation_stress_reduction_method": self.excavation_stress_reduction_method,
+            "excavation_width": self.excavation_width,
+            "excavation_edge_distance": self.excavation_edge_distance,
+            "pile_head_level_nap": self.pile_head_level_nap,
+            "pile_load_sls": self.pile_load_sls,
+            "pile_tip_levels_nap": self.pile_tip_levels_nap,
+            "relative_pile_load" : self.relative_pile_load,
+            "apply_qc3_reduction" : self.apply_qc3_reduction,
+            "negative_shaft_friction": self.negative_shaft_friction,
+            "fixed_negative_friction_range_nap": self.fixed_negative_friction_range_nap,
+            "fixed_positive_friction_range_nap": self.fixed_positive_friction_range_nap,
+            "norms" : Norms(
+                nen_9997_1=self.nen_9997_1,
+                cur_236=self.cur_236,),
+            "gamma_f_nk": self.gamma_f_nk,
+            "gamma_r_b": self.gamma_r_b,
+            "gamma_r_s": self.gamma_r_s,
+            "overrule_xi": self.overrule_xi,
+            "soil_load_sls": self.soil_load_sls,
+            "use_almere_rules" : self.use_almere_rules,
+            "stiff_construction" : self.stiff_construction,
+            "ocr" : self.ocr,
+            "individual_ocr" : self.individual_ocr,
         }
 
 def replace_case(base: T, **overrides) -> T:
     """
-    Create a new InputCase instance by replacing attributes of a base InputCase with provided overrides.
+    Returns a new InputCase instance with updated attributes (uses built-in dataclass.replace function).
 
     Args:
         base (InputCase): The base InputCase instance to copy from.
@@ -185,30 +252,18 @@ def replace_case(base: T, **overrides) -> T:
     """
     return replace(base, **overrides)
 
-def _parse_values(row: pd.Series) -> dict:
-    """
-    Parse values in a pandas Series row, converting string representations of dictionaries to actual dictionaries.
-
-    Args:
-        row (pd.Series): A pandas Series representing a row of data.
-    Returns:       
-        dict: A dictionary with parsed values, where string representations of dictionaries are converted to actual dictionaries.
-    """
+def _normalize(row: pd.Series) -> dict:
+    #TODO: Implement robust normalization logic for missing (nan's) columns resulting from parsing of the input_file
     parsed_row = {}
     for colname, colvalue in row.to_dict().items():
-        if colname in CUSTOM_PARSERS:
+        if colname in CUSTOM_PARSERS and pd.notnull(colvalue):
             try:
                 parsed_row[colname] = CUSTOM_PARSERS[colname](colvalue)
             except (ValueError, SyntaxError) as e:
                 print(f"Warning: Failed to parse column '{colname}' with value '{colvalue}': {e}")
-                parsed_row[colname] = colvalue  # Keep as string if parsing fails
-        else:
+        elif pd.notnull(colvalue):
             parsed_row[colname] = colvalue
     return parsed_row
-
-def _normalize(row: dict) -> dict:
-    #TODO: Implement robust normalization logic for missing (nan's) columns resulting from parsing of the input_file
-    return dict((k,v) for k,v in row.items() if pd.notnull(v))
 
 def _warn_unknown(row: dict, cls: Type[T]) -> None:
     """
