@@ -2,27 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.4.0] - 2026-08-10
+
+### Bug Fixes
+
+- *Results*:
+    - Guard tension bearing overview on optional cpt_table
+    - Narrow optional soil data before plotting
+
+### Documentation
+- *Grouper*: End-to-end custom Grouper flow snippet
+- *Grouper-custom-bearing*: Add feature context & ADR
+- *Readme*: Fix lint script name and add no-Docker lint steps
 
 ### Features
-- Grouper with custom (externally-computed) bearing results: build a lean
-  `CustomBearingResults` from your own numbers + coordinates and drive the whole Grouper
-  flow (payload, wrapping, viewers, report) as a source-agnostic drop-in for the
-  PileCore-computed object. New public names: `CustomBearingResults`,
-  `CustomCptBearingResult`, `GrouperBearingResultsLike`, `GrouperCptInput`,
-  `create_grouper_payload_from_bearing_results`, and
-  `GrouperResults.from_grouper_response`. `SoilProperties` may now be "coordinate-only"
-  (identifies a CPT via `test_id`/`x`/`y` without a raw trace).
 
-### Deprecations
-- `GrouperResults.multi_cpt_bearing_results` is deprecated; use
-  `GrouperResults.bearing_results` instead.
-- `MaxBearingResult.pile_head_level_nap` is deprecated (an unused symmetry artefact),
-  is now typed `float | None`, and will be removed in the next major release.
-- `create_grouper_payload(cpt_results_dict=...)` and
-  `GrouperResults.from_api_response(..., multi_cpt_bearing_results=...)` remain supported
-  but are superseded by `create_grouper_payload_from_bearing_results` and
-  `from_grouper_response`.
+- *Grouper*:
+    - CustomBearingResults -> grouper payload
+    - Source-agnostic GrouperResults + viewers
+    - Source-agnostic payload seam
+- *Soil*: Coordinate-only SoilProperties
+
+### Miscellaneous Tasks
+- Bootstrap Claude Code agent setup
+
+### Styling
+- Apply black and isort to grouper and results modules
+
+### Testing
+
+- *Grouper*:
+    - Full pipeline + equivalence via CustomBearingResults
+    - Tier-2 soil trace unlocks overview plots
+
+### Build
+- *Deps*: Sync lint deps to super-linter v8, prune redundant
 
 ## [2.3.2] - 2026-04-28
 
@@ -120,13 +134,13 @@ All notable changes to this project will be documented in this file.
 - *Ci*: Reduce GH jobs triggerred by renovate (#187)
 
 - *Notebook*:
-    - Update static images for pile reference tables
     - Update notebooks to v4 schema
+    - Update static images for pile reference tables
 
 - *Test*:
+    - Fix tests for norms with v4 schema
     - Minimum fix for passing tests
     - Update api schema to v4
-    - Fix tests for norms with v4 schema
 - *Tests*: Refactor tests
 - Update CUR236 figure
 - CUR236 version should be 2023
@@ -134,22 +148,22 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - *Api*:
+    - Update pile_type serialization according to v4 api
     - Improve FrictionRangeStrategy validation
     - Added FrictionSettings
     - Added Norms and tests
-    - Update pile_type serialization according to v4 api
 
 - *Grouper results*:
     - Add pypilecore.viewers.ViewerGroupResultsPlanView class
     - Add pypilecore.results.CasesGrouperResults class
 - Add ViewerCptResultsOverview + refactoring
+- Update notebooks and remove routing to staging server
+- Update grouper endpoint names
 - Update grouper notebook
 - Refactor ViewerCptResults and FigureCPTResultsVersusPtls to also handle Grouper results. Removes ViewerCptGroupResults
 - Add Viewer-Table classes for multi-cpt and grouper results
 - Add `results_per_case` property to Cases[]Results classes
 - Add save_failed_payload debugging flag to call-endpoint functions
-- Update notebooks and remove routing to staging server
-- Update grouper endpoint names
 
 ### Miscellaneous Tasks
 
@@ -193,10 +207,10 @@ All notable changes to this project will be documented in this file.
     - Update cems-nuclei to get rid of the ipython dependency
     - Allow future fixes of anywidget
     - Require dependency patch of cems-nuclei
-    - Downgrade plotly to v5
     - Use correct dependencies for documentation
     - Use version 2 of cems-nuclei
     - Update and pin all dependencies to latest version
+    - Downgrade plotly to v5
 - *Pile_name*: Guarantee that PileProperties.name returns a string or None
 - *Rounding*: Fix rounding of pile tip levels to be 2 decimals
 - *Viewer_results*: Fix error of not finding color for NaN results for ViewerCptResultsPlanView
@@ -255,8 +269,8 @@ All notable changes to this project will be documented in this file.
     - Add class CasesMultiCPTBearingResults (#76)
 
 - *Viewer_results*:
-    - Add the results viewer ViewerCptResultsPlanView
     - Add the results viewer ViewerCptGroupResults
+    - Add the results viewer ViewerCptResultsPlanView
     - Add ViewerCptResults class
 
 ### Miscellaneous Tasks
@@ -295,35 +309,35 @@ All notable changes to this project will be documented in this file.
 ## [0.4.0] - 2024-03-12
 
 ### Bug Fixes
-- Final max-bearing fixups & Add unittests
-- Remove dataclass hash & to_pandas caching
+- Do array comparison on float with np.isclose()
+- Fix MaxBearingResults initiation & refactor
 - Make sure that all pile tip levels have same order
 - Remove dataclass hash & to_pandas caching
-- Fix MaxBearingResults initiation & refactor
 - Update unit test
-- Do array comparison on float with np.isclose()
+- Remove dataclass hash & to_pandas caching
+- Final max-bearing fixups & Add unittests
 - Add missing pile definitions plot
 
 ### Features
 - *Api*: Add verbose argument to functions in api module
+- Denote CPT name in MaxBeraingTable.origin attribute
+- Combine grouper and single results
 - Rotate x-labels in 2D max-bearing plot
 - Add lru_cache on MaxBearingResults.to_pandas
 - Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
-- Denote CPT name in MaxBeraingTable.origin attribute
-- Add delaunay map
-- Add result bearing 3d plots to notebook
-- Add 3D plots for bearing results
-- Combine grouper and single results
-- Resolve comments in mr
 - Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
+- Add 3D plots for bearing results
+- Add delaunay map
+- Resolve comments in mr
+- Add result bearing 3d plots to notebook
 
 ### Miscellaneous Tasks
 - Update example notebook
 - Revert
 
 ### Styling
-- Lint file
 - Format file and fix typing errors
+- Lint file
 
 ## [0.3.4] - 2024-02-16
 
@@ -400,35 +414,35 @@ All notable changes to this project will be documented in this file.
 ## [0.2.1] - 2023-11-09
 
 ### Features
-- Accept None for `relative_pile_load`
-- Minor fixups in PileCore_multi_cpt notebook
 - Validate excavation and pile-load input in function create_multi_cpt_payload
+- Minor fixups in PileCore_multi_cpt notebook
+- Accept None for `relative_pile_load`
 
 ## [0.2.0] - 2023-11-08
 
 ### Bug Fixes
 - *Test*: Coverage warning no data was collected
 - Notebook and grouper workflow (#18)
+- Plot empty friction ratio in CPTTable.plot_friction_ratio()
 - Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
+- Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
+- Fix adding diameter_shaft property logic
 - Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
 - Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
-- Plot empty friction ratio in CPTTable.plot_friction_ratio()
-- Fix adding diameter_shaft property logic
-- Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
 
 ### Documentation
 - Add missing create_multi_cpt_payload arguments docstrings
 - Update `getting started`
-- Add single- & multi-cpt-results docstrings
 - Add items to reference & fix docstrings & typing
+- Add single- & multi-cpt-results docstrings
 - Init pages (#10)
 
 ### Features
 - *Grouper*: Add grouper implementation (#7)
-- Add `name` property to PileProperties object
-- Cast property getter responses of PileProperties & child objects
-- Raise ValueError for invalid pile_properties `height_base` input.
 - Add _shape class-attribute to Round- & RectPileProperties
+- Cast property getter responses of PileProperties & child objects
+- Add `name` property to PileProperties object
+- Raise ValueError for invalid pile_properties `height_base` input.
 - Add notebook example (#17)
 - Cast CPTGroupResultsTable attributes to numpy arrays
 
@@ -448,28 +462,33 @@ All notable changes to this project will be documented in this file.
 
 ### Testing
 - Add create_multi_cpt_payload unit-tests
+- Refactor pile_properties tests
 - Add create_pile_properties_payload tests
 - Add multi-cpt-results tests
-- Add soilproperties tests
-- Omit tests folder in superlinter
-- Rename test_soil to test_input
-- Refactor pile_properties tests
-- Add results/test_pile_properties tests
 - Move grouper tests to "results" folder
+- Rename test_soil to test_input
+- Omit tests folder in superlinter
+- Add soilproperties tests
+- Add results/test_pile_properties tests
 
 ### Deps
 - Update mypy==1.6.1 & black==23.10.1
+
+## [0.1.0] - 2023-10-20
+
+### Features
+- Rename module folder name to "py_pilecore"
+- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
+- Add empty module __init__.py
+
+### Styling
+- Add github workflow job "lint" & update superlinter to v5
 
 ## [0.0.1] - 2023-10-20
 
 ### Documentation
 - Add docstrings to "create_payload" functions
 - Update README
-
-### Features
-- Add empty module __init__.py
-- Rename module folder name to "py_pilecore"
-- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
 
 ### Miscellaneous Tasks
 - Init pyproject.toml
@@ -478,6 +497,5 @@ All notable changes to this project will be documented in this file.
 ### Styling
 - Add run_super_linters.sh bash script
 - Add .flake8 file
-- Add github workflow job "lint" & update superlinter to v5
 
 <!-- CEMS BV. -->
