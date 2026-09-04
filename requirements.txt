@@ -235,7 +235,7 @@ openapi-schema-validator==0.6.3
     #   openapi-spec-validator
 openapi-spec-validator==0.7.2
     # via openapi-core
-orjson==3.11.5
+orjson==3.11.6
     # via cems-nuclei
 packaging==25.0
     # via
