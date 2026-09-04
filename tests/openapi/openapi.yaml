@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PileCore
-  version: 2.4.0
+  version: 4.3.2
   description: >-
     PileCore aims to give you the full pile calculation utilities without an
     engineer in the loop. This means that calculations must be able to run from
@@ -321,7 +321,7 @@ paths:
               type: object
               properties:
                 norms:
-                  $ref: "#/components/schemas/norms_schema"
+                  $ref: "#/components/schemas/norms"
                 pile_properties:
                   oneOf:
                     - $ref: "#/components/schemas/pile_standard_input_nen"
@@ -582,26 +582,22 @@ paths:
                 $ref: "#/components/schemas/output_task_id"
 components:
   schemas:
-    norms_schema:
+    norms:
       type: object
       properties:
-        norms:
-          type: object
-          properties:
-            NEN99971_version:
-              type: string
-              description: NEN 9997-1 standard for pile design.
-              enum:
-                - "2017"
-                - "2025"
-              default: "2017"
-            CUR236_version:
-              type: string
-              description: CUR236 standard for pile design.
-              enum:
-                - "2023"
-              default: "2023"
-
+        NEN99971_version:
+          type: string
+          description: NEN 9997-1 standard for pile design.
+          enum:
+            - "2017"
+            - "2025"
+          default: "2025"
+        CUR236_version:
+          type: string
+          description: CUR236 standard for pile design.
+          enum:
+            - "2023"
+          default: "2023"
     overrule_xi:
       oneOf:
         - type: object
@@ -1424,7 +1420,7 @@ components:
             secondary_dimension:
               type: number
               minimum: 0.05
-              maximum: 1.5
+              maximum: 100.0
               example: 0.35
               description: >
                 The secondary dimension of a pile component with rectangular
@@ -1435,7 +1431,7 @@ components:
             tertiary_dimension:
               type: number
               minimum: 0.05
-              maximum: 1.5
+              maximum: 100.0
               example: 0.35
               description: >
                 The tertiary dimension of a pile component with rectangular
@@ -1496,7 +1492,7 @@ components:
             diameter:
               type: number
               minimum: 0.05
-              maximum: 1.5
+              maximum: 100.0
               example: 0.56
               description: |
                 The outer-diameter of a pile component with round shape.
@@ -1610,6 +1606,7 @@ components:
             qc_z_a_lesser_1m: 12.0
             qc_z_a_greater_1m: 15.0
             qb_max_limit: 15.0
+            chamfered: 20.0
     bearing_calculation_multi_cpts_input:
       type: object
       properties:
@@ -1773,7 +1770,7 @@ components:
             applied for auger piles. If norm NEN-9997-1 version 2025 is selected, the
             qc3 is not applied by default.
         norms:
-          $ref: "#/components/schemas/norms_schema"
+          $ref: "#/components/schemas/norms"
         overrule_xi:
           $ref: "#/components/schemas/overrule_xi"
         stiff_construction:
@@ -2084,6 +2081,7 @@ components:
           description: |
             Alpha t factor used in uplift pile resistance calculation.
             **unit: `-`**
+          nullable: true
         alpha_t_clay:
           $ref: "#/components/schemas/alpha_t_clay"
         is_auger:
@@ -2192,6 +2190,16 @@ components:
             specified. </br></br>
 
             **unit: `MPa`**
+        chamfered:
+          type: number
+          minimum: 0
+          nullable: true
+          description: >
+            Maximum value cone resistance `qc` value allowed in the calculation of
+            skin friction resistance. This value is used to compute the trimmed 
+            (chamfered) `qc;z;a` values according to CUR 236 (2024) Tabel 6.1. </br></br>
+
+            **unit: `MPa`**
       required:
         - alpha_p
         - alpha_s_sand
@@ -2210,6 +2218,7 @@ components:
         - qc_z_a_lesser_1m
         - qc_z_a_greater_1m
         - qb_max_limit
+        - chamfered
       example:
         alpha_p: 0.01
         alpha_s_sand: 0.01
@@ -2232,6 +2241,7 @@ components:
         qc_z_a_lesser_1m: 12.0
         qc_z_a_greater_1m: 15.0
         qb_max_limit: 15.0
+        chamfered: 20.0
     soil_arguments_multi_cpt:
       type: object
       properties:
@@ -2276,8 +2286,8 @@ components:
                 - 10
             - name: CPT102
               coordinates:
-                x: 142892.19
-                "y": 470783.87
+                x: 142897.19
+                "y": 470788.87
               shaft_bearing_capacity:
                 - 90
                 - 180
@@ -3627,6 +3637,12 @@ components:
           type: string
           description: Author of the report.
           example: J.A. Frusciante
+        project_remark:
+          type: string
+          description: Optional remark for the project.
+          example: This is a test project.
+          minLength: 0
+          maxLength: 100
         date:
           type: string
           description: |
@@ -3909,6 +3925,14 @@ components:
             uniqueItems: true
           type: array
           uniqueItems: true
+          example:
+            [
+              [
+                [142892.19, 470793.87],
+                [142902.19, 407783.87],
+                [142882.19, 407783.87],
+              ],
+            ]
         type:
           description: the geometry type
           enum:
@@ -4295,7 +4319,7 @@ components:
         - pile_tip_levels_nap
       properties:
         norms:
-          $ref: "#/components/schemas/norms_schema"
+          $ref: "#/components/schemas/norms"
         pile_tip_levels_nap:
           type: array
           minItems: 1
@@ -4737,7 +4761,7 @@ components:
               - d;eq equal to the diameter of the shaft + 20 mm
               - D;eq equal to the diameter of the base
           - *default*: `d;eq` and `D;eq` equal to pile dimension (diameter) or 1.5.2.106a/b
-    
+
         The value is inferred from the `standard_pile` specification by default, but
         can be overwritten.
     is_low_vibrating:
