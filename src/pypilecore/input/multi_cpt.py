@@ -50,9 +50,9 @@ def create_multi_cpt_payload(
     individual_ocr: Mapping[str, float] | None = None,
     use_almere_rules: bool = False,
     overrule_xi: dict | float | None = None,
-    gamma_f_nk: float = 1.0,
-    gamma_r_s: float = 1.2,
-    gamma_r_b: float = 1.2,
+    gamma_f_nk: float | None = 1.0,
+    gamma_r_s: float | None = 1.2,
+    gamma_r_b: float | None = 1.2,
 ) -> Tuple[dict, Dict[str, dict]]:
     """
     Creates a dictionary with the payload content for the PileCore endpoint
@@ -223,12 +223,18 @@ def create_multi_cpt_payload(
         Default = None
     gamma_f_nk:
         Safety factor for design-values of the negative sleeve friction force.
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.0.
         Default = 1.0
     gamma_r_s:
         Safety factor, used to obtain design-values of the pile-tip bearingcapacity.
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.2.
         Default = 1.2
     gamma_r_b:
         Safety factor, used to obtain design-values of the sleeve bearingcapacity.
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.2.
         Default = 1.2
 
     Returns
@@ -298,12 +304,18 @@ def create_multi_cpt_payload(
         soil_load=soil_load_sls if soil_load_sls is not None else 0.0,
         excavation_param_t=excavation_param_t,
         use_almere_rules=use_almere_rules,
-        gamma_f_nk=gamma_f_nk,
-        gamma_r_b=gamma_r_b,
-        gamma_r_s=gamma_r_s,
     )
 
-    # Add optional properties
+    # Add optional properties.
+    # Note: the safety factors are only added when they have a value. The API rejects
+    # a null value, but applies its own default when the property is omitted.
+    if gamma_f_nk is not None:
+        multi_cpt_payload["gamma_f_nk"] = gamma_f_nk
+    if gamma_r_b is not None:
+        multi_cpt_payload["gamma_r_b"] = gamma_r_b
+    if gamma_r_s is not None:
+        multi_cpt_payload["gamma_r_s"] = gamma_r_s
+
     if excavation_depth_nap is not None:
         multi_cpt_payload["excavation_depth_nap"] = excavation_depth_nap
 
