@@ -30,15 +30,15 @@ def create_multi_cpt_payload(
     excavation_edge_distance: float | None = None,
     individual_ocr: Mapping[str, float] | None = None,
     overrule_xi: float | None = None,
-    gamma_f_nk: float = 1.0,
-    gamma_r_s: float = 1.2,
-    gamma_r_b: float = 1.2,
+    gamma_f_nk: float | None = 1.0,
+    gamma_r_s: float | None = 1.2,
+    gamma_r_b: float | None = 1.2,
     void_ratio_max: float = 0.8,
     void_ratio_min: float = 0.4,
     pile_load_sls_max: float = 1,
     pile_load_sls_min: float = 0,
-    gamma_s_t: float = 1.35,
-    gamma_gamma: float = 1.1,
+    gamma_s_t: float | None = 1.35,
+    gamma_gamma: float | None = 1.1,
     construction_sequence: Literal["cpt-pile", "pile-cpt"] = "cpt-pile",
 ) -> Tuple[dict, Dict[str, dict]]:
     """
@@ -156,12 +156,18 @@ def create_multi_cpt_payload(
         coefficient and construction stiffness.
     gamma_f_nk:
         Safety factor for design-values of the negative sleeve friction force.
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.0.
         Default = 1.0
     gamma_r_s:
         Safety factor, used to obtain design-values of the pile-tip bearingcapacity.
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.2.
         Default = 1.2
     gamma_r_b:
         Safety factor, used to obtain design-values of the sleeve bearingcapacity.
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.2.
         Default = 1.2
     void_ratio_max:
         Maximum void ratio of the soil (the loosest packing). The influence of this
@@ -186,9 +192,13 @@ def create_multi_cpt_payload(
     gamma_s_t:
         Pile resistance factor gamma_s;t used to compute the design cone resistance values
         qc;z;d as prescribed in NEN 9997-1+C2_2017 7.6.3.3(d).
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.35.
         Default = 1.35
     gamma_gamma:
         Partial factor for volumetric weight NEN 9997-1+C2:2017 A.3.2
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.1.
         Default = 1.1
     construction_sequence:
         Value that indicates if CPT are performed before or after pile
@@ -243,19 +253,27 @@ def create_multi_cpt_payload(
         stiff_construction=stiff_construction,
         soil_load=soil_load_sls if soil_load_sls is not None else 0.0,
         excavation_param_t=excavation_param_t,
-        gamma_f_nk=gamma_f_nk,
-        gamma_r_b=gamma_r_b,
-        gamma_r_s=gamma_r_s,
         void_ratio_max=void_ratio_max,
         void_ratio_min=void_ratio_min,
         pile_load_sls_max=pile_load_sls_max,
         pile_load_sls_min=pile_load_sls_min,
-        gamma_s_t=gamma_s_t,
-        gamma_gamma=gamma_gamma,
         construction_sequence=construction_sequence,
     )
 
-    # Add optional properties
+    # Add optional properties.
+    # Note: the safety factors are only added when they have a value. The API rejects
+    # a null value, but applies its own default when the property is omitted.
+    if gamma_f_nk is not None:
+        multi_cpt_payload["gamma_f_nk"] = gamma_f_nk
+    if gamma_r_b is not None:
+        multi_cpt_payload["gamma_r_b"] = gamma_r_b
+    if gamma_r_s is not None:
+        multi_cpt_payload["gamma_r_s"] = gamma_r_s
+    if gamma_s_t is not None:
+        multi_cpt_payload["gamma_s_t"] = gamma_s_t
+    if gamma_gamma is not None:
+        multi_cpt_payload["gamma_gamma"] = gamma_gamma
+
     if excavation_depth_nap is not None:
         multi_cpt_payload["excavation_depth_nap"] = excavation_depth_nap
     if excavation_stress_reduction_method == "constant":

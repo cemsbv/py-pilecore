@@ -90,6 +90,44 @@ def test_create_grouper_payload_from_bearing_results_nan_defaults() -> None:
     assert signature.parameters["skip_nan"].default is False
 
 
+@pytest.mark.parametrize("safety_factor", ["gamma_bottom", "gamma_shaft"])
+def test_create_grouper_payload_safety_factor_none_is_omitted(
+    grouper_multi_cpt_bearing_results: MultiCPTCompressionBearingResults,
+    pc_openapi,
+    headers: dict,
+    safety_factor: str,
+) -> None:
+    """
+    A safety factor of None is omitted from the payload, so that the API applies its own
+    default. Passing null would be rejected by the API.
+    """
+    payload = create_grouper_payload_from_bearing_results(
+        grouper_multi_cpt_bearing_results, **{safety_factor: None}
+    )
+
+    assert safety_factor not in payload
+
+    request = Request(
+        method="POST",
+        headers=headers,
+        url="http://grouper/group-cpts",
+        json=serialize_jsonifyable_object(payload),
+    )
+    pc_openapi.request_validator.validate(RequestsOpenAPIRequest(request))
+
+
+def test_create_grouper_payload_safety_factor_defaults(
+    grouper_multi_cpt_bearing_results: MultiCPTCompressionBearingResults,
+) -> None:
+    """The safety factors are sent with their documented defaults when not overruled."""
+    payload = create_grouper_payload_from_bearing_results(
+        grouper_multi_cpt_bearing_results
+    )
+
+    assert payload["gamma_bottom"] == 1.2
+    assert payload["gamma_shaft"] == 1.2
+
+
 def test_pile_tip_levels_nap_returns_shared_grid(
     grouper_multi_cpt_bearing_results: MultiCPTCompressionBearingResults,
 ) -> None:
