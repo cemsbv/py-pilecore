@@ -13,12 +13,22 @@ from pypilecore.common.piles.type import PileType
 from pypilecore.input.tension import create_multi_cpt_payload
 
 SAFETY_FACTOR_DEFAULTS = {
-    "gamma_f_nk": 1.0,
-    "gamma_r_b": 1.2,
-    "gamma_r_s": 1.2,
     "gamma_s_t": 1.35,
-    "gamma_gamma": 1.1,
 }
+
+# Properties that the uplift request schema does not document. They are never sent,
+# and their (deprecated) arguments are accepted but ignored. Maps the argument name to
+# a sample value and the payload key it used to produce.
+DEPRECATED_ARGUMENTS = {
+    "gamma_f_nk": (1.0, "gamma_f_nk"),
+    "gamma_r_b": (1.2, "gamma_r_b"),
+    "gamma_r_s": (1.2, "gamma_r_s"),
+    "gamma_gamma": (1.1, "gamma_gamma"),
+    "stiff_construction": (True, "stiff_construction"),
+    "soil_load_sls": (5.0, "soil_load"),
+}
+
+DEPRECATED_PAYLOAD_KEYS = {key for _, key in DEPRECATED_ARGUMENTS.values()}
 
 
 @pytest.fixture()
@@ -110,3 +120,50 @@ def test_create_multi_cpt_payload_safety_factor_defaults(
 
     for name, default in SAFETY_FACTOR_DEFAULTS.items():
         assert payload[name] == default
+
+
+@pytest.mark.parametrize(
+    "argument, value",
+    [
+        (argument, value)
+        for argument, (value, _) in sorted(DEPRECATED_ARGUMENTS.items())
+    ],
+)
+def test_create_multi_cpt_payload_deprecated_arguments_warn(
+    cpt,
+    round_pile,
+    classify_table,
+    argument,
+    value,
+):
+    """The uplift endpoints do not accept these properties; passing them is deprecated."""
+    with pytest.warns(DeprecationWarning, match=argument):
+        payload, _ = create_multi_cpt_payload(
+            pile_tip_levels_nap=[-10.0, -20.0],
+            cptdata_objects=[cpt],
+            classify_tables={cpt.alias: classify_table},
+            groundwater_level_nap=-10.0,
+            pile=round_pile,
+            pile_grid=None,
+            **{argument: value},
+        )
+
+    assert not DEPRECATED_PAYLOAD_KEYS.intersection(payload)
+
+
+def test_create_multi_cpt_payload_omits_undocumented_properties(
+    cpt,
+    round_pile,
+    classify_table,
+):
+    """Properties absent from the uplift request schema are never sent."""
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[-10.0, -20.0],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: classify_table},
+        groundwater_level_nap=-10.0,
+        pile=round_pile,
+        pile_grid=None,
+    )
+
+    assert not DEPRECATED_PAYLOAD_KEYS.intersection(payload)
