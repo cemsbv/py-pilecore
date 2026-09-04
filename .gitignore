@@ -177,3 +177,4 @@ super-linter-output/
 cemsdev.toml
 .cemsdev/
 .cemsbox/
+.scratch/
