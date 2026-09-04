@@ -11,6 +11,12 @@ You can install `py-PileCore` with:
 
     pip install py-pilecore
 
+Or, in a `uv <https://docs.astral.sh/uv/>`_ project:
+
+.. code-block:: bash
+
+    uv add py-pilecore
+
 
 Guided usage
 -------------
