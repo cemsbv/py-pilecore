@@ -286,6 +286,74 @@ def test_create_multi_cpt_payload_excavation_settings_invalid(
         )
 
 
+@pytest.fixture
+def classify_table() -> dict:
+    return {
+        "geotechnicalSoilName": ["Sand"],
+        "lowerBoundary": [1.0],
+        "upperBoundary": [0.0],
+        "color": ["#000000"],
+        "mainComponent": ["sand"],
+        "cohesion": [0.0],
+        "gamma_sat": [20],
+        "gamma_unsat": [18],
+        "phi": [30],
+        "undrainedShearStrength": [0.0],
+    }
+
+
+@pytest.mark.parametrize("safety_factor", ["gamma_f_nk", "gamma_r_b", "gamma_r_s"])
+def test_create_multi_cpt_payload_safety_factor_none_is_omitted(
+    pc_openapi,
+    cpt,
+    round_pile,
+    classify_table,
+    headers,
+    safety_factor,
+):
+    """
+    A safety factor of None is omitted from the payload, so that the API applies its own
+    default. Passing null would be rejected by the API.
+    """
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[-10.0, -20.0],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: classify_table},
+        groundwater_level_nap=-10.0,
+        pile=round_pile,
+        **{safety_factor: None},
+    )
+
+    assert safety_factor not in payload
+
+    request = Request(
+        method="POST",
+        headers=headers,
+        url="http://bearing/multiple-cpts/results",
+        json=serialize_jsonifyable_object(payload),
+    )
+    pc_openapi.request_validator.validate(RequestsOpenAPIRequest(request))
+
+
+def test_create_multi_cpt_payload_safety_factor_defaults(
+    cpt,
+    round_pile,
+    classify_table,
+):
+    """The safety factors are sent with their documented defaults when not overruled."""
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[-10.0, -20.0],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: classify_table},
+        groundwater_level_nap=-10.0,
+        pile=round_pile,
+    )
+
+    assert payload["gamma_f_nk"] == 1.0
+    assert payload["gamma_r_b"] == 1.2
+    assert payload["gamma_r_s"] == 1.2
+
+
 def test_get_cpt_depth(cpt: pygef.cpt.CPTData):
     depth = np.array(cpt.data["depth"])
     penetration_length = np.array(cpt.data["penetrationLength"])

@@ -15,8 +15,8 @@ def create_grouper_payload(
     cpt_results_dict: Dict[str, SingleCPTCompressionBearingResults],
     building_polygon: Polygon | None = None,
     cpt_grid_rotation: float = 0.0,
-    gamma_bottom: float = 1.2,
-    gamma_shaft: float = 1.2,
+    gamma_bottom: float | None = 1.2,
+    gamma_shaft: float | None = 1.2,
     include_centre_to_centre_check: bool = False,
     stiff_construction: bool = False,
     resolution: float = 0.5,
@@ -64,10 +64,12 @@ def create_grouper_payload(
         Attribute use to get the xi3 and xi4 value. True if it is a stiff construction
     gamma_shaft
         Default is 1.2
-        Safety factor shaft design bearing capacity
+        Safety factor shaft design bearing capacity. If None, the parameter is omitted
+        from the payload, so that the API applies its default of 1.2.
     gamma_bottom
         Default is 1.2
-        Safety factor bottom design bearing capacity
+        Safety factor bottom design bearing capacity. If None, the parameter is omitted
+        from the payload, so that the API applies its default of 1.2.
     include_centre_to_centre_check:
         Default is False
         Flag that indicates if the cluster algorithm performs a centre to centre validation of the CPT’s of the
@@ -144,8 +146,8 @@ def create_grouper_payload_from_bearing_results(
     bearing: GrouperBearingResultsLike,
     building_polygon: Polygon | None = None,
     cpt_grid_rotation: float = 0.0,
-    gamma_bottom: float = 1.2,
-    gamma_shaft: float = 1.2,
+    gamma_bottom: float | None = 1.2,
+    gamma_shaft: float | None = 1.2,
     include_centre_to_centre_check: bool = False,
     stiff_construction: bool = False,
     resolution: float = 0.5,
@@ -207,8 +209,8 @@ def _build_grouper_payload(
     *,
     building_polygon: Polygon | None,
     cpt_grid_rotation: float,
-    gamma_bottom: float,
-    gamma_shaft: float,
+    gamma_bottom: float | None,
+    gamma_shaft: float | None,
     include_centre_to_centre_check: bool,
     stiff_construction: bool,
     resolution: float,
@@ -228,12 +230,17 @@ def _build_grouper_payload(
     # create default payload object
     payload: Dict[str, Any] = {
         "cpt_grid_rotation": cpt_grid_rotation,
-        "gamma_bottom": gamma_bottom,
-        "gamma_shaft": gamma_shaft,
         "include_centre_to_centre_check": include_centre_to_centre_check,
         "stiff_construction": stiff_construction,
         "resolution": resolution,
     }
+
+    # The safety factors are only added when they have a value. The API rejects a null
+    # value, but applies its own default when the property is omitted.
+    if gamma_bottom is not None:
+        payload["gamma_bottom"] = gamma_bottom
+    if gamma_shaft is not None:
+        payload["gamma_shaft"] = gamma_shaft
 
     # set source building polygon in payload
     if building_polygon is not None:
