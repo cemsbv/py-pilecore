@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypilecore.viewers.viewer_cpt_results_plan_view &mdash; py-pilecore 2.4.0 documentation</title>
+  <title>pypilecore.viewers.viewer_cpt_results_plan_view &mdash; py-pilecore 2.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=4d935f96"></script>
+      <script src="../../../_static/documentation_options.js?v=3c4615cf"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -89,7 +89,7 @@
 <div class="viewcode-block" id="ViewerCptResultsPlanView">
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ViewerCptResultsPlanView</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Viewer for the CPT results of the bearing capacity calculations in</span>
 <span class="sd">    plan view for a fixed pile tip level (PTL).</span>
 
@@ -102,25 +102,25 @@
 <span class="sd">            - X axis: X coordinate.</span>
 <span class="sd">            - Y axis: Y coordinate.</span>
 <span class="sd">            - Each point represents a different CPT, but the same pile tip level.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="ViewerCptResultsPlanView.__init__">
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results_cases</span><span class="p">:</span> <span class="n">CasesMultiCPTResultsLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the viewer.</span>
+<span class="w">        </span><span class="sd">"""Initialize the viewer.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        results_cases : CasesMultiCPTResultsProtocol</span>
 <span class="sd">            The results of the bearing capacity calculations.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Initialize figure CPT results in plan view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span> <span class="o">=</span> <span class="n">FigureCPTResultsPlanView</span><span class="p">(</span><span class="n">results_cases</span><span class="o">=</span><span class="n">results_cases</span><span class="p">)</span>
 
         <span class="c1"># Set up control widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_case_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Case:&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">"Case:"</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span><span class="o">.</span><span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span><span class="o">.</span><span class="n">cases</span><span class="p">,</span>
         <span class="p">)</span>
@@ -134,12 +134,12 @@
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_result_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Result:&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">"Result:"</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">result_options</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">options</span><span class="o">=</span><span class="n">result_options</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_level_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Pile tip level NAP:&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">"Pile tip level NAP:"</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span><span class="o">.</span><span class="n">pile_tip_levels_nap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span><span class="o">.</span><span class="n">pile_tip_levels_nap</span><span class="p">,</span>
         <span class="p">)</span>
@@ -148,9 +148,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_case_result_and_ptl</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># Set up callbacks</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_case_dropdown</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_case_result_and_ptl</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_result_dropdown</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_case_result_and_ptl</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_level_dropdown</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_case_result_and_ptl</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_case_dropdown</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_case_result_and_ptl</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_result_dropdown</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_case_result_and_ptl</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_level_dropdown</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_case_result_and_ptl</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">)</span>
 
         <span class="c1"># Set up layout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_control_widgets</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">HBox</span><span class="p">(</span>
@@ -166,10 +166,10 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_update_case_result_and_ptl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Private method to update the figure when the case, result name or pile tip level</span>
 <span class="sd">        are changed in the control widgets.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Update the figure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_figure_plan_view</span><span class="o">.</span><span class="n">show_case_result_and_ptl</span><span class="p">(</span>
             <span class="n">case_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_case_dropdown</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
@@ -180,7 +180,7 @@
 <div class="viewcode-block" id="ViewerCptResultsPlanView.display">
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.viewers.viewer_cpt_results_plan_view.ViewerCptResultsPlanView.display">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DisplayHandle</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the figure.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Display the figure."""</span>
         <span class="k">return</span> <span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layout</span><span class="p">)</span></div>
 </div>
 

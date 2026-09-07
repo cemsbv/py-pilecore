@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypilecore.common.piles.type &mdash; py-pilecore 2.4.0 documentation</title>
+  <title>pypilecore.common.piles.type &mdash; py-pilecore 2.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
@@ -14,7 +14,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=4d935f96"></script>
+      <script src="../../../../_static/documentation_options.js?v=3c4615cf"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -78,18 +78,18 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_anchor_reference</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Infer whether the pile is an anchor from the pile type reference in the payload.</span>
-<span class="sd">     - If the reference is one of [&quot;AA1&quot;, &quot;AA2&quot;, &quot;AB1&quot;, &quot;AB2&quot;, &quot;AC&quot;, &quot;AD&quot;, &quot;AE&quot;], it is an anchor.</span>
+<span class="sd">     - If the reference is one of ["AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE"], it is an anchor.</span>
 <span class="sd">     - For all other references, it is not an anchor.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">reference</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;AA1&quot;</span><span class="p">,</span> <span class="s2">&quot;AA2&quot;</span><span class="p">,</span> <span class="s2">&quot;AB1&quot;</span><span class="p">,</span> <span class="s2">&quot;AB2&quot;</span><span class="p">,</span> <span class="s2">&quot;AC&quot;</span><span class="p">,</span> <span class="s2">&quot;AD&quot;</span><span class="p">,</span> <span class="s2">&quot;AE&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">reference</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"AA1"</span><span class="p">,</span> <span class="s2">"AA2"</span><span class="p">,</span> <span class="s2">"AB1"</span><span class="p">,</span> <span class="s2">"AB2"</span><span class="p">,</span> <span class="s2">"AC"</span><span class="p">,</span> <span class="s2">"AD"</span><span class="p">,</span> <span class="s2">"AE"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_custom_property_constant_value</span><span class="p">(</span>
     <span class="n">property_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">property_value</span><span class="p">:</span> <span class="nb">dict</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get the constant value of a custom property if use_constant_value is True, otherwise return None.</span>
 
 <span class="sd">    Parameters:</span>
@@ -103,21 +103,21 @@
 <span class="sd">    --------</span>
 <span class="sd">    float | None</span>
 <span class="sd">        The constant value of the custom property if use_constant_value is True, otherwise None.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">property_value</span><span class="p">[</span><span class="s2">&quot;use_constant_value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">property_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;constant_value&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">property_value</span><span class="p">[</span><span class="s2">&quot;use_constant_value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">property_value</span><span class="p">[</span><span class="s2">"use_constant_value"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">property_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"constant_value"</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">property_value</span><span class="p">[</span><span class="s2">"use_constant_value"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Unexpected value for &#39;use_constant_value&#39;: </span><span class="si">{</span><span class="n">property_value</span><span class="p">[</span><span class="s1">&#39;use_constant_value&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Unexpected value for 'use_constant_value': </span><span class="si">{</span><span class="n">property_value</span><span class="p">[</span><span class="s1">'use_constant_value'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
 
 <div class="viewcode-block" id="PileType">
 <a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.type.PileType">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PileType</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The PileType class represents the type of a pile.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The PileType class represents the type of a pile."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -140,7 +140,7 @@
         <span class="n">qb_max_limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">chamfered</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Represents the type of a pile.</span>
 
 <span class="sd">        Parameters:</span>
@@ -186,8 +186,8 @@
 <span class="sd">            Default: None.</span>
 <span class="sd">        chamfered : float, optional</span>
 <span class="sd">            The chamfered value of the pile type, by default None.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="n">reference</span><span class="p">}</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{</span><span class="s2">"reference"</span><span class="p">:</span> <span class="n">reference</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span> <span class="o">=</span> <span class="n">reference</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_installation_method</span> <span class="o">=</span> <span class="n">installation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_prefab</span> <span class="o">=</span> <span class="n">is_prefab</span>
@@ -211,215 +211,215 @@
 <a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.type.PileType.from_api_response">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_api_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pile_type</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Instantiates a PileType from a pile type object in the API response payload.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">        -----------</span>
 <span class="sd">        pile_type: dict</span>
-<span class="sd">            A dictionary that is retrieved from the API response payload at &quot;/pile_properties/pile_type&quot;.</span>
+<span class="sd">            A dictionary that is retrieved from the API response payload at "/pile_properties/pile_type".</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">        --------</span>
 <span class="sd">        PileType</span>
 <span class="sd">            A pile type.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">standard_pile</span> <span class="o">=</span> <span class="n">pile_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="n">properties</span> <span class="o">=</span> <span class="n">pile_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;properties&quot;</span><span class="p">,</span> <span class="p">{})</span>
+<span class="sd">        """</span>
+        <span class="n">standard_pile</span> <span class="o">=</span> <span class="n">pile_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"standard_pile"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">pile_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"properties"</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">reference</span><span class="o">=</span><span class="n">standard_pile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reference&quot;</span><span class="p">),</span>
-            <span class="n">is_prefab</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_prefab&quot;</span><span class="p">),</span>
-            <span class="n">is_open_ended</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_open_ended&quot;</span><span class="p">),</span>
-            <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_low_vibrating&quot;</span><span class="p">),</span>
-            <span class="n">is_auger</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_auger&quot;</span><span class="p">),</span>
-            <span class="n">installation_method</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;installation_method&quot;</span><span class="p">),</span>
-            <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_s_sand&quot;</span><span class="p">),</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">standard_pile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"reference"</span><span class="p">),</span>
+            <span class="n">is_prefab</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"is_prefab"</span><span class="p">),</span>
+            <span class="n">is_open_ended</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"is_open_ended"</span><span class="p">),</span>
+            <span class="n">is_low_vibrating</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"is_low_vibrating"</span><span class="p">),</span>
+            <span class="n">is_auger</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"is_auger"</span><span class="p">),</span>
+            <span class="n">installation_method</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"installation_method"</span><span class="p">),</span>
+            <span class="n">alpha_s_sand</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"alpha_s_sand"</span><span class="p">),</span>
             <span class="n">alpha_s_clay</span><span class="o">=</span><span class="n">_get_custom_property_constant_value</span><span class="p">(</span>
-                <span class="s2">&quot;alpha_s_clay&quot;</span><span class="p">,</span> <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;alpha_s_clay&quot;</span><span class="p">]</span>
+                <span class="s2">"alpha_s_clay"</span><span class="p">,</span> <span class="n">properties</span><span class="p">[</span><span class="s2">"alpha_s_clay"</span><span class="p">]</span>
             <span class="p">),</span>
-            <span class="n">alpha_p</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_p&quot;</span><span class="p">),</span>
-            <span class="n">alpha_t_sand</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha_t_sand&quot;</span><span class="p">),</span>
+            <span class="n">alpha_p</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"alpha_p"</span><span class="p">),</span>
+            <span class="n">alpha_t_sand</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"alpha_t_sand"</span><span class="p">),</span>
             <span class="n">alpha_t_clay</span><span class="o">=</span><span class="n">_get_custom_property_constant_value</span><span class="p">(</span>
-                <span class="s2">&quot;alpha_t_clay&quot;</span><span class="p">,</span> <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;alpha_t_clay&quot;</span><span class="p">]</span>
+                <span class="s2">"alpha_t_clay"</span><span class="p">,</span> <span class="n">properties</span><span class="p">[</span><span class="s2">"alpha_t_clay"</span><span class="p">]</span>
             <span class="p">),</span>
-            <span class="n">settlement_curve</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settlement_curve&quot;</span><span class="p">),</span>
-            <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;negative_fr_delta_factor&quot;</span><span class="p">),</span>
-            <span class="n">adhesion</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;adhesion&quot;</span><span class="p">),</span>
-            <span class="n">qc_z_a_lesser_1m</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_lesser_1m&quot;</span><span class="p">),</span>
-            <span class="n">qc_z_a_greater_1m</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qc_z_a_greater_1m&quot;</span><span class="p">),</span>
-            <span class="n">qb_max_limit</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qb_max_limit&quot;</span><span class="p">),</span>
+            <span class="n">settlement_curve</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"settlement_curve"</span><span class="p">),</span>
+            <span class="n">negative_fr_delta_factor</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"negative_fr_delta_factor"</span><span class="p">),</span>
+            <span class="n">adhesion</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"adhesion"</span><span class="p">),</span>
+            <span class="n">qc_z_a_lesser_1m</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"qc_z_a_lesser_1m"</span><span class="p">),</span>
+            <span class="n">qc_z_a_greater_1m</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"qc_z_a_greater_1m"</span><span class="p">),</span>
+            <span class="n">qb_max_limit</span><span class="o">=</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"qb_max_limit"</span><span class="p">),</span>
         <span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">reference</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The standard pile definition of the pile type (if applicable)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The standard pile definition of the pile type (if applicable)"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alpha_s_sand</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The alpha_s_sand value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The alpha_s_sand value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_s_sand</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alpha_s_clay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The alpha_s_clay value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The alpha_s_clay value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_s_clay</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alpha_p</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The alpha_p value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The alpha_p value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_p</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alpha_t_sand</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The alpha_t_sand value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The alpha_t_sand value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_t_sand</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alpha_t_clay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The alpha_t_clay value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The alpha_t_clay value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_t_clay</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">settlement_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The settlement curve of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The settlement curve of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settlement_curve</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">negative_fr_delta_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The negative_fr_delta_factor value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The negative_fr_delta_factor value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_negative_fr_delta_factor</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">adhesion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The adhesion value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The adhesion value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adhesion</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_prefab</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The is_prefab value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The is_prefab value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_prefab</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_open_ended</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The is_open_ended value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The is_open_ended value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_open_ended</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">installation_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The installation_method value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The installation_method value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_installation_method</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_low_vibrating</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The is_low_vibrating value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The is_low_vibrating value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_low_vibrating</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_auger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The is_auger value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The is_auger value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_auger</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">qc_z_a_lesser_1m</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maximum cone resistance qc value allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Maximum cone resistance qc value allowed for layers with thickness &lt; 1m in the calculation of positive skin friction resistance."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qc_z_a_lesser_1m</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">qc_z_a_greater_1m</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maximum cone resistance qc value allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Maximum cone resistance qc value allowed for layers with thickness &gt;= 1m in the calculation of positive skin friction resistance."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qc_z_a_greater_1m</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">qb_max_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maximum value allowed for the pile tip resistance qb_max.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Maximum value allowed for the pile tip resistance qb_max."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qb_max_limit</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">chamfered</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The chamfered value of the pile type&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The chamfered value of the pile type"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chamfered</span>
 
 <div class="viewcode-block" id="PileType.serialize_payload">
 <a class="viewcode-back" href="../../../../tree/reference.html#pypilecore.common.piles.type.PileType.serialize_payload">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Serialize the pile type to a dictionary payload for the API.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A dictionary payload containing the standard pile (if set), alpha_s_sand, alpha_s_clay, alpha_p,</span>
 <span class="sd">            alpha_t_sand, settlement curve, negative_fr_delta_factor, adhesion, is_low_vibrating, and is_auger.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">"standard_pile"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_pile</span>
 
         <span class="n">custom_type_properties</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_sand</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;alpha_s_sand&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_sand</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"alpha_s_sand"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_sand</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_clay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;alpha_s_clay&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;use_constant_value&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;constant_value&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_clay</span><span class="p">,</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"alpha_s_clay"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"use_constant_value"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"constant_value"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_s_clay</span><span class="p">,</span>
             <span class="p">}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;alpha_p&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_p</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"alpha_p"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_p</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_t_sand</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;alpha_t_sand&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_t_sand</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"alpha_t_sand"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_t_sand</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_t_clay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;alpha_t_clay&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;use_constant_value&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;constant_value&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_t_clay</span><span class="p">,</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"alpha_t_clay"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"use_constant_value"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"constant_value"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_t_clay</span><span class="p">,</span>
             <span class="p">}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settlement_curve</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;settlement_curve&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settlement_curve</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"settlement_curve"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settlement_curve</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_fr_delta_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;negative_fr_delta_factor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"negative_fr_delta_factor"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">negative_fr_delta_factor</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adhesion</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;adhesion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adhesion</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"adhesion"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adhesion</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">installation_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;installation_method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">installation_method</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"installation_method"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">installation_method</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_prefab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_prefab&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_prefab</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"is_prefab"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_prefab</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_low_vibrating</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_low_vibrating&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_low_vibrating</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"is_low_vibrating"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_low_vibrating</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_auger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_auger&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_auger</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"is_auger"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_auger</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_open_ended</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;is_open_ended&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_open_ended</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"is_open_ended"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_open_ended</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_lesser_1m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;qc_z_a_lesser_1m&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_lesser_1m</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"qc_z_a_lesser_1m"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_lesser_1m</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_greater_1m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;qc_z_a_greater_1m&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_greater_1m</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"qc_z_a_greater_1m"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc_z_a_greater_1m</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qb_max_limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;qb_max_limit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qb_max_limit</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"qb_max_limit"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qb_max_limit</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chamfered</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">&quot;chamfered&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chamfered</span>
+            <span class="n">custom_type_properties</span><span class="p">[</span><span class="s2">"chamfered"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chamfered</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">custom_type_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;custom_properties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_type_properties</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">"custom_properties"</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_type_properties</span>
 
         <span class="k">return</span> <span class="n">payload</span></div>
 </div>
