@@ -101,10 +101,10 @@
 <div class="viewcode-block" id="SingleClusterData">
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SingleClusterData</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data for a single CPT subgroup</span>
 <span class="sd">    *Not meant to be instantiated by the user.*</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -124,7 +124,7 @@
         <span class="n">xi_factor</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">xi_values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        characteristic_bearing_capacity:</span>
@@ -157,7 +157,7 @@
 <span class="sd">            xi factor</span>
 <span class="sd">        xi_values:</span>
 <span class="sd">            xi values [-]</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_characteristic_bearing_capacity</span> <span class="o">=</span> <span class="n">characteristic_bearing_capacity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_design_bearing_capacity</span> <span class="o">=</span> <span class="n">design_bearing_capacity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_design_negative_friction</span> <span class="o">=</span> <span class="n">design_negative_friction</span>
@@ -182,81 +182,81 @@
 
         <span class="n">raw_lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"All values in this dataclass must have the same length."</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;All values in this dataclass must have the same length.&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">characteristic_bearing_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Characteristic bearing capacity [kN]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Characteristic bearing capacity [kN]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_characteristic_bearing_capacity</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">design_bearing_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Design bearing capacity [kN]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Design bearing capacity [kN]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_design_bearing_capacity</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">design_negative_friction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Design negative friction [kN]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Design negative friction [kN]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_design_negative_friction</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">group_centre_to_centre_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Group centre to centre validation"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Group centre to centre validation&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_centre_to_centre_validation</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">group_centre_to_centre_validation_15</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Group centre to centre validation 15 meter"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Group centre to centre validation 15 meter&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_centre_to_centre_validation_15</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">group_centre_to_centre_validation_20</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Group centre to centre validation 20 meter"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Group centre to centre validation 20 meter&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_centre_to_centre_validation_20</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">group_centre_to_centre_validation_25</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Group centre to centre validation 25 meter"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Group centre to centre validation 25 meter&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_centre_to_centre_validation_25</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">mean_calculated_bearing_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Mean calculated bearing capacity [kN]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mean calculated bearing capacity [kN]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mean_calculated_bearing_capacity</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">min_calculated_bearing_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Min calculated bearing capacity [kN]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Min calculated bearing capacity [kN]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_calculated_bearing_capacity</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">net_design_bearing_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Net design bearing capacity [kN]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Net design bearing capacity [kN]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_net_design_bearing_capacity</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">nominal_cpt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Nominal cpt"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Nominal cpt&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nominal_cpt</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pile_tip_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Pile tip level [m w.r.t NAP]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pile tip level [m w.r.t NAP]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_level</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">variation_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Variation coefficient [-]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Variation coefficient [-]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variation_coefficient</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">xi_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Xi factor"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Xi factor&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xi_factor</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">xi_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Xi values [-]"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Xi values [-]&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xi_values</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
@@ -268,7 +268,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_variation_coefficient</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the bearing capacity and variation coefficient in a subplot</span>
 
 <span class="sd">        Parameters</span>
@@ -277,15 +277,15 @@
 <span class="sd">            `plt.Axes` object where the data can be plotted on.</span>
 <span class="sd">        **kwargs:</span>
 <span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># create variation coefficient plot</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variation_coefficient</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span> <span class="s2">"o-"</span><span class="p">)</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variation_coefficient</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Variation coefficient [-]"</span><span class="p">)</span></div>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Variation coefficient [-]&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SingleClusterData.plot_bearing_capacity">
@@ -293,7 +293,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_bearing_capacity</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the bearing capacity and variation coefficient in a subplot</span>
 
 <span class="sd">        Note</span>
@@ -311,7 +311,7 @@
 <span class="sd">            ULS load in kN.</span>
 <span class="sd">        **kwargs:</span>
 <span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -321,14 +321,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
                 <span class="nb">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">"tab:blue"</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.12</span> <span class="k">else</span> <span class="s2">"tab:orange"</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:blue&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.12</span> <span class="k">else</span> <span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">variation_coefficient</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pile_load_uls</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pile_load_uls</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Net bearing capacity [kN]"</span><span class="p">)</span></div>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Net bearing capacity [kN]&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SingleClusterData.plot_group_centre_to_centre_validation">
@@ -336,7 +336,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_group_centre_to_centre_validation</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the spacing checks in a subplot</span>
 
 <span class="sd">        Note</span>
@@ -351,17 +351,17 @@
 <span class="sd">            `plt.Axes` object where the data can be plotted on.</span>
 <span class="sd">        **kwargs:</span>
 <span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
-            <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
                 <span class="nb">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">"tab:green"</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">"tab:red"</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:green&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">group_centre_to_centre_validation_25</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">),</span>
@@ -369,10 +369,10 @@
         <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
-            <span class="n">marker</span><span class="o">=</span><span class="s2">"s"</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
                 <span class="nb">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">"tab:green"</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">"tab:red"</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:green&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">group_centre_to_centre_validation_20</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">),</span>
@@ -380,23 +380,23 @@
         <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
-            <span class="n">marker</span><span class="o">=</span><span class="s2">"D"</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;D&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
                 <span class="nb">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">"tab:green"</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">"tab:red"</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;tab:green&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">group_centre_to_centre_validation_15</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s2">"25"</span><span class="p">,</span> <span class="s2">"20"</span><span class="p">,</span> <span class="s2">"15"</span><span class="p">])</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"CPT ctc [m]"</span><span class="p">)</span></div>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;25&quot;</span><span class="p">,</span> <span class="s2">&quot;20&quot;</span><span class="p">,</span> <span class="s2">&quot;15&quot;</span><span class="p">])</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;CPT ctc [m]&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SingleClusterData.plot_xi">
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterData.plot_xi">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_xi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the xi factor in a subplot</span>
 
 <span class="sd">        Note</span>
@@ -411,7 +411,7 @@
 <span class="sd">            `plt.Axes` object where the data can be plotted on.</span>
 <span class="sd">        **kwargs:</span>
 <span class="sd">            All additional keyword arguments are passed to the `pyplot.subplots()` call.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -420,13 +420,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
                 <span class="nb">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="s2">"tab:cyan"</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">"</span><span class="se">\u03be</span><span class="s2">4"</span> <span class="k">else</span> <span class="s2">"tab:olive"</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="s2">&quot;tab:cyan&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\u03be</span><span class="s2">4&quot;</span> <span class="k">else</span> <span class="s2">&quot;tab:olive&quot;</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">xi_factor</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"xi value [-]"</span><span class="p">)</span></div>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;xi value [-]&quot;</span><span class="p">)</span></div>
 </div>
 
 
@@ -435,7 +435,7 @@
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.SingleClusterResult">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SingleClusterResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Not meant to be instantiated by the user.*</span>
 
 <span class="sd">    Attributes:</span>
@@ -461,7 +461,7 @@
 <span class="sd">        True if one of the conditions stated in NEN9997-1 3.2.3 is met at one or more pile-tip levels.</span>
 <span class="sd">    data: SingleClusterData</span>
 <span class="sd">        single cluster dataclass</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">cpt_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">coordinates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
@@ -477,61 +477,61 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_api_response</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">response_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"SingleClusterResult"</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SingleClusterResult&quot;</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">table</span> <span class="o">=</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">"table"</span><span class="p">]</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;table&quot;</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-                <span class="n">cpt_names</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">"names"</span><span class="p">],</span>
-                <span class="n">coordinates</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">"coordinates"</span><span class="p">],</span>
+                <span class="n">cpt_names</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">],</span>
+                <span class="n">coordinates</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">],</span>
                 <span class="n">pile_load_uls</span><span class="o">=</span><span class="n">pile_load_uls</span><span class="p">,</span>
-                <span class="n">maximum_pile_level</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">"maximum_pile_level"</span><span class="p">],</span>
-                <span class="n">minimum_pile_level</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">"minimum_pile_level"</span><span class="p">],</span>
+                <span class="n">maximum_pile_level</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;maximum_pile_level&quot;</span><span class="p">],</span>
+                <span class="n">minimum_pile_level</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;minimum_pile_level&quot;</span><span class="p">],</span>
                 <span class="n">number_of_consecutive_pile_levels</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span>
-                    <span class="s2">"number_of_consecutive_pile_levels"</span>
+                    <span class="s2">&quot;number_of_consecutive_pile_levels&quot;</span>
                 <span class="p">],</span>
-                <span class="n">spatial_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">"spatial_check"</span><span class="p">],</span>
-                <span class="n">variation_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">"variation_check"</span><span class="p">],</span>
-                <span class="n">centre_to_centre_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">"centre_to_centre_check"</span><span class="p">],</span>
+                <span class="n">spatial_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;spatial_check&quot;</span><span class="p">],</span>
+                <span class="n">variation_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;variation_check&quot;</span><span class="p">],</span>
+                <span class="n">centre_to_centre_check</span><span class="o">=</span><span class="n">response_dict</span><span class="p">[</span><span class="s2">&quot;centre_to_centre_check&quot;</span><span class="p">],</span>
                 <span class="n">data</span><span class="o">=</span><span class="n">SingleClusterData</span><span class="p">(</span>
                     <span class="n">characteristic_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
-                        <span class="s2">"characteristic_bearing_capacity"</span>
+                        <span class="s2">&quot;characteristic_bearing_capacity&quot;</span>
                     <span class="p">],</span>
-                    <span class="n">design_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">"design_bearing_capacity"</span><span class="p">],</span>
-                    <span class="n">design_negative_friction</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">"design_negative_friction"</span><span class="p">],</span>
+                    <span class="n">design_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;design_bearing_capacity&quot;</span><span class="p">],</span>
+                    <span class="n">design_negative_friction</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;design_negative_friction&quot;</span><span class="p">],</span>
                     <span class="n">group_centre_to_centre_validation</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
-                        <span class="s2">"group_centre_to_centre_validation"</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation&quot;</span>
                     <span class="p">],</span>
                     <span class="n">group_centre_to_centre_validation_15</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
-                        <span class="s2">"group_centre_to_centre_validation_15"</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation_15&quot;</span>
                     <span class="p">],</span>
                     <span class="n">group_centre_to_centre_validation_20</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
-                        <span class="s2">"group_centre_to_centre_validation_20"</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation_20&quot;</span>
                     <span class="p">],</span>
                     <span class="n">group_centre_to_centre_validation_25</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
-                        <span class="s2">"group_centre_to_centre_validation_25"</span>
+                        <span class="s2">&quot;group_centre_to_centre_validation_25&quot;</span>
                     <span class="p">],</span>
                     <span class="n">mean_calculated_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
-                        <span class="s2">"mean_calculated_bearing_capacity"</span>
+                        <span class="s2">&quot;mean_calculated_bearing_capacity&quot;</span>
                     <span class="p">],</span>
                     <span class="n">min_calculated_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span>
-                        <span class="s2">"min_calculated_bearing_capacity"</span>
+                        <span class="s2">&quot;min_calculated_bearing_capacity&quot;</span>
                     <span class="p">],</span>
-                    <span class="n">net_design_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">"net_design_bearing_capacity"</span><span class="p">],</span>
-                    <span class="n">nominal_cpt</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">"nominal_cpt"</span><span class="p">],</span>
-                    <span class="n">pile_tip_level</span><span class="o">=</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">table</span><span class="p">[</span><span class="s2">"pile_tip_level"</span><span class="p">]],</span>
-                    <span class="n">variation_coefficient</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">"variation_coefficient"</span><span class="p">],</span>
-                    <span class="n">xi_factor</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">"xi_factor"</span><span class="p">],</span>
-                    <span class="n">xi_values</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">"xi_values"</span><span class="p">],</span>
+                    <span class="n">net_design_bearing_capacity</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;net_design_bearing_capacity&quot;</span><span class="p">],</span>
+                    <span class="n">nominal_cpt</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;nominal_cpt&quot;</span><span class="p">],</span>
+                    <span class="n">pile_tip_level</span><span class="o">=</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">table</span><span class="p">[</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">]],</span>
+                    <span class="n">variation_coefficient</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;variation_coefficient&quot;</span><span class="p">],</span>
+                    <span class="n">xi_factor</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;xi_factor&quot;</span><span class="p">],</span>
+                    <span class="n">xi_values</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;xi_values&quot;</span><span class="p">],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
-                <span class="s2">"Response dictionary is missing an expected key.</span><span class="se">\n</span><span class="s2">"</span> <span class="sa">rf</span><span class="s2">"Traceback: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                <span class="s2">&quot;Response dictionary is missing an expected key.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="sa">rf</span><span class="s2">&quot;Traceback: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"Could not create `SingleClusterResult` class with the following cpts: </span><span class="si">{</span><span class="n">response_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'names'</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">"</span>
-                <span class="sa">rf</span><span class="s2">"Traceback: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">&quot;Could not create `SingleClusterResult` class with the following cpts: </span><span class="si">{</span><span class="n">response_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;names&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">rf</span><span class="s2">&quot;Traceback: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
 <div class="viewcode-block" id="SingleClusterResult.map">
@@ -541,7 +541,7 @@
         <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a map of the cpt locations</span>
 
 <span class="sd">        Parameters</span>
@@ -555,12 +555,12 @@
 <span class="sd">        -------</span>
 <span class="sd">        axes:</span>
 <span class="sd">            The `Axes` object where the data was plotted on.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Create axes objects if not provided</span>
         <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"figsize"</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
-            <span class="s2">"tight_layout"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -571,12 +571,12 @@
 
         <span class="c1"># plot cpt</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">))</span>
-        <span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"grey"</span><span class="p">)</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
 
         <span class="c1"># add labels (cpt names) to map</span>
         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">):</span>
-            <span class="n">axes</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">"offset points"</span><span class="p">)</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">"plain"</span><span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span></div>
 
 
@@ -587,7 +587,7 @@
         <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot contains the:</span>
 <span class="sd">            - bearing capacity</span>
 <span class="sd">            - variation coefficient</span>
@@ -619,12 +619,12 @@
 <span class="sd">        -------</span>
 <span class="sd">        figure:</span>
 <span class="sd">            `plt.Figure` object.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"sharey"</span><span class="p">:</span> <span class="s2">"row"</span><span class="p">,</span>
-            <span class="s2">"sharex"</span><span class="p">:</span> <span class="s2">"col"</span><span class="p">,</span>
-            <span class="s2">"figsize"</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;sharey&quot;</span><span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sharex&quot;</span><span class="p">:</span> <span class="s2">&quot;col&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -655,7 +655,7 @@
 <a class="viewcode-back" href="../../../tree/reference.html#pypilecore.results.grouper_result.GrouperResults">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">GrouperResults</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Not meant to be instantiated by the user.*</span>
 
 <span class="sd">    Use the `from_grouper_response` (or the legacy `from_api_response`) method to</span>
@@ -668,7 +668,7 @@
 <span class="sd">        The bearing results the subgroups were generated with. May be a PileCore</span>
 <span class="sd">        `MultiCPTCompressionBearingResults` or a user-built `CustomBearingResults`;</span>
 <span class="sd">        both satisfy the `GrouperBearingResultsLike` protocol.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">clusters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SingleClusterResult</span><span class="p">]</span>
     <span class="n">bearing_results</span><span class="p">:</span> <span class="n">GrouperBearingResultsLike</span>
@@ -682,9 +682,9 @@
                 <span class="c1"># in the bearing results</span>
                 <span class="k">if</span> <span class="n">cpt_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bearing_cpt_names</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">"CPT names dont match between MultiCPTBearingResults object and GrouperResults. "</span>
-                        <span class="s2">"Make sure that you use the same MultiCPTBearingResults as you generated "</span>
-                        <span class="s2">"the subgroups/clusters with."</span>
+                        <span class="s2">&quot;CPT names dont match between MultiCPTBearingResults object and GrouperResults. &quot;</span>
+                        <span class="s2">&quot;Make sure that you use the same MultiCPTBearingResults as you generated &quot;</span>
+                        <span class="s2">&quot;the subgroups/clusters with.&quot;</span>
                     <span class="p">)</span>
 
                 <span class="c1"># Check that all the pile tip levels in the SingleClusterResults are</span>
@@ -696,23 +696,23 @@
                         <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                            <span class="s2">"Pile tip levels dont match between MultiCPTBearingResults object and GrouperResults. "</span>
-                            <span class="s2">"Make sure that you use the same MultiCPTBearingResults as you generated "</span>
-                            <span class="s2">"the subgroups/clusters with."</span>
+                            <span class="s2">&quot;Pile tip levels dont match between MultiCPTBearingResults object and GrouperResults. &quot;</span>
+                            <span class="s2">&quot;Make sure that you use the same MultiCPTBearingResults as you generated &quot;</span>
+                            <span class="s2">&quot;the subgroups/clusters with.&quot;</span>
                         <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@typing_extensions</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span>
-        <span class="s2">"`multi_cpt_bearing_results` is deprecated; use `bearing_results` instead."</span>
+        <span class="s2">&quot;`multi_cpt_bearing_results` is deprecated; use `bearing_results` instead.&quot;</span>
     <span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">multi_cpt_bearing_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MultiCPTCompressionBearingResults</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deprecated accessor for the bearing results.</span>
 
 <span class="sd">        Returns the PileCore `MultiCPTCompressionBearingResults` when the results were</span>
 <span class="sd">        computed by PileCore, or ``None`` for a custom (externally-computed) source. Use</span>
 <span class="sd">        `bearing_results` instead.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bearing_results</span><span class="p">,</span> <span class="n">MultiCPTCompressionBearingResults</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bearing_results</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -725,9 +725,9 @@
         <span class="n">response</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">bearing_results</span><span class="p">:</span> <span class="n">GrouperBearingResultsLike</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"GrouperResults"</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Stores the response of the PileCore endpoint "/grouper/group_cpts".</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GrouperResults&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores the response of the PileCore endpoint &quot;/grouper/group_cpts&quot;.</span>
 
 <span class="sd">        This is the general, source-agnostic constructor: `bearing_results` may be a</span>
 <span class="sd">        PileCore `MultiCPTCompressionBearingResults` or a user-built</span>
@@ -741,10 +741,10 @@
 <span class="sd">            ULS load in kN. Used to determine if a grouping configuration is valid.</span>
 <span class="sd">        bearing_results:</span>
 <span class="sd">           The bearing results that the subgroups were generated with.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">SingleClusterResult</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">pile_load_uls</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">"sub_groups"</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;sub_groups&quot;</span><span class="p">]</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">clusters</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">bearing_results</span><span class="o">=</span><span class="n">bearing_results</span><span class="p">)</span></div>
 
@@ -757,10 +757,10 @@
         <span class="n">response_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">pile_load_uls</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">multi_cpt_bearing_results</span><span class="p">:</span> <span class="n">MultiCPTCompressionBearingResults</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"GrouperResults"</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GrouperResults&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stores the response of the PileCore endpoint</span>
-<span class="sd">        "/grouper/group_cpts"</span>
+<span class="sd">        &quot;/grouper/group_cpts&quot;</span>
 
 <span class="sd">        Kept for backwards compatibility; delegates to `from_grouper_response`.</span>
 
@@ -772,7 +772,7 @@
 <span class="sd">            ULS load in kN. Used to determine if a grouping configuration is valid.</span>
 <span class="sd">        multi_cpt_bearing_results:</span>
 <span class="sd">           The container that holds multiple SingleCPTBearingResults objects</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_grouper_response</span><span class="p">(</span>
             <span class="n">response</span><span class="o">=</span><span class="n">response_dict</span><span class="p">,</span>
             <span class="n">pile_load_uls</span><span class="o">=</span><span class="n">pile_load_uls</span><span class="p">,</span>
@@ -781,14 +781,14 @@
 
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">cpt_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"MaxBearingResults"</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cpt_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MaxBearingResults&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the results of the maximum net design bearing capacity (R_c_d_net) for every CPT.</span>
 
 <span class="sd">        Source-agnostic: it folds the subgroup capacities over the per-CPT baseline that</span>
 <span class="sd">        `bearing_results.base_max_bearing_results()` provides, so the PileCore and custom</span>
 <span class="sd">        sources ride the exact same routine.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">max_bearing</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># Start from the per-CPT baseline. `MaxBearingTable` properties return a fresh</span>
@@ -803,7 +803,7 @@
                     <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">,</span>
                     <span class="n">R_c_d_net</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">R_c_d_net</span><span class="p">,</span>
                     <span class="n">F_nk_d</span><span class="o">=</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">,</span>
-                    <span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">"CPT:</span><span class="si">{</span><span class="n">cpt_name</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+                    <span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;CPT:</span><span class="si">{</span><span class="n">cpt_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
                     <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_result</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">pile_tip_level_nap</span><span class="p">),</span>
                 <span class="p">),</span>
             <span class="p">)</span>
@@ -816,7 +816,7 @@
                 <span class="k">for</span> <span class="n">cluster_ptl_idx</span><span class="p">,</span> <span class="n">ptl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pile_tip_level</span><span class="p">):</span>
                     <span class="c1"># find corresponding pile tip level index in the max_bearing results</span>
                     <span class="n">max_bearing_ptl_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
-                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"pile_tip_level_nap"</span><span class="p">]</span>
+                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">]</span>
                         <span class="o">-</span> <span class="n">ptl</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
 
@@ -825,7 +825,7 @@
                         <span class="c1"># New value has a higher net design bearing capacity</span>
                         <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">net_design_bearing_capacity</span><span class="p">[</span><span class="n">cluster_ptl_idx</span><span class="p">]</span>
                         <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
-                            <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"R_c_d_net"</span><span class="p">][</span>
+                            <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;R_c_d_net&quot;</span><span class="p">][</span>
                                 <span class="n">max_bearing_ptl_idx</span>
                             <span class="p">]</span>
                         <span class="p">)</span>
@@ -833,26 +833,26 @@
                         <span class="ow">and</span> <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">variation_coefficient</span><span class="p">[</span><span class="n">cluster_ptl_idx</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">12.0</span>
                     <span class="p">):</span>
                         <span class="c1"># replace data</span>
-                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"R_c_d_net"</span><span class="p">][</span>
+                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;R_c_d_net&quot;</span><span class="p">][</span>
                             <span class="n">max_bearing_ptl_idx</span>
                         <span class="p">]</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">net_design_bearing_capacity</span><span class="p">[</span><span class="n">cluster_ptl_idx</span><span class="p">]</span>
-                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"F_nk_d"</span><span class="p">][</span>
+                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;F_nk_d&quot;</span><span class="p">][</span>
                             <span class="n">max_bearing_ptl_idx</span>
                         <span class="p">]</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">design_negative_friction</span><span class="p">[</span><span class="n">cluster_ptl_idx</span><span class="p">]</span>
-                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"origin"</span><span class="p">][</span>
+                        <span class="n">max_bearing</span><span class="p">[</span><span class="n">cpt_name</span><span class="p">][</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;origin&quot;</span><span class="p">][</span>
                             <span class="n">max_bearing_ptl_idx</span>
-                        <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Group:</span><span class="si">{</span><span class="n">cluster_idx</span><span class="si">}</span><span class="s2">"</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Group:</span><span class="si">{</span><span class="n">cluster_idx</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="k">return</span> <span class="n">MaxBearingResults</span><span class="p">(</span>
             <span class="n">cpt_results_dict</span><span class="o">=</span><span class="p">{</span>
                 <span class="n">cpt_name</span><span class="p">:</span> <span class="n">MaxBearingResult</span><span class="p">(</span>
-                    <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"pile_head_level_nap"</span><span class="p">],</span>
-                    <span class="n">soil_properties</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"soil_properties"</span><span class="p">],</span>
+                    <span class="n">pile_head_level_nap</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;pile_head_level_nap&quot;</span><span class="p">],</span>
+                    <span class="n">soil_properties</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;soil_properties&quot;</span><span class="p">],</span>
                     <span class="n">table</span><span class="o">=</span><span class="n">MaxBearingTable</span><span class="p">(</span>
-                        <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"pile_tip_level_nap"</span><span class="p">],</span>
-                        <span class="n">R_c_d_net</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"R_c_d_net"</span><span class="p">],</span>
-                        <span class="n">F_nk_d</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"F_nk_d"</span><span class="p">],</span>
-                        <span class="n">origin</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"results_table"</span><span class="p">][</span><span class="s2">"origin"</span><span class="p">],</span>
+                        <span class="n">pile_tip_level_nap</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;pile_tip_level_nap&quot;</span><span class="p">],</span>
+                        <span class="n">R_c_d_net</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;R_c_d_net&quot;</span><span class="p">],</span>
+                        <span class="n">F_nk_d</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;F_nk_d&quot;</span><span class="p">],</span>
+                        <span class="n">origin</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;results_table&quot;</span><span class="p">][</span><span class="s2">&quot;origin&quot;</span><span class="p">],</span>
                     <span class="p">),</span>
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">cpt_name</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">max_bearing</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -868,12 +868,12 @@
         <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a map of the valid subgroups.</span>
 <span class="sd">        Plot contains the:</span>
 
 <span class="sd">            - convex_hull of the subgroup with buffer distance</span>
-<span class="sd">            - All CPT's with tag</span>
+<span class="sd">            - All CPT&#39;s with tag</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -892,11 +892,11 @@
 <span class="sd">        -------</span>
 <span class="sd">        figure:</span>
 <span class="sd">            The `Figure` object where the data was plotted on.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"figsize"</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
-            <span class="s2">"tight_layout"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -908,12 +908,12 @@
         <span class="k">for</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">):</span>
             <span class="c1"># add cpts to plot</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">cluster</span><span class="o">.</span><span class="n">coordinates</span><span class="p">))</span>
-            <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"grey"</span><span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">add_tags</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cluster</span><span class="o">.</span><span class="n">cpt_names</span><span class="p">):</span>
                     <span class="n">axes</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-                        <span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">"offset points"</span>
+                        <span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span>
                     <span class="p">)</span>
 
             <span class="c1"># add group convex hull</span>
@@ -922,10 +922,10 @@
                 <span class="o">.</span><span class="n">convex_hull</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">exterior</span>
             <span class="p">)</span>
-            <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polygon</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Group </span><span class="si">{</span><span class="n">group_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polygon</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">group_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">)</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">"plain"</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
@@ -937,7 +937,7 @@
         <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a summary of the valid subgroups.</span>
 
 <span class="sd">        Note</span>
@@ -968,11 +968,11 @@
 <span class="sd">        -------</span>
 <span class="sd">        figure:</span>
 <span class="sd">            the `plt.Figure` object.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"sharex"</span><span class="p">:</span> <span class="s2">"row"</span><span class="p">,</span>
-            <span class="s2">"figsize"</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
-            <span class="s2">"tight_layout"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;sharex&quot;</span><span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -995,12 +995,12 @@
             <span class="n">color_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="p">(</span>
-                        <span class="s2">"tab:green"</span>
+                        <span class="s2">&quot;tab:green&quot;</span>
                         <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
                         <span class="k">else</span> <span class="p">(</span>
-                            <span class="s2">"tab:orange"</span>
+                            <span class="s2">&quot;tab:orange&quot;</span>
                             <span class="k">if</span> <span class="n">cluster</span><span class="o">.</span><span class="n">spatial_check</span> <span class="ow">and</span> <span class="o">~</span><span class="n">cluster</span><span class="o">.</span><span class="n">centre_to_centre_check</span>
-                            <span class="k">else</span> <span class="s2">"tab:red"</span>
+                            <span class="k">else</span> <span class="s2">&quot;tab:red&quot;</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="p">]</span>
@@ -1015,20 +1015,20 @@
 
             <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s2">"group_id"</span><span class="p">:</span> <span class="n">group_id_list_sort</span><span class="p">,</span>
-                    <span class="s2">"cpt_names"</span><span class="p">:</span> <span class="n">cpt_names_list</span><span class="p">,</span>
-                    <span class="s2">"colors"</span><span class="p">:</span> <span class="n">color_list</span><span class="p">,</span>
+                    <span class="s2">&quot;group_id&quot;</span><span class="p">:</span> <span class="n">group_id_list_sort</span><span class="p">,</span>
+                    <span class="s2">&quot;cpt_names&quot;</span><span class="p">:</span> <span class="n">cpt_names_list</span><span class="p">,</span>
+                    <span class="s2">&quot;colors&quot;</span><span class="p">:</span> <span class="n">color_list</span><span class="p">,</span>
                 <span class="p">}</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"cpt_names"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">natsort</span><span class="o">.</span><span class="n">natsort_keygen</span><span class="p">())</span>
-            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">"group_id"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">"cpt_names"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"colors"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Group ID"</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;cpt_names&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">natsort</span><span class="o">.</span><span class="n">natsort_keygen</span><span class="p">())</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;group_id&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;cpt_names&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;colors&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Group ID&quot;</span><span class="p">)</span>
             <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">group_id_list</span><span class="p">)</span>
-            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"CPT name"</span><span class="p">)</span>
-            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"major"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;CPT name&quot;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Group ID"</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Depth [m NAP]"</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"major"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Group ID&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Depth [m NAP]&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 </div>

@@ -91,7 +91,7 @@
 <div class="viewcode-block" id="PileGeometry">
 <a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.PileGeometry">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PileGeometry</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""The PileGeometry class represents the geometry of a pile."""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The PileGeometry class represents the geometry of a pile.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -100,7 +100,7 @@
         <span class="n">pile_tip_factor_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">beta_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Represents the geometry of a pile.</span>
 
 <span class="sd">        Parameters:</span>
@@ -113,7 +113,7 @@
 <span class="sd">            The pile tip factor S, by default None.</span>
 <span class="sd">        beta_p : float, optional</span>
 <span class="sd">            The beta_p value, by default None.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_components</span> <span class="o">=</span> <span class="n">components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_materials</span> <span class="o">=</span> <span class="n">materials</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_factor_s</span> <span class="o">=</span> <span class="n">pile_tip_factor_s</span>
@@ -123,22 +123,22 @@
 <a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.PileGeometry.from_api_response">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_api_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">geometry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PileGeometry</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Instantiates a PileGeometry from a geometry object in the API response payload.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">        -----------</span>
 <span class="sd">        geometry: dict</span>
-<span class="sd">            A dictionary that is retrieved from the API response payload at "/pile_properties/geometry".</span>
+<span class="sd">            A dictionary that is retrieved from the API response payload at &quot;/pile_properties/geometry&quot;.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">        --------</span>
 <span class="sd">        PileGeometry</span>
 <span class="sd">            A pile geometry.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RoundPileGeometryComponent</span> <span class="o">|</span> <span class="n">RectPileGeometryComponent</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">geometry</span><span class="p">[</span><span class="s2">"components"</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">component</span><span class="p">[</span><span class="s2">"outer_shape"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"round"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">geometry</span><span class="p">[</span><span class="s2">&quot;components&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">component</span><span class="p">[</span><span class="s2">&quot;outer_shape&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;round&quot;</span><span class="p">:</span>
                 <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">RoundPileGeometryComponent</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
                 <span class="p">)</span>
@@ -148,15 +148,15 @@
                 <span class="p">)</span>
 
         <span class="n">materials</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="s2">"materials"</span> <span class="ow">in</span> <span class="n">geometry</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">geometry</span><span class="p">[</span><span class="s2">"materials"</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;materials&quot;</span> <span class="ow">in</span> <span class="n">geometry</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">geometry</span><span class="p">[</span><span class="s2">&quot;materials&quot;</span><span class="p">]:</span>
                 <span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PileMaterial</span><span class="o">.</span><span class="n">from_api_response</span><span class="p">(</span><span class="n">material</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">components</span><span class="o">=</span><span class="n">components</span><span class="p">,</span>
             <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span>
-            <span class="n">pile_tip_factor_s</span><span class="o">=</span><span class="n">geometry</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pile_tip_factor_s"</span><span class="p">),</span>
-            <span class="n">beta_p</span><span class="o">=</span><span class="n">geometry</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"beta_p"</span><span class="p">],</span>
+            <span class="n">pile_tip_factor_s</span><span class="o">=</span><span class="n">geometry</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pile_tip_factor_s&quot;</span><span class="p">),</span>
+            <span class="n">beta_p</span><span class="o">=</span><span class="n">geometry</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;beta_p&quot;</span><span class="p">],</span>
         <span class="p">)</span></div>
 
 
@@ -164,69 +164,69 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">components</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">RoundPileGeometryComponent</span> <span class="o">|</span> <span class="n">RectPileGeometryComponent</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""The components of the pile geometry"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The components of the pile geometry&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">materials</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PileMaterial</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""The materials used in the pile geometry"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The materials used in the pile geometry&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_materials</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_materials</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">materials_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PileMaterial</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""The materials used in the pile geometry as a dictionary with the material name as key"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The materials used in the pile geometry as a dictionary with the material name as key&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">material</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">material</span> <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pile_tip_factor_s</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""The pile tip factor S of the pile geometry"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The pile tip factor S of the pile geometry&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pile_tip_factor_s</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">beta_p</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""The beta_p value of the pile geometry"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The beta_p value of the pile geometry&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beta_p</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">equiv_diameter_pile_tip</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""The equivalent diameter of the pile at the pile tip."""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The equivalent diameter of the pile at the pile tip.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">equiv_tip_diameter</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">circumference_pile_tip</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""The outer-circumference of the pile at the pile tip."""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The outer-circumference of the pile at the pile tip.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">circumference</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">area_pile_tip</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""The area of the pile at the pile tip."""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The area of the pile at the pile tip.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">area_full</span>
 
 <div class="viewcode-block" id="PileGeometry.serialize_payload">
 <a class="viewcode-back" href="../../../../../tree/reference.html#pypilecore.common.piles.geometry.PileGeometry.serialize_payload">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">serialize_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Serialize the pile geometry to a dictionary payload for the API.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A dictionary payload containing the components, materials (if set), pile tip factor S (if set), and beta_p (if set).</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">()</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">]</span>
-        <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"components"</span><span class="p">:</span> <span class="n">components</span><span class="p">}</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;components&quot;</span><span class="p">:</span> <span class="n">components</span><span class="p">}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">materials</span> <span class="o">=</span> <span class="p">[</span><span class="n">material</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">()</span> <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">]</span>
-            <span class="n">payload</span><span class="p">[</span><span class="s2">"materials"</span><span class="p">]</span> <span class="o">=</span> <span class="n">materials</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;materials&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">materials</span>
 
         <span class="n">custom_geom_properties</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_factor_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_geom_properties</span><span class="p">[</span><span class="s2">"pile_tip_factor_s"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_factor_s</span>
+            <span class="n">custom_geom_properties</span><span class="p">[</span><span class="s2">&quot;pile_tip_factor_s&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_tip_factor_s</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">custom_geom_properties</span><span class="p">[</span><span class="s2">"beta_p"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_p</span>
+            <span class="n">custom_geom_properties</span><span class="p">[</span><span class="s2">&quot;beta_p&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_p</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">custom_geom_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">payload</span><span class="p">[</span><span class="s2">"custom_properties"</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_geom_properties</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;custom_properties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_geom_properties</span>
 
         <span class="k">return</span> <span class="n">payload</span></div>
 
@@ -239,7 +239,7 @@
         <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">depth_nap</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns pile circumferences at requested depths.</span>
 
 <span class="sd">        Parameters</span>
@@ -255,7 +255,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        np.array</span>
 <span class="sd">            Array with pile circumferences at the requested `depth_nap` levels.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">circum_vs_depth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">depth_nap</span><span class="p">)</span>
 
         <span class="c1"># Use the maximum circumference of all components at each depth.</span>
@@ -280,7 +280,7 @@
         <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">depth_nap</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns cross-sectional area of the pile at requested depths.</span>
 
 <span class="sd">        Parameters</span>
@@ -296,7 +296,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        np.array</span>
 <span class="sd">            Array with pile areas at the requested `depth_nap` levels.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">area_vs_depth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">depth_nap</span><span class="p">)</span>
 
         <span class="c1"># Use the maximum area of all components at each depth.</span>
@@ -323,7 +323,7 @@
         <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Axes</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the top-view of the pile at a specified depth.</span>
 
 <span class="sd">        Parameters</span>
@@ -338,20 +338,20 @@
 <span class="sd">            Whether to display the plot, by default True.</span>
 <span class="sd">        **kwargs</span>
 <span class="sd">            Additional keyword arguments to pass to the `plt</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs_subplot</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"figsize"</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
-            <span class="s2">"gridspec_kw"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">"hspace"</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
-                <span class="s2">"height_ratios"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+            <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s2">&quot;gridspec_kw&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;hspace&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
+                <span class="s2">&quot;height_ratios&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
             <span class="p">},</span>
         <span class="p">}</span>
 
         <span class="n">kwargs_subplot</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">height_ratio</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">kwargs_subplot</span><span class="p">[</span><span class="s2">"gridspec_kw"</span><span class="p">][</span><span class="s2">"height_ratios"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
-            <span class="o">/</span> <span class="n">kwargs_subplot</span><span class="p">[</span><span class="s2">"gridspec_kw"</span><span class="p">][</span><span class="s2">"height_ratios"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+            <span class="n">kwargs_subplot</span><span class="p">[</span><span class="s2">&quot;gridspec_kw&quot;</span><span class="p">][</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+            <span class="o">/</span> <span class="n">kwargs_subplot</span><span class="p">[</span><span class="s2">&quot;gridspec_kw&quot;</span><span class="p">][</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
         <span class="p">)</span>
 
         <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
@@ -364,7 +364,7 @@
         <span class="n">y_ticks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
 
         <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="n">facecolor</span> <span class="o">=</span> <span class="s2">"grey"</span>
+            <span class="n">facecolor</span> <span class="o">=</span> <span class="s2">&quot;grey&quot;</span>
             <span class="k">if</span> <span class="n">component</span><span class="o">.</span><span class="n">material</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials_dict</span><span class="p">:</span>
                 <span class="n">material_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials_dict</span><span class="p">[</span><span class="n">component</span><span class="o">.</span><span class="n">material</span><span class="p">]</span><span class="o">.</span><span class="n">color</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">material_color</span><span class="p">,</span> <span class="n">Color</span><span class="p">):</span>
@@ -379,7 +379,7 @@
             <span class="n">component</span><span class="o">.</span><span class="n">plot_cross_section_exterior</span><span class="p">(</span>
                 <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">facecolor</span><span class="o">=</span><span class="n">facecolor</span><span class="p">,</span>
-                <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span>
+                <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
                 <span class="n">axis_arg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
@@ -397,9 +397,9 @@
             <span class="n">x_ticks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">cross_section_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">y_ticks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">cross_section_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="n">y_ticks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">cross_section_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"scaled"</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;scaled&quot;</span><span class="p">)</span>
         <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"auto"</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
         <span class="n">ax1_aspect</span> <span class="o">=</span> <span class="p">(</span>
             <span class="nb">abs</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span>
             <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span>
@@ -415,10 +415,10 @@
         <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">))</span>
         <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span>
             <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">pile_head_level_nap</span><span class="p">,</span> <span class="n">pile_tip_level_nap</span><span class="p">],</span>
-            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">"Pile Head"</span><span class="p">,</span> <span class="s2">"Pile Tip"</span><span class="p">],</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Pile Head&quot;</span><span class="p">,</span> <span class="s2">&quot;Pile Tip&quot;</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">labelrotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">labelrotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">labelrotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">labelrotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

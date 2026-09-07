@@ -95,14 +95,14 @@
     <span class="n">groundwater_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">pile</span><span class="p">:</span> <span class="n">PileProperties</span><span class="p">,</span>
     <span class="n">friction_range_strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
-        <span class="s2">"manual"</span><span class="p">,</span> <span class="s2">"lower_bound"</span><span class="p">,</span> <span class="s2">"settlement_driven"</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="s2">"lower_bound"</span><span class="p">,</span>
+        <span class="s2">&quot;manual&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span> <span class="s2">&quot;settlement_driven&quot;</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lower_bound&quot;</span><span class="p">,</span>
     <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">cpts_group</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">ocr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fixed_negative_friction_range_nap</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fixed_positive_friction_range_nap</span><span class="p">:</span> <span class="p">(</span>
-        <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"ptl"</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+        <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">norms</span><span class="p">:</span> <span class="n">Norms</span> <span class="o">=</span> <span class="n">Norms</span><span class="p">(),</span>
     <span class="n">negative_shaft_friction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -110,10 +110,10 @@
     <span class="n">relative_pile_load</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
     <span class="n">pile_load_sls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">soil_load_sls</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"surface"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"surface"</span><span class="p">,</span>
+    <span class="n">pile_head_level_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;surface&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;surface&quot;</span><span class="p">,</span>
     <span class="n">excavation_depth_nap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">excavation_param_t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">excavation_stress_reduction_method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"constant"</span><span class="p">,</span> <span class="s2">"begemann"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"constant"</span><span class="p">,</span>
+    <span class="n">excavation_stress_reduction_method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;begemann&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span>
     <span class="n">excavation_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">excavation_edge_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">individual_negative_shaft_friction</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -121,7 +121,7 @@
         <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">individual_positive_friction_range_nap</span><span class="p">:</span> <span class="p">(</span>
-        <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"ptl"</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
+        <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ptl&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">individual_ocr</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">use_almere_rules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -130,9 +130,9 @@
     <span class="n">gamma_r_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
     <span class="n">gamma_r_b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">    "/compression/multi-cpt/results"</span>
+<span class="sd">    &quot;/compression/multi-cpt/results&quot;</span>
 
 <span class="sd">    This dictionary can be passed directly to `nuclei.client.call_endpoint()`.</span>
 
@@ -160,7 +160,7 @@
 <span class="sd">                Upper boundary of the layer [m]</span>
 <span class="sd">            - color: Sequence[str]</span>
 <span class="sd">                Hex color code</span>
-<span class="sd">            - mainComponent: Sequence[Literal["rocks", "gravel", "sand", "silt", "clay", "peat"]]</span>
+<span class="sd">            - mainComponent: Sequence[Literal[&quot;rocks&quot;, &quot;gravel&quot;, &quot;sand&quot;, &quot;silt&quot;, &quot;clay&quot;, &quot;peat&quot;]]</span>
 <span class="sd">                Main soil component</span>
 <span class="sd">            - cohesion: Sequence[float]</span>
 <span class="sd">                Cohesion of the layer [kPa]</span>
@@ -181,11 +181,11 @@
 <span class="sd">    friction_range_strategy:</span>
 <span class="sd">        Sets the method to determine the sleeve friction zones on the pile. The soil</span>
 <span class="sd">        friction in the positive zone contributes to the bearing capacity, while the</span>
-<span class="sd">        negative zone adds an extra load on the pile. Accepted values: "manual",</span>
-<span class="sd">        "lower_bound" (default) or "settlement_driven".</span>
+<span class="sd">        negative zone adds an extra load on the pile. Accepted values: &quot;manual&quot;,</span>
+<span class="sd">        &quot;lower_bound&quot; (default) or &quot;settlement_driven&quot;.</span>
 <span class="sd">    stiff_construction:</span>
-<span class="sd">        Set to True if it's a stiff costruction. This will have influence on the xi factor</span>
-<span class="sd">        if you don't overrule it. Default = False.</span>
+<span class="sd">        Set to True if it&#39;s a stiff costruction. This will have influence on the xi factor</span>
+<span class="sd">        if you don&#39;t overrule it. Default = False.</span>
 <span class="sd">    cpts_group:</span>
 <span class="sd">        CPTs that are considered one group. Items must relate to the alias of the CPTData</span>
 <span class="sd">        objects in `cptdata_objects`.</span>
@@ -205,7 +205,7 @@
 <span class="sd">        is calculated. It applies to all CPTs, unless overruled for specific CPTs in</span>
 <span class="sd">        `individual_positive_friction_range_nap`. If an array of format (top, bottom),</span>
 <span class="sd">        the range is set between top and bottom where top and bottom are floating point values.</span>
-<span class="sd">        If bottom == "ptl", the pile tip level of the calculation is used as value for bottom.</span>
+<span class="sd">        If bottom == &quot;ptl&quot;, the pile tip level of the calculation is used as value for bottom.</span>
 <span class="sd">        Unit: [m] w.r.t. NAP</span>
 <span class="sd">    negative_shaft_friction:</span>
 <span class="sd">        Sets a fixed value for the negative friction force. If provided, the</span>
@@ -216,7 +216,7 @@
 <span class="sd">        applied conform 7.6.2.3(e) of NEN 9997-1. If omitted (or null: default), the</span>
 <span class="sd">        value is inferred from the pile type: only True for auger piles (when</span>
 <span class="sd">        pile_properties.is_auger == True). If a boolean is provided, the qc3 reduction</span>
-<span class="sd">        is/isn't applied, regardless of the pile type.</span>
+<span class="sd">        is/isn&#39;t applied, regardless of the pile type.</span>
 <span class="sd">    relative_pile_load:</span>
 <span class="sd">        The fraction of the maximum bearing capacity that is used as pilehead force in</span>
 <span class="sd">        the settlement calculations. The input value can range between 0.0 and 1.0,</span>
@@ -239,7 +239,7 @@
 <span class="sd">        The level of the pile head. Can be:</span>
 <span class="sd">            - float:</span>
 <span class="sd">                This is interpreted as an absolute level in [m w.r.t. NAP].</span>
-<span class="sd">            - Literal["surface"] (default).</span>
+<span class="sd">            - Literal[&quot;surface&quot;] (default).</span>
 <span class="sd">                In this case, the soil_properties.service_level property is used.</span>
 <span class="sd">    excavation_depth_nap:</span>
 <span class="sd">        Soil excavation depth after the CPT was taken. Unit: [m] w.r.t. NAP.</span>
@@ -255,9 +255,9 @@
 <span class="sd">    excavation_stress_reduction_method:</span>
 <span class="sd">        Method used to calculate the stress reduction due to the excavation applied to the effective and total stresses.</span>
 <span class="sd">        Only used when `excavation_depth_nap` is different than `None`. It can be:</span>
-<span class="sd">            - "constant" (default): The stress reduction below the excavation is constant with depth. The stress reduction</span>
+<span class="sd">            - &quot;constant&quot; (default): The stress reduction below the excavation is constant with depth. The stress reduction</span>
 <span class="sd">            is equal to the original effective stress (i.e. before the excavation) at the excavation depth.</span>
-<span class="sd">            - "begemann": The stress reduction below the excavation decreases with depth according to the Begemann method.</span>
+<span class="sd">            - &quot;begemann&quot;: The stress reduction below the excavation decreases with depth according to the Begemann method.</span>
 <span class="sd">            This method uses the elastic solution of a strip load acting on a semi-infinite homogeneous soil mass.</span>
 <span class="sd">            The load has a width equal to the excavation width and a magnitude equal to the original effective stress at</span>
 <span class="sd">            the excavation depth.</span>
@@ -277,17 +277,17 @@
 <span class="sd">        A dictionary, mapping specific CPTs (using the ``CPTData.alias`` as keys) to fixed negative-friction ranges (as values).</span>
 <span class="sd">        For a specification of the values, see ``fixed_negative_friction_range_nap``.</span>
 <span class="sd">        This will overrule the general `fixed_negative_friction_range_nap` setting for the given CPTs only.</span>
-<span class="sd">        Example: {"S03": (-5.5, -17.5)}</span>
+<span class="sd">        Example: {&quot;S03&quot;: (-5.5, -17.5)}</span>
 <span class="sd">    individual_positive_friction_range_nap:</span>
 <span class="sd">        A dictionary, mapping specific CPTs (using the ``CPTData.alias`` as keys) to fixed positive-friction ranges (as values).</span>
 <span class="sd">        For a specification of the values, see ``fixed_positive_friction_range_nap``.</span>
 <span class="sd">        This will overrule the general `fixed_positive_friction_range_nap` setting for the given CPTs only.</span>
-<span class="sd">        Example: {"S03": (-17.5, 'ptl')}</span>
+<span class="sd">        Example: {&quot;S03&quot;: (-17.5, &#39;ptl&#39;)}</span>
 <span class="sd">    individual_ocr:</span>
 <span class="sd">        A dictionary, mapping specific CPTs (using the `CPTData.alias`` as keys) to Over-Consolidation-Ratio [-]</span>
 <span class="sd">        of the foundation layer (as values). This will overrule the general `ocr` setting for</span>
 <span class="sd">        these specific CPTs only.</span>
-<span class="sd">        Example: {"S03": 1.5}</span>
+<span class="sd">        Example: {&quot;S03&quot;: 1.5}</span>
 <span class="sd">    use_almere_rules:</span>
 <span class="sd">        If set to True the contribution, produced by the positive shaft friction, to the</span>
 <span class="sd">        total bearing capacity is limited to at most 75% the contribution provided by</span>
@@ -295,7 +295,7 @@
 <span class="sd">    overrule_xi:</span>
 <span class="sd">        Overrule the calculation of xi-values based on the group-size, variation-</span>
 <span class="sd">        coefficient and construction stiffness. Can set a single value for xi3,xi4 and xi4_single by providing a number OR specify individual values by</span>
-<span class="sd">        providing a dictionary with keys 'xi3', 'xi4' and 'xi4_single'. Example {"xi3" : 1.39, "xi4" : 1.27, "xi4_single" : 1.2}</span>
+<span class="sd">        providing a dictionary with keys &#39;xi3&#39;, &#39;xi4&#39; and &#39;xi4_single&#39;. Example {&quot;xi3&quot; : 1.39, &quot;xi4&quot; : 1.27, &quot;xi4_single&quot; : 1.2}</span>
 <span class="sd">        Default = None</span>
 <span class="sd">    gamma_f_nk:</span>
 <span class="sd">        Safety factor for design-values of the negative sleeve friction force.</span>
@@ -317,7 +317,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    multi_cpt_payload:</span>
 <span class="sd">        Dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">        "/compression/multi-cpt/results"</span>
+<span class="sd">        &quot;/compression/multi-cpt/results&quot;</span>
 <span class="sd">    results_kwargs:</span>
 <span class="sd">        Dictionary with keyword arguments for the `pilecore.MultiCPTBearingResults`</span>
 <span class="sd">        object.</span>
@@ -326,34 +326,34 @@
 <span class="sd">    ------</span>
 <span class="sd">    ValueError:</span>
 <span class="sd">        - If `excavation_depth_nap` is not None and `excavation_param_t` is None.</span>
-<span class="sd">        - If `excavation_stress_reduction_method` is not either 'constant' or 'begemann'.</span>
-<span class="sd">        - If `excavation_stress_reduction_method` is 'begemann' and `excavation_width` is None.</span>
-<span class="sd">        - If `excavation_stress_reduction_method` is 'begemann' and `excavation_edge_distance` is None.</span>
+<span class="sd">        - If `excavation_stress_reduction_method` is not either &#39;constant&#39; or &#39;begemann&#39;.</span>
+<span class="sd">        - If `excavation_stress_reduction_method` is &#39;begemann&#39; and `excavation_width` is None.</span>
+<span class="sd">        - If `excavation_stress_reduction_method` is &#39;begemann&#39; and `excavation_edge_distance` is None.</span>
 <span class="sd">        - If both `relative_pile_load` and `pile_load_sls` are None.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="n">excavation_depth_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">excavation_param_t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"`excavation_param_t` cannot be None when `excavation_depth_nap` is not None."</span>
+            <span class="s2">&quot;`excavation_param_t` cannot be None when `excavation_depth_nap` is not None.&quot;</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"constant"</span><span class="p">,</span> <span class="s2">"begemann"</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;begemann&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"`excavation_stress_reduction_method` must be either 'constant' or 'begemann'."</span>
+            <span class="s2">&quot;`excavation_stress_reduction_method` must be either &#39;constant&#39; or &#39;begemann&#39;.&quot;</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">"begemann"</span> <span class="ow">and</span> <span class="n">excavation_width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">&quot;begemann&quot;</span> <span class="ow">and</span> <span class="n">excavation_width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"`excavation_width` must be provided when `excavation_stress_reduction_method` is 'begemann'."</span>
+            <span class="s2">&quot;`excavation_width` must be provided when `excavation_stress_reduction_method` is &#39;begemann&#39;.&quot;</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">"begemann"</span>
+        <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">&quot;begemann&quot;</span>
         <span class="ow">and</span> <span class="n">excavation_edge_distance</span> <span class="ow">is</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"`excavation_edge_distance` must be provided when `excavation_stress_reduction_method` is 'begemann'"</span>
+            <span class="s2">&quot;`excavation_edge_distance` must be provided when `excavation_stress_reduction_method` is &#39;begemann&#39;&quot;</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">relative_pile_load</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pile_load_sls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"Need at least a value for one of: [`relative_pile_load`, `pile_load_sls`]"</span>
+            <span class="s2">&quot;Need at least a value for one of: [`relative_pile_load`, `pile_load_sls`]&quot;</span>
         <span class="p">)</span>
 
     <span class="n">soil_properties_list</span><span class="p">,</span> <span class="n">results_kwargs</span> <span class="o">=</span> <span class="n">create_soil_properties_payload</span><span class="p">(</span>
@@ -386,30 +386,30 @@
     <span class="c1"># Note: the safety factors are only added when they have a value. The API rejects</span>
     <span class="c1"># a null value, but applies its own default when the property is omitted.</span>
     <span class="k">if</span> <span class="n">gamma_f_nk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"gamma_f_nk"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_f_nk</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_f_nk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_f_nk</span>
     <span class="k">if</span> <span class="n">gamma_r_b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"gamma_r_b"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_b</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_b</span>
     <span class="k">if</span> <span class="n">gamma_r_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"gamma_r_s"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_s</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_s&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_s</span>
 
     <span class="k">if</span> <span class="n">excavation_depth_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"excavation_depth_nap"</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_depth_nap</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_depth_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_depth_nap</span>
 
-    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">"constant"</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"excavation_settings"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">stress_reduction_method</span><span class="o">=</span><span class="s2">"constant"</span>
+    <span class="k">if</span> <span class="n">excavation_stress_reduction_method</span> <span class="o">==</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">stress_reduction_method</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"excavation_settings"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">stress_reduction_method</span><span class="o">=</span><span class="s2">"begemann"</span><span class="p">,</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">stress_reduction_method</span><span class="o">=</span><span class="s2">&quot;begemann&quot;</span><span class="p">,</span>
             <span class="n">excavation_width</span><span class="o">=</span><span class="n">excavation_width</span><span class="p">,</span>
             <span class="n">excavation_edge_distance</span><span class="o">=</span><span class="n">excavation_edge_distance</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">pile_load_sls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"pile_load"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_load_sls</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;pile_load&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pile_load_sls</span>
     <span class="k">if</span> <span class="n">apply_qc3_reduction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"apply_qc3_reduction"</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_qc3_reduction</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;apply_qc3_reduction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_qc3_reduction</span>
 
     <span class="n">friction_settings</span> <span class="o">=</span> <span class="n">FrictionSettings</span><span class="p">(</span>
         <span class="n">friction_range_strategy</span><span class="o">=</span><span class="n">friction_range_strategy</span><span class="p">,</span>
@@ -417,12 +417,12 @@
         <span class="n">positive_friction_range_nap</span><span class="o">=</span><span class="n">fixed_positive_friction_range_nap</span><span class="p">,</span>
         <span class="n">negative_friction_range_nap</span><span class="o">=</span><span class="n">fixed_negative_friction_range_nap</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"friction_settings"</span><span class="p">]</span> <span class="o">=</span> <span class="n">friction_settings</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">()</span>
+    <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;friction_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">friction_settings</span><span class="o">.</span><span class="n">serialize_payload</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">overrule_xi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"overrule_xi"</span><span class="p">]</span> <span class="o">=</span> <span class="n">overrule_xi</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;overrule_xi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overrule_xi</span>
     <span class="k">if</span> <span class="n">cpts_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">"cpts_group"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpts_group</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;cpts_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpts_group</span>
 
     <span class="k">return</span> <span class="n">multi_cpt_payload</span><span class="p">,</span> <span class="n">results_kwargs</span></div>
 
@@ -441,9 +441,9 @@
     <span class="n">individual_cpt_results_content</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">result_summary_content</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">    "/compression/multi-cpt/report"</span>
+<span class="sd">    &quot;/compression/multi-cpt/report&quot;</span>
 
 <span class="sd">    This dictionary can be passed directly to `nuclei.client.call_endpoint()`. Note that</span>
 <span class="sd">    it should be converted to a jsonifyable message before it can be passed to a</span>
@@ -476,8 +476,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    report_payload:</span>
 <span class="sd">        Dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">        "/compression/multi-cpt/report"</span>
-<span class="sd">    """</span>
+<span class="sd">        &quot;/compression/multi-cpt/report&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">report_payload</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">multi_cpt_payload</span><span class="p">)</span>
     <span class="n">report_payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
         <span class="nb">dict</span><span class="p">(</span>
@@ -492,7 +492,7 @@
                 <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
                 <span class="n">project_remark</span><span class="o">=</span><span class="n">project_remark</span><span class="p">,</span>
                 <span class="n">date</span><span class="o">=</span><span class="p">(</span>
-                    <span class="n">date</span> <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"</span><span class="si">%d</span><span class="s2">-%m-%y"</span><span class="p">)</span>
+                    <span class="n">date</span> <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%y&quot;</span><span class="p">)</span>
                 <span class="p">),</span>
             <span class="p">),</span>
         <span class="p">)</span>

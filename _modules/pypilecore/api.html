@@ -87,55 +87,55 @@
     <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span> <span class="n">ticket</span><span class="p">:</span> <span class="n">Response</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Waiting for ticket to be ready"</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Waiting for ticket to be ready&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">ticket</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">rf</span><span class="s2">"</span><span class="si">{</span><span class="n">ticket</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ticket</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Ticket status: OK"</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Ticket ID: </span><span class="si">{</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">'id'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ticket status: OK&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ticket ID: </span><span class="si">{</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="n">status</span> <span class="o">=</span> <span class="s2">"STARTED"</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;STARTED&quot;</span>
     <span class="n">sleep_time</span> <span class="o">=</span> <span class="mf">0.05</span>
 
-    <span class="k">while</span> <span class="n">status</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"PENDING"</span><span class="p">,</span> <span class="s2">"STARTED"</span><span class="p">,</span> <span class="s2">"RETRY"</span><span class="p">]:</span>
+    <span class="k">while</span> <span class="n">status</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;PENDING&quot;</span><span class="p">,</span> <span class="s2">&quot;STARTED&quot;</span><span class="p">,</span> <span class="s2">&quot;RETRY&quot;</span><span class="p">]:</span>
         <span class="c1"># Exponential backoff</span>
         <span class="n">sleep_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sleep_time</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Sleeping for </span><span class="si">%s</span><span class="s2"> seconds"</span><span class="p">,</span> <span class="n">sleep_time</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sleeping for </span><span class="si">%s</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">sleep_time</span><span class="p">)</span>
         <span class="n">sleep</span><span class="p">(</span><span class="n">sleep_time</span><span class="p">)</span>
 
         <span class="c1"># Get the status of the ticket</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Polling ticket status"</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Polling ticket status&quot;</span><span class="p">)</span>
         <span class="n">status_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-            <span class="s2">"PileCore"</span><span class="p">,</span>
-            <span class="s2">"/get-task-status"</span><span class="p">,</span>
-            <span class="n">version</span><span class="o">=</span><span class="s2">"v4"</span><span class="p">,</span>
+            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;/get-task-status&quot;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span>
             <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span>
             <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Check if the status response is OK</span>
         <span class="k">if</span> <span class="n">status_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">rf</span><span class="s2">"</span><span class="si">{</span><span class="n">status_response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status_response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="n">status</span> <span class="o">=</span> <span class="n">status_response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"state"</span><span class="p">]</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">status_response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Ticket status: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ticket status: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
 
     <span class="c1"># If the status is FAILURE, raise an error</span>
-    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">"FAILURE"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;FAILURE&quot;</span><span class="p">:</span>
         <span class="c1"># Get the task-status failure message</span>
-        <span class="n">failure_message</span> <span class="o">=</span> <span class="n">status_response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"msg"</span><span class="p">]</span>
+        <span class="n">failure_message</span> <span class="o">=</span> <span class="n">status_response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;msg&quot;</span><span class="p">]</span>
 
         <span class="c1"># Try to get the task-result failure message</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">result_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-                <span class="s2">"PileCore"</span><span class="p">,</span>
-                <span class="s2">"/get-task-result"</span><span class="p">,</span>
-                <span class="n">version</span><span class="o">=</span><span class="s2">"v4"</span><span class="p">,</span>
+                <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span>
+                <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span>
                 <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span>
                 <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
@@ -152,7 +152,7 @@
     <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"dict"</span><span class="p">],</span>
+    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;dict&quot;</span><span class="p">],</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span> <span class="o">...</span>
@@ -164,7 +164,7 @@
     <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"bytes"</span><span class="p">],</span>
+    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;bytes&quot;</span><span class="p">],</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span> <span class="o">...</span>
@@ -175,11 +175,11 @@
     <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"dict"</span><span class="p">,</span> <span class="s2">"bytes"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"dict"</span><span class="p">,</span>
+    <span class="n">response_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span> <span class="s2">&quot;bytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"debug_payload.json"</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Execute a task and return the result.</span>
 
 <span class="sd">    Parameters</span>
@@ -192,19 +192,19 @@
 <span class="sd">        the payload of the request</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
-<span class="sd">    response_type: Literal["dict", "bytes"]</span>
-<span class="sd">        the type of the response, either "dict" or "bytes"</span>
+<span class="sd">    response_type: Literal[&quot;dict&quot;, &quot;bytes&quot;]</span>
+<span class="sd">        the type of the response, either &quot;dict&quot; or &quot;bytes&quot;</span>
 <span class="sd">    save_failed_payload: bool</span>
 <span class="sd">        if True, save the payload to a file in case of failure</span>
 <span class="sd">    failed_payload_filename: str</span>
 <span class="sd">        the name of the file to save the failed payload to</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ticket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-            <span class="s2">"PileCore"</span><span class="p">,</span>
+            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span>
             <span class="n">endpoint</span><span class="p">,</span>
-            <span class="n">version</span><span class="o">=</span><span class="s2">"v4"</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span>
             <span class="n">schema</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
             <span class="n">return_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
@@ -212,12 +212,12 @@
         <span class="n">wait_until_ticket_is_ready</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">ticket</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_endpoint</span><span class="p">(</span>
-            <span class="s2">"PileCore"</span><span class="p">,</span> <span class="s2">"/get-task-result"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"v4"</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="s2">&quot;PileCore&quot;</span><span class="p">,</span> <span class="s2">&quot;/get-task-result&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v4&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">ticket</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">save_failed_payload</span><span class="p">:</span>
             <span class="c1"># In case of failure, save the payload to a file for debugging</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">failed_payload_filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">failed_payload_filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="kn">from</span><span class="w"> </span><span class="nn">nuclei.client.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">serialize_json_string</span>
 
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">serialize_json_string</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
@@ -233,10 +233,10 @@
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"pilecore_multi_cpt_result_debug_payload.json"</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_result_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Wrapper around the PileCore endpoint "/bearing/multiple-cpts/results".</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/bearing/multiple-cpts/results&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -250,17 +250,17 @@
 <span class="sd">        if True, save the payload to a file in case of failure</span>
 <span class="sd">    failed_payload_filename: str</span>
 <span class="sd">        the name of the file to save the failed payload to</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">"Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Depending on the amount of pile tip levels and CPT's this can take a while."</span>
+        <span class="s2">&quot;Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
         <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
-        <span class="n">endpoint</span><span class="o">=</span><span class="s2">"/bearing/multiple-cpts/results"</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/bearing/multiple-cpts/results&quot;</span><span class="p">,</span>
         <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-        <span class="n">response_type</span><span class="o">=</span><span class="s2">"dict"</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span>
         <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
         <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
@@ -274,10 +274,10 @@
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"pilecore_multi_cpt_report_debug_payload.json"</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_report_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Wrapper around the PileCore endpoint "/bearing/multiple-cpts/report".</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/bearing/multiple-cpts/report&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -291,17 +291,17 @@
 <span class="sd">        if True, save the payload to a file in case of failure</span>
 <span class="sd">    failed_payload_filename: str</span>
 <span class="sd">        the name of the file to save the failed payload to</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">"Generate report... </span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Depending on the amount of pile tip levels and CPT's this can take a while."</span>
+        <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
         <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
-        <span class="n">endpoint</span><span class="o">=</span><span class="s2">"/bearing/multiple-cpts/report"</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/bearing/multiple-cpts/report&quot;</span><span class="p">,</span>
         <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-        <span class="n">response_type</span><span class="o">=</span><span class="s2">"bytes"</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;bytes&quot;</span><span class="p">,</span>
         <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
         <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
@@ -315,10 +315,10 @@
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"pilecore_group_cpts_debug_payload.json"</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_group_cpts_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Wrapper around the PileCore endpoint "/grouper/group_cpts".</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/group_cpts&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -332,17 +332,17 @@
 <span class="sd">        if True, save the payload to a file in case of failure</span>
 <span class="sd">    failed_payload_filename: str</span>
 <span class="sd">        the name of the file to save the failed payload to</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">"Finding groups... </span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Depending on the amount of pile tip levels and CPT's this can take a while."</span>
+        <span class="s2">&quot;Finding groups... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
         <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
-        <span class="n">endpoint</span><span class="o">=</span><span class="s2">"/grouper/group-cpts"</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/grouper/group-cpts&quot;</span><span class="p">,</span>
         <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-        <span class="n">response_type</span><span class="o">=</span><span class="s2">"dict"</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span>
         <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
         <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
@@ -356,10 +356,10 @@
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"pilecore_grouper_report_debug_payload.json"</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_grouper_report_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Wrapper around the PileCore endpoint "/grouper/generate_grouper_report".</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/grouper/generate_grouper_report&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -373,17 +373,17 @@
 <span class="sd">        if True, save the payload to a file in case of failure</span>
 <span class="sd">    failed_payload_filename: str</span>
 <span class="sd">        the name of the file to save the failed payload to</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">"Generate report... </span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Depending on the amount of pile tip levels and CPT's this can take a while."</span>
+        <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">get_task_result_pipeline</span><span class="p">(</span>
         <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
-        <span class="n">endpoint</span><span class="o">=</span><span class="s2">"/grouper/generate-grouper-report"</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/grouper/generate-grouper-report&quot;</span><span class="p">,</span>
         <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-        <span class="n">response_type</span><span class="o">=</span><span class="s2">"bytes"</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;bytes&quot;</span><span class="p">,</span>
         <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
         <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span></div>
@@ -391,28 +391,28 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">STANDARD_PATH</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
-    <span class="n">NEN9997_1</span> <span class="o">=</span> <span class="s2">"nen"</span>
-    <span class="n">CUR236</span> <span class="o">=</span> <span class="s2">"cur"</span>
+    <span class="n">NEN9997_1</span> <span class="o">=</span> <span class="s2">&quot;nen&quot;</span>
+    <span class="n">CUR236</span> <span class="o">=</span> <span class="s2">&quot;cur&quot;</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">UpliftEndpoint</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
-    <span class="n">MULTI_CPT_RESULT</span> <span class="o">=</span> <span class="s2">"/uplift/</span><span class="si">{standard}</span><span class="s2">/multiple-cpts/results"</span>
-    <span class="n">MULTI_CPT_REPORT</span> <span class="o">=</span> <span class="s2">"/uplift/</span><span class="si">{standard}</span><span class="s2">/multiple-cpts/report"</span>
+    <span class="n">MULTI_CPT_RESULT</span> <span class="o">=</span> <span class="s2">&quot;/uplift/</span><span class="si">{standard}</span><span class="s2">/multiple-cpts/results&quot;</span>
+    <span class="n">MULTI_CPT_REPORT</span> <span class="o">=</span> <span class="s2">&quot;/uplift/</span><span class="si">{standard}</span><span class="s2">/multiple-cpts/report&quot;</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">STANDARD_PATH</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Infer the standard to use for the tension API from the payload.</span>
 <span class="sd">    The standard is inferred from the pile type reference in the payload.</span>
-<span class="sd">     - If the reference is one of ["AA1", "AA2", "AB1", "AB2", "AC", "AD", "AE"], CUR236 is used.</span>
+<span class="sd">     - If the reference is one of [&quot;AA1&quot;, &quot;AA2&quot;, &quot;AB1&quot;, &quot;AB2&quot;, &quot;AC&quot;, &quot;AD&quot;, &quot;AE&quot;], CUR236 is used.</span>
 <span class="sd">     - For all other references, NEN9997-1 is used.</span>
 <span class="sd">     - If the pile type reference is not found in the payload, NEN9997-1 is used by default.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pile_properties"</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pile_type"</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"standard_pile"</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"reference"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pile_properties&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pile_type&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;standard_pile&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reference&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">_is_anchor_reference</span><span class="p">(</span><span class="n">reference</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">CUR236</span>
@@ -423,13 +423,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_multi_cpt_api_result_tension</span><span class="p">(</span>
     <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"NEN9997-1"</span><span class="p">,</span> <span class="s2">"CUR236"</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"pilecore_multi_cpt_tension_result_debug_payload.json"</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_tension_result_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Wrapper around the PileCore endpoint "/uplift/[nen or cur]/multiple-cpts/results".</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/uplift/[nen or cur]/multiple-cpts/results&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -444,18 +444,18 @@
 <span class="sd">        Defaults to NEN9997-1 if the pile-type is not recognized.</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        if True, print additional information to the console</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">"Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Depending on the amount of pile tip levels and CPT's this can take a while."</span>
+        <span class="s2">&quot;Calculating bearing capacities... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">standard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">standard_path</span> <span class="o">=</span> <span class="n">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">[</span><span class="n">standard</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">)]</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">[</span><span class="n">standard</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)]</span>
 
     <span class="k">if</span> <span class="n">standard_path</span> <span class="o">==</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">CUR236</span><span class="p">:</span>
-        <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"construction_sequence"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="n">endpoint</span> <span class="o">=</span> <span class="n">UpliftEndpoint</span><span class="o">.</span><span class="n">MULTI_CPT_RESULT</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="n">standard</span><span class="o">=</span><span class="n">standard_path</span><span class="o">.</span><span class="n">value</span>
@@ -466,7 +466,7 @@
         <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span>
         <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-        <span class="n">response_type</span><span class="o">=</span><span class="s2">"dict"</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span>
         <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
         <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span>
@@ -475,13 +475,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_multi_cpt_api_report_tension</span><span class="p">(</span>
     <span class="n">client</span><span class="p">:</span> <span class="n">NucleiClient</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"NEN9997-1"</span><span class="p">,</span> <span class="s2">"CUR236"</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">standard</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;NEN9997-1&quot;</span><span class="p">,</span> <span class="s2">&quot;CUR236&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">save_failed_payload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"pilecore_multi_cpt_tension_report_debug_payload.json"</span><span class="p">,</span>
+    <span class="n">failed_payload_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pilecore_multi_cpt_tension_report_debug_payload.json&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Wrapper around the PileCore endpoint "/uplift/[nen or cur]/multiple-cpts/report".</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around the PileCore endpoint &quot;/uplift/[nen or cur]/multiple-cpts/report&quot;.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -500,19 +500,19 @@
 <span class="sd">        if True, save the payload to a file in case of failure</span>
 <span class="sd">    failed_payload_filename: str</span>
 <span class="sd">        the name of the file to save the failed payload to</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">"Generate report... </span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Depending on the amount of pile tip levels and CPT's this can take a while."</span>
+        <span class="s2">&quot;Generate report... </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Depending on the amount of pile tip levels and CPT&#39;s this can take a while.&quot;</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">standard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">standard_path</span> <span class="o">=</span> <span class="n">_get_standard_path_from_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">[</span><span class="n">standard</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">)]</span>
+        <span class="n">standard_path</span> <span class="o">=</span> <span class="n">STANDARD_PATH</span><span class="p">[</span><span class="n">standard</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)]</span>
 
     <span class="k">if</span> <span class="n">standard_path</span> <span class="o">==</span> <span class="n">STANDARD_PATH</span><span class="o">.</span><span class="n">CUR236</span><span class="p">:</span>
-        <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"construction_sequence"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;construction_sequence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="n">endpoint</span> <span class="o">=</span> <span class="n">UpliftEndpoint</span><span class="o">.</span><span class="n">MULTI_CPT_REPORT</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="n">standard</span><span class="o">=</span><span class="n">standard_path</span><span class="o">.</span><span class="n">value</span>
@@ -523,7 +523,7 @@
         <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span>
         <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-        <span class="n">response_type</span><span class="o">=</span><span class="s2">"bytes"</span><span class="p">,</span>
+        <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;bytes&quot;</span><span class="p">,</span>
         <span class="n">save_failed_payload</span><span class="o">=</span><span class="n">save_failed_payload</span><span class="p">,</span>
         <span class="n">failed_payload_filename</span><span class="o">=</span><span class="n">failed_payload_filename</span><span class="p">,</span>
     <span class="p">)</span>
