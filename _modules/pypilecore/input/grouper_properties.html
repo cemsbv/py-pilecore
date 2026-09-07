@@ -91,8 +91,8 @@
     <span class="n">cpt_results_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SingleCPTCompressionBearingResults</span><span class="p">],</span>
     <span class="n">building_polygon</span><span class="p">:</span> <span class="n">Polygon</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">cpt_grid_rotation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">gamma_bottom</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
-    <span class="n">gamma_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">gamma_bottom</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">gamma_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
     <span class="n">include_centre_to_centre_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">resolution</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
@@ -140,10 +140,12 @@
 <span class="sd">        Attribute use to get the xi3 and xi4 value. True if it is a stiff construction</span>
 <span class="sd">    gamma_shaft</span>
 <span class="sd">        Default is 1.2</span>
-<span class="sd">        Safety factor shaft design bearing capacity</span>
+<span class="sd">        Safety factor shaft design bearing capacity. If None, the parameter is omitted</span>
+<span class="sd">        from the payload, so that the API applies its default of 1.2.</span>
 <span class="sd">    gamma_bottom</span>
 <span class="sd">        Default is 1.2</span>
-<span class="sd">        Safety factor bottom design bearing capacity</span>
+<span class="sd">        Safety factor bottom design bearing capacity. If None, the parameter is omitted</span>
+<span class="sd">        from the payload, so that the API applies its default of 1.2.</span>
 <span class="sd">    include_centre_to_centre_check:</span>
 <span class="sd">        Default is False</span>
 <span class="sd">        Flag that indicates if the cluster algorithm performs a centre to centre validation of the CPT’s of the</span>
@@ -221,8 +223,8 @@
     <span class="n">bearing</span><span class="p">:</span> <span class="n">GrouperBearingResultsLike</span><span class="p">,</span>
     <span class="n">building_polygon</span><span class="p">:</span> <span class="n">Polygon</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">cpt_grid_rotation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">gamma_bottom</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
-    <span class="n">gamma_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">gamma_bottom</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">gamma_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
     <span class="n">include_centre_to_centre_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">resolution</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
@@ -284,8 +286,8 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">building_polygon</span><span class="p">:</span> <span class="n">Polygon</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">cpt_grid_rotation</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">gamma_bottom</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">gamma_shaft</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">gamma_bottom</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gamma_shaft</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">include_centre_to_centre_check</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">stiff_construction</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">resolution</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -305,12 +307,17 @@
     <span class="c1"># create default payload object</span>
     <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;cpt_grid_rotation&quot;</span><span class="p">:</span> <span class="n">cpt_grid_rotation</span><span class="p">,</span>
-        <span class="s2">&quot;gamma_bottom&quot;</span><span class="p">:</span> <span class="n">gamma_bottom</span><span class="p">,</span>
-        <span class="s2">&quot;gamma_shaft&quot;</span><span class="p">:</span> <span class="n">gamma_shaft</span><span class="p">,</span>
         <span class="s2">&quot;include_centre_to_centre_check&quot;</span><span class="p">:</span> <span class="n">include_centre_to_centre_check</span><span class="p">,</span>
         <span class="s2">&quot;stiff_construction&quot;</span><span class="p">:</span> <span class="n">stiff_construction</span><span class="p">,</span>
         <span class="s2">&quot;resolution&quot;</span><span class="p">:</span> <span class="n">resolution</span><span class="p">,</span>
     <span class="p">}</span>
+
+    <span class="c1"># The safety factors are only added when they have a value. The API rejects a null</span>
+    <span class="c1"># value, but applies its own default when the property is omitted.</span>
+    <span class="k">if</span> <span class="n">gamma_bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;gamma_bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_bottom</span>
+    <span class="k">if</span> <span class="n">gamma_shaft</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;gamma_shaft&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_shaft</span>
 
     <span class="c1"># set source building polygon in payload</span>
     <span class="k">if</span> <span class="n">building_polygon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

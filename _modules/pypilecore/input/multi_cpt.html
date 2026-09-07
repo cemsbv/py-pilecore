@@ -126,9 +126,9 @@
     <span class="n">individual_ocr</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">use_almere_rules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">overrule_xi</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">gamma_f_nk</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">gamma_r_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
-    <span class="n">gamma_r_b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">gamma_f_nk</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">gamma_r_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">gamma_r_b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
@@ -299,12 +299,18 @@
 <span class="sd">        Default = None</span>
 <span class="sd">    gamma_f_nk:</span>
 <span class="sd">        Safety factor for design-values of the negative sleeve friction force.</span>
+<span class="sd">        If None, the parameter is omitted from the payload, so that the API applies</span>
+<span class="sd">        its default of 1.0.</span>
 <span class="sd">        Default = 1.0</span>
 <span class="sd">    gamma_r_s:</span>
 <span class="sd">        Safety factor, used to obtain design-values of the pile-tip bearingcapacity.</span>
+<span class="sd">        If None, the parameter is omitted from the payload, so that the API applies</span>
+<span class="sd">        its default of 1.2.</span>
 <span class="sd">        Default = 1.2</span>
 <span class="sd">    gamma_r_b:</span>
 <span class="sd">        Safety factor, used to obtain design-values of the sleeve bearingcapacity.</span>
+<span class="sd">        If None, the parameter is omitted from the payload, so that the API applies</span>
+<span class="sd">        its default of 1.2.</span>
 <span class="sd">        Default = 1.2</span>
 
 <span class="sd">    Returns</span>
@@ -374,12 +380,18 @@
         <span class="n">soil_load</span><span class="o">=</span><span class="n">soil_load_sls</span> <span class="k">if</span> <span class="n">soil_load_sls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">excavation_param_t</span><span class="o">=</span><span class="n">excavation_param_t</span><span class="p">,</span>
         <span class="n">use_almere_rules</span><span class="o">=</span><span class="n">use_almere_rules</span><span class="p">,</span>
-        <span class="n">gamma_f_nk</span><span class="o">=</span><span class="n">gamma_f_nk</span><span class="p">,</span>
-        <span class="n">gamma_r_b</span><span class="o">=</span><span class="n">gamma_r_b</span><span class="p">,</span>
-        <span class="n">gamma_r_s</span><span class="o">=</span><span class="n">gamma_r_s</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># Add optional properties</span>
+    <span class="c1"># Add optional properties.</span>
+    <span class="c1"># Note: the safety factors are only added when they have a value. The API rejects</span>
+    <span class="c1"># a null value, but applies its own default when the property is omitted.</span>
+    <span class="k">if</span> <span class="n">gamma_f_nk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_f_nk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_f_nk</span>
+    <span class="k">if</span> <span class="n">gamma_r_b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_b</span>
+    <span class="k">if</span> <span class="n">gamma_r_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;gamma_r_s&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_r_s</span>
+
     <span class="k">if</span> <span class="n">excavation_depth_nap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">multi_cpt_payload</span><span class="p">[</span><span class="s2">&quot;excavation_depth_nap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excavation_depth_nap</span>
 
