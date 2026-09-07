@@ -56,7 +56,7 @@ cfgv==3.5.0
     # via pre-commit
 cfn-lint==1.41.0
     # via py-pilecore (pyproject.toml)
-chardet==5.2.0
+chardet==7.6.0
     # via
     #   diff-cover
     #   sqlfluff
