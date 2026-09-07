@@ -99,9 +99,9 @@
     <span class="n">overrule_nan</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">skip_nan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">    &quot;/grouper/group_cpts&quot;</span>
+<span class="sd">    "/grouper/group_cpts"</span>
 
 
 <span class="sd">    Note</span>
@@ -127,7 +127,7 @@
 
 <span class="sd">    The CTC check is performed by drawing a square around each CPT with the CTC dimensions according to the</span>
 <span class="sd">    outlier criterion and verifying that there is no empty space between squares. The rotation of the squares</span>
-<span class="sd">    can be provided with the `cpt_grid_rotation` argument. Note that this rotation is assigned to all CPT&#39;s and</span>
+<span class="sd">    can be provided with the `cpt_grid_rotation` argument. Note that this rotation is assigned to all CPT's and</span>
 <span class="sd">    therefore should represent the main orientation of the building.</span>
 
 <span class="sd">    Parameters</span>
@@ -165,11 +165,11 @@
 <span class="sd">    overrule_nan:</span>
 <span class="sd">        Default is 0.0</span>
 <span class="sd">        The default behavior is to replace NaN with zero, for one of the following</span>
-<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_d&quot;, &quot;R_s_cal&quot;].</span>
+<span class="sd">        attributes ["R_b_cal", "F_nk_d", "R_s_cal"].</span>
 <span class="sd">    skip_nan:</span>
 <span class="sd">        Default is False</span>
 <span class="sd">        If True the CPTs are skipped that have NaN values in one of the following</span>
-<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_d&quot;, &quot;R_s_cal&quot;], this means that they are not used in the grouper method.</span>
+<span class="sd">        attributes ["R_b_cal", "F_nk_d", "R_s_cal"], this means that they are not used in the grouper method.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -178,7 +178,7 @@
 
 <span class="sd">        - if x or y coordinate is None</span>
 
-<span class="sd">        - if pile tip levels don&#39;t macht for all SingleCPTBearingResults</span>
+<span class="sd">        - if pile tip levels don't macht for all SingleCPTBearingResults</span>
 
 <span class="sd">        - if less than 2 valid CPTs are provided</span>
 
@@ -187,8 +187,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    payload:</span>
 <span class="sd">        Dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">        &quot;/grouper/group_cpts&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        "/grouper/group_cpts"</span>
+<span class="sd">    """</span>
     <span class="c1"># Adapt the PileCore-shaped dict onto the source-agnostic payload seam and build the</span>
     <span class="c1"># payload through the shared core. Kept for backwards compatibility; prefer</span>
     <span class="c1"># `create_grouper_payload_from_bearing_results`.</span>
@@ -231,9 +231,9 @@
     <span class="n">overrule_nan</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">skip_nan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">    &quot;/grouper/group_cpts&quot; from any object that satisfies `GrouperBearingResultsLike`.</span>
+<span class="sd">    "/grouper/group_cpts" from any object that satisfies `GrouperBearingResultsLike`.</span>
 
 <span class="sd">    This is the source-agnostic sibling of `create_grouper_payload`: it serves both a</span>
 <span class="sd">    PileCore `MultiCPTCompressionBearingResults` and a user-built `CustomBearingResults`,</span>
@@ -251,13 +251,13 @@
 <span class="sd">    overrule_nan:</span>
 <span class="sd">        Default is 0.0.</span>
 <span class="sd">        The default behavior is to replace NaN with zero, for one of the following</span>
-<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_d&quot;, &quot;R_s_cal&quot;].</span>
+<span class="sd">        attributes ["R_b_cal", "F_nk_d", "R_s_cal"].</span>
 
 <span class="sd">        Note: inert for a `CustomBearingResults` source, which is NaN-free by construction.</span>
 <span class="sd">    skip_nan:</span>
 <span class="sd">        Default is False.</span>
 <span class="sd">        If True the CPTs are skipped that have NaN values in one of the following</span>
-<span class="sd">        attributes [&quot;R_b_cal&quot;, &quot;F_nk_d&quot;, &quot;R_s_cal&quot;].</span>
+<span class="sd">        attributes ["R_b_cal", "F_nk_d", "R_s_cal"].</span>
 
 <span class="sd">        Note: inert for a `CustomBearingResults` source, which is NaN-free by construction.</span>
 
@@ -265,8 +265,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    payload:</span>
 <span class="sd">        Dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">        &quot;/grouper/group_cpts&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        "/grouper/group_cpts"</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">_build_grouper_payload</span><span class="p">(</span>
         <span class="n">bearing</span><span class="o">.</span><span class="n">grouper_cpt_inputs</span><span class="p">(),</span>
         <span class="n">building_polygon</span><span class="o">=</span><span class="n">building_polygon</span><span class="p">,</span>
@@ -294,34 +294,34 @@
     <span class="n">overrule_nan</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">skip_nan</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Shared core that builds the &quot;/grouper/group_cpts&quot; payload from a list of neutral</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Shared core that builds the "/grouper/group_cpts" payload from a list of neutral</span>
 <span class="sd">    `GrouperCptInput` records.</span>
 
 <span class="sd">    Holds the NaN-handling coercion (`overrule_nan`/`skip_nan`), the equal-pile-tip-level</span>
-<span class="sd">    validation and the &quot;at least 2 valid CPTs&quot; requirement, so both</span>
+<span class="sd">    validation and the "at least 2 valid CPTs" requirement, so both</span>
 <span class="sd">    `create_grouper_payload` (PileCore dict) and</span>
 <span class="sd">    `create_grouper_payload_from_bearing_results` (any `GrouperBearingResultsLike`) share</span>
 <span class="sd">    exactly the same behaviour.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># create default payload object</span>
     <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;cpt_grid_rotation&quot;</span><span class="p">:</span> <span class="n">cpt_grid_rotation</span><span class="p">,</span>
-        <span class="s2">&quot;include_centre_to_centre_check&quot;</span><span class="p">:</span> <span class="n">include_centre_to_centre_check</span><span class="p">,</span>
-        <span class="s2">&quot;stiff_construction&quot;</span><span class="p">:</span> <span class="n">stiff_construction</span><span class="p">,</span>
-        <span class="s2">&quot;resolution&quot;</span><span class="p">:</span> <span class="n">resolution</span><span class="p">,</span>
+        <span class="s2">"cpt_grid_rotation"</span><span class="p">:</span> <span class="n">cpt_grid_rotation</span><span class="p">,</span>
+        <span class="s2">"include_centre_to_centre_check"</span><span class="p">:</span> <span class="n">include_centre_to_centre_check</span><span class="p">,</span>
+        <span class="s2">"stiff_construction"</span><span class="p">:</span> <span class="n">stiff_construction</span><span class="p">,</span>
+        <span class="s2">"resolution"</span><span class="p">:</span> <span class="n">resolution</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># The safety factors are only added when they have a value. The API rejects a null</span>
     <span class="c1"># value, but applies its own default when the property is omitted.</span>
     <span class="k">if</span> <span class="n">gamma_bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;gamma_bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_bottom</span>
+        <span class="n">payload</span><span class="p">[</span><span class="s2">"gamma_bottom"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_bottom</span>
     <span class="k">if</span> <span class="n">gamma_shaft</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;gamma_shaft&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_shaft</span>
+        <span class="n">payload</span><span class="p">[</span><span class="s2">"gamma_shaft"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_shaft</span>
 
     <span class="c1"># set source building polygon in payload</span>
     <span class="k">if</span> <span class="n">building_polygon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;building_polygon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">(</span><span class="n">building_polygon</span><span class="p">)</span>
+        <span class="n">payload</span><span class="p">[</span><span class="s2">"building_polygon"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">(</span><span class="n">building_polygon</span><span class="p">)</span>
 
     <span class="c1"># set bearing capacity in payload</span>
     <span class="n">cpt_objects</span> <span class="o">=</span> <span class="p">[]</span>
@@ -332,27 +332,27 @@
         <span class="c1"># check if coordinate are set</span>
         <span class="k">if</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot; CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a x-coordinate or y-coordinate&quot;</span>
+                <span class="sa">f</span><span class="s2">" CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a x-coordinate or y-coordinate"</span>
             <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="p">(</span>
-            <span class="p">(</span><span class="s2">&quot;R_b_cal&quot;</span><span class="p">,</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">R_b_cal</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;F_nk_d&quot;</span><span class="p">,</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;R_s_cal&quot;</span><span class="p">,</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">R_s_cal</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"R_b_cal"</span><span class="p">,</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">R_b_cal</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"F_nk_d"</span><span class="p">,</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"R_s_cal"</span><span class="p">,</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">R_s_cal</span><span class="p">),</span>
         <span class="p">):</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">skip_nan</span><span class="p">:</span>
                     <span class="n">has_nan</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has NaN values are present in column </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Not included in grouper payload.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has NaN values are present in column </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">. "</span>
+                        <span class="sa">f</span><span class="s2">"Not included in grouper payload."</span>
                     <span class="p">)</span>
 
                     <span class="k">break</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has NaN values are present in column </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Replace NaN with </span><span class="si">{</span><span class="n">overrule_nan</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has NaN values are present in column </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">. "</span>
+                        <span class="sa">f</span><span class="s2">"Replace NaN with </span><span class="si">{</span><span class="n">overrule_nan</span><span class="si">}</span><span class="s2">."</span>
                     <span class="p">)</span>
         <span class="c1"># skip CPT that are not valid.</span>
         <span class="k">if</span> <span class="n">has_nan</span><span class="p">:</span>
@@ -364,43 +364,43 @@
         <span class="c1"># add bearing capacity result to object</span>
         <span class="n">cpt_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">&quot;bottom_bearing_capacity&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+                <span class="s2">"bottom_bearing_capacity"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
                     <span class="n">cpt_input</span><span class="o">.</span><span class="n">R_b_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-                <span class="s2">&quot;negative_friction&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+                <span class="s2">"negative_friction"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
                     <span class="n">cpt_input</span><span class="o">.</span><span class="n">F_nk_d</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-                <span class="s2">&quot;shaft_bearing_capacity&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+                <span class="s2">"shaft_bearing_capacity"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
                     <span class="n">cpt_input</span><span class="o">.</span><span class="n">R_s_cal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="n">overrule_nan</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-                <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
-                    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"x"</span><span class="p">:</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                    <span class="s2">"y"</span><span class="p">:</span> <span class="n">cpt_input</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">cpt_objects</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;The PileCore grouper requires at least 2 CPTs with valid bearing capacity.&quot;</span>
+            <span class="s2">"The PileCore grouper requires at least 2 CPTs with valid bearing capacity."</span>
         <span class="p">)</span>
 
-    <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;cpt_objects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpt_objects</span>
+    <span class="n">payload</span><span class="p">[</span><span class="s2">"cpt_objects"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpt_objects</span>
 
     <span class="c1"># validate pile tip levels</span>
     <span class="n">raw_lengths</span> <span class="o">=</span> <span class="p">[</span>
         <span class="nb">frozenset</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">pile_tip_level_object</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The PileCore grouper requires all CPTs to have a valid bearing capacity for all pile tip levels. </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"The PileCore grouper requires all CPTs to have a valid bearing capacity for all pile tip levels. </span><span class="se">\n</span><span class="s2">"</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">pile_tip_level</span> <span class="ow">in</span> <span class="n">pile_tip_level_object</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">msg</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Pile tip levels are not similar for CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> with length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;upper boundary: </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">, lower boundary: </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Pile tip levels are not similar for CPT </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> with length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
+                <span class="sa">f</span><span class="s2">"upper boundary: </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">, lower boundary: </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">pile_tip_level</span><span class="p">)</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">payload</span><span class="p">[</span><span class="s2">"pile_tip_level"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">raw_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">payload</span>
 
@@ -415,9 +415,9 @@
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">project_remark</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Creates a dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">    &quot;grouper/generate_grouper_report&quot;</span>
+<span class="sd">    "grouper/generate_grouper_report"</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -436,12 +436,12 @@
 <span class="sd">    -------</span>
 <span class="sd">    report_payload:</span>
 <span class="sd">        Dictionary with the payload content for the PileCore endpoint</span>
-<span class="sd">        &quot;grouper/generate_grouper_report&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        "grouper/generate_grouper_report"</span>
+<span class="sd">    """</span>
     <span class="n">report_payload</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">grouper_payload</span><span class="p">)</span>
     <span class="n">report_payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
         <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">sub_groups</span><span class="o">=</span><span class="n">grouper_response</span><span class="p">[</span><span class="s2">&quot;sub_groups&quot;</span><span class="p">],</span>
+            <span class="n">sub_groups</span><span class="o">=</span><span class="n">grouper_response</span><span class="p">[</span><span class="s2">"sub_groups"</span><span class="p">],</span>
             <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
             <span class="n">project_number</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span>
             <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
@@ -449,8 +449,8 @@
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="c1"># remove not used attributes</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">report_payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;pile_tip_level&quot;</span><span class="p">)</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">report_payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cpt_objects&quot;</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">report_payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"pile_tip_level"</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">report_payload</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"cpt_objects"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">report_payload</span></div>
 
 </pre></div>
