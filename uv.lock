@@ -318,15 +318,16 @@ wheels = [
 
 [[package]]
 name = "cems-nuclei"
-version = "3.2.0"
+version = "3.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyjwt" },
     { name = "requests" },
+    { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/29/7d/ead2f343fd4d8d1683ffcee7a3fd670038d7a5cdfe030f8b43d48ad93c57/cems_nuclei-3.2.0.tar.gz", hash = "sha256:4cc8aa2e71e17596769c4fca5f3f448bad9c92b94a7631e22b5772d2cb1d143e", size = 11769, upload-time = "2026-01-20T09:57:31.421Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/74/b7/e28c78c48fc9435e20df1cb369ed04e38b8b1ac1f976eb15f6ff2e958dc9/cems_nuclei-3.2.1.tar.gz", hash = "sha256:009e7a0a1df7968c4b53897a46d7d17b9891856a2f85618b04c809046254e2bb", size = 11862, upload-time = "2026-09-12T11:32:23.047Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6f/65/8d3323dc5e996cd80d6c751de7fc65f11717ff595522171808d2a5843dd5/cems_nuclei-3.2.0-py3-none-any.whl", hash = "sha256:906d58af60e40622d19f262b38c205f115fa08cbee05e8df7d076f3c1f454f10", size = 10567, upload-time = "2026-01-20T09:57:30.344Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/fb/8e727b74fe9f28c785068a1f938c695ec9bbfb1746062772b939e8e075d6/cems_nuclei-3.2.1-py3-none-any.whl", hash = "sha256:62c569fb6b2451a485cd0f6f0126073a10ae4f98ba56ccf7182e2eb169ea4e71", size = 10479, upload-time = "2026-09-12T11:32:21.813Z" },
 ]
 
 [package.optional-dependencies]
@@ -2076,7 +2077,7 @@ requires-dist = [
     { name = "anywidget", specifier = ">=0.9.18,<0.10" },
     { name = "asteroid-sphinx-theme", marker = "extra == 'docs'", specifier = "==0.0.3" },
     { name = "black", marker = "extra == 'lint'", specifier = "==26.5.1" },
-    { name = "cems-nuclei", extras = ["client"], specifier = ">=3.2.0,<4" },
+    { name = "cems-nuclei", extras = ["client"], specifier = ">=3.2.1,<4" },
     { name = "cfn-lint", marker = "extra == 'lint'", specifier = "==1.51.5" },
     { name = "coveralls", marker = "extra == 'test'" },
     { name = "cpplint", marker = "extra == 'lint'", specifier = "==2.0.2" },
