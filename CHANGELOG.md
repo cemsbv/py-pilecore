@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2026-09-12
+
+### Miscellaneous Tasks
+- *Dependencies*: Bump cems-nuclei to 3.2.1 to allow new access tokens
+- *Uv*: Post-release update of uv.lock
+
 ## [2.5.0] - 2026-09-07
 
 ### Bug Fixes
@@ -283,13 +289,13 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - *Cases_multicpt*:
-    - Add class CasesMultiCPTBearingResults (#76)
     - Add class CasesMultiCPTBearingResults
+    - Add class CasesMultiCPTBearingResults (#76)
 
 - *Viewer_results*:
     - Add the results viewer ViewerCptResultsPlanView
-    - Add the results viewer ViewerCptGroupResults
     - Add ViewerCptResults class
+    - Add the results viewer ViewerCptGroupResults
 
 ### Miscellaneous Tasks
 - *Cases_multicpt*: Add CasesMultiCPTBearingResults to the init of the results module
@@ -327,27 +333,27 @@ All notable changes to this project will be documented in this file.
 ## [0.4.0] - 2024-03-12
 
 ### Bug Fixes
-- Remove dataclass hash & to_pandas caching
-- Final max-bearing fixups & Add unittests
-- Remove dataclass hash & to_pandas caching
-- Make sure that all pile tip levels have same order
-- Update unit test
 - Fix MaxBearingResults initiation & refactor
 - Do array comparison on float with np.isclose()
+- Make sure that all pile tip levels have same order
+- Remove dataclass hash & to_pandas caching
+- Update unit test
+- Remove dataclass hash & to_pandas caching
+- Final max-bearing fixups & Add unittests
 - Add missing pile definitions plot
 
 ### Features
 - *Api*: Add verbose argument to functions in api module
+- Combine grouper and single results
+- Rotate x-labels in 2D max-bearing plot
+- Add 3D plots for bearing results
 - Add lru_cache on MaxBearingResults.to_pandas
-- Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
 - Add methods to MaxBearingResults to align signature with SingleCPTBearingResultsContainer
+- Add result bearing 3d plots to notebook
 - Denote CPT name in MaxBeraingTable.origin attribute
 - Add delaunay map
 - Resolve comments in mr
-- Add result bearing 3d plots to notebook
-- Add 3D plots for bearing results
-- Combine grouper and single results
-- Rotate x-labels in 2D max-bearing plot
+- Make SingleCPTBearingResultsContainer.cpt_results_dict a read-only property
 
 ### Miscellaneous Tasks
 - Update example notebook
@@ -432,9 +438,9 @@ All notable changes to this project will be documented in this file.
 ## [0.2.1] - 2023-11-09
 
 ### Features
-- Accept None for `relative_pile_load`
 - Minor fixups in PileCore_multi_cpt notebook
 - Validate excavation and pile-load input in function create_multi_cpt_payload
+- Accept None for `relative_pile_load`
 
 ## [0.2.0] - 2023-11-08
 
@@ -442,10 +448,10 @@ All notable changes to this project will be documented in this file.
 - *Test*: Coverage warning no data was collected
 - Notebook and grouper workflow (#18)
 - Check arbitrary arrays for nan values with pd.isnull() instead of np.isnan() for better consistency
-- Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
 - Fix adding diameter_shaft property logic
-- Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
+- Correctly create MultiCPTResults object from api response with cascading from_api_response class_methods strategy
 - Plot empty cone resistance `qc` in CPTTable.plot_friction_ratio()
+- Assure that `CPTTable.depth_nap` attribute always has a dimension to satisfy pandas
 - Plot empty friction ratio in CPTTable.plot_friction_ratio()
 
 ### Documentation
@@ -458,9 +464,9 @@ All notable changes to this project will be documented in this file.
 ### Features
 - *Grouper*: Add grouper implementation (#7)
 - Cast property getter responses of PileProperties & child objects
+- Add `name` property to PileProperties object
 - Add _shape class-attribute to Round- & RectPileProperties
 - Raise ValueError for invalid pile_properties `height_base` input.
-- Add `name` property to PileProperties object
 - Add notebook example (#17)
 - Cast CPTGroupResultsTable attributes to numpy arrays
 
@@ -480,14 +486,14 @@ All notable changes to this project will be documented in this file.
 
 ### Testing
 - Add create_multi_cpt_payload unit-tests
-- Add soilproperties tests
-- Move grouper tests to "results" folder
 - Add create_pile_properties_payload tests
 - Refactor pile_properties tests
-- Add multi-cpt-results tests
 - Rename test_soil to test_input
-- Omit tests folder in superlinter
 - Add results/test_pile_properties tests
+- Move grouper tests to "results" folder
+- Add soilproperties tests
+- Add multi-cpt-results tests
+- Omit tests folder in superlinter
 
 ### Deps
 - Update mypy==1.6.1 & black==23.10.1
@@ -497,27 +503,25 @@ All notable changes to this project will be documented in this file.
 ### Documentation
 - Update README
 
+### Features
+- Rename module folder name to "py_pilecore"
+- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
+- Add empty module __init__.py
+
 ### Miscellaneous Tasks
 - Init pyproject.toml
 
 ### Styling
-- Add .flake8 file
 - Add github workflow job "lint" & update superlinter to v5
+- Add .flake8 file
+- Add run_super_linters.sh bash script
 
 ## [0.0.1] - 2023-10-20
 
 ### Documentation
 - Add docstrings to "create_payload" functions
 
-### Features
-- Clone "pylecore" module content from nuclei-notebooks: nuclei/core/pilecore/api_workflow/pylecore
-- Add empty module __init__.py
-- Rename module folder name to "py_pilecore"
-
 ### Miscellaneous Tasks
 - Update .gitignore
-
-### Styling
-- Add run_super_linters.sh bash script
 
 <!-- CEMS BV. -->
