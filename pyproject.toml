@@ -52,7 +52,7 @@ lint = [
   "cfn-lint==1.51.5",
   "cpplint==2.0.2",
   "flake8==7.3.0",
-  "isort==8.0.1",
+  "isort==9.0.1",
   "mypy==2.1.0",
   "sqlfluff==4.2.2",
   "yq==3.4.3",
