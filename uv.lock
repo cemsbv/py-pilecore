@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11, <3.14"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -2104,7 +2104,7 @@ requires-dist = [
     { name = "sqlfluff", marker = "extra == 'lint'", specifier = "==4.2.2" },
     { name = "tqdm", extras = ["notebook"], specifier = ">=4.67.1,<5" },
     { name = "typing-extensions", specifier = ">=4.5.0,<5" },
-    { name = "yq", marker = "extra == 'lint'", specifier = "==3.4.3" },
+    { name = "yq", marker = "extra == 'lint'", specifier = "==4.4.5" },
 ]
 provides-extras = ["test", "docs", "lint"]
 
@@ -3202,7 +3202,7 @@ wheels = [
 
 [[package]]
 name = "yq"
-version = "3.4.3"
+version = "4.4.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "argcomplete" },
@@ -3210,9 +3210,9 @@ dependencies = [
     { name = "tomlkit" },
     { name = "xmltodict" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/38/6a/eb9721ed0929d0f55d167c2222d288b529723afbef0a07ed7aa6cca72380/yq-3.4.3.tar.gz", hash = "sha256:ba586a1a6f30cf705b2f92206712df2281cd320280210e7b7b80adcb8f256e3b", size = 33214, upload-time = "2024-04-27T15:39:43.29Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fd/be/ae37199d28a0a99eb79084f91da94f6e7e58550552361a2397c5032d5d37/yq-4.4.5.tar.gz", hash = "sha256:e17b21a927d04ae33f61a7284351b69b0a539bfb73b852a04a907b79bcd15de2", size = 54535, upload-time = "2026-10-11T02:20:56.748Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f2/ba/d1b21f3e57469030bd6536b91bb28fedd2511d4e68b5a575f2bdb3a3dbb6/yq-3.4.3-py3-none-any.whl", hash = "sha256:547e34bc3caacce83665fd3429bf7c85f8e8b6b9aaee3f953db1ad716ff3434d", size = 18812, upload-time = "2024-04-27T15:39:41.652Z" },
+    { url = "https://files.pythonhosted.org/packages/fd/38/cca2b04f284c788ded19a9401e3049fd1f82d0467c1d6bd361915a77c063/yq-4.4.5-py3-none-any.whl", hash = "sha256:4e8b4e54979b26554c72a7e669009017a7fdd3fb00bbae0b26f82a86636c289f", size = 30255, upload-time = "2026-10-11T02:20:55.272Z" },
 ]
 
 [[package]]
