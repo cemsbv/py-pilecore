@@ -48,7 +48,7 @@ docs = [
 # ignoring because redundant (no matching files in this repo): snakefmt, snakemake
 lint = [
   "ansible-lint==26.4.0",
-  "black==26.5.1",
+  "black==26.10.1",
   "cfn-lint==1.51.5",
   "cpplint==2.0.2",
   "flake8==7.3.0",
