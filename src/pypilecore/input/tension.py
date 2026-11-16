@@ -33,7 +33,7 @@ def create_multi_cpt_payload(
     groundwater_level_nap: float,
     pile: PileProperties,
     pile_grid: PileGridProperties | None,
-    stiff_construction: bool | None = None,
+    stiff_construction: bool = False,
     ocr: float | None = None,
     soil_load_sls: float | None = None,
     pile_head_level_nap: float | Literal["surface"] = "surface",
@@ -54,7 +54,7 @@ def create_multi_cpt_payload(
     pile_load_sls_max: float = 1,
     pile_load_sls_min: float = 0,
     gamma_s_t: float | None = 1.35,
-    gamma_gamma: float | None = None,
+    gamma_gamma: float | None = 1.1,
     construction_sequence: Literal["cpt-pile", "pile-cpt"] = "cpt-pile",
 ) -> Tuple[dict, Dict[str, dict]]:
     """
@@ -105,9 +105,8 @@ def create_multi_cpt_payload(
     pile:
         A PileProperties object.
     stiff_construction:
-        .. deprecated::
-            The uplift endpoints do not accept this property; it is ignored and never
-            sent. The argument is kept for backwards compatibility only.
+        Set to True if it's a stiff construction. This will have influence on the xi factor
+        if you don't overrule it. Default = False.
     ocr:
         The Over-Consolidation-Ratio [-] of the foundation layer.
     soil_load_sls:
@@ -210,9 +209,11 @@ def create_multi_cpt_payload(
         its default of 1.35.
         Default = 1.35
     gamma_gamma:
-        .. deprecated::
-            The uplift endpoints do not accept this property; it is ignored and never
-            sent. The argument is kept for backwards compatibility only.
+        Partial factor for volumetric weight NEN 9997-1+C2:2017 A.3.2. The (saturated and
+        unsaturated) volumetric weights are divided by this factor.
+        If None, the parameter is omitted from the payload, so that the API applies
+        its default of 1.1.
+        Default = 1.1
     construction_sequence:
         Value that indicates if CPT are performed before or after pile
         installation according to 7.3.1 CUR 2001-4.
@@ -243,9 +244,7 @@ def create_multi_cpt_payload(
         gamma_f_nk=gamma_f_nk,
         gamma_r_s=gamma_r_s,
         gamma_r_b=gamma_r_b,
-        gamma_gamma=gamma_gamma,
         soil_load_sls=soil_load_sls,
-        stiff_construction=stiff_construction,
     )
 
     # Input validation
@@ -272,6 +271,7 @@ def create_multi_cpt_payload(
         list_soil_properties=soil_properties_list,
         pile_properties=pile.serialize_payload(),
         pile_head_level_nap=pile_head_level_nap,
+        stiff_construction=stiff_construction,
         excavation_param_t=excavation_param_t,
         void_ratio_max=void_ratio_max,
         void_ratio_min=void_ratio_min,
@@ -281,10 +281,12 @@ def create_multi_cpt_payload(
     )
 
     # Add optional properties.
-    # Note: gamma_s_t is only added when it has a value. The API rejects a null value,
-    # but applies its own default when the property is omitted.
+    # Note: the safety factors are only added when they have a value. The API rejects
+    # a null value, but applies its own default when the property is omitted.
     if gamma_s_t is not None:
         multi_cpt_payload["gamma_s_t"] = gamma_s_t
+    if gamma_gamma is not None:
+        multi_cpt_payload["gamma_gamma"] = gamma_gamma
 
     if excavation_depth_nap is not None:
         multi_cpt_payload["excavation_depth_nap"] = excavation_depth_nap

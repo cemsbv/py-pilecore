@@ -14,6 +14,7 @@ from pypilecore.input.tension import create_multi_cpt_payload
 
 SAFETY_FACTOR_DEFAULTS = {
     "gamma_s_t": 1.35,
+    "gamma_gamma": 1.1,
 }
 
 # Properties that the uplift request schema does not document. They are never sent,
@@ -23,8 +24,6 @@ DEPRECATED_ARGUMENTS = {
     "gamma_f_nk": (1.0, "gamma_f_nk"),
     "gamma_r_b": (1.2, "gamma_r_b"),
     "gamma_r_s": (1.2, "gamma_r_s"),
-    "gamma_gamma": (1.1, "gamma_gamma"),
-    "stiff_construction": (True, "stiff_construction"),
     "soil_load_sls": (5.0, "soil_load"),
 }
 
@@ -167,3 +166,36 @@ def test_create_multi_cpt_payload_omits_undocumented_properties(
     )
 
     assert not DEPRECATED_PAYLOAD_KEYS.intersection(payload)
+
+
+@pytest.mark.parametrize("stiff_construction", [False, True])
+def test_create_multi_cpt_payload_stiff_construction(
+    pc_openapi,
+    cpt,
+    round_pile,
+    classify_table,
+    headers,
+    stiff_construction,
+):
+    """stiff_construction is always sent and accepted by the uplift request schema."""
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[-10.0, -20.0],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: classify_table},
+        groundwater_level_nap=-10.0,
+        pile=round_pile,
+        pile_grid=None,
+        stiff_construction=stiff_construction,
+        gamma_gamma=1.1,
+    )
+
+    assert payload["stiff_construction"] is stiff_construction
+    assert payload["gamma_gamma"] == 1.1
+
+    request = Request(
+        method="POST",
+        headers=headers,
+        url="http://uplift/nen/multiple-cpts/results",
+        json=serialize_jsonifyable_object(payload),
+    )
+    pc_openapi.request_validator.validate(RequestsOpenAPIRequest(request))
