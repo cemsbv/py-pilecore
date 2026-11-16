@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Literal, Mapping, Sequence, Tuple
 
 from pygef.cpt import CPTData
 
+from pypilecore.common.norms import Norms
 from pypilecore.common.piles import PileGridProperties, PileProperties
 from pypilecore.input.soil_properties import create_soil_properties_payload
 
@@ -34,6 +35,7 @@ def create_multi_cpt_payload(
     pile: PileProperties,
     pile_grid: PileGridProperties | None,
     stiff_construction: bool = False,
+    norms: Norms = Norms(),
     ocr: float | None = None,
     soil_load_sls: float | None = None,
     pile_head_level_nap: float | Literal["surface"] = "surface",
@@ -107,6 +109,9 @@ def create_multi_cpt_payload(
     stiff_construction:
         Set to True if it's a stiff construction. This will have influence on the xi factor
         if you don't overrule it. Default = False.
+    norms:
+        The norms (NEN 9997-1 and CUR 236 versions) used in the calculation.
+        Default = Norms(), i.e. the latest versions.
     ocr:
         The Over-Consolidation-Ratio [-] of the foundation layer.
     soil_load_sls:
@@ -272,6 +277,7 @@ def create_multi_cpt_payload(
         pile_properties=pile.serialize_payload(),
         pile_head_level_nap=pile_head_level_nap,
         stiff_construction=stiff_construction,
+        norms=norms.serialize_payload(),
         excavation_param_t=excavation_param_t,
         void_ratio_max=void_ratio_max,
         void_ratio_min=void_ratio_min,

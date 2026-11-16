@@ -3,6 +3,7 @@ from nuclei.client.utils import serialize_jsonifyable_object
 from openapi_core.contrib.requests import RequestsOpenAPIRequest
 from requests import Request
 
+from pypilecore.common.norms import Norms
 from pypilecore.common.piles import PileProperties
 from pypilecore.common.piles.geometry import PileGeometry
 from pypilecore.common.piles.geometry.components import RoundPileGeometryComponent
@@ -191,6 +192,38 @@ def test_create_multi_cpt_payload_stiff_construction(
 
     assert payload["stiff_construction"] is stiff_construction
     assert payload["gamma_gamma"] == 1.1
+
+    request = Request(
+        method="POST",
+        headers=headers,
+        url="http://uplift/nen/multiple-cpts/results",
+        json=serialize_jsonifyable_object(payload),
+    )
+    pc_openapi.request_validator.validate(RequestsOpenAPIRequest(request))
+
+
+@pytest.mark.parametrize("nen_9997_1", ["2017", "2025"])
+def test_create_multi_cpt_payload_norms(
+    pc_openapi,
+    cpt,
+    round_pile,
+    classify_table,
+    headers,
+    nen_9997_1,
+):
+    """The norms are sent and accepted by the uplift request schema."""
+    norms = Norms(nen_9997_1=nen_9997_1, cur_236="2023")
+    payload, _ = create_multi_cpt_payload(
+        pile_tip_levels_nap=[-10.0, -20.0],
+        cptdata_objects=[cpt],
+        classify_tables={cpt.alias: classify_table},
+        groundwater_level_nap=-10.0,
+        pile=round_pile,
+        pile_grid=None,
+        norms=norms,
+    )
+
+    assert payload["norms"] == norms.serialize_payload()
 
     request = Request(
         method="POST",
