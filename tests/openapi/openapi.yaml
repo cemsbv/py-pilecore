@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PileCore
-  version: 2.5.1
+  version: 4.5.1
   description: >-
     PileCore aims to give you the full pile calculation utilities without an
     engineer in the loop. This means that calculations must be able to run from
@@ -12,8 +12,23 @@ info:
     ## Access
 
     A bearer-token is required for this web-API. Sign in or sign up (for free!)
-    on our [nuclei website](https://nuclei.cemsbv.io) and use the "Short-lived
-    Access Token" from the "API Acess Tokens" section.
+    on our [nuclei website](https://nuclei.cemsbv.io) and use the "Access Token" 
+    from the "API Access Tokens" section.
+
+    Most endpoints additionally require at least one of a set of permissions
+    on your Nuclei account, listed in that endpoint's description under
+    "Requires any of the following NUCLEI permissions:". Holding any single one of the
+    listed permissions is sufficient:
+
+    - `read:pilecore+calculate`: run bearing, uplift and friction-range calculations.
+
+    - `read:pilecore+report`: generate PDF reports.
+
+    - `read:pilecore+grouper`: group CPTs and inspect group metrics.
+
+    Endpoints without a listed permission (`/get-task-result`,
+    `/get-task-status`, `/pile-properties/shape`, `/pile-properties/type` and
+    `/friction-ranges/lower-bound`) only require a valid access token.
 
     ## Python
 
@@ -22,7 +37,7 @@ info:
     library [cems-nuclei](https://github.com/cemsbv/nuclei) (*Application-name =
     PileCore*).
 
-    ## Addition URLs
+    ## Additional URLs
 
     - [CHANGELOG](./../static?filename=CHANGELOG.md): All notable changes to
     this project will be documented in this file
@@ -36,8 +51,8 @@ info:
     ## Known issues
 
     - The f2 factor for uplift piles does take some time to be calculated.
-    - Due to precession errors the calculations of the A;eff of uplift calculation may be incorrect 
-    for some cases where large number are used.
+    - Due to precision errors the calculations of the A;eff of uplift calculation may be incorrect 
+    for some cases where large numbers are used.
 
   contact:
     name: CRUX Engineering Microservices BV (CEMS)
@@ -47,36 +62,6 @@ servers:
   - url: /
     description: Root url
 paths:
-  /healthcheck:
-    get:
-      description: Use this endpoint to check the state of the server.
-      operationId: nuclei_cfg.responses.healthcheck
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                description: Should be "server alive"
-                type: string
-          description: OK
-      summary: Health Check
-      tags:
-        - Service
-  /healthcheck-worker:
-    get:
-      description: Use this endpoint to check the state of the service.
-      operationId: nuclei_cfg.job.healthcheck_worker
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                description: Should be "Service alive"
-                type: string
-          description: OK
-      summary: Health Check Worker
-      tags:
-        - Service
   /grouper/generate-grouper-report:
     post:
       operationId: api.web.grouper.generate_grouper_report
@@ -90,9 +75,48 @@ paths:
           - Filter specifications
           - Safety factors
           - Results of the calculation per pile tip level
+
+        Requires any of the following NUCLEI permissions:
+          - read:pilecore+calculate
+          - read:pilecore+report
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              project_name: Project Amsterdam
+              project_number: "123456AB"
+              author: N. Uclei
+              gamma_shaft: 1.2
+              gamma_bottom: 1.2
+              stiff_construction: true
+              sub_groups:
+                - names: [CPT101, CPT102]
+                  variation_check: true
+                  spatial_check: true
+                  centre_to_centre_check: true
+                  minimum_pile_level: -10
+                  maximum_pile_level: -12
+                  number_of_consecutive_pile_levels: 3
+                  coordinates: [[142892.19, 470783.87], [142897.19, 470788.87]]
+                  table:
+                    pile_tip_level: [-10, -11, -12]
+                    variation_coefficient: [5.2, 4.9, 5.2]
+                    mean_calculated_bearing_capacity: [1765, 1963, 2180]
+                    min_calculated_bearing_capacity: [1700, 1895, 2100]
+                    xi_values: [1.2, 1.2, 1.2]
+                    xi_factor: ["ξ3", "ξ3", "ξ3"]
+                    nominal_cpt: [CPT102, CPT102, CPT102]
+                    characteristic_bearing_capacity: [1471, 1636, 1817]
+                    design_bearing_capacity: [1226, 1363, 1514]
+                    design_negative_friction: [95, 95, 95]
+                    net_design_bearing_capacity: [1131, 1268, 1419]
+                    group_centre_to_centre_validation_15: [true, true, true]
+                    group_centre_to_centre_validation_20: [true, true, true]
+                    group_centre_to_centre_validation_25: [true, true, true]
+                    group_centre_to_centre_validation: [true, true, true]
             schema:
               allOf:
                 - $ref: "#/components/schemas/shared_input_groups_meta_data"
@@ -197,18 +221,64 @@ paths:
         Run a bearing calculation and obtain 2 DataFrames (with the
         get-task-result endpoint):
           - summary_table: Table containing the characteristic and design values per pile tip level.
-          - all_results: Table containing all the claculated values per cpt and per pile tip level.
+          - all_results: Table containing all the calculated values per cpt and per pile tip level.
 
-        ## Free account usage
-
-        This endpoint can be called with CEMS-Nuclei free-tier users with the
-        following restrictions:
-
-          - maximum 5 values in `pile_tip_levels_nap`. 
-          - maximum 10 values in `list_soil_properties`.
+        Requires the following NUCLEI permission:
+          - read:pilecore+calculate
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              pile_tip_levels_nap: [-10, -11, -12]
+              pile_head_level_nap: -1
+              friction_settings:
+                friction_range_strategy: lower_bound
+              stiff_construction: false
+              pile_properties:
+                name: Prefab 350x350
+                geometry:
+                  components:
+                    - outer_shape: rectangle
+                      secondary_dimension: 0.35
+                pile_type:
+                  standard_pile:
+                    reference: B1
+              list_soil_properties:
+                - test_id: CPT101
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 8, 12, 14, 15.5, 16, 17.5, 18, 19, 18.5, 20, 21, 20.5, 22]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+                - test_id: CPT102
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 6.5, 10.5, 12.5, 14, 14.5, 16, 16.5, 17.5, 17, 18.5, 19.5, 19, 20.5]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
             schema:
               $ref: "#/components/schemas/bearing_calculation_multi_cpts_input"
       responses:
@@ -237,16 +307,67 @@ paths:
           - Combined results of the calculation per pile tip level
           - Plot bearing capacity
 
-        ## Free account usage
-
-        This endpoint can be called with CEMS-Nuclei free-tier users with the
-        following restrictions:
-
-          - maximum 5 values in `pile_tip_levels_nap`. 
-          - maximum 10 values in `list_soil_properties`.
+        Requires any of the following NUCLEI permissions:
+          - read:pilecore+calculate
+          - read:pilecore+report
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              pile_tip_levels_nap: [-10, -11, -12]
+              pile_head_level_nap: -1
+              friction_settings:
+                friction_range_strategy: lower_bound
+              stiff_construction: false
+              pile_properties:
+                name: Prefab 350x350
+                geometry:
+                  components:
+                    - outer_shape: rectangle
+                      secondary_dimension: 0.35
+                pile_type:
+                  standard_pile:
+                    reference: B1
+              list_soil_properties:
+                - test_id: CPT101
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 8, 12, 14, 15.5, 16, 17.5, 18, 19, 18.5, 20, 21, 20.5, 22]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+                - test_id: CPT102
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 6.5, 10.5, 12.5, 14, 14.5, 16, 16.5, 17.5, 17, 18.5, 19.5, 19, 20.5]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+              general:
+                project_name: Project Amsterdam
+                project_id: "123456AB"
+                author: N. Uclei
             schema:
               $ref: "#/components/schemas/input_multi_cpt_report"
       responses:
@@ -293,6 +414,48 @@ paths:
                     assumption that the pile-tip is in a firm sand layer.
                   default: 40
                   minimum: 0
+                reference:
+                  type: string
+                  description: >
+                    The NEN9997-1 or CUR236 (anchor pile) standard pile
+                    reference. Some pile types (e.g. B2, B3, B4) have a
+                    special rule for the pile-tip shape factor `beta_p`
+                    (NEN9997-1 art. 7.6.2.3(h)), so the result can depend on
+                    this value. Defaults to "B1" (no special rule applies).
+                  enum:
+                    - "B1"
+                    - "B2"
+                    - "B3"
+                    - "B4"
+                    - "B5"
+                    - "B6"
+                    - "B7"
+                    - "B8"
+                    - "S1"
+                    - "S2"
+                    - "S4"
+                    - "S3"
+                    - "S5"
+                    - "S6"
+                    - "S7"
+                    - "H1"
+                    - "H2"
+                    - "MA1"
+                    - "MA2"
+                    - "MB1"
+                    - "MB2"
+                    - "MC"
+                    - "MD"
+                    - "ME"
+                    - "MF"
+                    - "AA1"
+                    - "AA2"
+                    - "AB1"
+                    - "AB2"
+                    - "AC"
+                    - "AD"
+                    - "AE"
+                  default: "B1"
               required:
                 - components
               example:
@@ -359,7 +522,7 @@ paths:
   /grouper/group-cpts:
     post:
       operationId: api.web.grouper.group_cpts
-      summary: Find groups among the calulated bearing capacities
+      summary: Find groups among the calculated bearing capacities
       tags:
         - Grouper
       description: >
@@ -374,16 +537,41 @@ paths:
         After finding many subgroups, only those groups are returned that result in the
         highest overall bearing capacity for at least one pile tip level and CPT
         combination.
-
-        ## Free account usage
-
-        This endpoint can be called with CEMS-Nuclei free-tier users with the
-        following restrictions:
-
-        - maximum 30 values in `cpt_objects`.
+        
+        Requires any of the following NUCLEI permissions:
+          - read:pilecore+calculate
+          - read:pilecore+grouper
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              stiff_construction: true
+              pile_tip_level: [-10, -11, -12]
+              cpt_objects:
+                - name: CPT101
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  shaft_bearing_capacity: [520, 610, 700]
+                  bottom_bearing_capacity: [1310, 1420, 1560]
+                  negative_friction: [95, 95, 95]
+                - name: CPT102
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  shaft_bearing_capacity: [480, 565, 650]
+                  bottom_bearing_capacity: [1220, 1330, 1450]
+                  negative_friction: [95, 95, 95]
+                - name: CPT103
+                  coordinates:
+                    x: 142902.19
+                    "y": 470783.87
+                  shaft_bearing_capacity: [500, 590, 675]
+                  bottom_bearing_capacity: [1270, 1380, 1500]
+                  negative_friction: [95, 95, 95]
             schema:
               allOf:
                 - $ref: "#/components/schemas/shared_input_groups_cpt_objects"
@@ -406,9 +594,43 @@ paths:
         Takes sub-group configurations and returns group metrics such as
         Variation coefficient and xi factors, as well as group validity
         statements.
+        
+        Requires any of the following NUCLEI permissions:
+          - read:pilecore+calculate
+          - read:pilecore+grouper
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              stiff_construction: true
+              pile_tip_level: [-10, -11, -12]
+              cpt_objects:
+                - name: CPT101
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  shaft_bearing_capacity: [520, 610, 700]
+                  bottom_bearing_capacity: [1310, 1420, 1560]
+                  negative_friction: [95, 95, 95]
+                - name: CPT102
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  shaft_bearing_capacity: [480, 565, 650]
+                  bottom_bearing_capacity: [1220, 1330, 1450]
+                  negative_friction: [95, 95, 95]
+                - name: CPT103
+                  coordinates:
+                    x: 142902.19
+                    "y": 470783.87
+                  shaft_bearing_capacity: [500, 590, 675]
+                  bottom_bearing_capacity: [1270, 1380, 1500]
+                  negative_friction: [95, 95, 95]
+              sub_groups:
+                - names: [CPT101, CPT102, CPT103]
             schema:
               $ref: "#/components/schemas/input_group_metrics"
       responses:
@@ -434,9 +656,66 @@ paths:
         Takes sub-group configurations and returns group metrics such as
         Variation coefficient and xi factors, as well as group validity
         statements.
+        
+        Requires the following NUCLEI permission:
+          - read:pilecore+calculate
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              pile_tip_levels_nap: [-10, -11, -12]
+              pile_head_level_nap: -1
+              top_of_tension_zone_nap: -7
+              pile_grid:
+                locations: [[0, 0], [2.5, 0], [5, 0], [0, 2.5], [2.5, 2.5], [5, 2.5], [0, 5], [2.5, 5], [5, 5]]
+                pile_index: 4
+              pile_load_sls_max: 250
+              pile_load_sls_min: 0
+              pile_properties:
+                name: Prefab 350x350
+                geometry:
+                  components:
+                    - outer_shape: rectangle
+                      secondary_dimension: 0.35
+                pile_type:
+                  standard_pile:
+                    reference: B1
+              list_soil_properties:
+                - test_id: CPT101
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 8, 12, 14, 15.5, 16, 17.5, 18, 19, 18.5, 20, 21, 20.5, 22]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+                - test_id: CPT102
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 6.5, 10.5, 12.5, 14, 14.5, 16, 16.5, 17.5, 17, 18.5, 19.5, 19, 20.5]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
             schema:
               allOf:
                 - $ref: "#/components/schemas/nen_uplift_properties"
@@ -475,9 +754,68 @@ paths:
         Takes sub-group configurations and returns group metrics such as
         Variation coefficient and xi factors, as well as group validity
         statements.
+        
+        Requires the following NUCLEI permission:
+          - read:pilecore+calculate
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              pile_tip_levels_nap: [-14, -15, -16]
+              pile_head_level_nap: -1
+              top_of_tension_zone_nap: -7
+              pile_grid:
+                locations: [[0, 0], [3, 0], [6, 0], [0, 3], [3, 3], [6, 3], [0, 6], [3, 6], [6, 6]]
+                pile_index: 4
+              pile_load_sls_max: 300
+              pile_load_sls_min: 0
+              pile_properties:
+                name: Anchor pile
+                geometry:
+                  components:
+                    - outer_shape: round
+                      diameter: 0.1
+                    - outer_shape: round
+                      diameter: 0.35
+                pile_type:
+                  standard_pile:
+                    reference: AA1
+              list_soil_properties:
+                - test_id: CPT101
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 8, 12, 14, 15.5, 16, 17.5, 18, 19, 18.5, 20, 21, 20.5, 22]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+                - test_id: CPT102
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 6.5, 10.5, 12.5, 14, 14.5, 16, 16.5, 17.5, 17, 18.5, 19.5, 19, 20.5]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
             schema:
               allOf:
                 - $ref: "#/components/schemas/cur_uplift_properties"
@@ -517,9 +855,70 @@ paths:
         Takes sub-group configurations and returns group metrics such as
         Variation coefficient and xi factors, as well as group validity
         statements.
+        
+        Requires the following NUCLEI permission:
+          - read:pilecore+calculate
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              pile_tip_levels_nap: [-10, -11, -12]
+              pile_head_level_nap: -1
+              top_of_tension_zone_nap: -7
+              pile_grid:
+                locations: [[0, 0], [2.5, 0], [5, 0], [0, 2.5], [2.5, 2.5], [5, 2.5], [0, 5], [2.5, 5], [5, 5]]
+                pile_index: 4
+              pile_load_sls_max: 250
+              pile_load_sls_min: 0
+              pile_properties:
+                name: Prefab 350x350
+                geometry:
+                  components:
+                    - outer_shape: rectangle
+                      secondary_dimension: 0.35
+                pile_type:
+                  standard_pile:
+                    reference: B1
+              list_soil_properties:
+                - test_id: CPT101
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 8, 12, 14, 15.5, 16, 17.5, 18, 19, 18.5, 20, 21, 20.5, 22]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+                - test_id: CPT102
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 6.5, 10.5, 12.5, 14, 14.5, 16, 16.5, 17.5, 17, 18.5, 19.5, 19, 20.5]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+              general:
+                project_name: Project Amsterdam
+                project_id: "123456AB"
+                author: N. Uclei
             schema:
               allOf:
                 - $ref: "#/components/schemas/nen_uplift_properties"
@@ -554,9 +953,72 @@ paths:
         Takes sub-group configurations and returns group metrics such as
         Variation coefficient and xi factors, as well as group validity
         statements.
+        
+        Requires the following NUCLEI permission:
+          - read:pilecore+calculate
       requestBody:
         content:
           application/json:
+            example:
+              norms:
+                NEN99971_version: "2025"
+                CUR236_version: "2023"
+              pile_tip_levels_nap: [-14, -15, -16]
+              pile_head_level_nap: -1
+              top_of_tension_zone_nap: -7
+              pile_grid:
+                locations: [[0, 0], [3, 0], [6, 0], [0, 3], [3, 3], [6, 3], [0, 6], [3, 6], [6, 6]]
+                pile_index: 4
+              pile_load_sls_max: 300
+              pile_load_sls_min: 0
+              pile_properties:
+                name: Anchor pile
+                geometry:
+                  components:
+                    - outer_shape: round
+                      diameter: 0.1
+                    - outer_shape: round
+                      diameter: 0.35
+                pile_type:
+                  standard_pile:
+                    reference: AA1
+              list_soil_properties:
+                - test_id: CPT101
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142892.19
+                    "y": 470783.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 8, 12, 14, 15.5, 16, 17.5, 18, 19, 18.5, 20, 21, 20.5, 22]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+                - test_id: CPT102
+                  ref_height: 0.5
+                  groundwater_level_nap: -0.5
+                  coordinates:
+                    x: 142897.19
+                    "y": 470788.87
+                  cpt_data:
+                    depth: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+                    qc: [1.5, 0.6, 0.4, 0.5, 0.4, 0.5, 0.6, 0.5, 6.5, 10.5, 12.5, 14, 14.5, 16, 16.5, 17.5, 17, 18.5, 19.5, 19, 20.5]
+                  layer_table_data:
+                    lower_boundary: [1, 7.5, 20]
+                    thickness: [1, 6.5, 12.5]
+                    main_component: [sand, clay, sand]
+                    gamma_unsat: [0.018, 0.017, 0.019]
+                    gamma_sat: [0.02, 0.017, 0.021]
+                    phi: [0.5236, 0.3927, 0.5672]
+              general:
+                project_name: Project Amsterdam
+                project_id: "123456AB"
+                author: N. Uclei
             schema:
               allOf:
                 - $ref: "#/components/schemas/cur_uplift_properties"
@@ -581,6 +1043,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/output_task_id"
 components:
+  securitySchemes:
+    # Required so users can copy the token in the Swagger UI
+    accessToken:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
   schemas:
     norms:
       type: object
@@ -600,7 +1068,8 @@ components:
           default: "2023"
     overrule_xi:
       oneOf:
-        - type: object
+        - title: Per correlation factor
+          type: object
           properties:
             xi3:
               type: number
@@ -608,11 +1077,12 @@ components:
               type: number
             xi4_single:
               type: number
-        - type: number
+        - title: Single value
+          type: number
       description: >
         Set custom values for the correlation factors xi3, xi4 or xi4_single in all calculations. 
         Use with caution. This will  overrule the calculation of xi-values based on the
-        group-size, variation- coefficient and construction stiffness according to NEN 9997-1+C2_2017
+        group-size, variation coefficient and construction stiffness according to NEN 9997-1+C2_2017
         Table A.10a and A.10b. Used to calculate the characteristic value of the
         bearing capacity: R_c;k = R_c;cal / xi.
 
@@ -987,14 +1457,13 @@ components:
         - geometry
         - pile_type
       example:
-        name: Prefab 350x350
+        name: Anchor pile
         geometry:
           components:
             - outer_shape: round
               diameter: 0.1
             - outer_shape: round
               diameter: 0.35
-              length: 9
         pile_type:
           standard_pile:
             reference: "AA1"
@@ -1008,7 +1477,7 @@ components:
         below, in combination with the chosen NEN9997-1 version in the norms property
         (default=2025).
 
-        ![standard_piles-NEN9997-1 (2025)](./../static?filename=standard_piles-NEN9997-1_2025.png)
+        [standard_piles-NEN9997-1 (2025)](./../static?filename=standard_piles-NEN9997-1_2025.png)
 
         When using the 2017 version of the NEN9997-1, the following table applies:
         [standard_piles-NEN9997-1 (2017)](./../static?filename=standard_piles-NEN9997-1_2017.png)
@@ -1055,7 +1524,6 @@ components:
         below.
 
 
-        ![standard_piles-CUR236](./../static?filename=standard_piles-CUR236_2023.png)
         [standard_piles-CUR236](./../static?filename=standard_piles-CUR236_2023.png)
       properties:
         reference:
@@ -1266,11 +1734,13 @@ components:
         - yield_stress
         - color
     html_colour:
+      title: HTML colour
       type: string
       description: >-
         HTML-hex color definition. Should start with an `#`. E.g. `#FF0000` for
         red.
     rgb_colour:
+      title: RGB colour
       type: object
       description: RGB color definition.
       properties:
@@ -1367,9 +1837,11 @@ components:
                 **unit: `m`**
             top_level_nap:
               oneOf:
-                - type: number
+                - title: Level
+                  type: number
                   nullable: true
-                - type: string
+                - title: Pile head
+                  type: string
                   enum:
                     - pile-head
                   nullable: true
@@ -1383,9 +1855,11 @@ components:
                 **unit: `m w.r.t. NAP`**
             bottom_level_nap:
               oneOf:
-                - type: number
+                - title: Level
+                  type: number
                   nullable: true
-                - type: string
+                - title: Pile tip
+                  type: string
                   enum:
                     - pile-tip
                   nullable: true
@@ -1405,6 +1879,7 @@ components:
         - material
         - primary_dimension
     rectangular_pile_geometry_component_input:
+      title: Rectangular component
       allOf:
         - $ref: "#/components/schemas/pile_geometry_component_common_input"
         - type: object
@@ -1444,6 +1919,7 @@ components:
             - outer_shape
             - secondary_dimension
     rectangular_pile_geometry_component_output:
+      title: Rectangular component
       allOf:
         - $ref: "#/components/schemas/pile_geometry_component_common_output"
         - type: object
@@ -1478,6 +1954,7 @@ components:
             - secondary_dimension
             - tertiary_dimension
     round_pile_geometry_component_input:
+      title: Round component
       allOf:
         - $ref: "#/components/schemas/pile_geometry_component_common_input"
         - type: object
@@ -1501,6 +1978,7 @@ components:
             - outer_shape
             - diameter
     round_pile_geometry_component_output:
+      title: Round component
       allOf:
         - $ref: "#/components/schemas/pile_geometry_component_common_output"
         - type: object
@@ -1567,8 +2045,8 @@ components:
             - outer_shape: rectangle
               primary_dimension:
                 length: null
-                top_level_nap: null
-                bottom_level_nap: null
+                top_level_nap: pile-head
+                bottom_level_nap: pile-tip
               secondary_dimension: 0.35
               tertiary_dimension: 0.35
               material: concrete
@@ -1595,14 +2073,10 @@ components:
             adhesion: null
             is_low_vibrating: false
             is_auger: false
-            installation_method: excavated
+            installation_method: driven
             diameter_method: default
             is_prefab: true
             is_open_ended: false
-            is_anchor: false
-            chamfer_value: null
-            is_load_tested: null
-            is_extorted: null
             qc_z_a_lesser_1m: 12.0
             qc_z_a_greater_1m: 15.0
             qb_max_limit: 15.0
@@ -1629,9 +2103,6 @@ components:
           description: >
             Each object in this array represents a single CPT. The optional
             fields will overwrite the 'general' value **for that CPT only**.
-
-            Note that the report a with `individual_cpt_results` content accepts
-            a maximum of 50 CPTs.
           minItems: 1
           items:
             allOf:
@@ -1639,8 +2110,12 @@ components:
               - $ref: "#/components/schemas/soil_arguments_multi_cpt"
         pile_properties:
           oneOf:
-            - $ref: "#/components/schemas/nen_pile_properties_input"
-            - $ref: "#/components/schemas/cur_pile_properties_input"
+            - title: NEN9997-1
+              allOf:
+                - $ref: "#/components/schemas/nen_pile_properties_input"
+            - title: CUR-236
+              allOf:
+                - $ref: "#/components/schemas/cur_pile_properties_input"
         pile_load:
           type: number
           description: >
@@ -1730,7 +2205,7 @@ components:
           default: 1.2
           description: >
             Safety factor, used to obtain design-values of the pile-tip
-            bearingcapacity.
+            bearing capacity.
 
             **unit: `-`**
         gamma_r_s:
@@ -1738,7 +2213,7 @@ components:
           default: 1.2
           description: >
             Safety factor, used to obtain design-values of the sleeve
-            bearingcapacity.
+            bearing capacity.
 
             **unit: `-`**
         use_almere_rules:
@@ -1777,7 +2252,7 @@ components:
           type: boolean
           default: false
           description: >
-            Set to True if it's a stiff costruction. This will have
+            Set to True if it's a stiff construction. This will have
             influence on the xi factor.
         cpts_group:
           description: >-
@@ -1845,14 +2320,11 @@ components:
                 - 0.5
                 - 2
               gamma_unsat:
-                - 15
-                - 19
+                - 0.015
+                - 0.019
               gamma_sat:
-                - 15
-                - 21
-              index:
-                - 0
-                - 1
+                - 0.015
+                - 0.021
               phi:
                 - 0.2
                 - 0.4799655443
@@ -1898,14 +2370,11 @@ components:
                 - 0.5
                 - 2
               gamma_unsat:
-                - 15
-                - 19
+                - 0.015
+                - 0.019
               gamma_sat:
-                - 15
-                - 21
-              index:
-                - 0
-                - 1
+                - 0.015
+                - 0.021
               phi:
                 - 0.2
                 - 0.4799655443
@@ -2062,7 +2531,7 @@ components:
       properties:
         alpha_p:
           type: number
-          example: 0.01
+          example: 0.7
           description: |
             Alpha p factor used in pile tip resistance calculation.
             **unit: `-`**
@@ -2088,7 +2557,7 @@ components:
           type: boolean
           example: false
           description: |
-            Determines whether the pile the pile is an auger pile or not.
+            Determines whether the pile is an auger pile or not.
         diameter_method:
           type: string
           enum:
@@ -2220,7 +2689,7 @@ components:
         - qb_max_limit
         - chamfered
       example:
-        alpha_p: 0.01
+        alpha_p: 0.7
         alpha_s_sand: 0.01
         alpha_s_clay:
           use_constant_value: true
@@ -2306,7 +2775,7 @@ components:
               Each CPT object in the array contains the name, location, bearing
               capacity and negative friction for every cpt. Note that the depth
               values of the bearing capacity and negative friction must be given
-              in an other property. This to ensure that all cpt_object are at
+              in another property. This to ensure that all cpt_object are at
               the same depth and have valid values (not null).
             properties:
               name:
@@ -2453,7 +2922,7 @@ components:
                   - CPT101
                   - CPT102
                 minItems: 1
-                description: List of CTP names in subgroup
+                description: List of CPT names in subgroup
               variation_check:
                 type: boolean
                 example: true
@@ -2507,7 +2976,7 @@ components:
                       - 0
                       - 0
                       - 0
-                    description: Variation coefficient of the subgroup [-]
+                    description: Variation coefficient of the subgroup [%]
                   net_design_bearing_capacity:
                     type: array
                     minItems: 1
@@ -2703,7 +3172,7 @@ components:
                       type: string
                     example:
                       - CPT101
-                    description: List of CTP names in subgroup
+                    description: List of CPT names in subgroup
           required:
             - sub_groups
     soil_properties:
@@ -2819,7 +3288,7 @@ components:
         tau_mob_max:
           description: >-
             The average mobilized shear stress around the uplift-loaded used
-            in  failure tests on anchor piles accourding to CUR236 [kN/m2].
+            in failure tests on anchor piles according to CUR236 [kN/m2].
           items:
             example: 50
             exclusiveMinimum: true
@@ -2831,8 +3300,8 @@ components:
           type: array
         qc_gem_failure_test:
           description: >-
-            The average cone resistance  used in  failure tests on anchor piles
-            accourding to CUR236 [MPa].
+            The average cone resistance used in failure tests on anchor piles
+            according to CUR236 [MPa].
           items:
             example: 10
             exclusiveMinimum: true
@@ -2843,18 +3312,18 @@ components:
           maxItems: 100
           type: array
         gamma_unsat:
-          description: The dry unit weights [MPa].
+          description: The dry unit weights [MN/m3].
           items:
-            example: 19
+            example: 0.019
             minimum: 0
             type: number
           minItems: 1
           maxItems: 100
           type: array
         gamma_sat:
-          description: The saturated unit weights [MPa].
+          description: The saturated unit weights [MN/m3].
           items:
-            example: 21
+            example: 0.021
             minimum: 0
             type: number
           minItems: 1
@@ -2992,14 +3461,14 @@ components:
           example:
             - 0
             - 0
-            - 1
-            - 2
-            - 3
-            - 4
-            - 5
-            - 6
-            - 7
-            - 8
+            - 0.01
+            - 0.02
+            - 0.03
+            - 0.04
+            - 0.05
+            - 0.06
+            - 0.07
+            - 0.08
       required:
         - qc
         - depth
@@ -3059,13 +3528,12 @@ components:
         soil friction in the positive zone contributes to the bearing capacity, while
         the negative zone adds an extra load on the pile.
 
-        Accepted values: "manual", "lower_bound" or "settlement_driven".
-
         ## *manual*
 
         If "manual" is entered, the user is required to provide the friction ranges
         manually.
     excavation_settings_constant_method:
+      title: Constant method
       type: object
       properties:
         stress_reduction_method:
@@ -3085,6 +3553,7 @@ components:
       required:
         - stress_reduction_method
     excavation_settings_begemann_method:
+      title: Begemann method
       type: object
       properties:
         stress_reduction_method:
@@ -3334,52 +3803,52 @@ components:
             type: number
         R_b_cal:
           type: array
-          description: The calculated bottom bearingcapacity [kN].
+          description: The calculated bottom bearing capacity [kN].
           items:
             type: number
         R_b_k:
           type: array
-          description: The characteristic bottom bearingcapacity [kN].
+          description: The characteristic bottom bearing capacity [kN].
           items:
             type: number
         R_b_d:
           type: array
-          description: The design bottom bearingcapacity [kN].
+          description: The design bottom bearing capacity [kN].
           items:
             type: number
         R_s_cal:
           type: array
-          description: The calculated shaft bearingcapacity [kN].
+          description: The calculated shaft bearing capacity [kN].
           items:
             type: number
         R_s_k:
           type: array
-          description: The characteristic shaft bearingcapacity [kN].
+          description: The characteristic shaft bearing capacity [kN].
           items:
             type: number
         R_s_d:
           type: array
-          description: The design shaft bearingcapacity [kN].
+          description: The design shaft bearing capacity [kN].
           items:
             type: number
         R_c_cal:
           type: array
-          description: The total calculated bearingcapacity [kN].
+          description: The total calculated bearing capacity [kN].
           items:
             type: number
         R_c_k:
           type: array
-          description: The total characteristic bearingcapacity [kN].
+          description: The total characteristic bearing capacity [kN].
           items:
             type: number
         R_c_d:
           type: array
-          description: The total design bearingcapacity [kN].
+          description: The total design bearing capacity [kN].
           items:
             type: number
         R_c_d_net:
           type: array
-          description: The total net design bearingcapacity [kN].
+          description: The total net design bearing capacity [kN].
           items:
             type: number
         F_c_k:
@@ -3604,6 +4073,10 @@ components:
               items:
                 type: number
               minItems: 2
+              example:
+                - -10
+                - -11
+                - -12
               description: |
                 Range of values for which the pile resistance is calculated.
 
@@ -3647,7 +4120,7 @@ components:
           type: string
           description: |
             Report date. Defaults to current date in `"%d-%m-%y"` format.
-          example: 01-01-2001
+          example: 01-01-01
       required:
         - project_name
         - project_id
@@ -3700,37 +4173,37 @@ components:
             type: number
         R_s_k:
           description: |
-            The characteristic value of the shaft bearingcapacity  [kN].
+            The characteristic value of the shaft bearing capacity  [kN].
           type: array
           items:
             type: number
         R_b_k:
           description: |
-            The characteristic value of the bottom bearingcapacity  [kN].
+            The characteristic value of the bottom bearing capacity  [kN].
           type: array
           items:
             type: number
         R_c_k:
           description: >
-            The characteristic value of the total compressive bearingcapacity 
+            The characteristic value of the total compressive bearing capacity 
             [kN].
           type: array
           items:
             type: number
         R_s_d:
           description: |
-            The design value of the shaft bearingcapacity  [kN].
+            The design value of the shaft bearing capacity  [kN].
           type: array
           items:
             type: number
         R_b_d:
           description: |
-            The design value of the bottom bearingcapacity  [kN].
+            The design value of the bottom bearing capacity  [kN].
           type: array
           items:
             type: number
         R_c_d:
-          description: The design value of the total bearingcapacity [kN].
+          description: The design value of the total bearing capacity [kN].
           type: array
           items:
             type: number
@@ -3742,7 +4215,7 @@ components:
           items:
             type: number
         F_nk_k:
-          description: The charactertistic value of the negative friction force [kN].
+          description: The characteristic value of the negative friction force [kN].
           type: array
           items:
             type: number
@@ -3753,7 +4226,7 @@ components:
             type: number
         R_c_d_net:
           description: >
-            The net design value of the total bearingcapacity [kN] (netto =
+            The net design value of the total bearing capacity [kN] (netto =
             excluding design negative friction force.).
           type: array
           items:
@@ -3812,20 +4285,20 @@ components:
         R_c_min:
           description: >
             The minimum of the single-CPT values for the calculated
-            bearingcapacity [kN].
+            bearing capacity [kN].
           type: array
           items:
             type: number
         R_c_max:
           description: >
             The maximum of the single-CPT values for the calculated
-            bearingcapacity [kN].
+            bearing capacity [kN].
           type: array
           items:
             type: number
         R_c_mean:
           description: >
-            The mean of the single-CPT values for the calculated bearingcapacity
+            The mean of the single-CPT values for the calculated bearing capacity
             [kN].
           type: array
           items:
@@ -3833,21 +4306,21 @@ components:
         R_c_std:
           description: >
             The standard-deviation of the single-CPT values for the calculated
-            bearingcapacity [kN].
+            bearing capacity [kN].
           type: array
           items:
             type: number
         R_s_mean:
           description: >
             The mean of the single-CPT values for the calculated shaft
-            bearingcapacity [kN].
+            bearing capacity [kN].
           type: array
           items:
             type: number
         R_b_mean:
           description: >
             The mean of the single-CPT values for the calculated bottom
-            bearingcapacity [kN].
+            bearing capacity [kN].
           type: array
           items:
             type: number
@@ -3929,8 +4402,8 @@ components:
             [
               [
                 [142892.19, 470793.87],
-                [142902.19, 407783.87],
-                [142882.19, 407783.87],
+                [142902.19, 470783.87],
+                [142882.19, 470783.87],
               ],
             ]
         type:
@@ -4359,6 +4832,11 @@ components:
                 $ref: "#/components/schemas/Point2D"
               uniqueItems: true
               minItems: 2
+              example:
+                - [0, 0]
+                - [1.5, 0]
+                - [0, 1.5]
+                - [1.5, 1.5]
             pile_index:
               type: number
               default: 0
@@ -4427,8 +4905,25 @@ components:
             Pile resistance factor gamma_s;t  used to compute the design cone
             resistance values qc;z;d as prescribed in NEN 9997-1+C2_2017
             7.6.3.3(d).
+        gamma_gamma:
+          type: number
+          default: 1.0
+          minimum: 0
+          exclusiveMinimum: true
+          description: >
+            Partial factor γ_γ for volumetric weight of the soil, as prescribed
+            in NEN 9997-1+C2:2017 A.3.2. The (saturated and unsaturated)
+            volumetric weights are divided by this factor.
+
+            **unit: `-`**
         overrule_xi:
           $ref: "#/components/schemas/overrule_xi"
+        stiff_construction:
+          type: boolean
+          default: false
+          description: >
+            Set to True if it's a stiff construction. This will have
+            influence on the xi factor.
     nen_uplift_properties:
       allOf:
         - $ref: "#/components/schemas/shared_uplift_properties"
@@ -4575,26 +5070,26 @@ components:
               items:
                 type: number
             R_t_d:
-              description: The design value of the total bearingcapacity [kN].
+              description: The design value of the total bearing capacity [kN].
               type: array
               items:
                 type: number
             R_t_d_plug:
-              description: The design value of the total plug weight bearingcapacity [kN].
+              description: The design value of the total plug weight bearing capacity [kN].
               type: array
               items:
                 type: number
             R_t_d_min:
               description: >
                 The minimum of the single-CPT values for the calculated
-                bearingcapacity [kN].
+                bearing capacity [kN].
               type: array
               items:
                 type: number
             R_t_d_mean:
               description: >
                 The mean of the single-CPT values for the calculated
-                bearingcapacity [kN].
+                bearing capacity [kN].
               type: array
               items:
                 type: number
@@ -4671,10 +5166,12 @@ components:
         - calculation_params
     pile_head_level_nap_input:
       oneOf:
-        - type: string
+        - title: Surface
+          type: string
           enum:
             - surface
-        - type: number
+        - title: Level
+          type: number
       default: surface
       example: surface
       description: |
@@ -4725,7 +5222,7 @@ components:
     is_auger:
       type: boolean
       description: >
-        Determines whether the pile the pile is an auger pile or not. This only
+        Determines whether the pile is an auger pile or not. This only
         influences the calculation (qc3-reduction) when norms.NEN99971_version=2025.
 
         The value is inferred from the `standard_pile` specification by default, but
@@ -4928,7 +5425,6 @@ components:
       description: >
         chamfered value of the qc measurements related to the pile type [MPa]
 tags:
-  - name: Service
   - name: Pile properties
   - name: Friction ranges
   - name: Report
